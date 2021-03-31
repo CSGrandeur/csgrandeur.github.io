@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+    var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
   <meta name="description" content="很忙很累的就不多说了。 比赛顺利开始之后，整个一天就在忙外网rank了。。。 没有独立IP，没有端口映射，数据库同步这个之前配过一次被吓着了好麻烦不打算用。 于是考虑把数据从内网往外推。 总不可能频繁复制数据库，最终决定推rank页的html。 然后问题来了。">
@@ -230,13 +230,14 @@
 <p>没有独立IP，没有端口映射，数据库同步这个之前配过一次被吓着了好麻烦不打算用。</p>
 <p>于是考虑把数据从内网往外推。 总不可能频繁复制数据库，最终决定推rank页的html。</p>
 <p>然后问题来了。</p>
-<h2 id="section"><span id="more"></span></h2>
+<span id="more"></span>
+<hr>
 <p>1 跨域问题</p>
 <p>用jsonp好了。</p>
 <p>2 jsonp只能get不能post</p>
 <p>这么长的页面代码。。只好用后台来post了</p>
 <p>3 最终保存到外网sql的页面代码不完整</p>
-<p>怀疑是post功能代码的问题。换了n种，都不行。 php.ini神马的肯定都设置正确了。 难道post也限制长度？这好像不科学。先试试控制长度吧，用rank页后台推来的json。</p>
+<p>怀疑是post功能代码的问题。换了n种，都不行。 php.ini神马的肯定都设置正确了。<br>难道post也限制长度？这好像不科学。先试试控制长度吧，用rank页后台推来的json。</p>
 <p>4 json信息不完整</p>
 <p>服务器除了后台json外，已经有了部分信息，所以只用后台json数据的话还原不了rank，还得直接取页面。</p>
 <p>中间各种代码bug的也够折腾的。</p>
@@ -329,7 +330,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
