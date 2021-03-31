@@ -167,6 +167,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2021-03-31-vscode-latex/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021-03-31-vscode-latex/" class="post-title-link" itemprop="url">vscode使用latex</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-31 16:10:11 / 修改时间：16:17:38" itemprop="dateCreated datePublished" datetime="2021-03-31T16:10:11+08:00">2021-03-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus：</span>
+    
+    <a title="disqus" href="/2021-03-31-vscode-latex/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021-03-31-vscode-latex/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="安装texlive">1. 安装<a target="_blank" rel="noopener" href="http://tug.org/texlive/">texlive</a></h2>
+<p>官网的用户体验很不好，找iso有点迷</p>
+<p>这里有提供下载镜像的汇总：<a target="_blank" rel="noopener" href="https://ctan.org/mirrors">https://ctan.org/mirrors</a></p>
+<p>这个阿里云的镜像一时半会儿应该不会失效吧：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/CTAN/systems/texlive/Images/">https://mirrors.aliyun.com/CTAN/systems/texlive/Images/</a></p>
+<p>下载 <code>texlive.iso</code></p>
+<p>打开iso文件，运行 <code>install-tl-windows.bat</code>，界面都看得懂，装就是了。</p>
+<h2 id="vscode-安装-latex-workshop-扩展">2. vscode 安装 latex workshop 扩展</h2>
+<p>vscode怎么装扩展不用赘述了</p>
+<h2 id="设置里找latex栏目下的-latextools编辑settings.json">3. 设置里，找latex栏目下的 <code>Latex:Tools</code>，编辑<code>settings.json</code></h2>
+<p>添加：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;args&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;-synctex=1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-interaction=nonstopmode&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-file-line-error&quot;</span>,</span><br><span class="line">        <span class="string">&quot;%DOC%&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h2 id="latexrecipes编辑settings.json">4. <code>Latex:Recipes</code>，编辑<code>settings.json</code></h2>
+<p>添加：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex ➞ bibtex ➞ xelatex × 2&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;bibtex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>可以把latexmk的三条注释掉</p>
+<p>要想使用bibtex参考文献，需要“四次编译”，可以设为默认，把<code>"xelatex ➞ bibtex ➞ xelatex × 2"</code>挪到前面。</p>
+<h2 id="一些快捷键">一些快捷键</h2>
+<ul>
+<li>ctrl+alt+b：编译</li>
+<li>ctrl+鼠标点击pdf：可跳至源码位置</li>
+<li>在源码位置ctrl+alt+j可跳至pdf位置</li>
+<li>ctrl+k ctrl+a： 切换活动栏可见性(左侧图标开关)</li>
+<li>ctrl+alt+x：显示LaTeX面板(左侧编译命令面板和文档大纲)。</li>
+<li>ctrl+alt+c：清除辅助文件</li>
+<li>ctrl+alt+v：查看编译的pdf文件(预览)</li>
+<li>ctrl+alt+j：正向搜索。当设置<code>"latex-workshop.view.pdf.viewer": "tab";</code>时，在LaTeX源文件中按下快捷键，定位到PDF文档相应位置。</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2021-03-31-vscode-mingw-acm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -983,96 +1091,6 @@ w^{*} = \mathop{\arg\min}_{w}\sum_{i}L(y_{i}, f(x_{i}; w)) + \lambda\Omega(w)
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2017-03-07-csunewoj/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2017-03-07-csunewoj/" class="post-title-link" itemprop="url">CSU-ACM新官网上线</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-03-07 21:32:45" itemprop="dateCreated datePublished" datetime="2017-03-07T21:32:45+08:00">2017-03-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-31 12:52:10" itemprop="dateModified" datetime="2021-03-31T12:52:10+08:00">2021-03-31</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus：</span>
-    
-    <a title="disqus" href="/2017-03-07-csunewoj/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017-03-07-csunewoj/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>花了一个多星期给CSUACM做了个新网站。</p>
-<p><a target="_blank" rel="noopener" href="http://acm.csu.edu.cn">acm.csu.edu.cn</a></p>
-<p>本来只是想在学校OJ刷刷题，然而觉得各种丑，之前也一直因为代码不是自己的，想调整内容、增减功能总是不那么得心应手，这次也算心血来潮做个新的UI，做着做着就干脆把官网和报名网站也整合了。</p>
-<p>这几天太累了也不想打太多字了，做篇日志留念。也许什么时候有空了再写个新的Judge端吧。</p>
-<p>多年过去了，发现自己对中南ACM队伍还是深爱着。。。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2017-03-07-csunewoj/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1142,7 +1160,7 @@ w^{*} = \mathop{\arg\min}_{w}\sum_{i}L(y_{i}, f(x_{i}; w)) + \lambda\Omega(w)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

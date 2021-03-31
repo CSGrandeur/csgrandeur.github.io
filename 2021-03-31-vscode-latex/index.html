@@ -20,26 +20,19 @@
     var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="花了一个多星期给CSUACM做了个新网站。 acm.csu.edu.cn 本来只是想在学校OJ刷刷题，然而觉得各种丑，之前也一直因为代码不是自己的，想调整内容、增减功能总是不那么得心应手，这次也算心血来潮做个新的UI，做着做着就干脆把官网和报名网站也整合了。 这几天太累了也不想打太多字了，做篇日志留念。也许什么时候有空了再写个新的Judge端吧。 多年过去了，发现自己对中南ACM队伍还是深爱着。。">
+  <meta name="description" content="1. 安装texlive 官网的用户体验很不好，找iso有点迷 这里有提供下载镜像的汇总：https:&#x2F;&#x2F;ctan.org&#x2F;mirrors 这个阿里云的镜像一时半会儿应该不会失效吧：https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;CTAN&#x2F;systems&#x2F;texlive&#x2F;Images&#x2F; 下载 texlive.iso 打开iso文件，运行 install-tl-windows.bat，界面都看">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CSU-ACM新官网上线">
-<meta property="og:url" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/">
+<meta property="og:title" content="vscode使用latex">
+<meta property="og:url" content="https://blog.csgrandeur.com/2021-03-31-vscode-latex/">
 <meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
-<meta property="og:description" content="花了一个多星期给CSUACM做了个新网站。 acm.csu.edu.cn 本来只是想在学校OJ刷刷题，然而觉得各种丑，之前也一直因为代码不是自己的，想调整内容、增减功能总是不那么得心应手，这次也算心血来潮做个新的UI，做着做着就干脆把官网和报名网站也整合了。 这几天太累了也不想打太多字了，做篇日志留念。也许什么时候有空了再写个新的Judge端吧。 多年过去了，发现自己对中南ACM队伍还是深爱着。。">
+<meta property="og:description" content="1. 安装texlive 官网的用户体验很不好，找iso有点迷 这里有提供下载镜像的汇总：https:&#x2F;&#x2F;ctan.org&#x2F;mirrors 这个阿里云的镜像一时半会儿应该不会失效吧：https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;CTAN&#x2F;systems&#x2F;texlive&#x2F;Images&#x2F; 下载 texlive.iso 打开iso文件，运行 install-tl-windows.bat，界面都看">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/home.png">
-<meta property="og:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/problem.png">
-<meta property="og:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/status.png">
-<meta property="og:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/contest.png">
-<meta property="og:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/registration.png">
-<meta property="og:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/admin.png">
-<meta property="article:published_time" content="2017-03-07T13:32:45.000Z">
-<meta property="article:modified_time" content="2021-03-31T04:52:10.443Z">
+<meta property="article:published_time" content="2021-03-31T08:10:11.000Z">
+<meta property="article:modified_time" content="2021-03-31T08:17:38.378Z">
 <meta property="article:author" content="CSGrandeur">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog.csgrandeur.com/2017-03-07-csunewoj/home.png">
 
-<link rel="canonical" href="https://blog.csgrandeur.com/2017-03-07-csunewoj/">
+<link rel="canonical" href="https://blog.csgrandeur.com/2021-03-31-vscode-latex/">
 
 
 <script id="page-configurations">
@@ -52,7 +45,7 @@
   };
 </script>
 
-  <title>CSU-ACM新官网上线 | CSGrandeur's Thinking</title>
+  <title>vscode使用latex | CSGrandeur's Thinking</title>
   
     <script>
       function sendPageView() {
@@ -179,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2017-03-07-csunewoj/">
+    <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2021-03-31-vscode-latex/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -192,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          CSU-ACM新官网上线
+          vscode使用latex
         </h1>
 
         <div class="post-meta">
@@ -201,16 +194,19 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2017-03-07 21:32:45" itemprop="dateCreated datePublished" datetime="2017-03-07T21:32:45+08:00">2017-03-07</time>
+              <time title="创建时间：2021-03-31 16:10:11 / 修改时间：16:17:38" itemprop="dateCreated datePublished" datetime="2021-03-31T16:10:11+08:00">2021-03-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-31 12:52:10" itemprop="dateModified" datetime="2021-03-31T12:52:10+08:00">2021-03-31</time>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
               </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Tools/" itemprop="url" rel="index"><span itemprop="name">Tools</span></a>
+                </span>
+            </span>
 
           
   
@@ -221,8 +217,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2017-03-07-csunewoj/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017-03-07-csunewoj/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021-03-31-vscode-latex/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021-03-31-vscode-latex/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -237,24 +233,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>花了一个多星期给CSUACM做了个新网站。</p>
-<p><a target="_blank" rel="noopener" href="http://acm.csu.edu.cn">acm.csu.edu.cn</a></p>
-<p>本来只是想在学校OJ刷刷题，然而觉得各种丑，之前也一直因为代码不是自己的，想调整内容、增减功能总是不那么得心应手，这次也算心血来潮做个新的UI，做着做着就干脆把官网和报名网站也整合了。</p>
-<p>这几天太累了也不想打太多字了，做篇日志留念。也许什么时候有空了再写个新的Judge端吧。</p>
-<p>多年过去了，发现自己对中南ACM队伍还是深爱着。。。</p>
-<span id="more"></span>
-<h4 id="home-page">Home Page</h4>
-<img src="/2017-03-07-csunewoj/home.png" class="" title="home">
-<h4 id="problemset">Problemset</h4>
-<img src="/2017-03-07-csunewoj/problem.png" class="" title="problem">
-<h4 id="status">Status</h4>
-<img src="/2017-03-07-csunewoj/status.png" class="" title="status">
-<h4 id="contest">Contest</h4>
-<img src="/2017-03-07-csunewoj/contest.png" class="" title="contest">
-<h4 id="contest-registration">Contest Registration</h4>
-<img src="/2017-03-07-csunewoj/registration.png" class="" title="registration">
-<h4 id="admin-panel">Admin Panel</h4>
-<img src="/2017-03-07-csunewoj/admin.png" class="" title="admin">
+        <h2 id="安装texlive">1. 安装<a target="_blank" rel="noopener" href="http://tug.org/texlive/">texlive</a></h2>
+<p>官网的用户体验很不好，找iso有点迷</p>
+<p>这里有提供下载镜像的汇总：<a target="_blank" rel="noopener" href="https://ctan.org/mirrors">https://ctan.org/mirrors</a></p>
+<p>这个阿里云的镜像一时半会儿应该不会失效吧：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/CTAN/systems/texlive/Images/">https://mirrors.aliyun.com/CTAN/systems/texlive/Images/</a></p>
+<p>下载 <code>texlive.iso</code></p>
+<p>打开iso文件，运行 <code>install-tl-windows.bat</code>，界面都看得懂，装就是了。</p>
+<h2 id="vscode-安装-latex-workshop-扩展">2. vscode 安装 latex workshop 扩展</h2>
+<p>vscode怎么装扩展不用赘述了</p>
+<h2 id="设置里找latex栏目下的-latextools编辑settings.json">3. 设置里，找latex栏目下的 <code>Latex:Tools</code>，编辑<code>settings.json</code></h2>
+<p>添加：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;args&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;-synctex=1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-interaction=nonstopmode&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-file-line-error&quot;</span>,</span><br><span class="line">        <span class="string">&quot;%DOC%&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h2 id="latexrecipes编辑settings.json">4. <code>Latex:Recipes</code>，编辑<code>settings.json</code></h2>
+<p>添加：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex ➞ bibtex ➞ xelatex × 2&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;bibtex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>可以把latexmk的三条注释掉</p>
+<p>要想使用bibtex参考文献，需要“四次编译”，可以设为默认，把<code>"xelatex ➞ bibtex ➞ xelatex × 2"</code>挪到前面。</p>
+<h2 id="一些快捷键">一些快捷键</h2>
+<ul>
+<li>ctrl+alt+b：编译</li>
+<li>ctrl+鼠标点击pdf：可跳至源码位置</li>
+<li>在源码位置ctrl+alt+j可跳至pdf位置</li>
+<li>ctrl+k ctrl+a： 切换活动栏可见性(左侧图标开关)</li>
+<li>ctrl+alt+x：显示LaTeX面板(左侧编译命令面板和文档大纲)。</li>
+<li>ctrl+alt+c：清除辅助文件</li>
+<li>ctrl+alt+v：查看编译的pdf文件(预览)</li>
+<li>ctrl+alt+j：正向搜索。当设置<code>"latex-workshop.view.pdf.viewer": "tab";</code>时，在LaTeX源文件中按下快捷键，定位到PDF文档相应位置。</li>
+</ul>
 
     </div>
 
@@ -270,13 +275,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2017-02-09-csu-oj-complete-plan-10xx/" rel="prev" title="CSU-OJ补完计划（一，10xx）">
-      <i class="fa fa-chevron-left"></i> CSU-OJ补完计划（一，10xx）
+    <a href="/2021-03-31-vscode-mingw-acm/" rel="prev" title="基于vscode与mingw配置c++环境（ACM向）">
+      <i class="fa fa-chevron-left"></i> 基于vscode与mingw配置c++环境（ACM向）
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2017-03-23-ksvd-and-denoising/" rel="next" title="从稀疏表示到K-SVD，再到图像去噪">
-      从稀疏表示到K-SVD，再到图像去噪 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -342,7 +344,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#home-page"><span class="nav-number">1.</span> <span class="nav-text">Home Page</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#problemset"><span class="nav-number">2.</span> <span class="nav-text">Problemset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#status"><span class="nav-number">3.</span> <span class="nav-text">Status</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#contest"><span class="nav-number">4.</span> <span class="nav-text">Contest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#contest-registration"><span class="nav-number">5.</span> <span class="nav-text">Contest Registration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#admin-panel"><span class="nav-number">6.</span> <span class="nav-text">Admin Panel</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85texlive"><span class="nav-number">1.</span> <span class="nav-text">1. 安装texlive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vscode-%E5%AE%89%E8%A3%85-latex-workshop-%E6%89%A9%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">2. vscode 安装 latex workshop 扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%87%8C%E6%89%BElatex%E6%A0%8F%E7%9B%AE%E4%B8%8B%E7%9A%84-latextools%E7%BC%96%E8%BE%91settings.json"><span class="nav-number">3.</span> <span class="nav-text">3. 设置里，找latex栏目下的 Latex:Tools，编辑settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latexrecipes%E7%BC%96%E8%BE%91settings.json"><span class="nav-number">4.</span> <span class="nav-text">4. Latex:Recipes，编辑settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">5.</span> <span class="nav-text">一些快捷键</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -530,9 +532,9 @@ window.addEventListener('pjax:success', () => {
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://blog.csgrandeur.com/2017-03-07-csunewoj/";
-    this.page.identifier = "2017-03-07-csunewoj/";
-    this.page.title = "CSU-ACM新官网上线";
+    this.page.url = "https://blog.csgrandeur.com/2021-03-31-vscode-latex/";
+    this.page.identifier = "2021-03-31-vscode-latex/";
+    this.page.title = "vscode使用latex";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
