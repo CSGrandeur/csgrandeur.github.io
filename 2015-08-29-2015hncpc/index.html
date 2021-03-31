@@ -235,14 +235,13 @@
 <p>没有独立IP，没有端口映射，数据库同步这个之前配过一次被吓着了好麻烦不打算用。</p>
 <p>于是考虑把数据从内网往外推。 总不可能频繁复制数据库，最终决定推rank页的html。</p>
 <p>然后问题来了。</p>
-<span id="more"></span>
-<hr>
+<h2 id="section"><span id="more"></span></h2>
 <p>1 跨域问题</p>
 <p>用jsonp好了。</p>
 <p>2 jsonp只能get不能post</p>
 <p>这么长的页面代码。。只好用后台来post了</p>
 <p>3 最终保存到外网sql的页面代码不完整</p>
-<p>怀疑是post功能代码的问题。换了n种，都不行。 php.ini神马的肯定都设置正确了。<br>难道post也限制长度？这好像不科学。先试试控制长度吧，用rank页后台推来的json。</p>
+<p>怀疑是post功能代码的问题。换了n种，都不行。 php.ini神马的肯定都设置正确了。 难道post也限制长度？这好像不科学。先试试控制长度吧，用rank页后台推来的json。</p>
 <p>4 json信息不完整</p>
 <p>服务器除了后台json外，已经有了部分信息，所以只用后台json数据的话还原不了rank，还得直接取页面。</p>
 <p>中间各种代码bug的也够折腾的。</p>
@@ -335,6 +334,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#section"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

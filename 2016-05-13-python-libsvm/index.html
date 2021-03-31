@@ -231,11 +231,8 @@
 
       
         <p>一开始打算用OpenCV的SVM，不过好像有些bug，训练有问题，保存model之后load()也有问题，于是用LibSVM了。</p>
-<p>LibSVM提供了Python的接口，去官网下载他们的包，解压后有Python文件夹，把这个Python文件夹路径加入到环境变量（可能要新建）PYTHONPATH中。</p>
-<span id="more"></span>
-<p>代码里常用的就下面这几行，简单粗暴哈。</p>
+<p>LibSVM提供了Python的接口，去官网下载他们的包，解压后有Python文件夹，把这个Python文件夹路径加入到环境变量（可能要新建）PYTHONPATH中。 <span id="more"></span> 代码里常用的就下面这几行，简单粗暴哈。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> svmutil <span class="keyword">as</span> svm</span><br><span class="line"><span class="comment"># 训练</span></span><br><span class="line">model = svm.svm_train(trainY, trainX, <span class="string">&#x27;-c 4&#x27;</span>)</span><br><span class="line"><span class="comment"># 保存模型</span></span><br><span class="line">svm.svm_save_model(<span class="string">&#x27;../filepath/model.dat&#x27;</span>, model)</span><br><span class="line"><span class="comment"># 读取模型</span></span><br><span class="line">model = svm.svm_load_model(<span class="string">&#x27;../filepath/model.dat&#x27;</span>)</span><br><span class="line"><span class="comment"># 预测</span></span><br><span class="line">p_label, p_acc, p_val = svm.svm_predict(testY, testX, model)</span><br></pre></td></tr></table></figure>
-
 <p>训练数据格式也很直接，trainX是二维数组，trainX[i][j] 表示第 i 组训练数据的第 j 个属性值。</p>
 <p>trainY是一维数组，trainY[i]就是第 i 组数据的标签。</p>
 <p>test数据同上。testY不影响预测结果，不过如果testY是对应的测试集标签，那么可以得到正确的预测精度值。</p>
