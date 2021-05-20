@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="本篇博客与基于vscode与wsl配置c++环境（ACM向） 联动。 mingw 相对 wsl 而言，小白使用更方便。">
+  <meta name="description" content="本篇博客与基于vscode与wsl配置c++环境（ACM向） 联动。 MinGW 相对 wsl 而言，小白使用更方便。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于vscode与mingw配置c++环境（ACM向）">
 <meta property="og:url" content="https://blog.csgrandeur.com/2021-03-31-vscode-mingw-acm/">
 <meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
-<meta property="og:description" content="本篇博客与基于vscode与wsl配置c++环境（ACM向） 联动。 mingw 相对 wsl 而言，小白使用更方便。">
+<meta property="og:description" content="本篇博客与基于vscode与wsl配置c++环境（ACM向） 联动。 MinGW 相对 wsl 而言，小白使用更方便。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-31T06:40:31.000Z">
-<meta property="article:modified_time" content="2021-03-31T07:03:21.411Z">
+<meta property="article:modified_time" content="2021-04-29T01:56:38.224Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="ACM">
 <meta name="twitter:card" content="summary">
@@ -195,10 +195,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-31 14:40:31 / 修改时间：15:03:21" itemprop="dateCreated datePublished" datetime="2021-03-31T14:40:31+08:00">2021-03-31</time>
+              <time title="创建时间：2021-03-31 14:40:31" itemprop="dateCreated datePublished" datetime="2021-03-31T14:40:31+08:00">2021-03-31</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-29 09:56:38" itemprop="dateModified" datetime="2021-04-29T09:56:38+08:00">2021-04-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -239,17 +245,17 @@
 
       
         <p>本篇博客与<a href="/2021-03-31-vscode-wsl-acm/">基于vscode与wsl配置c++环境（ACM向）</a> 联动。</p>
-<p>mingw 相对 wsl 而言，小白使用更方便。</p>
+<p>MinGW 相对 wsl 而言，小白使用更方便。</p>
 <span id="more"></span>
 <p>注：在windows环境使用powershell，所以一些地方与基于 wsl 的配置语法不一样。</p>
-<h3 id="mingw">mingw</h3>
-<p>安装mingw应该不难。小白可以简单粗暴地下载 <a target="_blank" rel="noopener" href="https://www.codeblocks.org/downloads/binaries/">codeblocks</a>-mingw-nosetup 版本，解压后就有个 mingw 目录</p>
+<h3 id="mingw">MinGW</h3>
+<p>安装mingw应该不难。小白可以简单粗暴地下载 <a target="_blank" rel="noopener" href="https://www.codeblocks.org/downloads/binaries/">codeblocks</a>-MinGW-nosetup 版本，解压后就有个 MinGW 目录</p>
 <p>这里给个当前版本的SourceForge<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/codeblocks/files/Binaries/20.03/Windows/codeblocks-20.03mingw-nosetup.zip/download">下载链接</a></p>
 <blockquote>
 <p>都下载codeblocks了还用vscode干嘛？<br />
 之前我也这么想的，直到发现确实有人更想要vscode的界面与字体与配色，codeblocks配置半天还是没vscode养眼。</p>
 </blockquote>
-<p>配置系统环境变量 path，添加 <code>xxx/xxx/mingw/bin</code></p>
+<p>配置系统环境变量 path，添加 <code>xxx/xxx/MinGW/bin</code></p>
 <p>检查是否配置好，新打开powershell或cmd，<code>gcc -v</code> 有版本信息就是配好了。</p>
 <h3 id="目录设定">目录设定</h3>
 <p>vscode 打开工作目录，比如 <code>E:\cpp\localcpp</code>，在此目录下新建一个<code>workspace</code></p>
@@ -356,7 +362,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mingw"><span class="nav-number">1.</span> <span class="nav-text">mingw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E8%AE%BE%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">目录设定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tasks.json"><span class="nav-number">3.</span> <span class="nav-text">tasks.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#launch.json"><span class="nav-number">4.</span> <span class="nav-text">launch.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">使用</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#mingw"><span class="nav-number">1.</span> <span class="nav-text">MinGW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E8%AE%BE%E5%AE%9A"><span class="nav-number">2.</span> <span class="nav-text">目录设定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tasks.json"><span class="nav-number">3.</span> <span class="nav-text">tasks.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#launch.json"><span class="nav-number">4.</span> <span class="nav-text">launch.json</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">使用</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -370,7 +376,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -382,7 +388,7 @@
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

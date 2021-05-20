@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="首先耦合性最低的方式是在代码中加入搜索目录，绝对路径相对路径都可以。这种方式在PyCharm中，引入外部路径的那行会有红色波浪线提示语法问题，不过能正常运行。">
+  <meta name="description" content="凸优化是个大话题，常见却又从未系统去理解，这里做一些初步了解。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python引入外部文件夹或其他工程的搜索目录设置方法">
-<meta property="og:url" content="https://blog.csgrandeur.com/2016-05-11-python-import-outer-folder-project/">
+<meta property="og:title" content="凸优化初步了解">
+<meta property="og:url" content="https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/">
 <meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
-<meta property="og:description" content="首先耦合性最低的方式是在代码中加入搜索目录，绝对路径相对路径都可以。这种方式在PyCharm中，引入外部路径的那行会有红色波浪线提示语法问题，不过能正常运行。">
+<meta property="og:description" content="凸优化是个大话题，常见却又从未系统去理解，这里做一些初步了解。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2016-05-11T08:48:00.000Z">
-<meta property="article:modified_time" content="2021-03-31T04:52:10.429Z">
+<meta property="article:published_time" content="2021-04-24T02:58:02.000Z">
+<meta property="article:modified_time" content="2021-05-20T09:26:27.999Z">
 <meta property="article:author" content="CSGrandeur">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blog.csgrandeur.com/2016-05-11-python-import-outer-folder-project/">
+<link rel="canonical" href="https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>Python引入外部文件夹或其他工程的搜索目录设置方法 | CSGrandeur's Thinking</title>
+  <title>凸优化初步了解 | CSGrandeur's Thinking</title>
   
     <script>
       function sendPageView() {
@@ -172,7 +172,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2016-05-11-python-import-outer-folder-project/">
+    <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -185,7 +185,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Python引入外部文件夹或其他工程的搜索目录设置方法
+          凸优化初步了解
         </h1>
 
         <div class="post-meta">
@@ -195,14 +195,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-05-11 16:48:00" itemprop="dateCreated datePublished" datetime="2016-05-11T16:48:00+08:00">2016-05-11</time>
+              <time title="创建时间：2021-04-24 10:58:02" itemprop="dateCreated datePublished" datetime="2021-04-24T10:58:02+08:00">2021-04-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-31 12:52:10" itemprop="dateModified" datetime="2021-03-31T12:52:10+08:00">2021-03-31</time>
+                <time title="修改时间：2021-05-20 17:26:27" itemprop="dateModified" datetime="2021-05-20T17:26:27+08:00">2021-05-20</time>
               </span>
 
           
@@ -214,8 +214,8 @@
       </span>
       <span class="post-meta-item-text">Disqus：</span>
     
-    <a title="disqus" href="/2016-05-11-python-import-outer-folder-project/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016-05-11-python-import-outer-folder-project/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2021-04-24-understanding-of-convex-optimization/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2021-04-24-understanding-of-convex-optimization/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -230,12 +230,68 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>首先耦合性最低的方式是在代码中加入搜索目录，绝对路径相对路径都可以。这种方式在PyCharm中，引入外部路径的那行会有红色波浪线提示语法问题，不过能正常运行。 <span id="more"></span> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">sys.path.append(&#39;&#x2F;..&#x2F;..&#x2F;somepath&#x2F;&#39;)</span><br></pre></td></tr></table></figure></p>
-<p>简单粗暴的方式是添加环境变量PYTHONPATH，把想要的搜索目录加进去，就能直接import了。引入工程外代码的时候比较方便。</p>
-<p>工程内加了__init__.py的目录都被理解为包，文件内容空着就可以。</p>
-<p>假设如下目录结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">base&#x2F;</span><br><span class="line">--&#x2F;__init__.py</span><br><span class="line">--&#x2F;a&#x2F;</span><br><span class="line">--&#x2F;--&#x2F;__init__.py</span><br><span class="line">--&#x2F;--&#x2F;test.py</span><br><span class="line">--&#x2F;b&#x2F;</span><br><span class="line">--&#x2F;--&#x2F;__init__.py</span><br><span class="line">--&#x2F;--&#x2F;run.py</span><br></pre></td></tr></table></figure>
-<p>我们要在run.py中引入test.py，则在run.py中写 import a.test 就可以了。</p>
+        <p>凸优化是个大话题，常见却又从未系统去理解，这里做一些初步了解。</p>
+<span id="more"></span>
+<h2 id="优化optimization">优化（optimization）</h2>
+<p>机器学习的大部分事情，就是把任务建模成一个优化问题：</p>
+<p><span class="math display">\[
+\min_{x\in D} f(x)
+\]</span></p>
+<p>用高中数学的用词来讲，就是让 <span class="math inline">\(x\)</span> 在定义域 <span class="math inline">\(D\)</span> 上找到特定位置，使 <span class="math inline">\(f(x)\)</span> 达到最小值。</p>
+<p>机器学习中，我们通常用梯度下降、牛顿迭代等方法来找最优解，也就是利用函数的导数，或数据的梯度，来迭代地找到达到最优解的优化变量的位置。</p>
+<p>我们曾经学函数的时候直到，可以利用“导数=0”来求最大或最小值，也知道对于一些函数，这个方法是不适用的，比如三次函数，拐点梯度为0但并不是最大或最小值。显然，二次函数的形状是“凸的”，三次函数则不是。</p>
+<p>如果机器学习中的问题能够适用“梯度为0则为最优解”，或问题可以转换成适用的问题，那么优化问题就会变简单。那么我们可以对问题做限定：</p>
+<ol type="1">
+<li>函数是凸函数</li>
+<li>优化变量的可行域是凸集</li>
+</ol>
+<h2 id="凸集">凸集</h2>
+<p>通过二次函数与三次函数，凸函数还算容易理解。那么凸集是什么呢？</p>
+<p>对于<code>n</code>维空间集合<code>D</code>中任意两点 <span class="math inline">\(p_{1}\)</span> 与 <span class="math inline">\(p_{2}\)</span> ， 对 <span class="math inline">\(\theta \in [0, 1]\)</span> 都有</p>
+<p><span class="math display">\[
+\theta p_{1} + (1-\theta)p_{2} \in D
+\]</span></p>
+<p>则该集合<code>D</code>是凸集。</p>
+<p>也比较显而易见，用二维空间理解的话，就是没有洞也没有凹槽。</p>
+<p>显然在不加约束的情况下，任意维度空间都满足上面公式，即都是凸集。</p>
+<p>那么如果作为一个课程，就可以出不少有意思的考试题了：给不同类型的约束，证明约束下的可行域是否是凸集。</p>
+<p>比如线性规划：如果每条直线都取一侧作为可行域，一系列直线的交集肯定是个凸集。</p>
+<ul>
+<li>多个凸集的交集也是凸集</li>
+<li>线性等式约束可行域是凸集</li>
+</ul>
+<h2 id="凸函数">凸函数</h2>
+<p>在定义域内，任意两点 <span class="math inline">\(p_{1}\)</span> 与 <span class="math inline">\(p_{2}\)</span> ，都满足</p>
+<p><span class="math display">\[
+f(\theta p_{1} + (1 - \theta)p_{2}) \leq \theta f(p_{1}) + (1 - \theta)f(p_{2})
+\]</span></p>
+<p>则 <code>f</code> 是凸函数。</p>
+<p>当然，实际问题中往往不那么直观，就会有更多数学工具与方法来证明函数凸性，比如海瑟矩阵是否正定等等，读研时候学过，早忘一干二净了。。。</p>
+<h2 id="凸优化">凸优化</h2>
+<p>如果一个最优化问题的可行域是凸集，并且目标函数是凸函数，则该问题为凸优化问题。</p>
+<p>证明一个优化问题是凸优化，就从以上内容着手，证明凸函数一般就证明海瑟矩阵半正定，证明可行域是凸集就可以利用许多已有的结论。凸优化的通用写法是</p>
+<p><span class="math display">\[
+\min f(x) \\
+g_{i} (x) \leq 0, i = 1, ..., m \\
+h_{i} (x) = 0, i = 1, ..., p
+\]</span></p>
+<p>很多地方见到这么写，就是不解释 g、h 是什么，急死个人，对小白很不友好。</p>
+<p>这里 <span class="math inline">\(g_{i}(x)\)</span> 是不等式约束函数，为凸函数。</p>
+<p><span class="math inline">\(h_{i} (x)\)</span> 是等式约束函数，为仿射函数，仿射函数即相对于线性函数而言， <code>Ax+b</code> 是线性函数，<code>Ax</code>即仿射函数，可以理解为“穿过原点”。</p>
+<p>这是用了前面说的凸集中被证明的结论：凸集的交集是凸集，线性等式约束的可行域是凸集，那么就可以用这两点来描述一个更具体的凸优化，分别对应 <span class="math inline">\(g\)</span> 函数集合与 <span class="math inline">\(h\)</span> 函数集合。</p>
+<h2 id="局部最优与全局最优">局部最优与全局最优</h2>
+<p>目标函数是凸函数、优化变量的可行域是凸集，这两个条件缺其中任何一个都不能保证局部最优解是全局最优解。</p>
+<p>也即两者都满足才是凸优化问题，而凸优化问题可以放心地找局部最优，同时也就找到了全局最优。</p>
+<p>证明过程也不十分复杂，这里就不照搬资料了。</p>
+<h2 id="求解">求解</h2>
+<p>梯度下降、牛顿法、拟牛顿法这些研究生课也学过，现在竟不记得那门课叫什么名字，只记得是数学院的老师讲的，十分受用。</p>
+<p>难者不会，会者不难。非本篇文章重点，这里掠过。</p>
+<p>各种各样的机器学习方法，大都也是在梯度下降的思想上设计的。支持向量机、逻辑回归等等等等。就想起当时老师说：</p>
+<blockquote>
+<p>模拟退火、遗传算法这些随机算法都发不了什么好期刊了，因为它们不“数学”，收敛靠概率，不能数学地证明收敛时间。而梯度下降、拟牛顿法等等是基于数据梯度方向的，可以严谨地证明收敛性和收敛时间。</p>
+</blockquote>
+<h2 id="小结">小结</h2>
+<p>不求甚解地了解了一下凸优化，背后的数学优美而复杂，而浅尝辄止地理解一下概念未尝不可。</p>
 
     </div>
 
@@ -251,12 +307,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2016-05-10-python-threadpool-processpool/" rel="prev" title="Python多线程（线程池）与多进程（进程池）简单使用">
-      <i class="fa fa-chevron-left"></i> Python多线程（线程池）与多进程（进程池）简单使用
+    <a href="/2021-04-05-federated-learning-start/" rel="prev" title="联邦学习初理解">
+      <i class="fa fa-chevron-left"></i> 联邦学习初理解
     </a></div>
       <div class="post-nav-item">
-    <a href="/2016-05-13-python-libsvm/" rel="next" title="Python使用LibSVM">
-      Python使用LibSVM <i class="fa fa-chevron-right"></i>
+    <a href="/2021-04-27-try-to-prove-loop-by-kmp/" rel="next" title="试证KMP计算循环节方法">
+      试证KMP计算循环节方法 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -323,6 +379,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96optimization"><span class="nav-number">1.</span> <span class="nav-text">优化（optimization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">凸集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">凸函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">凸优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9C%80%E4%BC%98%E4%B8%8E%E5%85%A8%E5%B1%80%E6%9C%80%E4%BC%98"><span class="nav-number">5.</span> <span class="nav-text">局部最优与全局最优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3"><span class="nav-number">6.</span> <span class="nav-text">求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">小结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -510,9 +567,9 @@ window.addEventListener('pjax:success', () => {
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://blog.csgrandeur.com/2016-05-11-python-import-outer-folder-project/";
-    this.page.identifier = "2016-05-11-python-import-outer-folder-project/";
-    this.page.title = "Python引入外部文件夹或其他工程的搜索目录设置方法";
+    this.page.url = "https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/";
+    this.page.identifier = "2021-04-24-understanding-of-convex-optimization/";
+    this.page.title = "凸优化初步了解";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
