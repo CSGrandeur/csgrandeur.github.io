@@ -235,11 +235,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <ol type="1">
+        <ol>
 <li>给一个字符串，求最短循环节，如<code>abcabcabcabc</code>循环节为<code>abc</code></li>
 <li>给一个字符串，求在末尾最少补多少字母后成为一个有循环节的字符串，如<code>abcabca</code>需要补充<code>bc</code></li>
 </ol>
 <span id="more"></span>
+
 <p>数据结构课程在string章节的实验课，多半会有循环节这道题，或许蒙的猜的或许课堂讲的，大多人会发现 <code>strLen - next[strLen]</code> 就是最短循环节的长度，无论是上述问题<code>1</code>还是问题<code>2</code>，都能求出循环节长度为<code>3</code>，即<code>abc</code></p>
 <p>但总觉得哪里怪怪的，大家都默认这样正确，在网上却不太容易找到一个严谨的证明。这篇博客试着证明一下，当然依然是非数学的，期望更容易读懂。</p>
 <p>我们知道KMP算法的next数组是由“最长相等前后缀”推得的，<code>strLen - next[strLen]</code> 其实就是“字符串长度”减去“整串最长相等前后缀长度”后的长度，循环节即这个长度的前缀，这里我们就是要证明：</p>
@@ -247,52 +248,61 @@
 <p>一个字符串的最长相等前后缀，有两种情况：</p>
 <p>情况<code>1</code>：最长相等前后缀重叠</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmmmmmmmmmmm---</span><br><span class="line">---mmmmmmmmmmmmmm</span><br><span class="line">0  j         k  l</span><br></pre></td></tr></table></figure>
+
 <p>这里 m 表示相匹配的串</p>
 <p>情况<code>2</code>：不重叠</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
+
 <p>对于情况<code>1</code>和情况<code>2</code>，又分别有 <strong>循环刚好填满</strong> ，和 <strong>循环未填满需要补充</strong> 的情况。</p>
-<h2 id="情况1最长相等前后缀重叠-且-循环节填满">情况<code>1</code>最长相等前后缀重叠 <strong>且</strong> 循环节填满</h2>
-<p>这里用 <code>[0,k] == [j,l]</code> 表示 <code>0~k</code> 的字符与 <code>j~l</code> 的字符顺序一一匹配，<code>[]</code>表示闭区间。</p>
+<h2 id="情况1最长相等前后缀重叠-且-循环节填满"><a href="#情况1最长相等前后缀重叠-且-循环节填满" class="headerlink" title="情况1最长相等前后缀重叠 且 循环节填满"></a>情况<code>1</code>最长相等前后缀重叠 <strong>且</strong> 循环节填满</h2><p>这里用 <code>[0,k] == [j,l]</code> 表示 <code>0~k</code> 的字符与 <code>j~l</code> 的字符顺序一一匹配，<code>[]</code>表示闭区间。</p>
 <p>显然<code>[0,j) == [j,j+j)</code>，即最长相等前后缀之间，“前缀的前缀”肯定与“后缀的前缀”相匹配。这里<code>)</code>表示右侧开区间，用<code>M</code>来表示这个情况。</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMmmmmmmmmmmmm---</span><br><span class="line">---MMMmmmmmmmmmmmm</span><br><span class="line">0  j          k  l</span><br></pre></td></tr></table></figure>
+
 <p>而<code>[j,j+j) == [j+j,j+j+j)</code> 也是成立的，最长相等前后缀之间，前缀的任意一段，等于后缀对应位移的那段，这里用<code>P</code>来表示</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPmmmmmmmmm---</span><br><span class="line">---MMMPPPmmmmmmmmm</span><br><span class="line">0  j          k  l</span><br></pre></td></tr></table></figure>
+
 <p>而显然，后缀的<code>MMM</code>和前缀的<code>PPP</code>是同一个区间，都是<code>[j,j+j)</code>，后缀的<code>PPP</code>又和前缀的<code>PPP</code>之后的长度为<code>j</code>的区间是同一个区间，可以连锁反应下去，直到字符串最后</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPOOOmmmmmm---</span><br><span class="line">---MMMPPPOOOmmmmmm</span><br><span class="line">0  j          k  l</span><br></pre></td></tr></table></figure>
-<h2 id="情况1最长相等前后缀重叠-但-循环节-未-填满">情况<code>1</code>最长相等前后缀重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2>
-<p>可能会是这个样子</p>
+
+<h2 id="情况1最长相等前后缀重叠-但-循环节-未-填满"><a href="#情况1最长相等前后缀重叠-但-循环节-未-填满" class="headerlink" title="情况1最长相等前后缀重叠 但 循环节 未 填满"></a>情况<code>1</code>最长相等前后缀重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2><p>可能会是这个样子</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmmmmmmmmmm---</span><br><span class="line">---mmmmmmmmmmmmm</span><br><span class="line">0  j        k  l</span><br></pre></td></tr></table></figure>
+
 <p>看起来没什么区别？其实就是长度不能整除这个假定的循环节了。</p>
 <p>连锁反应还和刚才一样，最后能得到：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPOOOAAAm---</span><br><span class="line">---MMMPPPOOOAAAm</span><br><span class="line">0  j        k  l</span><br></pre></td></tr></table></figure>
+
 <p>到这里，连锁还可以继续，后缀的<code>AAA</code>对应前缀的那段依然是循环，用<code>BBB</code>表示</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPOOOAAABBB-</span><br><span class="line">---MMMPPPOOOAAAm</span><br><span class="line">0  j        k  l</span><br></pre></td></tr></table></figure>
+
 <p>最后剩下的这个字符（或若干字符）</p>
 <ul>
 <li>是后缀的末尾，那必然也与前缀的末尾匹配 ==&gt;</li>
 <li>现在前缀已经被循环串填满了，所以前缀的末尾必然是循环串的一个开头 ==&gt;</li>
 <li>则后缀的末尾（也是字符串的末尾）也是循环串的一个开头</li>
 </ul>
-<h2 id="情况2最长相等前后缀-不-重叠-且-循环节填满">情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>且</strong> 循环节填满</h2>
-<p>循环节填满字符串的话，是不可能出现情况<code>2</code>的</p>
+<h2 id="情况2最长相等前后缀-不-重叠-且-循环节填满"><a href="#情况2最长相等前后缀-不-重叠-且-循环节填满" class="headerlink" title="情况2最长相等前后缀 不 重叠 且 循环节填满"></a>情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>且</strong> 循环节填满</h2><p>循环节填满字符串的话，是不可能出现情况<code>2</code>的</p>
 <p>循环两次时：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AAAA----</span><br><span class="line">----BBBB</span><br></pre></td></tr></table></figure>
+
 <p>最长相等前后缀是挨着的，用情况<code>1</code>的连锁反应即可</p>
 <p>循环大于两次时：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AAAACCCC----</span><br><span class="line">----BBBBCCCC</span><br></pre></td></tr></table></figure>
+
 <p>必然重叠</p>
-<h2 id="情况2最长相等前后缀-不-重叠-但-循环节-未-填满">情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
+<h2 id="情况2最长相等前后缀-不-重叠-但-循环节-未-填满"><a href="#情况2最长相等前后缀-不-重叠-但-循环节-未-填满" class="headerlink" title="情况2最长相等前后缀 不 重叠 但 循环节 未 填满"></a>情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
+
 <p>按照公式，即总长度减去最长相等前后缀长度，循环节应该是<code>[0,j)</code>，用<code>M</code>表示为</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMMMMMMMMMM-----</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
+
 <p>它当作需要补齐的循环节，是符合要求的。但是否是“最小循环节”呢？</p>
 <p><strong>反证</strong> 一下，假设有更短循环节<code>P</code></p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PPPmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
+
 <p>那么，我们得到的KMP匹配结果，将会是</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PPPAAABBBCCCDD---</span><br><span class="line">---PPPAAABBBCCCDD</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
+
 <p>这是情况<code>1</code>而不是情况<code>2</code>了，产生矛盾，故不存在更小的循环节<code>P</code>。</p>
-<h2 id="小结">小结</h2>
-<p>几种情况都已处理完，这样可以更感性地认知<code>strLen - next[strLen]</code>为循环节长度的意义了。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>几种情况都已处理完，这样可以更感性地认知<code>strLen - next[strLen]</code>为循环节长度的意义了。</p>
 
     </div>
 

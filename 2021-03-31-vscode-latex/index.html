@@ -242,24 +242,22 @@
       
         <p>进入vscode时代，sublime atom 那一套事情都打算切过来了。</p>
 <span id="more"></span>
-<h2 id="安装texlive">1. 安装<a target="_blank" rel="noopener" href="http://tug.org/texlive/">texlive</a></h2>
-<p>官网的用户体验很不好，找iso有点迷</p>
+
+<h2 id="1-安装texlive"><a href="#1-安装texlive" class="headerlink" title="1. 安装texlive"></a>1. 安装<a target="_blank" rel="noopener" href="http://tug.org/texlive/">texlive</a></h2><p>官网的用户体验很不好，找iso有点迷</p>
 <p>这里有提供下载镜像的汇总：<a target="_blank" rel="noopener" href="https://ctan.org/mirrors">https://ctan.org/mirrors</a></p>
 <p>这个阿里云的镜像一时半会儿应该不会失效吧：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/CTAN/systems/texlive/Images/">https://mirrors.aliyun.com/CTAN/systems/texlive/Images/</a></p>
 <p>下载 <code>texlive.iso</code></p>
 <p>打开iso文件，运行 <code>install-tl-windows.bat</code>，界面都看得懂，装就是了。</p>
-<h2 id="vscode-安装-latex-workshop-扩展">2. vscode 安装 latex workshop 扩展</h2>
-<p>vscode怎么装扩展不用赘述了</p>
-<h2 id="设置里找latex栏目下的-latextools编辑settings.json">3. 设置里，找latex栏目下的 <code>Latex:Tools</code>，编辑<code>settings.json</code></h2>
-<p>添加：</p>
+<h2 id="2-vscode-安装-latex-workshop-扩展"><a href="#2-vscode-安装-latex-workshop-扩展" class="headerlink" title="2. vscode 安装 latex workshop 扩展"></a>2. vscode 安装 latex workshop 扩展</h2><p>vscode怎么装扩展不用赘述了</p>
+<h2 id="3-设置里，找latex栏目下的-Latex-Tools，编辑settings-json"><a href="#3-设置里，找latex栏目下的-Latex-Tools，编辑settings-json" class="headerlink" title="3. 设置里，找latex栏目下的 Latex:Tools，编辑settings.json"></a>3. 设置里，找latex栏目下的 <code>Latex:Tools</code>，编辑<code>settings.json</code></h2><p>添加：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;command&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;args&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;-synctex=1&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-interaction=nonstopmode&quot;</span>,</span><br><span class="line">        <span class="string">&quot;-file-line-error&quot;</span>,</span><br><span class="line">        <span class="string">&quot;%DOC%&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<h2 id="latexrecipes编辑settings.json">4. <code>Latex:Recipes</code>，编辑<code>settings.json</code></h2>
-<p>添加：</p>
+
+<h2 id="4-Latex-Recipes，编辑settings-json"><a href="#4-Latex-Recipes，编辑settings-json" class="headerlink" title="4. Latex:Recipes，编辑settings.json"></a>4. <code>Latex:Recipes</code>，编辑<code>settings.json</code></h2><p>添加：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;xelatex ➞ bibtex ➞ xelatex × 2&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;tools&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;bibtex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span>,</span><br><span class="line">        <span class="string">&quot;xelatex&quot;</span></span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
 <p>可以把latexmk的三条注释掉</p>
-<p>要想使用bibtex参考文献，需要“四次编译”，可以设为默认，把<code>"xelatex ➞ bibtex ➞ xelatex × 2"</code>挪到前面。</p>
-<h2 id="一些快捷键">一些快捷键</h2>
-<ul>
+<p>要想使用bibtex参考文献，需要“四次编译”，可以设为默认，把<code>&quot;xelatex ➞ bibtex ➞ xelatex × 2&quot;</code>挪到前面。</p>
+<h2 id="一些快捷键"><a href="#一些快捷键" class="headerlink" title="一些快捷键"></a>一些快捷键</h2><ul>
 <li>ctrl+alt+b：编译</li>
 <li>ctrl+鼠标点击pdf：可跳至源码位置</li>
 <li>在源码位置ctrl+alt+j可跳至pdf位置</li>
@@ -267,7 +265,7 @@
 <li>ctrl+alt+x：显示LaTeX面板(左侧编译命令面板和文档大纲)。</li>
 <li>ctrl+alt+c：清除辅助文件</li>
 <li>ctrl+alt+v：查看编译的pdf文件(预览)</li>
-<li>ctrl+alt+j：正向搜索。当设置<code>"latex-workshop.view.pdf.viewer": "tab";</code>时，在LaTeX源文件中按下快捷键，定位到PDF文档相应位置。</li>
+<li>ctrl+alt+j：正向搜索。当设置<code>&quot;latex-workshop.view.pdf.viewer&quot;: &quot;tab&quot;;</code>时，在LaTeX源文件中按下快捷键，定位到PDF文档相应位置。</li>
 </ul>
 
     </div>
@@ -359,7 +357,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85texlive"><span class="nav-number">1.</span> <span class="nav-text">1. 安装texlive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vscode-%E5%AE%89%E8%A3%85-latex-workshop-%E6%89%A9%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">2. vscode 安装 latex workshop 扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%87%8C%E6%89%BElatex%E6%A0%8F%E7%9B%AE%E4%B8%8B%E7%9A%84-latextools%E7%BC%96%E8%BE%91settings.json"><span class="nav-number">3.</span> <span class="nav-text">3. 设置里，找latex栏目下的 Latex:Tools，编辑settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latexrecipes%E7%BC%96%E8%BE%91settings.json"><span class="nav-number">4.</span> <span class="nav-text">4. Latex:Recipes，编辑settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">5.</span> <span class="nav-text">一些快捷键</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85texlive"><span class="nav-number">1.</span> <span class="nav-text">1. 安装texlive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-vscode-%E5%AE%89%E8%A3%85-latex-workshop-%E6%89%A9%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">2. vscode 安装 latex workshop 扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%AE%BE%E7%BD%AE%E9%87%8C%EF%BC%8C%E6%89%BElatex%E6%A0%8F%E7%9B%AE%E4%B8%8B%E7%9A%84-Latex-Tools%EF%BC%8C%E7%BC%96%E8%BE%91settings-json"><span class="nav-number">3.</span> <span class="nav-text">3. 设置里，找latex栏目下的 Latex:Tools，编辑settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Latex-Recipes%EF%BC%8C%E7%BC%96%E8%BE%91settings-json"><span class="nav-number">4.</span> <span class="nav-text">4. Latex:Recipes，编辑settings.json</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">5.</span> <span class="nav-text">一些快捷键</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
