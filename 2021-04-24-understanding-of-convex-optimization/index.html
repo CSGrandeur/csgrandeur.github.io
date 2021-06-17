@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.4.0">
+
+
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
@@ -13,14 +15,12 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
-  </script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-  <meta name="description" content="凸优化是个大话题，常见却又从未系统去理解，这里做一些初步了解。">
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;blog.csgrandeur.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="凸优化是个大话题，常见却又从未系统去理解，这里做一些初步了解。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="凸优化初步了解">
 <meta property="og:url" content="https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/">
@@ -32,88 +32,47 @@
 <meta property="article:author" content="CSGrandeur">
 <meta name="twitter:card" content="summary">
 
+
 <link rel="canonical" href="https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/">
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
 
-  <title>凸优化初步了解 | CSGrandeur's Thinking</title>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;blog.csgrandeur.com&#x2F;2021-04-24-understanding-of-convex-optimization&#x2F;&quot;,&quot;path&quot;:&quot;2021-04-24-understanding-of-convex-optimization&#x2F;&quot;,&quot;title&quot;:&quot;凸优化初步了解&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>凸优化初步了解 | CSGrandeur's Thinking</title>
   
-    <script>
-      function sendPageView() {
-        if (CONFIG.hostname !== location.hostname) return;
-        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
-        localStorage.setItem('uid', uid);
-        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
-          v  : 1,
-          tid: 'UA-69787882-2',
-          cid: uid,
-          t  : 'pageview',
-          dp : encodeURIComponent(location.pathname)
-        }));
-      }
-      document.addEventListener('pjax:complete', sendPageView);
-      sendPageView();
-    </script>
-
-
+  <script class="next-config" data-name="google_analytics" type="application/json">{&quot;tracking_id&quot;:&quot;UA-69787882-2&quot;,&quot;only_pageview&quot;:true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
   <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
+  <main class="main">
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
   <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
+      <i class="logo-line"></i>
       <h1 class="site-title">CSGrandeur's Thinking</h1>
-      <span class="logo-line-after"><i></i></span>
+      <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
   </div>
@@ -126,24 +85,11 @@
 
 
 
-
 <nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
   </ul>
 </nav>
 
@@ -151,27 +97,94 @@
 
 
 </div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96optimization"><span class="nav-number">1.</span> <span class="nav-text">优化（optimization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">凸集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">凸函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">凸优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9C%80%E4%BC%98%E4%B8%8E%E5%85%A8%E5%B1%80%E6%9C%80%E4%BC%98"><span class="nav-number">5.</span> <span class="nav-text">局部最优与全局最优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3"><span class="nav-number">6.</span> <span class="nav-text">求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
     </header>
 
     
-  <div class="back-to-top">
+  <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
 
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
 
-          <div class="content post posts-expand">
-            
+    <div class="main-inner post posts-expand">
 
-    
+
+  
+
+
+<div class="post-block">
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -188,24 +201,25 @@
           凸优化初步了解
         </h1>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-04-24 10:58:02" itemprop="dateCreated datePublished" datetime="2021-04-24T10:58:02+08:00">2021-04-24</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-05-23 15:43:26" itemprop="dateModified" datetime="2021-05-23T15:43:26+08:00">2021-05-23</time>
-              </span>
+      <time title="创建时间：2021-04-24 10:58:02" itemprop="dateCreated datePublished" datetime="2021-04-24T10:58:02+08:00">2021-04-24</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-05-23 15:43:26" itemprop="dateModified" datetime="2021-05-23T15:43:26+08:00">2021-05-23</time>
+      </span>
 
-          
+  
   
   <span class="post-meta-item">
     
@@ -220,6 +234,7 @@
   </span>
   
   
+</div>
 
         </div>
       </header>
@@ -228,24 +243,27 @@
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
         <p>凸优化是个大话题，常见却又从未系统去理解，这里做一些初步了解。</p>
 <span id="more"></span>
-
-<h2 id="优化（optimization）"><a href="#优化（optimization）" class="headerlink" title="优化（optimization）"></a>优化（optimization）</h2><p>机器学习的大部分事情，就是把任务建模成一个优化问题：</p>
-<p>$$<br>\min_{x\in D} f(x)<br>$$</p>
-<p>用高中数学的用词来讲，就是让 $x$ 在定义域 $D$ 上找到特定位置，使 $f(x)$ 达到最小值。</p>
+<h2 id="优化optimization">优化（optimization）</h2>
+<p>机器学习的大部分事情，就是把任务建模成一个优化问题：</p>
+<p><span class="math display">\[
+\min_{x\in D} f(x)
+\]</span></p>
+<p>用高中数学的用词来讲，就是让 <span class="math inline">\(x\)</span> 在定义域 <span class="math inline">\(D\)</span> 上找到特定位置，使 <span class="math inline">\(f(x)\)</span> 达到最小值。</p>
 <p>机器学习中，我们通常用梯度下降、牛顿迭代等方法来找最优解，也就是利用函数的导数，或数据的梯度，来迭代地找到达到最优解的优化变量的位置。</p>
 <p>我们曾经学函数的时候直到，可以利用“导数=0”来求最大或最小值，也知道对于一些函数，这个方法是不适用的，比如三次函数，拐点梯度为0但并不是最大或最小值。显然，二次函数的形状是“凸的”，三次函数则不是。</p>
 <p>如果机器学习中的问题能够适用“梯度为0则为最优解”，或问题可以转换成适用的问题，那么优化问题就会变简单。那么我们可以对问题做限定：</p>
-<ol>
+<ol type="1">
 <li>函数是凸函数</li>
 <li>优化变量的可行域是凸集</li>
 </ol>
-<h2 id="凸集"><a href="#凸集" class="headerlink" title="凸集"></a>凸集</h2><p>通过二次函数与三次函数，凸函数还算容易理解。那么凸集是什么呢？</p>
-<p>对于<code>n</code>维空间集合<code>D</code>中任意两点 $p_{1}$ 与 $p_{2}$ ， 对 $\theta \in [0, 1]$ 都有 </p>
-<p>$$<br>\theta p_{1} + (1-\theta)p_{2} \in D<br>$$</p>
+<h2 id="凸集">凸集</h2>
+<p>通过二次函数与三次函数，凸函数还算容易理解。那么凸集是什么呢？</p>
+<p>对于<code>n</code>维空间集合<code>D</code>中任意两点 <span class="math inline">\(p_{1}\)</span> 与 <span class="math inline">\(p_{2}\)</span> ， 对 <span class="math inline">\(\theta \in [0, 1]\)</span> 都有</p>
+<p><span class="math display">\[
+\theta p_{1} + (1-\theta)p_{2} \in D
+\]</span></p>
 <p>则该集合<code>D</code>是凸集。</p>
 <p>也比较显而易见，用二维空间理解的话，就是没有洞也没有凹槽。</p>
 <p>显然在不加约束的情况下，任意维度空间都满足上面公式，即都是凸集。</p>
@@ -255,27 +273,38 @@
 <li>多个凸集的交集也是凸集</li>
 <li>线性等式约束可行域是凸集</li>
 </ul>
-<h2 id="凸函数"><a href="#凸函数" class="headerlink" title="凸函数"></a>凸函数</h2><p>在定义域内，任意两点 $p_{1}$ 与 $p_{2}$ ，都满足</p>
-<p>$$<br>f(\theta p_{1} + (1 - \theta)p_{2}) \leq \theta f(p_{1}) + (1 - \theta)f(p_{2})<br>$$</p>
+<h2 id="凸函数">凸函数</h2>
+<p>在定义域内，任意两点 <span class="math inline">\(p_{1}\)</span> 与 <span class="math inline">\(p_{2}\)</span> ，都满足</p>
+<p><span class="math display">\[
+f(\theta p_{1} + (1 - \theta)p_{2}) \leq \theta f(p_{1}) + (1 - \theta)f(p_{2})
+\]</span></p>
 <p>则 <code>f</code> 是凸函数。</p>
 <p>当然，实际问题中往往不那么直观，就会有更多数学工具与方法来证明函数凸性，比如海瑟矩阵是否正定等等，读研时候学过，早忘一干二净了。。。</p>
-<h2 id="凸优化"><a href="#凸优化" class="headerlink" title="凸优化"></a>凸优化</h2><p>如果一个最优化问题的可行域是凸集，并且目标函数是凸函数，则该问题为凸优化问题。</p>
+<h2 id="凸优化">凸优化</h2>
+<p>如果一个最优化问题的可行域是凸集，并且目标函数是凸函数，则该问题为凸优化问题。</p>
 <p>证明一个优化问题是凸优化，就从以上内容着手，证明凸函数一般就证明海瑟矩阵半正定，证明可行域是凸集就可以利用许多已有的结论。凸优化的通用写法是</p>
-<p>$$<br>\min f(x) \<br>g_{i} (x) \leq 0, i = 1, …, m \<br>h_{i} (x) = 0, i = 1, …, p<br>$$</p>
+<p><span class="math display">\[
+\min f(x) \\
+g_{i} (x) \leq 0, i = 1, ..., m \\
+h_{i} (x) = 0, i = 1, ..., p
+\]</span></p>
 <p>很多地方见到这么写，就是不解释 g、h 是什么，急死个人，对小白很不友好。</p>
-<p>这里 $g_{i}(x)$ 是不等式约束函数，为凸函数。</p>
-<p>$h_{i} (x)$ 是等式约束函数，为仿射函数，仿射函数即相对于线性函数而言， <code>Ax+b</code> 是线性函数，<code>Ax</code>即仿射函数，可以理解为“穿过原点”。</p>
-<p>这是用了前面说的凸集中被证明的结论：凸集的交集是凸集，线性等式约束的可行域是凸集，那么就可以用这两点来描述一个更具体的凸优化，分别对应 $g$ 函数集合与 $h$ 函数集合。</p>
-<h2 id="局部最优与全局最优"><a href="#局部最优与全局最优" class="headerlink" title="局部最优与全局最优"></a>局部最优与全局最优</h2><p>目标函数是凸函数、优化变量的可行域是凸集，这两个条件缺其中任何一个都不能保证局部最优解是全局最优解。</p>
+<p>这里 <span class="math inline">\(g_{i}(x)\)</span> 是不等式约束函数，为凸函数。</p>
+<p><span class="math inline">\(h_{i} (x)\)</span> 是等式约束函数，为仿射函数，仿射函数即相对于线性函数而言， <code>Ax+b</code> 是线性函数，<code>Ax</code>即仿射函数，可以理解为“穿过原点”。</p>
+<p>这是用了前面说的凸集中被证明的结论：凸集的交集是凸集，线性等式约束的可行域是凸集，那么就可以用这两点来描述一个更具体的凸优化，分别对应 <span class="math inline">\(g\)</span> 函数集合与 <span class="math inline">\(h\)</span> 函数集合。</p>
+<h2 id="局部最优与全局最优">局部最优与全局最优</h2>
+<p>目标函数是凸函数、优化变量的可行域是凸集，这两个条件缺其中任何一个都不能保证局部最优解是全局最优解。</p>
 <p>也即两者都满足才是凸优化问题，而凸优化问题可以放心地找局部最优，同时也就找到了全局最优。</p>
 <p>证明过程也不十分复杂，这里就不照搬资料了。</p>
-<h2 id="求解"><a href="#求解" class="headerlink" title="求解"></a>求解</h2><p>梯度下降、牛顿法、拟牛顿法这些研究生课也学过，现在竟不记得那门课叫什么名字，只记得是数学院的老师讲的，十分受用。</p>
+<h2 id="求解">求解</h2>
+<p>梯度下降、牛顿法、拟牛顿法这些研究生课也学过，现在竟不记得那门课叫什么名字，只记得是数学院的老师讲的，十分受用。</p>
 <p>难者不会，会者不难。非本篇文章重点，这里掠过。</p>
 <p>各种各样的机器学习方法，大都也是在梯度下降的思想上设计的。支持向量机、逻辑回归等等等等。就想起当时老师说：</p>
 <blockquote>
 <p>模拟退火、遗传算法这些随机算法都发不了什么好期刊了，因为它们不“数学”，收敛靠概率，不能数学地证明收敛时间。而梯度下降、拟牛顿法等等是基于数据梯度方向的，可以严谨地证明收敛性和收敛时间。</p>
 </blockquote>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>不求甚解地了解了一下凸优化，背后的数学优美而复杂，而浅尝辄止地理解一下概念未尝不可。</p>
+<h2 id="小结">小结</h2>
+<p>不求甚解地了解了一下凸优化，背后的数学优美而复杂，而浅尝辄止地理解一下概念未尝不可。</p>
 
     </div>
 
@@ -283,138 +312,44 @@
     
     
 
-      <footer class="post-footer">
+    <footer class="post-footer">
 
         
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2021-04-05-federated-learning-start/" rel="prev" title="联邦学习初理解">
-      <i class="fa fa-chevron-left"></i> 联邦学习初理解
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2021-04-27-try-to-prove-loop-by-kmp/" rel="next" title="试证KMP计算循环节方法">
-      试证KMP计算循环节方法 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021-04-05-federated-learning-start/" rel="prev" title="联邦学习初理解">
+                  <i class="fa fa-chevron-left"></i> 联邦学习初理解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021-04-27-try-to-prove-loop-by-kmp/" rel="next" title="试证KMP计算循环节方法">
+                  试证KMP计算循环节方法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
           </div>
-          
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
     
-  <div class="comments">
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%EF%BC%88optimization%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">优化（optimization）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">凸集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">凸函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%B8%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">凸优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9C%80%E4%BC%98%E4%B8%8E%E5%85%A8%E5%B1%80%E6%9C%80%E4%BC%98"><span class="nav-number">5.</span> <span class="nav-text">局部最优与全局最优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3"><span class="nav-number">6.</span> <span class="nav-text">求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">小结</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">CSGrandeur</p>
-  <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">25</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-        <span class="site-state-item-count">17</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
+  </main>
 
+  <footer class="footer">
+    <div class="footer-inner">
 
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
 
 <div class="copyright">
-  
   &copy; 
   <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
@@ -422,207 +357,37 @@
   </span>
   <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-  <script>
-var pjax = new Pjax({
-  selectors: [
-    'head title',
-    '#page-configurations',
-    '.content-wrap',
-    '.post-toc-wrap',
-    '.languages',
-    '#pjax'
-  ],
-  switches: {
-    '.post-toc-wrap': Pjax.switches.innerHTML
-  },
-  analytics: false,
-  cacheBust: false,
-  scrollTo : !CONFIG.bookmark.enable
-});
-
-window.addEventListener('pjax:success', () => {
-  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
-    var code = element.text || element.textContent || element.innerHTML || '';
-    var parent = element.parentNode;
-    parent.removeChild(element);
-    var script = document.createElement('script');
-    if (element.id) {
-      script.id = element.id;
-    }
-    if (element.className) {
-      script.className = element.className;
-    }
-    if (element.type) {
-      script.type = element.type;
-    }
-    if (element.src) {
-      script.src = element.src;
-      // Force synchronous loading of peripheral JS.
-      script.async = false;
-    }
-    if (element.dataset.pjax !== undefined) {
-      script.dataset.pjax = '';
-    }
-    if (code !== '') {
-      script.appendChild(document.createTextNode(code));
-    }
-    parent.appendChild(script);
-  });
-  NexT.boot.refresh();
-  // Define Motion Sequence & Bootstrap Motion.
-  if (CONFIG.motion.enable) {
-    NexT.motion.integrator
-      .init()
-      .add(NexT.motion.middleWares.subMenu)
-      .add(NexT.motion.middleWares.postList)
-      .bootstrap();
-  }
-  NexT.utils.updateSidebarPosition();
-});
-</script>
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div id="pjax">
-  
-
-  
-      
-
-<script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-
-    
-
-  
-
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://csgrandeur.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "https://blog.csgrandeur.com/2021-04-24-understanding-of-convex-optimization/";
-    this.page.identifier = "2021-04-24-understanding-of-convex-optimization/";
-    this.page.title = "凸优化初步了解";
-    };
-  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://csgrandeur.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
 
     </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{&quot;enable&quot;:true,&quot;shortname&quot;:&quot;csgrandeur&quot;,&quot;count&quot;:true,&quot;i18n&quot;:{&quot;disqus&quot;:&quot;disqus&quot;}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
 </body>
 </html>

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.4.0">
+
+
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
@@ -13,14 +15,12 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
-  </script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-  <meta name="description" content="目前Python多线程不能利用CPU多核优势，IO密集型可用多线程，CPU密集型适合用多进程。">
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;blog.csgrandeur.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="目前Python多线程不能利用CPU多核优势，IO密集型可用多线程，CPU密集型适合用多进程。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python多线程（线程池）与多进程（进程池）简单使用">
 <meta property="og:url" content="https://blog.csgrandeur.com/2016-05-10-python-threadpool-processpool/">
@@ -32,88 +32,47 @@
 <meta property="article:author" content="CSGrandeur">
 <meta name="twitter:card" content="summary">
 
+
 <link rel="canonical" href="https://blog.csgrandeur.com/2016-05-10-python-threadpool-processpool/">
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
 
-  <title>Python多线程（线程池）与多进程（进程池）简单使用 | CSGrandeur's Thinking</title>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;blog.csgrandeur.com&#x2F;2016-05-10-python-threadpool-processpool&#x2F;&quot;,&quot;path&quot;:&quot;2016-05-10-python-threadpool-processpool&#x2F;&quot;,&quot;title&quot;:&quot;Python多线程（线程池）与多进程（进程池）简单使用&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>Python多线程（线程池）与多进程（进程池）简单使用 | CSGrandeur's Thinking</title>
   
-    <script>
-      function sendPageView() {
-        if (CONFIG.hostname !== location.hostname) return;
-        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
-        localStorage.setItem('uid', uid);
-        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
-          v  : 1,
-          tid: 'UA-69787882-2',
-          cid: uid,
-          t  : 'pageview',
-          dp : encodeURIComponent(location.pathname)
-        }));
-      }
-      document.addEventListener('pjax:complete', sendPageView);
-      sendPageView();
-    </script>
-
-
+  <script class="next-config" data-name="google_analytics" type="application/json">{&quot;tracking_id&quot;:&quot;UA-69787882-2&quot;,&quot;only_pageview&quot;:true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
   <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
+  <main class="main">
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
   <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
+      <i class="logo-line"></i>
       <h1 class="site-title">CSGrandeur's Thinking</h1>
-      <span class="logo-line-after"><i></i></span>
+      <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
   </div>
@@ -126,24 +85,11 @@
 
 
 
-
 <nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
   </ul>
 </nav>
 
@@ -151,27 +97,94 @@
 
 
 </div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-number">1.</span> <span class="nav-text">线程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%B1%A0"><span class="nav-number">2.</span> <span class="nav-text">进程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE"><span class="nav-number">3.</span> <span class="nav-text">共享数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85-%E6%A8%A1%E5%9E%8B"><span class="nav-number"></span> <span class="nav-text">生产者-消费者 模型</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
     </header>
 
     
-  <div class="back-to-top">
+  <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
 
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
 
-          <div class="content post posts-expand">
-            
+    <div class="main-inner post posts-expand">
 
-    
+
+  
+
+
+<div class="post-block">
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2016-05-10-python-threadpool-processpool/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -188,24 +201,25 @@
           Python多线程（线程池）与多进程（进程池）简单使用
         </h1>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2016-05-10 17:53:00" itemprop="dateCreated datePublished" datetime="2016-05-10T17:53:00+08:00">2016-05-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-31 12:52:10" itemprop="dateModified" datetime="2021-03-31T12:52:10+08:00">2021-03-31</time>
-              </span>
+      <time title="创建时间：2016-05-10 17:53:00" itemprop="dateCreated datePublished" datetime="2016-05-10T17:53:00+08:00">2016-05-10</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-03-31 12:52:10" itemprop="dateModified" datetime="2021-03-31T12:52:10+08:00">2021-03-31</time>
+      </span>
 
-          
+  
   
   <span class="post-meta-item">
     
@@ -220,6 +234,7 @@
   </span>
   
   
+</div>
 
         </div>
       </header>
@@ -228,163 +243,67 @@
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
         <p>目前Python<strong>多线程</strong>不能利用CPU多核优势，IO密集型可用<strong>多线程</strong>，CPU密集型适合用<strong>多进程</strong>。</p>
 <span id="more"></span>
-
-<p>首先定义一个用来并行跑的函数，加一个随机sleep时间好感受并行的结果，两个参数好理解并行时多参数怎么传递。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Test</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    time.sleep(random.randint(<span class="number">5</span>, <span class="number">20</span>))</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">str</span>(a) + <span class="string">&#x27;_&#x27;</span> + <span class="built_in">str</span>(b) + <span class="string">&#x27;\t&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> threadpool</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MultiThreadTest</span>():</span></span><br><span class="line">    pool = threadpool.ThreadPool(<span class="number">20</span>)</span><br><span class="line">    li = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        li.append((<span class="literal">None</span>, &#123;<span class="string">&#x27;a&#x27;</span>: i, <span class="string">&#x27;b&#x27;</span>: i + <span class="number">10</span>&#125;))</span><br><span class="line">    requests = threadpool.makeRequests(Test, li)</span><br><span class="line">    [pool.putRequest(req) <span class="keyword">for</span> req <span class="keyword">in</span> requests]</span><br><span class="line">    pool.wait()</span><br></pre></td></tr></table></figure>
-<p>threadpool需要安装，pip就可以<br>多参数用 (None, {….})，当前版本threadpool 1.3.2是这么写的。</p>
-<h3 id="进程池"><a href="#进程池" class="headerlink" title="进程池"></a>进程池</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MultiProcessTest</span>():</span></span><br><span class="line">    pool = multiprocessing.Pool(processes = <span class="number">4</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        pool.apply_async(Test, (i, i + <span class="number">10</span>, ))</span><br><span class="line">    pool.close()</span><br><span class="line">    pool.join()</span><br></pre></td></tr></table></figure>
+<p>首先定义一个用来并行跑的函数，加一个随机sleep时间好感受并行的结果，两个参数好理解并行时多参数怎么传递。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Test</span>(<span class="params">a, b</span>):</span></span><br><span class="line">    time.sleep(random.randint(<span class="number">5</span>, <span class="number">20</span>))</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">str</span>(a) + <span class="string">&#x27;_&#x27;</span> + <span class="built_in">str</span>(b) + <span class="string">&#x27;\t&#x27;</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="线程池">线程池</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> threadpool</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MultiThreadTest</span>():</span></span><br><span class="line">    pool = threadpool.ThreadPool(<span class="number">20</span>)</span><br><span class="line">    li = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        li.append((<span class="literal">None</span>, &#123;<span class="string">&#x27;a&#x27;</span>: i, <span class="string">&#x27;b&#x27;</span>: i + <span class="number">10</span>&#125;))</span><br><span class="line">    requests = threadpool.makeRequests(Test, li)</span><br><span class="line">    [pool.putRequest(req) <span class="keyword">for</span> req <span class="keyword">in</span> requests]</span><br><span class="line">    pool.wait()</span><br></pre></td></tr></table></figure>
+<p>threadpool需要安装，pip就可以 多参数用 (None, {....})，当前版本threadpool 1.3.2是这么写的。</p>
+<h3 id="进程池">进程池</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MultiProcessTest</span>():</span></span><br><span class="line">    pool = multiprocessing.Pool(processes = <span class="number">4</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">        pool.apply_async(Test, (i, i + <span class="number">10</span>, ))</span><br><span class="line">    pool.close()</span><br><span class="line">    pool.join()</span><br></pre></td></tr></table></figure>
 <p>先close后join。</p>
-<h3 id="共享数据"><a href="#共享数据" class="headerlink" title="共享数据"></a>共享数据</h3><p>另外，多线程可以用Python的Queue共享数据，多进程要用multiprocessing.Queue。</p>
-<p>这里尝试用multiprocessing的dict保存数据。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Test</span>(<span class="params">a, b, mpDict</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">str</span>(a) + <span class="string">&quot;test&quot;</span>, b)</span><br><span class="line">    mpDict[<span class="built_in">str</span>(a) + <span class="string">&quot;test&quot;</span>] = b</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MultiProcessTest</span>():</span></span><br><span class="line">    pool = multiprocessing.Pool(processes=<span class="number">4</span>)</span><br><span class="line">    mpDict = multiprocessing.Manager().<span class="built_in">dict</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">        pool.apply_async(Test, (i, i + <span class="number">10</span>, mpDict, ))</span><br><span class="line">    pool.close()</span><br><span class="line">    pool.join()</span><br><span class="line">    traditionDict = <span class="built_in">dict</span>(mpDict)</span><br><span class="line">    <span class="built_in">print</span>(traditionDict)</span><br></pre></td></tr></table></figure>
-
-<h1 id="生产者-消费者-模型"><a href="#生产者-消费者-模型" class="headerlink" title="生产者-消费者 模型"></a>生产者-消费者 模型</h1><p>Pool 共享 Queue 有个 <strong>坑</strong>，<code>multiprocessing.Queue()</code> 只支持 Process 出来的进程，不支持 Pool 的，在 Pool 中需要使用 <code>multiprocessing.Manager()</code></p>
+<h3 id="共享数据">共享数据</h3>
+<p>另外，多线程可以用Python的Queue共享数据，多进程要用multiprocessing.Queue。</p>
+<p>这里尝试用multiprocessing的dict保存数据。 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> multiprocessing</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Test</span>(<span class="params">a, b, mpDict</span>):</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">str</span>(a) + <span class="string">&quot;test&quot;</span>, b)</span><br><span class="line">    mpDict[<span class="built_in">str</span>(a) + <span class="string">&quot;test&quot;</span>] = b</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MultiProcessTest</span>():</span></span><br><span class="line">    pool = multiprocessing.Pool(processes=<span class="number">4</span>)</span><br><span class="line">    mpDict = multiprocessing.Manager().<span class="built_in">dict</span>()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">        pool.apply_async(Test, (i, i + <span class="number">10</span>, mpDict, ))</span><br><span class="line">    pool.close()</span><br><span class="line">    pool.join()</span><br><span class="line">    traditionDict = <span class="built_in">dict</span>(mpDict)</span><br><span class="line">    <span class="built_in">print</span>(traditionDict)</span><br></pre></td></tr></table></figure></p>
+<h1 id="生产者-消费者-模型">生产者-消费者 模型</h1>
+<p>Pool 共享 Queue 有个 <strong>坑</strong>，<code>multiprocessing.Queue()</code> 只支持 Process 出来的进程，不支持 Pool 的，在 Pool 中需要使用 <code>multiprocessing.Manager()</code></p>
 <p>下面代码为 1 个生产者和 4 个消费者的例子。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"># 生产者</span><br><span class="line">def write(q):</span><br><span class="line">    a &#x3D; np.random.randint(0, 100, (100, 2, 2))</span><br><span class="line">    for value in range(a.shape[0]):</span><br><span class="line">        print(&#39;Put %s to queue...\n&#39; % a[value])</span><br><span class="line">        q.put(a[value])</span><br><span class="line">        print(q.qsize())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 消费者:</span><br><span class="line">def read(q):</span><br><span class="line">    while True:</span><br><span class="line">        # get的参数是 block&#x3D;True, timeout&#x3D;None</span><br><span class="line">        # block表示队列空时是阻塞等待还是抛出异常</span><br><span class="line">        # timeout指等待一定时间抛出异常，还是无限等待。</span><br><span class="line">        value &#x3D; q.get(True)</span><br><span class="line">        print(&#39;Get %s from queue.\n&#39; % value)</span><br><span class="line">        print(q.qsize())</span><br><span class="line">        time.sleep(random.random())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_pool():</span><br><span class="line">    manager &#x3D; mp.Manager()</span><br><span class="line">    q &#x3D; manager.Queue(2)</span><br><span class="line">    pw &#x3D; Process(target&#x3D;write, args&#x3D;(q,))</span><br><span class="line">    pw.start()</span><br><span class="line">    worker_num &#x3D; 4</span><br><span class="line">    pool &#x3D; mp.Pool(processes&#x3D;worker_num)</span><br><span class="line">    for i in range(worker_num):</span><br><span class="line">        print(&#39;start data worker &#39; + str(i))</span><br><span class="line">        pool.apply_async(read, (q, ))</span><br><span class="line">    pool.close()</span><br><span class="line">    pw.join()</span><br><span class="line">    pool.join()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
     </div>
 
     
     
     
 
-      <footer class="post-footer">
+    <footer class="post-footer">
 
         
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2015-08-29-2015hncpc/" rel="prev" title="2015省赛">
-      <i class="fa fa-chevron-left"></i> 2015省赛
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2016-05-11-python-import-outer-folder-project/" rel="next" title="Python引入外部文件夹或其他工程的搜索目录设置方法">
-      Python引入外部文件夹或其他工程的搜索目录设置方法 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2015-08-29-2015hncpc/" rel="prev" title="2015省赛">
+                  <i class="fa fa-chevron-left"></i> 2015省赛
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2016-05-11-python-import-outer-folder-project/" rel="next" title="Python引入外部文件夹或其他工程的搜索目录设置方法">
+                  Python引入外部文件夹或其他工程的搜索目录设置方法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
           </div>
-          
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
     
-  <div class="comments">
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-number">1.</span> <span class="nav-text">线程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E6%B1%A0"><span class="nav-number">2.</span> <span class="nav-text">进程池</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE"><span class="nav-number">3.</span> <span class="nav-text">共享数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85-%E6%A8%A1%E5%9E%8B"><span class="nav-number"></span> <span class="nav-text">生产者-消费者 模型</span></a></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">CSGrandeur</p>
-  <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">25</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-        <span class="site-state-item-count">17</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
+  </main>
 
+  <footer class="footer">
+    <div class="footer-inner">
 
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
 
 <div class="copyright">
-  
   &copy; 
   <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
@@ -392,154 +311,37 @@
   </span>
   <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-  <script>
-var pjax = new Pjax({
-  selectors: [
-    'head title',
-    '#page-configurations',
-    '.content-wrap',
-    '.post-toc-wrap',
-    '.languages',
-    '#pjax'
-  ],
-  switches: {
-    '.post-toc-wrap': Pjax.switches.innerHTML
-  },
-  analytics: false,
-  cacheBust: false,
-  scrollTo : !CONFIG.bookmark.enable
-});
-
-window.addEventListener('pjax:success', () => {
-  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
-    var code = element.text || element.textContent || element.innerHTML || '';
-    var parent = element.parentNode;
-    parent.removeChild(element);
-    var script = document.createElement('script');
-    if (element.id) {
-      script.id = element.id;
-    }
-    if (element.className) {
-      script.className = element.className;
-    }
-    if (element.type) {
-      script.type = element.type;
-    }
-    if (element.src) {
-      script.src = element.src;
-      // Force synchronous loading of peripheral JS.
-      script.async = false;
-    }
-    if (element.dataset.pjax !== undefined) {
-      script.dataset.pjax = '';
-    }
-    if (code !== '') {
-      script.appendChild(document.createTextNode(code));
-    }
-    parent.appendChild(script);
-  });
-  NexT.boot.refresh();
-  // Define Motion Sequence & Bootstrap Motion.
-  if (CONFIG.motion.enable) {
-    NexT.motion.integrator
-      .init()
-      .add(NexT.motion.middleWares.subMenu)
-      .add(NexT.motion.middleWares.postList)
-      .bootstrap();
-  }
-  NexT.utils.updateSidebarPosition();
-});
-</script>
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div id="pjax">
-  
-
-  
-
-  
-
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://csgrandeur.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "https://blog.csgrandeur.com/2016-05-10-python-threadpool-processpool/";
-    this.page.identifier = "2016-05-10-python-threadpool-processpool/";
-    this.page.title = "Python多线程（线程池）与多进程（进程池）简单使用";
-    };
-  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://csgrandeur.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
 
     </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{&quot;enable&quot;:true,&quot;shortname&quot;:&quot;csgrandeur&quot;,&quot;count&quot;:true,&quot;i18n&quot;:{&quot;disqus&quot;:&quot;disqus&quot;}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
 </body>
 </html>

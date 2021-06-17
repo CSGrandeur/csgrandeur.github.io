@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.4.0">
+
+
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
@@ -13,14 +15,12 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"blog.csgrandeur.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"default"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
-  </script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-  <meta name="description" content="给一个字符串，求最短循环节，如abcabcabcabc循环节为abc 给一个字符串，求在末尾最少补多少字母后成为一个有循环节的字符串，如abcabca需要补充bc">
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;blog.csgrandeur.com&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Gemini&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;}}</script><script src="/js/config.js"></script>
+<meta name="description" content="给一个字符串，求最短循环节，如abcabcabcabc循环节为abc 给一个字符串，求在末尾最少补多少字母后成为一个有循环节的字符串，如abcabca需要补充bc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="试证KMP计算循环节方法">
 <meta property="og:url" content="https://blog.csgrandeur.com/2021-04-27-try-to-prove-loop-by-kmp/">
@@ -34,88 +34,47 @@
 <meta property="article:tag" content="Algorithm">
 <meta name="twitter:card" content="summary">
 
+
 <link rel="canonical" href="https://blog.csgrandeur.com/2021-04-27-try-to-prove-loop-by-kmp/">
 
 
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
 
-  <title>试证KMP计算循环节方法 | CSGrandeur's Thinking</title>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;blog.csgrandeur.com&#x2F;2021-04-27-try-to-prove-loop-by-kmp&#x2F;&quot;,&quot;path&quot;:&quot;2021-04-27-try-to-prove-loop-by-kmp&#x2F;&quot;,&quot;title&quot;:&quot;试证KMP计算循环节方法&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>试证KMP计算循环节方法 | CSGrandeur's Thinking</title>
   
-    <script>
-      function sendPageView() {
-        if (CONFIG.hostname !== location.hostname) return;
-        var uid = localStorage.getItem('uid') || (Math.random() + '.' + Math.random());
-        localStorage.setItem('uid', uid);
-        navigator.sendBeacon('https://www.google-analytics.com/collect', new URLSearchParams({
-          v  : 1,
-          tid: 'UA-69787882-2',
-          cid: uid,
-          t  : 'pageview',
-          dp : encodeURIComponent(location.pathname)
-        }));
-      }
-      document.addEventListener('pjax:complete', sendPageView);
-      sendPageView();
-    </script>
-
-
+  <script class="next-config" data-name="google_analytics" type="application/json">{&quot;tracking_id&quot;:&quot;UA-69787882-2&quot;,&quot;only_pageview&quot;:true}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
 
 
 
 
   <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
+  <main class="main">
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
   <div class="site-meta">
 
     <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
+      <i class="logo-line"></i>
       <h1 class="site-title">CSGrandeur's Thinking</h1>
-      <span class="logo-line-after"><i></i></span>
+      <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
   </div>
@@ -128,24 +87,11 @@
 
 
 
-
 <nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
   </ul>
 </nav>
 
@@ -153,27 +99,94 @@
 
 
 </div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B51%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80%E9%87%8D%E5%8F%A0-%E4%B8%94-%E5%BE%AA%E7%8E%AF%E8%8A%82%E5%A1%AB%E6%BB%A1"><span class="nav-number">1.</span> <span class="nav-text">情况1最长相等前后缀重叠 且 循环节填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B51%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80%E9%87%8D%E5%8F%A0-%E4%BD%86-%E5%BE%AA%E7%8E%AF%E8%8A%82-%E6%9C%AA-%E5%A1%AB%E6%BB%A1"><span class="nav-number">2.</span> <span class="nav-text">情况1最长相等前后缀重叠 但 循环节 未 填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B52%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80-%E4%B8%8D-%E9%87%8D%E5%8F%A0-%E4%B8%94-%E5%BE%AA%E7%8E%AF%E8%8A%82%E5%A1%AB%E6%BB%A1"><span class="nav-number">3.</span> <span class="nav-text">情况2最长相等前后缀 不 重叠 且 循环节填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B52%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80-%E4%B8%8D-%E9%87%8D%E5%8F%A0-%E4%BD%86-%E5%BE%AA%E7%8E%AF%E8%8A%82-%E6%9C%AA-%E5%A1%AB%E6%BB%A1"><span class="nav-number">4.</span> <span class="nav-text">情况2最长相等前后缀 不 重叠 但 循环节 未 填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
     </header>
 
     
-  <div class="back-to-top">
+  <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up"></i>
     <span>0%</span>
   </div>
 
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
 
-          <div class="content post posts-expand">
-            
+    <div class="main-inner post posts-expand">
 
-    
+
+  
+
+
+<div class="post-block">
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://blog.csgrandeur.com/2021-04-27-try-to-prove-loop-by-kmp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -190,27 +203,28 @@
           试证KMP计算循环节方法
         </h1>
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
 
-              <time title="创建时间：2021-04-27 11:17:17 / 修改时间：13:37:19" itemprop="dateCreated datePublished" datetime="2021-04-27T11:17:17+08:00">2021-04-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
-                </span>
-            </span>
+      <time title="创建时间：2021-04-27 11:17:17 / 修改时间：13:37:19" itemprop="dateCreated datePublished" datetime="2021-04-27T11:17:17+08:00">2021-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+    </span>
 
-          
+  
   
   <span class="post-meta-item">
     
@@ -225,6 +239,7 @@
   </span>
   
   
+</div>
 
         </div>
       </header>
@@ -233,14 +248,11 @@
     
     
     <div class="post-body" itemprop="articleBody">
-
-      
-        <ol>
+        <ol type="1">
 <li>给一个字符串，求最短循环节，如<code>abcabcabcabc</code>循环节为<code>abc</code></li>
 <li>给一个字符串，求在末尾最少补多少字母后成为一个有循环节的字符串，如<code>abcabca</code>需要补充<code>bc</code></li>
 </ol>
 <span id="more"></span>
-
 <p>数据结构课程在string章节的实验课，多半会有循环节这道题，或许蒙的猜的或许课堂讲的，大多人会发现 <code>strLen - next[strLen]</code> 就是最短循环节的长度，无论是上述问题<code>1</code>还是问题<code>2</code>，都能求出循环节长度为<code>3</code>，即<code>abc</code></p>
 <p>但总觉得哪里怪怪的，大家都默认这样正确，在网上却不太容易找到一个严谨的证明。这篇博客试着证明一下，当然依然是非数学的，期望更容易读懂。</p>
 <p>我们知道KMP算法的next数组是由“最长相等前后缀”推得的，<code>strLen - next[strLen]</code> 其实就是“字符串长度”减去“整串最长相等前后缀长度”后的长度，循环节即这个长度的前缀，这里我们就是要证明：</p>
@@ -248,61 +260,52 @@
 <p>一个字符串的最长相等前后缀，有两种情况：</p>
 <p>情况<code>1</code>：最长相等前后缀重叠</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmmmmmmmmmmm---</span><br><span class="line">---mmmmmmmmmmmmmm</span><br><span class="line">0  j         k  l</span><br></pre></td></tr></table></figure>
-
 <p>这里 m 表示相匹配的串</p>
 <p>情况<code>2</code>：不重叠</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
-
 <p>对于情况<code>1</code>和情况<code>2</code>，又分别有 <strong>循环刚好填满</strong> ，和 <strong>循环未填满需要补充</strong> 的情况。</p>
-<h2 id="情况1最长相等前后缀重叠-且-循环节填满"><a href="#情况1最长相等前后缀重叠-且-循环节填满" class="headerlink" title="情况1最长相等前后缀重叠 且 循环节填满"></a>情况<code>1</code>最长相等前后缀重叠 <strong>且</strong> 循环节填满</h2><p>这里用 <code>[0,k] == [j,l]</code> 表示 <code>0~k</code> 的字符与 <code>j~l</code> 的字符顺序一一匹配，<code>[]</code>表示闭区间。</p>
+<h2 id="情况1最长相等前后缀重叠-且-循环节填满">情况<code>1</code>最长相等前后缀重叠 <strong>且</strong> 循环节填满</h2>
+<p>这里用 <code>[0,k] == [j,l]</code> 表示 <code>0~k</code> 的字符与 <code>j~l</code> 的字符顺序一一匹配，<code>[]</code>表示闭区间。</p>
 <p>显然<code>[0,j) == [j,j+j)</code>，即最长相等前后缀之间，“前缀的前缀”肯定与“后缀的前缀”相匹配。这里<code>)</code>表示右侧开区间，用<code>M</code>来表示这个情况。</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMmmmmmmmmmmmm---</span><br><span class="line">---MMMmmmmmmmmmmmm</span><br><span class="line">0  j          k  l</span><br></pre></td></tr></table></figure>
-
 <p>而<code>[j,j+j) == [j+j,j+j+j)</code> 也是成立的，最长相等前后缀之间，前缀的任意一段，等于后缀对应位移的那段，这里用<code>P</code>来表示</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPmmmmmmmmm---</span><br><span class="line">---MMMPPPmmmmmmmmm</span><br><span class="line">0  j          k  l</span><br></pre></td></tr></table></figure>
-
 <p>而显然，后缀的<code>MMM</code>和前缀的<code>PPP</code>是同一个区间，都是<code>[j,j+j)</code>，后缀的<code>PPP</code>又和前缀的<code>PPP</code>之后的长度为<code>j</code>的区间是同一个区间，可以连锁反应下去，直到字符串最后</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPOOOmmmmmm---</span><br><span class="line">---MMMPPPOOOmmmmmm</span><br><span class="line">0  j          k  l</span><br></pre></td></tr></table></figure>
-
-<h2 id="情况1最长相等前后缀重叠-但-循环节-未-填满"><a href="#情况1最长相等前后缀重叠-但-循环节-未-填满" class="headerlink" title="情况1最长相等前后缀重叠 但 循环节 未 填满"></a>情况<code>1</code>最长相等前后缀重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2><p>可能会是这个样子</p>
+<h2 id="情况1最长相等前后缀重叠-但-循环节-未-填满">情况<code>1</code>最长相等前后缀重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2>
+<p>可能会是这个样子</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmmmmmmmmmm---</span><br><span class="line">---mmmmmmmmmmmmm</span><br><span class="line">0  j        k  l</span><br></pre></td></tr></table></figure>
-
 <p>看起来没什么区别？其实就是长度不能整除这个假定的循环节了。</p>
 <p>连锁反应还和刚才一样，最后能得到：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPOOOAAAm---</span><br><span class="line">---MMMPPPOOOAAAm</span><br><span class="line">0  j        k  l</span><br></pre></td></tr></table></figure>
-
 <p>到这里，连锁还可以继续，后缀的<code>AAA</code>对应前缀的那段依然是循环，用<code>BBB</code>表示</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMPPPOOOAAABBB-</span><br><span class="line">---MMMPPPOOOAAAm</span><br><span class="line">0  j        k  l</span><br></pre></td></tr></table></figure>
-
 <p>最后剩下的这个字符（或若干字符）</p>
 <ul>
 <li>是后缀的末尾，那必然也与前缀的末尾匹配 ==&gt;</li>
 <li>现在前缀已经被循环串填满了，所以前缀的末尾必然是循环串的一个开头 ==&gt;</li>
 <li>则后缀的末尾（也是字符串的末尾）也是循环串的一个开头</li>
 </ul>
-<h2 id="情况2最长相等前后缀-不-重叠-且-循环节填满"><a href="#情况2最长相等前后缀-不-重叠-且-循环节填满" class="headerlink" title="情况2最长相等前后缀 不 重叠 且 循环节填满"></a>情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>且</strong> 循环节填满</h2><p>循环节填满字符串的话，是不可能出现情况<code>2</code>的</p>
+<h2 id="情况2最长相等前后缀-不-重叠-且-循环节填满">情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>且</strong> 循环节填满</h2>
+<p>循环节填满字符串的话，是不可能出现情况<code>2</code>的</p>
 <p>循环两次时：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AAAA----</span><br><span class="line">----BBBB</span><br></pre></td></tr></table></figure>
-
 <p>最长相等前后缀是挨着的，用情况<code>1</code>的连锁反应即可</p>
 <p>循环大于两次时：</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AAAACCCC----</span><br><span class="line">----BBBBCCCC</span><br></pre></td></tr></table></figure>
-
 <p>必然重叠</p>
-<h2 id="情况2最长相等前后缀-不-重叠-但-循环节-未-填满"><a href="#情况2最长相等前后缀-不-重叠-但-循环节-未-填满" class="headerlink" title="情况2最长相等前后缀 不 重叠 但 循环节 未 填满"></a>情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2><figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
-
+<h2 id="情况2最长相等前后缀-不-重叠-但-循环节-未-填满">情况<code>2</code>最长相等前后缀 <strong>不</strong> 重叠 <strong>但</strong> 循环节 <strong>未</strong> 填满</h2>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mmmmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
 <p>按照公式，即总长度减去最长相等前后缀长度，循环节应该是<code>[0,j)</code>，用<code>M</code>表示为</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">MMMMMMMMMMMM-----</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
-
 <p>它当作需要补齐的循环节，是符合要求的。但是否是“最小循环节”呢？</p>
 <p><strong>反证</strong> 一下，假设有更短循环节<code>P</code></p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PPPmm------------</span><br><span class="line">------------mmmmm</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
-
 <p>那么，我们得到的KMP匹配结果，将会是</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PPPAAABBBCCCDD---</span><br><span class="line">---PPPAAABBBCCCDD</span><br><span class="line">0   k       j   l</span><br></pre></td></tr></table></figure>
-
 <p>这是情况<code>1</code>而不是情况<code>2</code>了，产生矛盾，故不存在更小的循环节<code>P</code>。</p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>几种情况都已处理完，这样可以更感性地认知<code>strLen - next[strLen]</code>为循环节长度的意义了。</p>
+<h2 id="小结">小结</h2>
+<p>几种情况都已处理完，这样可以更感性地认知<code>strLen - next[strLen]</code>为循环节长度的意义了。</p>
 
     </div>
 
@@ -310,7 +313,7 @@
     
     
 
-      <footer class="post-footer">
+    <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/ACM/" rel="tag"># ACM</a>
               <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
@@ -318,131 +321,40 @@
 
         
 
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2021-04-24-understanding-of-convex-optimization/" rel="prev" title="凸优化初步了解">
-      <i class="fa fa-chevron-left"></i> 凸优化初步了解
-    </a></div>
-      <div class="post-nav-item"></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021-04-24-understanding-of-convex-optimization/" rel="prev" title="凸优化初步了解">
+                  <i class="fa fa-chevron-left"></i> 凸优化初步了解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021-06-07-MultiplicativeInverse/" rel="next" title="乘法逆元">
+                  乘法逆元 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
           </div>
-          
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
     
-  <div class="comments">
-    <div id="disqus_thread">
-      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
-    </div>
+  <div class="comments" id="disqus_thread">
+    <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
   </div>
   
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B51%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80%E9%87%8D%E5%8F%A0-%E4%B8%94-%E5%BE%AA%E7%8E%AF%E8%8A%82%E5%A1%AB%E6%BB%A1"><span class="nav-number">1.</span> <span class="nav-text">情况1最长相等前后缀重叠 且 循环节填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B51%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80%E9%87%8D%E5%8F%A0-%E4%BD%86-%E5%BE%AA%E7%8E%AF%E8%8A%82-%E6%9C%AA-%E5%A1%AB%E6%BB%A1"><span class="nav-number">2.</span> <span class="nav-text">情况1最长相等前后缀重叠 但 循环节 未 填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B52%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80-%E4%B8%8D-%E9%87%8D%E5%8F%A0-%E4%B8%94-%E5%BE%AA%E7%8E%AF%E8%8A%82%E5%A1%AB%E6%BB%A1"><span class="nav-number">3.</span> <span class="nav-text">情况2最长相等前后缀 不 重叠 且 循环节填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%85%E5%86%B52%E6%9C%80%E9%95%BF%E7%9B%B8%E7%AD%89%E5%89%8D%E5%90%8E%E7%BC%80-%E4%B8%8D-%E9%87%8D%E5%8F%A0-%E4%BD%86-%E5%BE%AA%E7%8E%AF%E8%8A%82-%E6%9C%AA-%E5%A1%AB%E6%BB%A1"><span class="nav-number">4.</span> <span class="nav-text">情况2最长相等前后缀 不 重叠 但 循环节 未 填满</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">CSGrandeur</p>
-  <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">25</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">5</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-        <span class="site-state-item-count">17</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
+  </main>
 
+  <footer class="footer">
+    <div class="footer-inner">
 
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
 
 <div class="copyright">
-  
   &copy; 
   <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
@@ -450,154 +362,37 @@
   </span>
   <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-pjax@0/pjax.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-  <script>
-var pjax = new Pjax({
-  selectors: [
-    'head title',
-    '#page-configurations',
-    '.content-wrap',
-    '.post-toc-wrap',
-    '.languages',
-    '#pjax'
-  ],
-  switches: {
-    '.post-toc-wrap': Pjax.switches.innerHTML
-  },
-  analytics: false,
-  cacheBust: false,
-  scrollTo : !CONFIG.bookmark.enable
-});
-
-window.addEventListener('pjax:success', () => {
-  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
-    var code = element.text || element.textContent || element.innerHTML || '';
-    var parent = element.parentNode;
-    parent.removeChild(element);
-    var script = document.createElement('script');
-    if (element.id) {
-      script.id = element.id;
-    }
-    if (element.className) {
-      script.className = element.className;
-    }
-    if (element.type) {
-      script.type = element.type;
-    }
-    if (element.src) {
-      script.src = element.src;
-      // Force synchronous loading of peripheral JS.
-      script.async = false;
-    }
-    if (element.dataset.pjax !== undefined) {
-      script.dataset.pjax = '';
-    }
-    if (code !== '') {
-      script.appendChild(document.createTextNode(code));
-    }
-    parent.appendChild(script);
-  });
-  NexT.boot.refresh();
-  // Define Motion Sequence & Bootstrap Motion.
-  if (CONFIG.motion.enable) {
-    NexT.motion.integrator
-      .init()
-      .add(NexT.motion.middleWares.subMenu)
-      .add(NexT.motion.middleWares.postList)
-      .bootstrap();
-  }
-  NexT.utils.updateSidebarPosition();
-});
-</script>
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div id="pjax">
-  
-
-  
-
-  
-
-<script>
-  function loadCount() {
-    var d = document, s = d.createElement('script');
-    s.src = 'https://csgrandeur.disqus.com/count.js';
-    s.id = 'dsq-count-scr';
-    (d.head || d.body).appendChild(s);
-  }
-  // defer loading until the whole page loading is completed
-  window.addEventListener('load', loadCount, false);
-</script>
-<script>
-  var disqus_config = function() {
-    this.page.url = "https://blog.csgrandeur.com/2021-04-27-try-to-prove-loop-by-kmp/";
-    this.page.identifier = "2021-04-27-try-to-prove-loop-by-kmp/";
-    this.page.title = "试证KMP计算循环节方法";
-    };
-  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
-    if (window.DISQUS) {
-      DISQUS.reset({
-        reload: true,
-        config: disqus_config
-      });
-    } else {
-      var d = document, s = d.createElement('script');
-      s.src = 'https://csgrandeur.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', '' + +new Date());
-      (d.head || d.body).appendChild(s);
-    }
-  });
-</script>
 
     </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{&quot;enable&quot;:true,&quot;tags&quot;:&quot;none&quot;,&quot;js&quot;:{&quot;url&quot;:&quot;https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;mathjax@3.1.4&#x2F;es5&#x2F;tex-mml-chtml.js&quot;,&quot;integrity&quot;:&quot;sha256-ncNI9OXOS5Ek4tzVYiOMmN&#x2F;KKCPZ6V0Cpv2P&#x2F;zHntiA&#x3D;&quot;}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="disqus" type="application/json">{&quot;enable&quot;:true,&quot;shortname&quot;:&quot;csgrandeur&quot;,&quot;count&quot;:true,&quot;i18n&quot;:{&quot;disqus&quot;:&quot;disqus&quot;}}</script>
+<script src="/js/third-party/comments/disqus.js"></script>
+
 </body>
 </html>
