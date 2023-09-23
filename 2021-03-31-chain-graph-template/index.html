@@ -14,10 +14,10 @@
 
 
 
-<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" integrity="sha256-AbA177XfpSnFEvgpYu1jMygiLabzPCJCRIBtR5jGc0k=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.13.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="该内容在紫书中有详述 这里贴一份模板方便讲解使用">
 <meta property="og:type" content="article">
@@ -51,6 +51,8 @@
 
 
 
+
+
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -60,8 +62,8 @@
   <div class="headband"></div>
 
   <main class="main">
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
         <span class="toggle-line"></span>
@@ -81,7 +83,7 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
         <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
@@ -123,15 +125,9 @@
     </div>
   </div>
 
-</div>
+</header>
         
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-
   <aside class="sidebar">
 
     <div class="sidebar-inner sidebar-overview-active">
@@ -151,11 +147,11 @@
         <!--/noindex-->
 
         <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">CSGrandeur</p>
   <div class="site-description" itemprop="description"></div>
 </div>
-<div class="site-state-wrap site-overview-item animated">
+<div class="site-state-wrap animated">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
@@ -176,27 +172,15 @@
   </nav>
 </div>
 
-
-
         </div>
       </div>
     </div>
-  </aside>
-  <div class="sidebar-dimmer"></div>
-
-
-    </header>
 
     
-  <div class="back-to-top" role="button" aria-label="返回顶部">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  </aside>
 
-<noscript>
-  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
-</noscript>
 
+    </div>
 
     <div class="main-inner post posts-expand">
 
@@ -266,8 +250,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
-        <p>该内容在紫书中有详述</p>
+    <div class="post-body" itemprop="articleBody"><p>该内容在紫书中有详述</p>
 <p>这里贴一份模板方便讲解使用</p>
 <span id="more"></span>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// 链式前向星建图</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxN = <span class="number">1100</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxM = <span class="number">110000</span>;</span><br><span class="line"><span class="type">int</span> first[maxN];    <span class="comment">// 每个顶点发出的边的边链表头结点，该数组可初始化为 -1 表示每个顶点都还没有边</span></span><br><span class="line"><span class="type">int</span> nex[maxM];      <span class="comment">// 同个顶点发出的边的边结点 next 域</span></span><br><span class="line"><span class="type">int</span> u[maxM];        <span class="comment">// 边的发出顶点</span></span><br><span class="line"><span class="type">int</span> v[maxM];        <span class="comment">// 边的收入顶点</span></span><br><span class="line"><span class="type">int</span> w[maxM];        <span class="comment">// 边的权值</span></span><br><span class="line"><span class="type">int</span> tp;             <span class="comment">// 全局“内存分配”“指针”，就是模拟分配内存时，tp从0开始逐个增加</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 比如 first[1]，表示顶点 V1 发出的第一条边的“指针”，这里就是数组编号</span></span><br><span class="line"><span class="comment">// nex[first[1]] 表示顶点 V1 发出的边的链表的第二个结点编号</span></span><br><span class="line"><span class="comment">// nex[nex[first[1]]] 表示顶点 V1 发出的边的链表的第三个结点编号 ...</span></span><br><span class="line"><span class="comment">// u[first[1]] 顶点 V1</span></span><br><span class="line"><span class="comment">// v[first[1]] 顶点 V1 发出的第一条边的另一端的顶点编号，比如 v[first[1]] == 3 就表示 V1 连着 V3</span></span><br><span class="line"><span class="comment">// w[first[1]] 顶点 V1 发出的第一条边的权值</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddEdge</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e, <span class="type">int</span> weight)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 建图：表示顶点 s 向顶点 e 发出了一条权重为 weight 的有向边</span></span><br><span class="line">    <span class="comment">// 程序开始时 tp 初始为 0</span></span><br><span class="line">    nex[tp] = first[s]; <span class="comment">// 类似链表头插法</span></span><br><span class="line">    first[s] = tp;</span><br><span class="line">    u[tp] = s;</span><br><span class="line">    v[tp] = e;</span><br><span class="line">    w[tp] = weight;</span><br><span class="line">    tp ++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DbEdge</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e, <span class="type">int</span> weight)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 如果表示无向图，那简单，两个方向都建一条有向边就好</span></span><br><span class="line">    <span class="built_in">AddEdge</span>(s, e, weight);</span><br><span class="line">    <span class="built_in">AddEdge</span>(e, s, weight);</span><br><span class="line">    <span class="comment">// 结合 tp 的属性，你会发现，可以很容易找到两个顶点之间成对的双向边</span></span><br><span class="line">    <span class="comment">// 比如 i 是 s 发向 e 的边的编号，那么 i^1 （异或操作） 就是 e 发向 s 的边</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// 以深度优先搜索为例遍历全图，感受前向星的使用</span></span><br><span class="line"><span class="type">bool</span> vis[maxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> now)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = first[now]; i != <span class="number">-1</span>; i = nex[i])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 类似链表访问过程，i = first[now] 从头结点获得第一条边的指针</span></span><br><span class="line">        <span class="comment">// i = nex[i] 即链表指针域往后遍历</span></span><br><span class="line">        <span class="comment">// i != -1 即判断是否到链表末尾</span></span><br><span class="line">        <span class="comment">// u[i]、v[i]、w[i] 都是链表结点的数据域，当然你可以把 nex、u、v、w 封装在 struct 里</span></span><br><span class="line">        <span class="keyword">if</span>(!vis[v[i]])</span><br><span class="line">        &#123;</span><br><span class="line">            vis[v[i]] = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">DFS</span>(v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// 以迪杰斯特拉最短路算法体验前向星的使用</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> vNum;</span><br><span class="line">    <span class="type">int</span> pathLen;</span><br><span class="line">    <span class="built_in">Node</span>()&#123;&#125;</span><br><span class="line">    <span class="built_in">Node</span>(<span class="type">int</span> v_, <span class="type">int</span> p_)&#123;vNum = v_, pathLen = p_;&#125;</span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> Node &amp;b)<span class="type">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> pathLen &gt; b.pathLen;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">int</span> key[maxN];  <span class="comment">// 动态更新每个结点与起点的距离</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Dijkstra</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(key, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(key));</span><br><span class="line">    key[s] = <span class="number">0</span>;</span><br><span class="line">    std::priority_queue&lt;Node&gt; q;</span><br><span class="line">    q.<span class="built_in">push</span>(<span class="built_in">Node</span>(<span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        Node now = q.<span class="built_in">top</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">if</span>(now.pathLen != key[now.vNum])</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">if</span>(now.vNum == e)</span><br><span class="line">            <span class="keyword">return</span> now.pathLen;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = first[now.vNum]; i != <span class="number">-1</span>; i = nex[i])</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(now.pathLen + w[i] &lt; key[v[i]])</span><br><span class="line">            &#123;</span><br><span class="line">                key[v[i]] = now.pathLen + w[i];</span><br><span class="line">                q.<span class="built_in">push</span>(<span class="built_in">Node</span>(v[i], key[v[i]]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0x3f3f3f3f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -289,12 +272,12 @@
           <div class="post-nav">
             <div class="post-nav-item">
                 <a href="/2021-03-31-git-newbie/" rel="prev" title="用git管理自己的代码与文档">
-                  <i class="fa fa-chevron-left"></i> 用git管理自己的代码与文档
+                  <i class="fa fa-angle-left"></i> 用git管理自己的代码与文档
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021-03-31-vscode-wsl-acm/" rel="next" title="基于vscode与wsl配置c++环境（ACM向）">
-                  基于vscode与wsl配置c++环境（ACM向） <i class="fa fa-chevron-right"></i>
+                <a href="/2021-03-31-vscode-mingw-acm/" rel="next" title="基于vscode与mingw配置c++环境（ACM向）">
+                  基于vscode与mingw配置c++环境（ACM向） <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -314,15 +297,14 @@
   <footer class="footer">
     <div class="footer-inner">
 
-
-<div class="copyright">
-  &copy; 
-  <span itemprop="copyrightYear">2023</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
-</div>
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
@@ -330,13 +312,25 @@
   </footer>
 
   
-  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
-  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.5.0/pjax.min.js" integrity="sha256-3NkoLDrmHLTYj7csHIZSr0MHAFTXth7Ua/DDt4MRUAg=" crossorigin="anonymous"></script>
-<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
 
   
-<script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
 <script src="/js/third-party/search/local-search.js"></script>
+
+
 
 
 
