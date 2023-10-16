@@ -3041,7 +3041,7 @@ a \cdot a^{b-2} \bmod b \equiv 1
     <content><![CDATA[<p>CSGOJ指本人开发的一个算法竞赛在线评测系统，OJ即Online Judge，CSG取自竞赛生涯的ID：CSGrandeur的前三个字母，同时有 长沙/中南（Central Source）/反恐精英（FPS游戏，Counter-Strike）/计算机（Computer Science）等若干与我人生相关的缩写 CS + 姓首字母 G</p>
 <span id="more"></span>
 <h3 id="一缘起">一、缘起</h3>
-<p>2012年是我的ACM退役之年，被研究生老板拉去搞省赛的环境，时间仓促环境都被指定好了，硬着头皮在Windows下体验了一把<span class="math inline">\(PC^2\)</span>，那疯狂的5小时至今难忘。百般劝说下省赛决定之后用OJ，也是在World Final的<span class="math inline">\(PC^2\)</span>大潮下较早使用OJ的省赛之一了吧。</p>
+<p>2012年ACM退役，被研究生老板拉去搞省赛的环境，时间仓促环境都被指定好了，硬着头皮在Windows下体验了一把<span class="math inline">\(PC^2\)</span>，那疯狂的5小时至今难忘。百般劝说下省赛决定之后用OJ，也是在World Final的<span class="math inline">\(PC^2\)</span>大潮下较早使用OJ的省赛之一了吧。</p>
 <p>那么就提前开始准备第二年的省赛，在当时最有名的国内开源OJ——HUSTOJ上二次开发，因为省赛有一些特定的团队排名需求，且当时受到之前在武汉打华中南邀请赛时Web提交打印的启发，当时就有了做一站式OJ的想法，把代码打印、气球管理一起做进系统，如果cnblogs（博客园）没挂的话，或许还能找到当年“ajax初尝试”的博客。</p>
 <p>另外觉得当时的 vjudge 的滚动rank很炫酷（就是常规rank有滚榜的动效），就模仿着做了一个动态rank。</p>
 <p>在经历了半年多的月赛校赛洗礼后，OJ在2013年的省赛运行很顺利，刘汝佳老师出题的数据非常优雅，很小的数据量，仍然可以考察各种复杂的算法，在这一点上也是我后来几年出题的准则之一。</p>
