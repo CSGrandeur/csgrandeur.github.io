@@ -26,19 +26,19 @@
 <meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
 <meta property="og:description" content="用 git 多年，网上 git 使用的博客也层出不穷，然而让学生使用 git 的时候，却困难重重。 找资料不如写资料，写篇小白入门，希望能有些效果。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//line_ending_style.png">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//git_bash_here.png">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//gitee_setting.png">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//gitee_ssh.png">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//gitee_repo.png">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//gitee_sshurl.png">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//git_clone.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/line_ending_style.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/git_bash_here.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/gitee_setting.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/gitee_ssh.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/gitee_repo.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/gitee_sshurl.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/git_clone.png">
 <meta property="article:published_time" content="2021-03-31T02:57:02.000Z">
-<meta property="article:modified_time" content="2023-09-23T02:21:31.720Z">
+<meta property="article:modified_time" content="2023-10-16T15:27:34.104Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="tutorial">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.csgrandeur.cn/.cn//line_ending_style.png">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2021-03-31-git-newbie/line_ending_style.png">
 
 
 <link rel="canonical" href="http://blog.csgrandeur.cn/2021-03-31-git-newbie/">
@@ -237,7 +237,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-23 10:21:31" itemprop="dateModified" datetime="2023-09-23T10:21:31+08:00">2023-09-23</time>
+      <time title="修改时间：2023-10-16 23:27:34" itemprop="dateModified" datetime="2023-10-16T23:27:34+08:00">2023-10-16</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -261,7 +261,7 @@
     <div class="post-body" itemprop="articleBody"><p>用 git 多年，网上 git 使用的博客也层出不穷，然而让学生使用 git 的时候，却困难重重。</p>
 <p>找资料不如写资料，写篇小白入门，希望能有些效果。</p>
 <span id="more"></span>
-<hr>
+<hr />
 <h2 id="什么是git">什么是git</h2>
 <p>git（分布式版本控制系统）并不等同于github。</p>
 <p>git是一个分布式版本控制软件，最初由林纳斯·托瓦兹创作，于2005年以GPL发布。</p>
@@ -275,13 +275,13 @@
 <p>当然要有支持软件才可以：https://git-scm.com/</p>
 <p>安装的时候有个细节要注意选择——</p>
 <p>“Checkout as-is, commit Unix-style line endings”</p>
-<img src="/.cn//line_ending_style.png" class title="a">
+<img src="/2021-03-31-git-newbie/line_ending_style.png" class="" title="a">
 <p>写代码的你们应该已经了解这个事情：Windows、OSX、Linux/Unix 的换行格式不一样（<code>\n</code>、<code>\r\n</code>...）</p>
 <p>建议推送到git仓库的代码都是 Unix 格式的换行。</p>
 <p>而Windows只要使用高级点的文本编辑器，换行显示都不是问题。</p>
 <h3 id="配置个人信息及公钥">配置个人信息及公钥</h3>
 <p>安装git软件之后就有git控制台了，任意位置右键打开它。</p>
-<img src="/.cn//git_bash_here.png" class title="b">
+<img src="/2021-03-31-git-newbie/git_bash_here.png" class="" title="b">
 <p>执行以下三行，替换引号里的内容为自己的。遇到提示都默认回车。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;&lt;你的用户名&gt;&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;&lt;你的邮箱&gt;&quot;</span></span><br><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;&lt;你的邮箱&gt;&quot;</span></span><br></pre></td></tr></table></figure>
 <p>对于新手小白，不用太关心这些是什么。特别是第三行以及下面的内容，如果想搞清楚，可以去了解一下<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RSA%E5%8A%A0%E5%AF%86%E6%BC%94%E7%AE%97%E6%B3%95">RSA加密算法</a>，简单来说是让你本地生成一个钥匙和一个锁，等下要把锁传给服务器用来锁你的代码。而钥匙只有你的本地有，能理解个大概吧。</p>
@@ -289,8 +289,8 @@
 <p>https://gitee.com/</p>
 <p>注册账号一通操作（认真对待账号邮箱与手机号。总忘密码不是快乐的事情）</p>
 <p>进入账号设置，找到ssh公钥设置进行填写。</p>
-<img src="/.cn//gitee_setting.png" class title="c">
-<img src="/.cn//gitee_ssh.png" class title="d">
+<img src="/2021-03-31-git-newbie/gitee_setting.png" class="" title="c">
+<img src="/2021-03-31-git-newbie/gitee_ssh.png" class="" title="d">
 <p>公钥字符串就是你的锁，它就是刚刚<code>ssh-keygen -t rsa -C "&lt;你的邮箱&gt;"</code>这行代码在你的系统里生成的：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\&lt;你的windows用户名&gt;\.ssh\id_rsa.pub</span><br></pre></td></tr></table></figure>
 <p>注意：这个目录有 <code>id_rsa</code> 和 <code>id_rsa.pub</code>，“pub”一看就能分辨这个才是“公”钥咯。</p>
@@ -298,12 +298,12 @@
 <p>私钥不需要另外的配置，git软件会自动到这个路径找你的私钥去开锁帮你读写服务器上的代码。</p>
 <h3 id="已经可以开始使用了">已经可以开始使用了</h3>
 <p>在gitee里建一个自己的仓库</p>
-<img src="/.cn//gitee_repo.png" class title="e">
+<img src="/2021-03-31-git-newbie/gitee_repo.png" class="" title="e">
 <p>进入仓库，复制仓库的管理链接，我们配置的是ssh方式的（ssh一般基于RSA加密，就是上面的钥匙和锁的事情）</p>
-<img src="/.cn//gitee_sshurl.png" class title="f">
+<img src="/2021-03-31-git-newbie/gitee_sshurl.png" class="" title="f">
 <p>到自己本地的工作目录（就是自己想要存放、管理代码或文档的目录）</p>
 <p>打开前面配置git的那个控制台（右键-&gt;git bash here），用git指令把代码克隆下来（当然新仓库啥都没有）</p>
-<img src="/.cn//git_clone.png" class title="g">
+<img src="/2021-03-31-git-newbie/git_clone.png" class="" title="g">
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> &lt;刚刚复制的ssh地址&gt;</span><br></pre></td></tr></table></figure>
 <p>正常情况仓库就到了本地了，会有一个你仓库名字的文件夹，比如<code>my-acm-code</code>。文件夹里有一个隐藏文件夹“<code>.git</code>”，这就是你本地的仓库。</p>
 <p>这里举个例子，仓库放在了这里：</p>

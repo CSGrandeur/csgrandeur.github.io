@@ -26,15 +26,15 @@
 <meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
 <meta property="og:description" content="先了解了一下生成模型与判别模型 隐马尔可夫模型 隐马尔可夫模型（HMM）属于生成模型。 组成：两个集合，两个序列，两个矩阵。 这些内容构成了隐马尔可夫模型的整体概念，具体问题中，有的是已知的，有的是未知的，这个模型就是通过已知量建模，进而推算未知量。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://blog.csgrandeur.cn/.cn//crf_example.png">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/crf_example.png">
 <meta property="article:published_time" content="2017-04-06T03:15:12.000Z">
-<meta property="article:modified_time" content="2023-09-23T02:21:31.669Z">
+<meta property="article:modified_time" content="2023-10-16T15:27:34.067Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="隐马尔可夫">
 <meta property="article:tag" content="条件随机场">
 <meta property="article:tag" content="CRF">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://blog.csgrandeur.cn/.cn//crf_example.png">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/crf_example.png">
 
 
 <link rel="canonical" href="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/">
@@ -233,7 +233,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-23 10:21:31" itemprop="dateModified" datetime="2023-09-23T10:21:31+08:00">2023-09-23</time>
+      <time title="修改时间：2023-10-16 23:27:34" itemprop="dateModified" datetime="2023-10-16T23:27:34+08:00">2023-10-16</time>
     </span>
 
   
@@ -337,7 +337,7 @@ P(Y_{i}|X, Y_{1},...,Y_{i-1},Y_{i+1},...,Y_{n})=P(Y_{i}|X,Y_{i-1},Y_{i+1})
 </blockquote>
 <h3 id="crf图像分割">CRF图像分割</h3>
 <p>把图像每个像素当作条件随机场的一个结点，相邻像素连边，结点集合为<code>Y</code>，在这个基础上，加一个和每个像素一一对应的条件<code>X</code>，条件<code>X</code>就是实际看到的图像，要求的<code>Y</code>是分割结果标签，参考前面的线性链条件随机场，就是把一维的链变成二维的图像，<code>Y</code>的每个像素与相邻像素相连，<code>X</code>的每个像素一一对应与<code>Y</code>连一条边，如图：</p>
-<img src="/.cn//crf_example.png" class title="CRF Example">
+<img src="/2017-04-06-mm-crf-imageprocessing/crf_example.png" class="" title="CRF Example">
 <p>于是就是各个资料都说的两个式子了： 按前面说的吉布斯分布，差不多就是每四个像素一个最大团 <span class="math display">\[
 P(Y=y|X)=\frac{1}{Z(X)}e^{-E(y|X)}
 \]</span> 标签能量表示为 <span class="math display">\[
