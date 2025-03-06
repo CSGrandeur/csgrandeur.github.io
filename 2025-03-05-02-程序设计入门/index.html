@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="程序设计入门 本章介绍程序设计的基础知识，重点讲解C语言的核心要素。内容涵盖头文件的作用、变量类型定义、主函数结构及程序语句规范，详细解析输入输出函数scanf与printf的格式化用法。通过顺序结构示例（如数值运算、图形输出）和分支结构（条件判断、运算符选择）演示基本逻辑设计，并结合评测系统机制强调代码格式与数据精度的重要性。本章通过典型例题帮助读者掌握程序设计的基本流程、语法规则及调试技巧，为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02.程序设计入门">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="程序设计入门 本章介绍程序设计的基础知识，重点讲解C语言的核心要素。内容涵盖头文件的作用、变量类型定义、主函数结构及程序语句规范，详细解析输入输出函数scanf与printf的格式化用法。通过顺序结构示例（如数值运算、图形输出）和分支结构（条件判断、运算符选择）演示基本逻辑设计，并结合评测系统机制强调代码格式与数据精度的重要性。本章通过典型例题帮助读者掌握程序设计的基本流程、语法规则及调试技巧，为">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/codeblocks_a_plus_b.jpg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/oj_a_plus_b.jpg">
+<meta property="article:published_time" content="2025-03-05T07:11:39.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:38:35.544Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/codeblocks_a_plus_b.jpg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/","path":"2025-03-05-02-程序设计入门/","title":"02.程序设计入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>02.程序设计入门 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">程序设计入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c%E8%AF%AD%E8%A8%80%E5%9F%BA%E6%9C%AC%E8%A6%81%E7%B4%A0"><span class="nav-number">1.1.</span> <span class="nav-text">C语言基本要素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%B4%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">头文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.2.</span> <span class="nav-text">变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">主函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.1.4.</span> <span class="nav-text">程序语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-number">1.1.5.</span> <span class="nav-text">定义变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%8B%E5%80%BC"><span class="nav-number">1.1.6.</span> <span class="nav-text">赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5"><span class="nav-number">1.1.7.</span> <span class="nav-text">输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97"><span class="nav-number">1.1.8.</span> <span class="nav-text">计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA"><span class="nav-number">1.1.9.</span> <span class="nav-text">输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E5%9F%BA%E6%9C%AC%E7%9A%84ab"><span class="nav-number">1.1.10.</span> <span class="nav-text">一个基本的a+b</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E8%BE%93%E5%87%BA%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="nav-number">1.1.11.</span> <span class="nav-text">例：输出浮点数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E6%B5%8B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">评测系统的机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%BA%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">顺序结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E7%94%A8%E8%BE%93%E5%87%BA%E8%8F%B1%E5%BD%A2"><span class="nav-number">1.3.1.</span> <span class="nav-text">例：用“*”输出菱形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B-%E8%AE%A1%E7%AE%97-abc-%E7%9A%84%E5%80%BC"><span class="nav-number">1.3.2.</span> <span class="nav-text">例 计算 \((a+b)&#x2F;c\) 的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B-%E6%B5%AE%E7%82%B9%E6%95%B0%E5%90%91%E9%9B%B6%E8%88%8D%E5%85%A5"><span class="nav-number">1.3.3.</span> <span class="nav-text">例 浮点数向零舍入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.</span> <span class="nav-text">分支结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.4.1.</span> <span class="nav-text">if语句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B-%E6%95%B4%E6%95%B0%E5%A4%A7%E5%B0%8F%E6%AF%94%E8%BE%83"><span class="nav-number">1.4.2.</span> <span class="nav-text">例 整数大小比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E5%85%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">1.4.3.</span> <span class="nav-text">三元运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#switch"><span class="nav-number">1.4.4.</span> <span class="nav-text">switch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B-%E7%AE%80%E5%8D%95%E8%AE%A1%E7%AE%97%E5%99%A8"><span class="nav-number">1.4.5.</span> <span class="nav-text">例 简单计算器</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="02.程序设计入门 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          02.程序设计入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-05 15:11:39" itemprop="dateCreated datePublished" datetime="2025-03-05T15:11:39+08:00">2025-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:38:35" itemprop="dateModified" datetime="2025-03-06T10:38:35+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="程序设计入门">程序设计入门</h1>
+<p>本章介绍程序设计的基础知识，重点讲解C语言的核心要素。内容涵盖头文件的作用、变量类型定义、主函数结构及程序语句规范，详细解析输入输出函数<code>scanf</code>与<code>printf</code>的格式化用法。通过顺序结构示例（如数值运算、图形输出）和分支结构（条件判断、运算符选择）演示基本逻辑设计，并结合评测系统机制强调代码格式与数据精度的重要性。本章通过典型例题帮助读者掌握程序设计的基本流程、语法规则及调试技巧，为后续算法学习奠定基础。</p>
+<span id="more"></span>
+<h2 id="c语言基本要素">C语言基本要素</h2>
+<p>C++ 兼容 C
+语言的语法，所以我们不必拘泥于“.c”还是“.cpp”这样的扩展名，新手不用管那么多，无论是写C++风格还是C语言风格，一律在C++的编译环境（.cpp文件）中写就好。</p>
+<h3 id="头文件">头文件</h3>
+<p>为了避免从电脑直接看得懂的“01011...”写起，或者从“MOV”、“ADD”这类非常底层的“汇编语言”写起，我们学习一个相对“高级”的语言，即C语言。那些高频使用的“向屏幕输出一些字符”等操作，C语言已经帮我们做好了，我们只需要“告诉”C语言，让C语言去要求电脑做这些事。</p>
+<p>“告诉”这个动作需要特定的指令来做，而C语言怎么知道这个指令是做什么的呢？它把不同类型的功能封装在了不同的文件里，所以我们要先让编译器知道，我们要用哪些文件里的功能，就要把这些文件“包含”进来，这就是“include”指令，包含进来的文件叫“头文件”。</p>
+<p>现在要包含一个处理“输入输出”这类操作的功能包，这个头文件是“stdio.h”，“std”是标准（standard）的缩写，“io”是“input/output”的缩写。</p>
+<p>这样接下来的程序，就可以用“stdio.h”里包含的功能。</p>
+<p>包含头文件的语法是：</p>
+<ul>
+<li>一个<code>#</code>符号，表示现在要做一些“特殊”的事情，“#”后面不同的内容对应不同的事情</li>
+<li><code>#</code>后紧跟“include”，表示我们现在要做的是“包含头文件”这样的事情，至于能做其它什么事情，以后再了解</li>
+<li>头文件用一对<code>&lt;&gt;</code>包裹</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="变量">变量</h3>
+<p>要计算总要有计算的对象，基础的计算对象就是“变量”，可以类比学过的代数，<span
+class="math inline">\(x,y,z...\)</span>
+这样的代数，然后把数字代进去就能计算不同的数据。</p>
+<p>代数有整数有小数，在电脑中还有字符，要让电脑看得懂，能合理的用“0101...”这样的二进制存储，需要告诉它这些代数是什么类型，这就是变量类型。</p>
+<p>先了解最常用的：</p>
+<ul>
+<li>int：整数（1，2，-6... 这样的数）</li>
+<li>double： 浮点数（0.4、2.5、5.0...这样有小数部分的精度的数）</li>
+</ul>
+<p>变量还有一些其它的类型，以后用到再了解。</p>
+<h3 id="主函数">主函数</h3>
+<p>C语言的功能是由“函数”组成的，初高中学过“函数”的概念，是把一些代数丢进去，完成固定的一套计算。比如
+<span class="math inline">\(f(y)=x*2+1\)</span>
+，C语言的函数可以延申这个概念，把一些变量（变量可以是 <span
+class="math inline">\(x,y,z\)</span>
+这样的代数，也可以是更复杂的结构）丢进去，完成固定的程序逻辑。</p>
+<p>一个程序运行，总得有一个开端，即从哪里开始，这就是“主函数”的作用，告诉系统从这里开始。</p>
+<p>函数可以有返回值（算完之后告诉调用它的地方它算出了个什么类型的东西），也可以没有返回值，但主函数必须有返回值，这是C语言的规则，它用来告诉操作系统这个程序执行的是否成功。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 主函数的代码 </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主函数的语法是：</p>
+<ul>
+<li><code>int</code>：主函数返回值必须是
+<code>int</code>，不能是别的</li>
+<li><code>main</code>：表示函数的名字，<code>main</code>这个名字是专门用于主函数的，不能用其它名字，大小写也不能改</li>
+<li><code>()</code>：一个小括号里写函数的参数，主函数有特定的参数，不过可以省略，初学时可以先不管它的参数</li>
+<li><code>&#123;&#125;</code>：包裹定义主函数要做的事的代码</li>
+<li><code>return 0;</code>：主函数包裹的代码的末尾必须是<code>return 0;</code>，表示当执行到这里的时候，向调用主函数的“东西”（比如操作系统的某个进程）告知本程序正常结束。</li>
+</ul>
+<p>这里“<code>//</code>”是注释语法，用于写一些帮助自己回忆代码是干什么的注释，对电脑来说这些内容不存在，纯粹是给人看的。</p>
+<h3 id="程序语句">程序语句</h3>
+<p>C语言中常规程序的语句末尾都要有分号“<code>;</code>”，表示一个语句的结束（以下语句的含义后文会说明）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a, b;</span><br><span class="line">a = <span class="number">3</span>;</span><br><span class="line">b = <span class="number">4</span>;</span><br><span class="line"><span class="type">int</span> c = a + b;</span><br></pre></td></tr></table></figure>
+<h3 id="定义变量">定义变量</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a, b;</span><br></pre></td></tr></table></figure>
+<p>这里定义两个变量 <code>a</code> 和 <code>b</code>，他们是
+<code>int</code> 类型。</p>
+<h3 id="赋值">赋值</h3>
+<p>数学中“<code>=</code>”表示两个变量/数字相等，而程序中，“<code>=</code>”表示将右边的值存入左边的变量，变量是一个可以改变的代数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">3</span>, b;</span><br><span class="line">b = <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="输入">输入</h3>
+<p>让用户在弹出的黑框框中输入想要的数字，再用输入的数字计算，就有了用户交互，这样程序就可以做很多事了。</p>
+<p>我们前面已经<code>#include&lt;stdio.h&gt;</code>，所以可以用输入输出相关的功能了：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a, b;</span><br><span class="line"><span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br></pre></td></tr></table></figure>
+<p><code>scanf</code>
+也是函数，<code>"%d%d", &amp;a, &amp;b</code>就是传给它的参数。</p>
+<ul>
+<li><code>"%d%d"</code>
+表示要输入两个整数，这里<code>%</code>用于标识输入，<code>%</code>之后跟的内容具体定义了要输入什么，好让电脑在内存中做好准备，<code>%d</code>就是要输入一个整数（<code>int</code>），如果是<code>%lf</code>就是要输入一个<code>double</code>。</li>
+<li><code>&amp;a</code>对应前一个<code>%d</code>，用户在黑框框输入的第一个数就会存入<code>a</code>这个变量，同理<code>&amp;b</code>对应第二个<code>%d</code>，<code>&amp;</code>是“取地址”符号，<code>&amp;a</code>表示指向<code>a</code>的内存地址，这里先不用了解那么多，知道这个格式能输入数据即可。</li>
+</ul>
+<blockquote>
+<p>知识点：<code>int</code>的输入输出都用<code>%d</code>，<code>double</code>的输入用<code>%lf</code>，输出用<code>%f</code>。这时你可能有个疑问，没错确实有个输入是<code>%f</code>的变量类型<code>float</code>，但编程之初我们不想讨论过多内容，减轻初学者压力，这里简单说就是<code>float</code>能表达的精度不够，而现代计算机性能很好，在算法竞赛中我们都用<code>double</code>就好了。</p>
+</blockquote>
+<h3 id="计算">计算</h3>
+<p>计算<code>a+b</code>的和，很直观在代码中写<code>a+b</code>即可，它得到的结果可以存入一个变量，也可以直接当参数传给函数。</p>
+<p>比如 <code>int c = a + b;</code> 就把 <code>a+b</code> 的结果存入
+<code>c</code>。</p>
+<h3 id="输出">输出</h3>
+<p><code>printf("%d\n", a + b);</code> 就把<code>a+b</code>
+的结果作为参数传给 <code>printf</code>这个函数，这里的<code>%d</code>
+和<code>scanf</code>的<code>%d</code>含义一样，<code>printf</code>用于输出，所以就是把<code>a+b</code>的结果作为整数的格式输出。
+<code>\n</code>
+表示输出后换一行（在文本编辑器里换一行就是敲一下回车）。</p>
+<p><code>double</code>的输出用<code>%f</code>，注意这里没有“<code>l</code>”。</p>
+<blockquote>
+<p>知识点：输出也会有一些特异的需求，比如输出小数保留多少位，输出整数能不能右对齐前面补空格让总长度固定等，就会有
+<code>%.3f</code>、<code>%02d</code>
+等用法，当遇到时，可查资料寻找可用的格式化方法。</p>
+</blockquote>
+<h3 id="一个基本的ab">一个基本的<code>a+b</code></h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a + b);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/codeblocks_a_plus_b.jpg" class="">
+<h3 id="例输出浮点数">例：输出浮点数</h3>
+<p>读入一个双精度浮点数（<code>double</code>），分别按输出格式
+<code>%f</code> ，<code>%f</code> 保留 5 位小数，<code>%e</code> 和
+<code>%g</code> 的形式输出这个数，每次在单独一行上输出。</p>
+<p>输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">12.3456789</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">12.345679</span><br><span class="line">12.34568</span><br><span class="line">1.234568e+01</span><br><span class="line">12.3457</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> x;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%f\n%.5f\n%e\n%g\n&quot;</span>, x, x, x, x);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="评测系统的机制">评测系统的机制</h2>
+<p>把代码通过网页（或软件）提交到评测系统，评测系统会在后台编译并执行你的代码，将一系列你看不到的输入数据发送给你的程序，将输出的内容和答案对比，然后告诉你你的代码是否正确。</p>
+<p>新手经常会问“我样例都通过了为什么提交了还不对呢”，这里再次强调一下：评测系统会测许多并不会让你看到的其它数据。</p>
+<p>在电脑中，空格“<code></code>”，回车等内容也都是由“字符”来表达的，它们都有编码，传统评测系统对答案的格式有严格的要求，<strong>你的程序的输出结果要与评测机上的答案完全一致才能通过</strong>。</p>
+<p>比如假设评测机上的答案是</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<p>如果你的程序输出的是 <code>123</code> 或
+<code>1 2 3</code>，就都无法通过。</p>
+<p>找一个OJ的<code>a+b</code>的题，提交你的代码试试把</p>
+<img src="/2025-03-05-02-%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E5%85%A5%E9%97%A8/oj_a_plus_b.jpg" class="">
+<h2 id="顺序结构">顺序结构</h2>
+<p>顺序结构是程序设计中最基本、最简单的控制结构之一。它指的是程序按照代码书写的先后顺序依次执行，从上到下逐条执行语句，没有跳跃、分支或循环。在顺序结构中，每一条语句都会被执行一次，并且严格按照它们在源代码中的排列顺序执行。</p>
+<p>上文的例子都是顺序结构，先定义变量，然后输入，然后输出，然后<code>return</code>……</p>
+<h3 id="例用输出菱形">例：用“<code>*</code>”输出菱形</h3>
+<p>用 <code>*</code> 构造一个对角线长 5 个字符，倾斜放置的菱形。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  *</span><br><span class="line"> ***</span><br><span class="line">*****</span><br><span class="line"> ***</span><br><span class="line">  *</span><br></pre></td></tr></table></figure>
+<p>因为图形很简单，不需要做特别的逻辑处理，简单粗暴用<code>printf</code>输出它就好。</p>
+<p>图形分为 5
+行，且要考虑每个空格也是答案的一部分，输出这样的内容肯定是错误的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">*</span><br><span class="line">***</span><br><span class="line">*****</span><br><span class="line">***</span><br><span class="line">*</span><br></pre></td></tr></table></figure>
+<p>每一行要把“<code></code>”和“<code>*</code>”都打出来，且要把换行的符号（“<code>\n</code>”）也打出来，答案如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;  *\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; ***\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;*****\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot; ***\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;  *\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例-计算-abc-的值">例 计算 <span
+class="math inline">\((a+b)/c\)</span> 的值</h3>
+<p>给定 3 个整数 <span class="math inline">\(a, b, c\)</span>， 计算
+<span class="math inline">\((a+b)/c\)</span> ，其中 <span
+class="math inline">\(/\)</span> 是整除运算。</p>
+<p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 1 3</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0</span><br></pre></td></tr></table></figure>
+<p>“整除运算”的意思是只取计算结果的整数部分，小数部分省略。</p>
+<blockquote>
+<p>知识点：大多编程语言默认相同类型的变量在计算过程中类型不变，<code>int</code>只能存整数，它无法表达
+<code>1/2=0.5</code>这样的概念，故<code>int</code>与<code>int</code>之间的计算，编译器默认结果自动取整，也就刚好符合“整除运算”的要求，即<code>1整除2=0</code>，保留<code>0.5</code>的整数部分<code>0</code>。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b, c;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, (a + b) / c);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识点：在读入多个数字的时候，<code>scanf</code>的格式化输入<code>%d</code>会自动跳过不是数字的符号，从而方便我们不用关心输入的数字之间有多少空格、多少换行，即无论输入的是
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 1 3</span><br></pre></td></tr></table></figure> 还是 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1     1</span><br><span class="line"></span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<code>scanf("%d%d%d", &amp;a, &amp;b, &amp;c);</code>
+都能正确地完成输入</p>
+</blockquote>
+<h3 id="例-浮点数向零舍入">例 浮点数向零舍入</h3>
+<p>输入一个双精度浮点数，将其向零舍入到整数。说明：向零舍入的含义是，正数向下舍入，负数向上舍入。</p>
+<p>输入数据范围是 <span class="math inline">\(-10^15\leq x \leq
+10^15\)</span>。</p>
+<p>这是一个 <code>double</code>
+向整数转换的任务，在编程语言中向<code>0</code>舍入是默认机制，不需要我们写特别的代码逻辑。</p>
+<p>关于强制转换，可以直接将<code>double</code>赋值给整数变量，也可以给值前面加<code>(变量类型)</code>来得到转换后的值。</p>
+<blockquote>
+<p>知识点：题目告知输入范围，并不是让你来判断题目输入的对不对，而是给你一个信息，让你知道在处理一个什么规模的问题，从而调整自己的实现思路。</p>
+</blockquote>
+<blockquote>
+<p>知识点：<code>int</code>可以表达的范围是
+<code>-2147483648~2147483647</code>，也就是<code>32</code>个二进制位能表达的范围，更大的整数类型是
+<code>long long</code>，它有<code>64</code>个二进制位，能表达
+<code>-9,223,372,036,854,775,808~9,223,372,036,854,775,807</code>，大约
+<span
+class="math inline">\(10^{19}\)</span>，它对应的输入输出占位符是<code>%lld</code></p>
+</blockquote>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2.3</span><br><span class="line">-2.3</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">-2</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> x;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;x);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, (<span class="type">long</span> <span class="type">long</span>)x);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分支结构">分支结构</h2>
+<p>分支结构（也称为选择结构）是程序设计中用于实现条件判断和不同路径执行的重要控制结构。通过分支结构，程序可以根据特定条件选择执行不同的代码块，从而实现更复杂的功能和逻辑处理。</p>
+<h3 id="if语句">if语句</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(条件) &#123;</span><br><span class="line">    <span class="comment">// 满足条件则执行这里</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(条件<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="comment">// 满足条件1则执行这里</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>(条件<span class="number">2</span>) &#123;</span><br><span class="line">    <span class="comment">// 满足条件2则执行这里</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 剩下的情况执行这里</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例-整数大小比较">例 整数大小比较</h3>
+<p>输入两个整数，比较它们的大小。若 <span
+class="math inline">\(x&gt;y\)</span> ，输出 <code>&gt;</code> ；若
+<span class="math inline">\(x=y\)</span> ，输出 <code>=</code> ；若
+<span class="math inline">\(x&lt;y\)</span>，输出 <code>&lt;</code>
+。</p>
+<p>数据范围 <span class="math inline">\(0\leq x \leq 2^32, -2^31 \leq y
+\leq 2^31\)</span></p>
+<p>输入：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1000 100</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这题范围很大，用<code>long long</code></li>
+<li>因为<code>=</code>是赋值用的，判断相等得用<code>==</code></li>
+<li>输出的好习惯：单行输出都带上<code>\n</code>在结尾换行</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> x, y;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>, &amp;x, &amp;y);</span><br><span class="line">    <span class="keyword">if</span>(x &gt; y) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;&gt;\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(x == y) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;=\n&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;&lt;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三元运算符">三元运算符</h3>
+<p>在“非此即彼”且逻辑简单的时候，用三元运算可简化代码，写起来很“帅”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">条件 ? 符合条件执行这里 : 不符合条件执行这里</span><br></pre></td></tr></table></figure>
+<p>上题用三元运算符也可以完成，不过它不是“非此即彼”的，有三种情况，可以三元运算套三元运算，这样写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> x, y;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lld%lld&quot;</span>, &amp;x, &amp;y);</span><br><span class="line">    <span class="built_in">printf</span>(x &gt; y ? <span class="string">&quot;&gt;\n&quot;</span> : (x == y ? <span class="string">&quot;=\n&quot;</span> : <span class="string">&quot;&lt;&quot;</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="switch">switch</h3>
+<p>一个变量或表达式有多种可能的目标值，可以用switch：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(变量) &#123;</span><br><span class="line">    <span class="keyword">case</span> 值<span class="number">1</span>: 变量是值<span class="number">1</span>时的逻辑; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> 值<span class="number">2</span>: 变量是值<span class="number">2</span>时的逻辑; <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> 值<span class="number">3</span>: 变量是值<span class="number">3</span>时的逻辑; <span class="keyword">break</span>;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">default</span>: 除了以上情况外时的逻辑;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意：除最后的default外，每个 <code>case</code> 最后必须有
+<code>break</code> ，否则它之后的 <code>case</code> 也会被执行</p>
+<h3 id="例-简单计算器">例 简单计算器</h3>
+<p>给两个数字、一个符号，如果符号不是加减乘除则输出<code>Invalid operator!</code>，如果除0则输出<code>Divided by zero!</code></p>
+<p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2 +</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> a, b;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d %c&quot;</span>, &amp;a, &amp;b, &amp;c);</span><br><span class="line">    <span class="keyword">switch</span>(c) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>: <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a + b); <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;-&#x27;</span>: <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a - b); <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;*&#x27;</span>: <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a * b); <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;/&#x27;</span>: </span><br><span class="line">            <span class="keyword">if</span>(b == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;Divided by zero!\n&quot;</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a / b);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>: <span class="built_in">printf</span>(<span class="string">&quot;Invalid operator!\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识点： - 字符需要用<code>char</code>这个变量类型， -
+读入<code>%d</code>能自动跳过空白，但<code>%c</code>不行，它会读空白字符，题目输入由空格隔开，所以要加一个空格占位后再写<code>%c</code>
+- 字符常量用单引号<code>'</code>，后面课程的字符串章节会更详细的讲解</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-03-05-01-%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E4%B8%8E%E7%BC%96%E7%A8%8B/" rel="prev" title="01.算法竞赛与编程">
+                  <i class="fa fa-angle-left"></i> 01.算法竞赛与编程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-03-06-03-%E6%95%B0%E7%BB%84%E4%B8%8E%E5%BE%AA%E7%8E%AF%E7%BB%93%E6%9E%84/" rel="next" title="03.数组与循环结构">
+                  03.数组与循环结构 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

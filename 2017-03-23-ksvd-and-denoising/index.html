@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="初学入门，将来有了更深的理解回来纠正错误。 MathJax需要加载，公式如未显示请稍候。 稀疏表示 稀疏性的理解 最初稀疏性产生于信号处理领域，自然界信号低频居多，高频主要是噪声，图像处理中的频率域滤波是个典型例子。 假设有一个干净没有噪声的图像，经过传输，收到的是一个受到干扰有了噪声的图像，而噪声主要是高频分量，对图片做二维傅里叶变换，对低频的波形保持，高频的一刀切，还原回来的图像就平滑了许多，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从稀疏表示到K-SVD，再到图像去噪">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2017-03-23-ksvd-and-denoising/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="初学入门，将来有了更深的理解回来纠正错误。 MathJax需要加载，公式如未显示请稍候。 稀疏表示 稀疏性的理解 最初稀疏性产生于信号处理领域，自然界信号低频居多，高频主要是噪声，图像处理中的频率域滤波是个典型例子。 假设有一个干净没有噪声的图像，经过传输，收到的是一个受到干扰有了噪声的图像，而噪声主要是高频分量，对图片做二维傅里叶变换，对低频的波形保持，高频的一刀切，还原回来的图像就平滑了许多，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-03-23T08:16:33.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.955Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="稀疏表示">
+<meta property="article:tag" content="K-SVD">
+<meta property="article:tag" content="Denoising">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2017-03-23-ksvd-and-denoising/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2017-03-23-ksvd-and-denoising/","path":"2017-03-23-ksvd-and-denoising/","title":"从稀疏表示到K-SVD，再到图像去噪"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从稀疏表示到K-SVD，再到图像去噪 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%80%E7%96%8F%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.</span> <span class="nav-text">稀疏表示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A8%80%E7%96%8F%E6%80%A7%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.1.</span> <span class="nav-text">稀疏性的理解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A8%80%E7%96%8F%E8%A1%A8%E7%A4%BA%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">稀疏表示的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A8%80%E7%96%8F%E8%A1%A8%E7%A4%BA%E7%9A%84%E4%B8%80%E4%B8%AA%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.</span> <span class="nav-text">稀疏表示的一个场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%82%E8%A7%A3"><span class="nav-number">1.4.</span> <span class="nav-text">求解</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-svd"><span class="nav-number">2.</span> <span class="nav-text">K-SVD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%80%BC%E5%88%86%E8%A7%A3"><span class="nav-number">2.1.</span> <span class="nav-text">特征值分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#svd%E5%A5%87%E5%BC%82%E5%80%BC%E5%88%86%E8%A7%A3"><span class="nav-number">2.2.</span> <span class="nav-text">SVD（奇异值）分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#k-svd%E5%AD%97%E5%85%B8%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.3.</span> <span class="nav-text">K-SVD字典学习</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#k-svd%E5%9B%BE%E5%83%8F%E5%8E%BB%E5%99%AA"><span class="nav-number">3.</span> <span class="nav-text">K-SVD图像去噪</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-03-23-ksvd-and-denoising/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从稀疏表示到K-SVD，再到图像去噪 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从稀疏表示到K-SVD，再到图像去噪
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-23 16:16:33" itemprop="dateCreated datePublished" datetime="2017-03-23T16:16:33+08:00">2017-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>初学入门，将来有了更深的理解回来纠正错误。</p>
+<p>MathJax需要加载，公式如未显示请稍候。</p>
+<h3 id="稀疏表示">稀疏表示</h3>
+<h4 id="稀疏性的理解">稀疏性的理解</h4>
+<p>最初稀疏性产生于信号处理领域，自然界信号低频居多，高频主要是噪声，图像处理中的频率域滤波是个典型例子。</p>
+<p>假设有一个干净没有噪声的图像，经过传输，收到的是一个受到干扰有了噪声的图像，而噪声主要是高频分量，对图片做二维傅里叶变换，对低频的波形保持，高频的一刀切，还原回来的图像就平滑了许多，大部分高频噪声就去除了。这个假设的场景就是个“信号恢复”的过程。如果把所有的频率的波都看作一个个相互正交的向量，恢复数据就是给这些向量找到一组系数，它们一乘、一合并，得到原始信号，频率从大到小是有无穷多个的，而由于自然界信号的“稀疏性”，对于图像而言，就是指有用的频率主要是低频，那么对应高频的系数基本都是<code>0</code>了，低频部分也不见得全是非<code>0</code>，这一系列系数<code>0</code>很多，非<code>0</code>很少，就很“稀疏”。</p>
+<span id="more"></span>
+<h4 id="稀疏表示的概念">稀疏表示的概念</h4>
+<p>稀疏表示的目的就是在给定的超完备字典中用尽可能少的原子来表示信号。</p>
+<p>意义在于降维，可以是压缩，可以用于机器学习特征提取，还有很多我也不知道的事情。。。</p>
+<p>原子：信号的基本构成成分，比如一个长为N的列向量。</p>
+<p>字典：许多原子的排序集合，一个<code>N*T</code>的矩阵，如果<code>T&gt;N</code>，则为过完备或冗余字典。</p>
+<blockquote>
+<p>咦，线性代数又出现了，假设列向量两两线性无关，<code>N*N</code>的矩阵的秩就是N了，再增加向量也不会增加额外的信息。</p>
+</blockquote>
+<h4 id="稀疏表示的一个场景">稀疏表示的一个场景</h4>
+<p>假设现在有了一个<code>N*T</code>的过完备字典
+<code>D</code>（比如前面所述图像傅里叶变换的所有频率的波），一个要表示的对象<code>y</code>（要还原的图像），求一套系数<code>x</code>，使得<code>y=Dx</code>，这里<code>y</code>是一个已知的长为<code>N</code>的列向量，<code>x</code>是一个未知的长为<code>T</code>的列向量，解方程。</p>
+<p>这是一个<code>T</code>个未知数，<code>N</code>个方程的方程组，<code>T&gt;N</code>，所以是有无穷多解的，线性代数中这样的方程很熟悉了。
+<span class="math display">\[
+\begin{bmatrix}
+1\\
+2\\
+3\\
+4\\
+5
+\end{bmatrix} = \begin{bmatrix}
+1 &amp; 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 &amp; 7 &amp; 8\\
+0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1\\
+0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}\times
+\begin{bmatrix}
+x1\\
+x2\\
+x3\\
+x4\\
+x5\\
+x6\\
+x7\\
+x8
+\end{bmatrix}
+\]</span> 上面我就随便举了个<code>N=5</code>,
+<code>T=8</code>的例子，用来随便感受下。</p>
+<p>这里可以引出一个名词，ill-posed
+problem（不适定问题），即有多个满足条件的解，无法判断哪个解更加合适，这是更“落地”的应用场景，inverse
+problem（逆问题），比如图像去噪，从噪声图中提取干净图。于是需要做一个约束。</p>
+<p>增加限制条件，要求<code>x</code>尽可能稀疏，怎么“稀疏”呢？就是<code>x</code>的<code>0</code>尽可能多，即<code>norm(x, 0)</code>（零范数：非0元素个数）尽可能小。这样就有唯一解了吗？也还不是，如何能“约束”出各位合适的解，如何解，正是稀疏表示所研究的重点问题。比如后来有证明<code>D</code>满足一定条件情况下<code>x</code>满足<code>norm(x,1)</code>即可还原原始数据等，这有不少大神开启这个领域的故事这里就不讲了。</p>
+<p>奥卡姆剃刀原理的思想：如果两个模型的解释力相同，选择较简洁的那个。稀疏表达就符合这一点。</p>
+<blockquote>
+<p>针对这个例子我有个疑问，<code>x</code>都比<code>y</code>还大了，这哪里压缩了。这个问题应该容易解答，例子里<code>x</code>是比<code>y</code>大，但是如果每个<code>原子</code>不是长度为<code>N</code>的列向量，而是个矩阵，或者更复杂的东西呢，<code>x</code>却依然只是一列系数。</p>
+</blockquote>
+<h4 id="求解">求解</h4>
+<p>字典<code>D</code>已知，求<code>y</code>在过完备字典<code>D</code>上的稀疏表示<code>x</code>，被称作稀疏编码，模型是：
+<span class="math display">\[
+x = \mathop{\arg\min}_{x} norm(y - Dx, 2)^{2}, s.t. norm(x, 1) \le
+\varepsilon
+\]</span>
+如何求解<code>x</code>？<code>D</code>又是怎么来的？先说<code>D</code>，<code>D</code>可以是前面说的傅里叶变换的一系列波啊，也可以是<code>DCT</code>的，也可以是小波的。但是科学家为了特定问题能有更具适应性的字典，让<code>D</code>也变成一个设计出来的量了，手工设计是不行，那么<code>D</code>也成了一个需要求的未知量。</p>
+<p>已知<code>D</code>求<code>x</code>有OMP算法，大意是先找到<code>D</code>和<code>y</code>最接近的一个原子<code>D(m)</code>，求出合适的系数<code>x(m)</code>，新的<code>y'=D(m) * x(m)</code>，再找下一个最接近的原子，直到找完合适的<code>x</code>，如何确定最接近，如何计算<code>x(m)</code>，这里不再细说。</p>
+<p>当任务是同时求出一个好的字典<code>D</code>，并得到一个满足稀疏约束的<code>x</code>，<strong>两步求解算法</strong>：先固定<code>D</code>，求个<code>x</code>出来，再固定<code>x</code>更新<code>D</code>，交替进行。</p>
+<blockquote>
+<p>两步求解好熟悉的老套路。也许可以这么理解，求<code>x</code>不再是个稀罕问题，而训练一个好的字典渐渐成为解决应用问题的关键，也是研究重点。</p>
+</blockquote>
+<p>做这个求解的方法就有MOD、K-SVD等等一系列了。MOD分为两个步骤：Sparse
+Coding和Dictionary Update。</p>
+<p><strong>Sparse Coding:</strong> <span class="math display">\[
+x = \mathop{\arg\min}_{x} norm(y - Ax, 2)^{2}, s.t. norm(x, 1) \le k
+\]</span></p>
+<p><strong>Dictinary Update:</strong> <span class="math display">\[
+D = \mathop{\arg\min}_{x} norm(y - Ax, 2)^{2}
+\]</span></p>
+<p><code>x</code>的更新类似OMP，字典<code>D</code>的更新使用最小二乘法。</p>
+<h3 id="k-svd">K-SVD</h3>
+<p>迭代K次，每次计算一下SVD分解的算法。SVD即奇异值，在了解SVD之前先复习一下矩阵的特征值。</p>
+<h4 id="特征值分解">特征值分解</h4>
+<p>特征值分解和奇异值分解是机器学习领域常见的方法。线性代数中我们熟悉的特征值
+<span class="math inline">\(\lambda\)</span> ，设
+<code>v</code>是矩阵<code>A</code>的特征向量，则 <span
+class="math display">\[
+Av = \lambda v
+\]</span> <code>v</code>是 <span class="math inline">\(\lambda\)</span>
+对应的特征值。
+矩阵的一组特征向量是相互正交的，<strong>特征值分解</strong>
+将矩阵分解成如下形式： <span class="math display">\[
+A = Q\Sigma Q^{-1}
+\]</span></p>
+<p>其中<code>Q</code>是矩阵<code>A</code>的特征向量组成的矩阵， <span
+class="math inline">\(\Sigma\)</span>
+是一个对角阵，对角线上每个元素就是一个特征值，由大到小排列。</p>
+<blockquote>
+<p>这像什么？<span class="math inline">\(\Sigma\)</span> 里的一串 <span
+class="math inline">\(\lambda\)</span>
+就像前面<code>y=Dx</code>里的<code>x</code>，而特征值矩阵<code>Q</code>就像字典<code>D</code>啊。特征向量的大小描述了每个特征值的权重，它们一起组合成了矩阵<code>A</code>，也就是那个<code>y</code>。</p>
+</blockquote>
+<p>然而，特征值分解有个严重的局限——<code>A</code>必须是个方阵。</p>
+<h4 id="svd奇异值分解">SVD（奇异值）分解</h4>
+<p>类比特征值分解，奇异值分解定义成这样： <span class="math display">\[
+A = U\Sigma V&#39;
+\]</span>
+假设<code>A</code>是一个<code>N*M</code>的矩阵，则<code>U</code>是<code>N*N</code>的方阵，<span
+class="math inline">\(\Sigma\)</span>
+是<code>N*M</code>的矩阵，<code>V</code>是<code>M*M</code>的方阵，于是奇异值分解就是求
+<span
+class="math inline">\(\Sigma\)</span>、<code>U</code>、<code>V</code>，<code>V'</code>是<code>V</code>的转置。于是套公式就可以求出奇异值、U、V，公式就不堆这里了。</p>
+<blockquote>
+<p>说来也巧，我之前在一个量子计算的书里看过SVD分解，当时还做了一下习题手算了半天SVD，这部分理解起来舒服多了</p>
+</blockquote>
+<p>SVD怎么和稀疏性搭边呢？因为奇异值矩阵 <span
+class="math inline">\(\Sigma\)</span>
+（虽然不是方阵，但也是按45°角放着一串奇异值的类似对角阵的东西）的“对角线”上大部分数值是<code>0</code>或接近<code>0</code>的，类比特征值分解，这些奇异值就是“权重”嘛，如果把接近<code>0</code>的这些丢掉，是不是清（稀）爽（疏）很多？部分奇异值分解，<code>A</code>还是<code>N*M</code>，但假设取比较大的<code>r</code>个奇异值，
+<span class="math inline">\(\Sigma\)</span>
+变成<code>r*r</code>，部分SVD分解即：</p>
+<p><span class="math display">\[
+A_{N\times M} \approx U_{N\times r} \Sigma_{r\times r} V^{-1}_{r\times
+M}
+\]</span></p>
+<p>如果<code>r</code>很小，而等式左右又能很接近，那数据就被压缩的相当不错，保存<code>U</code>、<span
+class="math inline">\(\Sigma\)</span> 、<code>V</code>
+要比保存<code>A</code>本身节省空间多了。</p>
+<h4 id="k-svd字典学习">K-SVD字典学习</h4>
+<p>K-SVD和MOD最大的不同在于，每次只更新字典的一个原子（即<code>D</code>的一列），而不是每次用一个<code>x</code>更新整个<code>D</code>。</p>
+<p>回忆下前面的<code>y=Dx</code>，但是学一个字典，当然不能只用一个数据，现在来升级版：
+<span class="math display">\[
+Y=DX
+\]</span>
+哈？小写变大写？意思是一组<code>y</code>和其对应的一组<code>x</code>，那么<code>Y</code>和<code>X</code>指的矩阵。</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+y_{11} &amp; y_{21} &amp; y_{31} &amp; y_{41} \\
+y_{12} &amp; y_{22} &amp; y_{32} &amp; y_{42} \\
+y_{13} &amp; y_{23} &amp; y_{33} &amp; y_{43} \\
+y_{14} &amp; y_{24} &amp; y_{34} &amp; y_{44} \\
+y_{15} &amp; y_{25} &amp; y_{35} &amp; y_{45}
+\end{bmatrix} = \begin{bmatrix}
+d_{11} &amp; d_{21} &amp; d_{31} &amp; d_{41} &amp; d_{51} &amp; d_{61}
+&amp; d_{71} &amp; d_{81}\\
+d_{12} &amp; d_{22} &amp; d_{32} &amp; d_{42} &amp; d_{52} &amp; d_{62}
+&amp; d_{72} &amp; d_{82}\\
+d_{13} &amp; d_{23} &amp; d_{33} &amp; d_{43} &amp; d_{53} &amp; d_{63}
+&amp; d_{73} &amp; d_{83}\\
+d_{14} &amp; d_{24} &amp; d_{34} &amp; d_{44} &amp; d_{54} &amp; d_{64}
+&amp; d_{74} &amp; d_{84}\\
+d_{15} &amp; d_{25} &amp; d_{35} &amp; d_{45} &amp; d_{55} &amp; d_{65}
+&amp; d_{75} &amp; d_{85}
+\end{bmatrix}\times
+\begin{bmatrix}
+x_{11} &amp; x_{21} &amp; x_{31} &amp; x_{41}\\
+x_{12} &amp; x_{22} &amp; x_{32} &amp; x_{42}\\
+x_{13} &amp; x_{23} &amp; x_{33} &amp; x_{43}\\
+x_{14} &amp; x_{24} &amp; x_{34} &amp; x_{44}\\
+x_{15} &amp; x_{25} &amp; x_{35} &amp; x_{45}\\
+x_{16} &amp; x_{26} &amp; x_{36} &amp; x_{46}\\
+x_{17} &amp; x_{27} &amp; x_{37} &amp; x_{47}\\
+x_{18} &amp; x_{28} &amp; x_{38} &amp; x_{48}
+\end{bmatrix}
+\]</span></p>
+<p>现在要更新字典<code>D</code>的第<code>k</code>个原子，也就是第<code>k</code>列，它能影响到的是<code>Y</code>的第<code>k</code>行，同样对应<code>D</code>的第<code>k</code>列的系数，也是<code>X</code>的第<code>k</code>行。</p>
+<p>目标函数的转化：</p>
+<p><span class="math display">\[
+\begin{align*}
+&amp;  \quad\ \left \|Y - DX\right \|^{2}_{F} \\
+&amp; =\left \|Y-\Sigma_{j=1}^{K}d_{j}x^{T}_{j}\right \|^{2}_{F} \\
+&amp; =\left \|(Y-\Sigma_{j\neq k}d_{j}x^{T}_{j})-d_{k}x^{T}_{k}\right
+\|^{2}_{F} \\
+&amp; =\left \|E_{k}-d_{k}x^{T}_{k}\right \|^{2}_{F}
+\end{align*}
+\]</span> <span class="math inline">\(E_{k}\)</span> 是去掉原子 <span
+class="math inline">\(d_{k}\)</span> 的 <span
+class="math inline">\(D\)</span> 中的误差，于是目标函数转化为 <span
+class="math inline">\(D\)</span> 的其他列固定，要更新的 <span
+class="math inline">\(d_{k}\)</span> 使全局误差（ <span
+class="math inline">\(\left \|Y-DX\right \|\)</span> ）最小化。
+即可得到字典的第<code>k</code>个原子。求解这里的 <span
+class="math inline">\(D_{k}, x^{T}_{k}\)</span> ，就用到对 <span
+class="math inline">\(E\)</span> 的SVD分解了。</p>
+<p>但是直接分解 <span class="math inline">\(E\)</span> 得到的 <span
+class="math inline">\(x^{T}_{k}\)</span> 并不稀疏。</p>
+<p>更新字典和稀疏系数是迭代进行的，在“本次”迭代中，找到“上次”迭代中哪些<code>Y</code>用到了字典<code>D</code>的原子<code>k</code>，也就是<code>X</code>的第<code>k</code>行哪些元素不为<code>0</code>，<span
+class="math inline">\(x_{1k},x_{2k},x_{3k},x_{4k}\)</span>
+里，<strong>假设</strong> <span
+class="math inline">\(x_{1k},x_{3k}\)</span>
+不为<code>0</code>，那么对应的<code>Y</code>的<code>1,3</code>列就是用到了<code>D</code>的原子<code>k</code>的信号（<code>Y</code>的每列是一个信号）。现在把它们拆出来：
+<span class="math display">\[
+\begin{align*}
+  &amp; Y^{temp}_{k} = \begin{bmatrix}
+  y_{11} &amp; y_{31} \\
+  y_{12} &amp; y_{32} \\
+  y_{13} &amp; y_{33} \\
+  y_{14} &amp; y_{34} \\
+  y_{15} &amp; y_{35}
+  \end{bmatrix} \\
+  &amp; X^{temp}_{k} = \begin{bmatrix}
+  x_{1k} &amp; x_{3k}
+  \end{bmatrix} \\
+  &amp; D^{temp}_{k} = \begin{bmatrix}
+  d_{k1}\\
+  d_{k2}\\
+  d_{k3}\\
+  d_{k4}\\
+  d_{k5}
+  \end{bmatrix} \\
+\end{align*}
+\]</span></p>
+<p>这样得到只保留非零位置的<code>X</code>、<code>D</code>计算目标函数后得到的只保留对应位置的
+<span class="math inline">\(E^{temp}_{k}\)</span> ，对这个 <span
+class="math inline">\(E^{temp}_{k}\)</span> 再做SVD分解，<span
+class="math inline">\(E^{temp}_{k} = U \Sigma V^{T}\)</span>， <span
+class="math inline">\(U\)</span> 的第一列即为新的 <span
+class="math inline">\(\widetilde{d}_{k}\)</span>， <span
+class="math inline">\(V\)</span> 的第一列与 <span
+class="math inline">\(\Sigma(1, 1)\)</span> 的乘积为新的 <span
+class="math inline">\(\widetilde{x}^{T}_{k}\)</span> 。</p>
+<p>逐列更新得到新字典 <span class="math inline">\(\widetilde{D}\)</span>
+。</p>
+<h3 id="k-svd图像去噪">K-SVD图像去噪</h3>
+<p>上面提到过稀疏表示基本的目标函数是： <span class="math display">\[
+x = \mathop{\arg\min}_{x} \left \|y - Dx\right \|^{2}_{2}, s.t. \left
+\|x \right \|_{0} \le \varepsilon
+\]</span></p>
+<blockquote>
+<p>这里暂时用0范数来说明。</p>
+</blockquote>
+<p>假设现在有一个零均值高斯白噪声，即 <span class="math inline">\(n\sim
+N(0,\sigma)\)</span> ， <span class="math inline">\(\sigma\)</span>
+是噪声的标准差，有噪声的图像为 <span
+class="math inline">\(z=y+n\)</span> ，目的是从信号 <code>z</code>
+中恢复出原始无噪信号
+<code>y</code>，通过最大后验概率，求得目标函数的解，即可恢复出<code>y</code>：</p>
+<p><span class="math display">\[
+x = \mathop{\arg\min}_{x} \left \|z - Dx\right \|^{2}_{2}, s.t. \left
+\|x \right \|_{0} \le T
+\]</span> &gt;
+这里最大后验概率能恢复<code>y</code>是为什么暂时没管，肯定有证明了。。</p>
+<p>其中<code>T</code>依赖于 <span
+class="math inline">\(\varepsilon\)</span> 和 <span
+class="math inline">\(\sigma\)</span>
+。为方便优化计算，实际操作中往往转化成： <span class="math display">\[
+x = \mathop{\arg\min}_{x} \left \|z - Dx\right \|^{2}_{2}+\mu \left \|x
+\right \|_{0}
+\]</span> 选取恰当的<span
+class="math inline">\(\mu\)</span>可以让上面两式等价。</p>
+<p>优化属于NP难问题，有一系列研究，可通过OMP、BP、FOCUSS等算法来获得近似解。如果
+<code>x</code> 足够稀疏，近似解就足够接近精确解。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A8%80%E7%96%8F%E8%A1%A8%E7%A4%BA/" rel="tag"># 稀疏表示</a>
+              <a href="/tags/K-SVD/" rel="tag"># K-SVD</a>
+              <a href="/tags/Denoising/" rel="tag"># Denoising</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017-03-07-csunewoj/" rel="prev" title="CSU-ACM新官网上线">
+                  <i class="fa fa-angle-left"></i> CSU-ACM新官网上线
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017-03-29-about-norm/" rel="next" title="关于机器学习中的范数的杂记">
+                  关于机器学习中的范数的杂记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

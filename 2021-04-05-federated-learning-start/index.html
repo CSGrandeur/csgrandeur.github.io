@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="开头一段是故事，可跳过看正文  几年前师兄让我研究一下为深度学习训练提供云服务时，如何解决用户的数据隐私顾虑，精度允许有损耗。 当时一腔热血展开调研，对着CNN结构苦思冥想，不给数据怎么训练？给了数据怎么隐私？ 然后顺理成章的钻进了数据加密的死胡同。原想着“加密-&gt;训练-&gt;解密”做成端到端或许行得通，跑了一波实验只能得到雪花点。发现一个无比牛叉的发明——同态加密，啃了好几天终于略有些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="联邦学习初理解">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2021-04-05-federated-learning-start/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="开头一段是故事，可跳过看正文  几年前师兄让我研究一下为深度学习训练提供云服务时，如何解决用户的数据隐私顾虑，精度允许有损耗。 当时一腔热血展开调研，对着CNN结构苦思冥想，不给数据怎么训练？给了数据怎么隐私？ 然后顺理成章的钻进了数据加密的死胡同。原想着“加密-&gt;训练-&gt;解密”做成端到端或许行得通，跑了一波实验只能得到雪花点。发现一个无比牛叉的发明——同态加密，啃了好几天终于略有些">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-04-05T03:10:29.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.955Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="Federated Learning">
+<meta property="article:tag" content="Machine Learning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2021-04-05-federated-learning-start/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2021-04-05-federated-learning-start/","path":"2021-04-05-federated-learning-start/","title":"联邦学习初理解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>联邦学习初理解 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">联邦学习是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0%E7%A0%94%E7%A9%B6%E4%BA%9B%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">联邦学习研究些什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%AE%AF%E6%88%90%E6%9C%AC%E9%AB%98"><span class="nav-number">2.1.</span> <span class="nav-text">通讯成本高</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%9F%E8%AE%A1%E5%AD%A6%E5%BC%82%E8%B4%A8%E6%80%A7statistical-heterogeneity"><span class="nav-number">2.2.</span> <span class="nav-text">统计学异质性（Statistical
+Heterogeneity）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8"><span class="nav-number">2.3.</span> <span class="nav-text">数据安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E8%90%BD%E5%9C%B0"><span class="nav-number">2.4.</span> <span class="nav-text">应用落地</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="nav-number">2.5.</span> <span class="nav-text">需求与优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E6%83%B3%E5%81%9A%E7%82%B9%E4%BB%80%E4%B9%88"><span class="nav-number">3.</span> <span class="nav-text">我想做点什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2021-04-05-federated-learning-start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="联邦学习初理解 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          联邦学习初理解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-05 11:10:29" itemprop="dateCreated datePublished" datetime="2021-04-05T11:10:29+08:00">2021-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Research/" itemprop="url" rel="index"><span itemprop="name">Research</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>开头一段是故事，可跳过看正文</p>
+</blockquote>
+<p>几年前师兄让我研究一下为深度学习训练提供云服务时，如何解决用户的数据隐私顾虑，精度允许有损耗。</p>
+<p>当时一腔热血展开调研，对着CNN结构苦思冥想，不给数据怎么训练？给了数据怎么隐私？</p>
+<p>然后顺理成章的钻进了数据加密的死胡同。原想着“加密-&gt;训练-&gt;解密”做成端到端或许行得通，跑了一波实验只能得到雪花点。发现一个无比牛叉的发明——同态加密，啃了好几天终于略有些理解，却是框架难实现、模型难收敛、图像难处理。</p>
+<p>在同态加密的死胡同里挣扎了一番，还是数学能力不足放弃了，感觉是个无解的问题。</p>
+<p>今年突然发现了“联邦学习”这个名词，科研界与工业界早已炒得火热，第一反应就是“啊？这样训练也能用？也能刷论文？也能做产品？”</p>
+<p>好吧感觉这么多年还是不够懂科研。想起那个水笔的故事——墨水只能灌那么高，再高会漏墨，怎么办呢，把笔芯就生产成那么高墨水的就好了，完全能用啊。</p>
+<p>如今坑都填差不多了，剩下的要么是人不想做的，要么是无比难搞的。</p>
+<p>这世上精明人那么多，哪有那么多舒服的方向给你。而且也给过你机会了。</p>
+<p>静下心来不要挑三拣四，总能做出点东西。</p>
+<span id="more"></span>
+<h2 id="联邦学习是什么">联邦学习是什么</h2>
+<p>大数据时代，数据为王，机器学习模型或好或坏，丢几十T数据进去，都能给你练出个NB模型，预测用户习惯，精准推送文章、商品、广告，换来的都是流量，都是真金白银。</p>
+<p>可用户不开心啊，我的聊天记录，我的朋友圈，我的联系人列表，都是我的隐私，你凭什么拿去机器学习。感到被监控，感到可怕...</p>
+<p>好的，法律来了，国内外都有，保护用户隐私。</p>
+<p>互联网公司郁闷了，这可咋整。</p>
+<p>好好好，不拿你数据了，借你手机cpu用你自己的数据跑几个特征值给我，我看不到你的隐私，还依然给你提供智能的自动化服务，双赢，如何。</p>
+<p>联邦学习的雏形就这么来了，比较典型的开始是谷歌2016年预测Android设备文本输入的模型训练中，保持数据在设备本地，服务器只收集设备按机器学习算法求出的局部梯度，通过服务器合并，在数学上逼近全局训练效果的计算方案。</p>
+<p>再往后，更丰富的需求和方案也来了：</p>
+<ul>
+<li>不同的企业都有数据，合在一起训练的模型不是更好。但是数据都是钱啊，凭什么给。互换数据？问问我的用户答应不答应。</li>
+<li>不同的部门有同一批用户的不同方面的数据，银行有存款信息，医院有病例信息，结合起来可以有更完整的用户模型，但是...</li>
+</ul>
+<p>要么是部门财产，要么是用户隐私，反正数据都拿出来一起跑个好模型的乌托邦是不存在的。</p>
+<p>机器学习一般把数据看作一个一个的包含多个特征值的数据，一个放一行的话，可以放进一个Excel表格里，一行是一个数据，每列是数据的一个特征值。</p>
+<p>那么</p>
+<ul>
+<li>横向联邦学习：不同企业的数据是不同的行，他们可能包含了不同的类别，把这些数据以联邦学习的方式训练联合模型，会支持更丰富的类别或更好的分类泛化性能。</li>
+<li>纵向联邦学习：不同部门的数据是不同的列，即每个数据都包含了用户重叠或不重叠的若干特征，以联邦学习的方式训练联合模型，会基于更多的特征给出更精准的结果。</li>
+</ul>
+<h2 id="联邦学习研究些什么">联邦学习研究些什么</h2>
+<h3 id="通讯成本高">通讯成本高</h3>
+<p>不是本地一个GPU从硬盘里拿了就训练，而是要各个终端频繁地发送梯度信息，下载模型更新信息。</p>
+<p>在保证相同模型精度前提下，考虑减少通讯次数、模型更新时间等</p>
+<h3 id="统计学异质性statistical-heterogeneity">统计学异质性（Statistical
+Heterogeneity）</h3>
+<p>这词也没找到官方翻译，说“异构性”感觉格局小了。。其实单词直译看起来还不错。</p>
+<p>这个问题在普通机器学习中就有，比如训练mnist
+<code>0</code>到<code>9</code>的手写数字识别，如果加入训练的数据是一堆<code>0</code>，然后一堆<code>1</code>，然后...，在训练完一堆<code>9</code>之后，你会发现模型可能预测啥都是<code>9</code>。每堆数据的分布是不一样的。</p>
+<p>那怎么办？传统机器学习把数据<strong>随机打乱</strong>一下就好了。这样你随便拿起“一堆”数据，他们就会有个统计学分布（比如画个柱状图统计不同数字个数）。不同“堆”得到的分布都很接近。</p>
+<p>按概率论说，每次随便拿起一个数字是几的概率是相互独立的，即先拿起一个数是<code>0</code>，不会影响再拿起一个数是几的概率。</p>
+<p>又分布接近，又相互独立，嗯，独立同分布（Independent and Identically
+Distributed，IID），这样的数据，才能在机器学习的熔炉里均衡地炼出较靠谱的解。</p>
+<p>那前面扎堆的<code>0</code>、扎堆的<code>1</code>...扎堆的<code>9</code>就是非独立同分布了（Non-IID）。</p>
+<p>传统机器学习可以随机打乱，但联邦学习我们没法把数据集合在一起处理，你的手机里全是<code>0</code>，我的手机里全是<code>1</code>，麻烦就大了。</p>
+<p>再者，手机运算速度、网络环境、网络波动，都给不同方向传给服务器的数据带来各种不确定性，归根到底都影响了数据的分布。</p>
+<p>所以联邦学习最大的困难就是悬丝诊脉，哦不，是碰不到数据还要依赖数据的分布。</p>
+<h3 id="数据安全">数据安全</h3>
+<p>既然要数据隐私，那这要考虑的就太多了，数据怎么不泄露？即使不发数据，发的信息会不会足够猜到数据本身是什么？</p>
+<p>如果要依赖“大”数据，往服务器发信息的终端一定都是“善良”的吗？</p>
+<p>任何事情牵扯到互联网，环节就会非常多，数据发送、接收、模型聚合、下发，都要顾虑一个安全问题，隐私安全，模型安全，数据安全...</p>
+<h3 id="应用落地">应用落地</h3>
+<p>有理论不一定能用，把理论用起来产生经济价值也有一系列要解决的问题。</p>
+<h3 id="需求与优化">需求与优化</h3>
+<p>异步训练？模型验证？无监督？区块链？...</p>
+<h2 id="我想做点什么">我想做点什么</h2>
+<p>统计学异质性是个老话题，哪怕是在联邦学习中。如前文所说，好填的坑都被人填完了，难啃的骨头啃一啃吧，总有些能改进的地方，对应用落地还是有些帮助。</p>
+<hr />
+<h2 id="参考">参考</h2>
+<ul>
+<li>[1] YANG Q, LIU Y, CHEN T, et al. Federated machine learning:
+Concept and applications[J]. ACM Trans. Intell. Syst. Technol., 2019,
+10(2): 12:1­12:19.</li>
+<li>[2] LI T, SAHU A K, TALWALKAR A, et al. Federated learning:
+Challenges, methods, and future directions[J]. IEEE Signal Processing
+Magazine, 2020, 37: 50­60.</li>
+<li>[3] LI L, FAN Y, TSE M, et al. A review of applications in federated
+learning[J]. Computers &amp; Industrial Engineering, 2020, 149:
+106854.</li>
+<li>[4] LI T, SAHU A K, ZAHEER M, et al. Federated optimization in
+heterogeneous networks [C]//DHILLON I S, PAPAILIOPOULOS D S, SZE V.
+Proceedings of Machine Learning and Systems 2020, MLSys 2020, Austin,
+TX, USA, March 2­4, 2020. mlsys.org, 2020.</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Federated-Learning/" rel="tag"># Federated Learning</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021-03-31-vscode-latex/" rel="prev" title="vscode使用latex">
+                  <i class="fa fa-angle-left"></i> vscode使用latex
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021-04-24-understanding-of-convex-optimization/" rel="next" title="凸优化初步了解">
+                  凸优化初步了解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

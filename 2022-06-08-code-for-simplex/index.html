@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本文仅针对代码实现思路，并不完整讲解单纯形算法原理，建议先完成课本或资料的原理学习，再阅读本文。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性规划单纯形法代码实现解析">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2022-06-08-code-for-simplex/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="本文仅针对代码实现思路，并不完整讲解单纯形算法原理，建议先完成课本或资料的原理学习，再阅读本文。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-06-08T12:53:00.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.965Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2022-06-08-code-for-simplex/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2022-06-08-code-for-simplex/","path":"2022-06-08-code-for-simplex/","title":"线性规划单纯形法代码实现解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>线性规划单纯形法代码实现解析 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E8%AF%BE%E6%9C%AC%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.</span> <span class="nav-text">1. 算法课本的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%A2%B3%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 流程梳理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 参数定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%AD%E4%B8%AA%E6%A1%86%E6%9E%B6"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 搭个框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AA%E7%8E%AF%E6%9E%9A%E4%B8%BE%E5%8F%AF%E8%A1%8C%E5%9F%BA"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.4.1 循环枚举可行基</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E5%8F%98%E6%8D%A2"><span class="nav-number">1.4.2.</span> <span class="nav-text">1.4.2 基变换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.4.3.</span> <span class="nav-text">1.4.3 初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.4.4.</span> <span class="nav-text">1.4.4 使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">2. 改进的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%BE%E5%BC%9B%E5%8F%98%E9%87%8F%E4%B8%8E%E7%BD%AE%E6%8D%A2%E7%AD%96%E7%95%A5"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 松弛变量与置换策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E9%AA%8C%E6%95%B0%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 检验数的选取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E5%A4%96%E8%AF%9D%E6%B5%AE%E7%82%B9%E6%95%B0%E8%AE%A1%E7%AE%97%E7%9A%84%E5%A5%BD%E4%B9%A0%E6%83%AF"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 题外话：浮点数计算的好习惯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E4%BE%8B%E9%A2%98%E4%B8%BA%E4%BE%8B%E7%9A%84%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 以例题为例的完整代码</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E8%A7%A3"><span class="nav-number"></span> <span class="nav-text">3. 输出解</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2022-06-08-code-for-simplex/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="线性规划单纯形法代码实现解析 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          线性规划单纯形法代码实现解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-06-08 20:53:00" itemprop="dateCreated datePublished" datetime="2022-06-08T20:53:00+08:00">2022-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>本文仅针对代码实现思路，并不完整讲解单纯形算法原理，建议先完成课本或资料的原理学习，再阅读本文。</p>
+<span id="more"></span>
+<h2 id="算法课本的实现">1. 算法课本的实现</h2>
+<p><strong>本节代码完全按课本方式实现，竞赛选手可略过此部分，查看第2节</strong>。</p>
+<h3 id="流程梳理">1.1 流程梳理</h3>
+<p>首先，我们先回顾单纯形基本流程：</p>
+<ol type="1">
+<li>确定初始基本可行解</li>
+<li>检查检验数 <span class="math inline">\(\lambda\)</span> 和 <span
+class="math inline">\(B^{-1}A\)</span> 的 <span
+class="math inline">\(\alpha\)</span> 矩阵做判断：
+<ul>
+<li>是最优解或无最优解则结束；</li>
+<li>否则，做基变换，合理选择一个非基变量换入，一个基变量换出，更新变换后的各值</li>
+</ul></li>
+<li>重复2</li>
+</ol>
+<h3 id="参数定义">1.2 参数定义</h3>
+<p>先看看课本的单纯形法有哪些量：</p>
+<ul>
+<li><span class="math inline">\(m\)</span> ：约束条件的行数</li>
+<li><span class="math inline">\(n\)</span> ：变量的个数</li>
+<li><span class="math inline">\(A\)</span> 矩阵： <span
+class="math inline">\(m\times n\)</span>
+的矩阵，约束条件的系数矩阵，通常情况 $ m &lt; n $ 且 <span
+class="math inline">\(A\)</span> 的秩为 <span
+class="math inline">\(m\)</span>
+。如果完整构建，则该矩阵应该也存了松弛变量对应的单位矩阵那部分</li>
+<li><span class="math inline">\(b\)</span>
+：约束条件右侧的值向量，最小标准形应该不小于0</li>
+<li><span class="math inline">\(c\)</span>
+：目标函数的系数向量，最小标准形就是求 <span
+class="math inline">\(\min{c^{T}x}\)</span></li>
+<li><span class="math inline">\(z\)</span>
+：目标函数，不过表达上经过了变换，在算法中每次由上一次的目标函数值来计算</li>
+<li><span class="math inline">\(B\)</span> 基： <span
+class="math inline">\(m\times m\)</span> 的矩阵，为 <span
+class="math inline">\(A\)</span> 中选出的 <span
+class="math inline">\(m\)</span>
+列线性无关的一组基，如果是完美的松弛形，则恰好可以选由松弛变量系数构成的“最右边”那个
+<span class="math inline">\(m\times m\)</span> 的单位矩阵</li>
+<li><span class="math inline">\(\alpha=B^{-1}A\)</span> 矩阵：由基 <span
+class="math inline">\(B\)</span> 和约束矩阵 <span
+class="math inline">\(A\)</span> 得到的校验参数</li>
+<li><span class="math inline">\(\beta=B^{-1}b\)</span>
+：其实就是枚举的每一组基本可行解</li>
+</ul>
+<p>我们来个课本例子：</p>
+<p><span class="math display">\[
+\begin{align}
+\min ~~ &amp; {z=-12x_{1}-15x_{2}} \\
+s.t. ~~ &amp; 0.25x_{1} +0.5x_{2}&amp; + x_{3} &amp;&amp;&amp; =120 \\
+&amp; 0.5x_{1} +0.5x_{2}&amp;&amp; + x_{4} &amp;&amp; =150 \\
+&amp; 0.25x_{1}&amp;&amp;&amp; + x_{5} &amp;=50 \\
+&amp; x_{i}\geq 0, i=1,2,\dots, 5
+\end{align}
+\]</span></p>
+<p>用表来展现：</p>
+<table>
+<thead>
+<tr class="header">
+<th>-12</th>
+<th>-15</th>
+<th>0</th>
+<th>0</th>
+<th>0</th>
+<th>c/b</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(x_1\)</span></td>
+<td><span class="math inline">\(x_2\)</span></td>
+<td><span class="math inline">\(x_3\)</span></td>
+<td><span class="math inline">\(x_4\)</span></td>
+<td><span class="math inline">\(x_5\)</span></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>0.25</td>
+<td>0.50</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td>0.50</td>
+<td>0.50</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>150</td>
+</tr>
+<tr class="even">
+<td>0.25</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(A\)</span> 矩阵就是完整的系数矩阵：</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>0.25</td>
+<td>0.50</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>0.50</td>
+<td>0.50</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>0.25</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>第一组可行基<span
+class="math inline">\(B\)</span>我们就选右侧的单位矩阵：</p>
+<table>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>既然选的这组基对应的变量序号是 <span
+class="math inline">\(3,4,5\)</span> 列，那么基变量 $x_{B}=x_3,x_4,x_5$
+，非基变量 $x_{N}=x_{1},x_{2}$ 。</p>
+<p>相应的，基变量对应的目标函数的系数 $c_{B}=,0,0$
+，非基变量对应的目标函数的系数 $c_{N}=,-15$
+，发现了吗，松弛变量因为是我们构建标准形额外加的，所以它们序号对应的目标函数的系数都是0，也即最初的基变量对应的目标函数的系数都是0
+。</p>
+<p><strong>记住以上内容（或文章的位置），我们接下来的代码实现会参照这些内容</strong>。</p>
+<h3 id="搭个框架">1.3 搭个框架</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Simplex</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 标准型：min Σcx, s.t. ax=b, x&gt;=0</span></span><br><span class="line">    vector&lt;<span class="type">double</span>&gt; b, c;</span><br><span class="line">    vector&lt;vector&lt;<span class="type">double</span>&gt; &gt;a;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> n_, <span class="type">int</span> m_)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> 一些初始化操作</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Pivot</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> l)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> 向量置换，参考课本公式更新 b, a, z, c 的值</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">Solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> k = <span class="number">0</span>, l = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// <span class="doctag">TODO:</span> 参考课本判断λ和α</span></span><br><span class="line">            <span class="comment">// 如果存在最优解且当前不是最优解，则计算置换的向量序号，进行向量置换（调用Pivot）</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里，我们用<code>a[][]</code>、<code>b[]</code>、<code>c[]</code>
+保存最初的 <span class="math inline">\(A\)</span> 矩阵、 <span
+class="math inline">\(b\)</span> 、 <span
+class="math inline">\(c\)</span> 向量。</p>
+<h3 id="实现">1.4 实现</h3>
+<h4 id="循环枚举可行基">1.4.1 循环枚举可行基</h4>
+<p>算法中“重复2”的过程体现在<code>Solve()</code>的<code>while(true)</code>里，在这里检查是否结束。
+如果需要基变量置换，则在<code>Solve()</code>中调用<code>Pivot()</code>执行置换过程。</p>
+<p><code>Solve()</code>的开头，参照课本最优性检验的定义， <span
+class="math inline">\(k\)</span> 是换入变量序号， <span
+class="math inline">\(l\)</span>
+是换出变量在基里的序号，先把这俩序号定义出来。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">Solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> k = <span class="number">0</span>, l = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>如果 <span class="math inline">\(\lambda \geq 0\)</span>
+则是最优解直接返回，否则如果有 <span class="math inline">\(\lambda_k
+&lt; 0\)</span> ，则 <span class="math inline">\(k\)</span>
+就是换入变量的序号。</p>
+<p>代码用一个单行<code>for</code>循环找到 <span
+class="math inline">\(k\)</span>
+，利用了<code>for</code>循环里的判断条件，注意这个<code>for</code>的结尾直接跟分号“<code>;</code>”。如果循环结束<code>k==n</code>的话那就是没找到小于0的
+<span class="math inline">\(\lambda\)</span>
+，这C语言基础知识了，这种情况已经最优解，属于“情况<code>1</code>”，返回当前的目标函数值<code>z</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; n &amp;&amp; c[k] &gt;= <span class="number">0</span>; k ++);</span><br><span class="line"><span class="keyword">if</span>(k == n) <span class="keyword">return</span> z;</span><br></pre></td></tr></table></figure>
+<p>困惑来了：不是 <span class="math inline">\(\lambda\)</span>
+吗，这里怎么用<code>c[k]&gt;=0</code>做条件？我们回顾课本检验数的公式：
+<span class="math inline">\(\lambda^{T}=c^{T}-c_{B}^{T}B^{-1}A\)</span>
+，翻一下上文的 <span class="math inline">\(c_{B}\)</span> 和 <span
+class="math inline">\(c_{N}\)</span> ，当松弛变量为初始基的时候，对应的
+<span class="math inline">\(c_{B}\)</span> 都是0呢，所以“恰好” <span
+class="math inline">\(c\)</span> 就是初始的 <span
+class="math inline">\(\lambda\)</span>
+。由于单纯形法的过程中都是由“上一步”的 <span
+class="math inline">\(\alpha,\beta,\lambda,z\)</span>
+推“下一步”的，所以初始的 <span class="math inline">\(c\)</span>
+可以不用保留，<strong>我们直接用<code>c[]</code>数组表示接下来所有的
+<span class="math inline">\(\lambda\)</span></strong>。</p>
+<p>接下来就处理有那么个 <span
+class="math inline">\(\lambda_{k}&lt;0\)</span> 的情况，看 <span
+class="math inline">\(\alpha\)</span> 的第 <span
+class="math inline">\(k\)</span> 列是否有大于0的。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> mn = inf;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(a[i][k] &gt; <span class="number">0</span> &amp;&amp; mn &gt; b[i] / a[i][k])</span><br><span class="line">    &#123;</span><br><span class="line">        mn = b[i] / a[i][k];</span><br><span class="line">        l = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(mn == inf) <span class="keyword">return</span> inf;</span><br></pre></td></tr></table></figure>
+<p>又有心细的同学问了，不是 <span class="math inline">\(\alpha\)</span>
+吗，怎么直接用<code>a[][]</code>矩阵了？回忆上文 <span
+class="math inline">\(\alpha\)</span> 是什么？是 <span
+class="math inline">\(B^{-1}A\)</span> ，而初始基 <span
+class="math inline">\(B\)</span> 是单位矩阵，所以初始的 <span
+class="math inline">\(\alpha\)</span> 恰好就是 <span
+class="math inline">\(A\)</span> 矩阵，我们又可以直接用
+<code>a[][]</code>表示后续的 <span class="math inline">\(\alpha\)</span>
+矩阵了。</p>
+<p>如果临时变量<code>mn==inf</code>，意味 <span
+class="math inline">\(\alpha\)</span> 的第 <span
+class="math inline">\(k\)</span>
+列没有遇到大于0的，根据算法，这种情况无最优解，属于“情况<code>2</code>”，返回一个信号，这里我们从简，返回个无穷大好了。</p>
+<p><code>for</code>循环里面就是在顺便处理“情况<code>3</code>”了，即确定换出变量的序号
+<span class="math inline">\(l\)</span> ，根据算法，是 <span
+class="math inline">\(\alpha\)</span> 这第 <span
+class="math inline">\(k\)</span> 列大于0的里面，对应的 <span
+class="math inline">\(\beta_{i}/\alpha_{i,k}\)</span> 最小的那个 <span
+class="math inline">\(i\)</span> 作为 <span
+class="math inline">\(l\)</span> 。</p>
+<p>如果“情况<code>1</code>”和“情况<code>2</code>”都没有遇到，即函数没有<code>return</code>，就要根据找到的
+<span class="math inline">\(k\)</span> 和 <span
+class="math inline">\(l\)</span>
+做基变换了，我们调用<code>Pivot(k,l)</code>，完整的<code>Solve()</code>代码为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">Solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> k = <span class="number">0</span>, l = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; n &amp;&amp; c[k] &gt;= <span class="number">0</span>; k ++);</span><br><span class="line">        <span class="keyword">if</span>(k == n) <span class="keyword">return</span> z;</span><br><span class="line">        <span class="type">double</span> mn = inf;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(a[i][k] &gt; <span class="number">0</span> &amp;&amp; mn &gt; b[i] / a[i][k])</span><br><span class="line">            &#123;</span><br><span class="line">                mn = b[i] / a[i][k];</span><br><span class="line">                l = i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(mn == inf) <span class="keyword">return</span> inf;</span><br><span class="line">        <span class="built_in">Pivot</span>(k, l);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="基变换">1.4.2 基变换</h4>
+<p>接下来看<code>void Pivot(int k, int l)</code>的实现。</p>
+<p>回顾课本公式：</p>
+<ul>
+<li><span
+class="math inline">\(\alpha_{lj}^{\prime}=\alpha_{lj}/\alpha_{lk},
+1\leq j \leq n\)</span></li>
+<li><span class="math inline">\(\alpha_{ij}^{\prime}=\alpha_{ij} -
+\alpha_{ik}\alpha_{lj}/\alpha_{lk}, 1 \leq i \leq m 且i\neq l, 1\leq j
+\leq n\)</span></li>
+<li><span
+class="math inline">\(\beta_{l}^{\prime}={\beta_l}/\alpha_{lk}\)</span></li>
+<li><span class="math inline">\(\beta_{i}^{\prime}=\beta_{i} -
+\alpha_{ik}\beta_{l}/\alpha_{lk}, 1\leq i \leq m 且 i \neq
+l\)</span></li>
+<li><span
+class="math inline">\(\lambda_{j}^{\prime}=\lambda_{j}-\lambda_{k}\alpha_{lj}/\alpha_{lk},
+1\leq j \leq n\)</span></li>
+<li><span
+class="math inline">\(z_{0}^{\prime}=z_{0}+\lambda_{k}\beta_{l}/\alpha_{lk}\)</span></li>
+</ul>
+<p>我们就依据公式把基变换之后所有的数都更新出来。</p>
+<p>先看<code>l</code>这一行，这里我们一开始没有更新 <span
+class="math inline">\(\alpha[l][k]\)</span>（即<code>a[l][k]</code>），因为它后面还要被用到，最后再更新它。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b[l] /= a[l][k];</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">    <span class="keyword">if</span>(j != k) a[l][j] /= a[l][k];</span><br></pre></td></tr></table></figure>
+<p>接着处理除了第<code>l</code>行之外的每一行，<code>a[i][k]==0</code>时候可以跳过不用计算，看公式就知道为0时对结果没有影响。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(i != l &amp;&amp; <span class="built_in">fabs</span>(a[i][k]) &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        b[i] -= a[i][k] * b[l];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(j != k) a[i][j] -= a[i][k] * a[l][j];</span><br><span class="line">        a[i][k] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里更新<code>a[i][j]</code>时的代码为<code>a[i][j] -= a[i][k] * a[l][j];</code>，公式是
+<span class="math inline">\(\alpha_{ij}^{\prime}=\alpha_{ij} -
+\alpha_{ik}\alpha_{lj}/\alpha_{lk}\)</span>
+，有同学可能要问“为什么少除了 <code>a[l][k]</code>
+呢”？因为前面的代码已经更新了 <code>a[l][j]</code>的值，到这行代码时的
+<code>a[l][j]</code> 已经是 <span
+class="math inline">\(\alpha_{lj}/\alpha_{lk}\)</span> 了。</p>
+<p>这里我们对第<code>k</code>列做了单独处理（置0），一方面计算过程中要用到<code>a[i][k]</code>的值，不能过早覆盖它，另一方面其实按公式算也是0，浮点数运算直接置0也能优化点精度。</p>
+<p>接着更新目标函数 <span class="math inline">\(z\)</span> 和检验数
+<span class="math inline">\(\lambda\)</span>
+，前面已经讲解了我们直接用<code>c[]</code>数组保存后续更新的 <span
+class="math inline">\(\lambda\)</span>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">z += c[k] * b[l];</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">    <span class="keyword">if</span>(j != k) c[j] -= c[k] * a[l][j];</span><br><span class="line">c[k] = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p><code>c[k]</code>单独处理理由和前面一样的，过程中要用它不能过早覆盖。</p>
+<p>最后别忘了前面的<code>a[l][k]</code>也要更新，按公式就是除以它自己，应该为<code>1</code>。<code>Pivot()</code>完整代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Pivot</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> l)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    b[l] /= a[l][k];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">        <span class="keyword">if</span>(j != k) a[l][j] /= a[l][k];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(i != l &amp;&amp; <span class="built_in">fabs</span>(a[i][k]) &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            b[i] -= a[i][k] * b[l];</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">                <span class="keyword">if</span>(j != k) a[i][j] -= a[i][k] * a[l][j];</span><br><span class="line">            a[i][k] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    z += c[k] * b[l];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">        <span class="keyword">if</span>(j != k) c[j] -= c[k] * a[l][j];</span><br><span class="line">    c[k] = <span class="number">0</span>;</span><br><span class="line">    a[l][k] = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="初始化">1.4.3 初始化</h4>
+<p>代码中要用到行数<code>m</code>和列数<code>n</code>，当然要初始化好，可以定义个内置函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> n_, <span class="type">int</span> m_)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    n = n_, m = m_;</span><br><span class="line">    b.<span class="built_in">resize</span>(m);</span><br><span class="line">    a.<span class="built_in">resize</span>(m);</span><br><span class="line">    c.<span class="built_in">resize</span>(n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> &amp;x : a) x.<span class="built_in">resize</span>(n + <span class="number">1</span>), <span class="built_in">fill</span>(x.<span class="built_in">begin</span>(), x.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    std::<span class="built_in">fill</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    std::<span class="built_in">fill</span>(c.<span class="built_in">begin</span>(), c.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    z = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>重点在于所有<code>a[][]</code>、<code>b[]</code>、<code>c[]</code>的值要根据输入初始化，不要在处理多组数据时残留之前的数据，初始化为<code>0</code>比较安全。<code>vector</code>容器增强代码的可伸缩性。</p>
+<p>当然，习惯用C语言形式的数组也可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e3</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxm = <span class="number">1e4</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">double</span> a[maxn][maxm], b[maxn], c[maxm], z;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> n_, <span class="type">int</span> m_)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    n = n_, m = m_;</span><br><span class="line">    <span class="built_in">memset</span>(c, <span class="number">0</span>, <span class="built_in">sizeof</span>(c));</span><br><span class="line">    <span class="built_in">memset</span>(a, <span class="number">0</span>, <span class="built_in">sizeof</span>(a));</span><br><span class="line">    z = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>特别注意的是，当存入了松弛变量，实质上变量数量增加了，传入<code>Init()</code>的<code>n</code>要对应哦。</p>
+<h4 id="使用">1.4.4 使用</h4>
+<p>以<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3980">P3980 [NOI2008]
+志愿者招募</a> 这道题为例：</p>
+<blockquote>
+<ul>
+<li><code>n</code>天，第<code>i</code>天需要<code>bi</code>个人</li>
+<li>有<code>m</code>类志愿者，第<code>j</code>类可以从第<code>si</code>天工作到第<code>ti</code>天，每人<code>ci</code>元</li>
+<li>第一行输入<code>n m</code>，第二行<code>n</code>个数表示每天需要人数，接下来<code>m</code>行每行
+3 个数表示一类志愿者的起止时间和花费</li>
+<li>求满足要求的最省钱总费用</li>
+</ul>
+</blockquote>
+<p>直接建线性规划模型，设<code>x</code>是每类志愿者个数，约束条件每一行是每一天的要求，<span
+class="math inline">\(A\)</span>矩阵第<code>i</code>行为<code>01</code>向量，<span
+class="math inline">\(A_{ij}\)</span>
+表示第<code>j</code>类志愿者第<code>i</code>天是否可以服务。</p>
+<p><span class="math display">\[
+\begin{align}
+\min ~~ &amp;{z=cx} \\
+s.t. ~~ &amp;\sum A_{ij}x_{j} \geq b \\
+    &amp;x\geq 0
+\end{align}
+\]</span></p>
+<p>这全是 <span class="math inline">\(\geq\)</span>
+，不便于我们建松弛变量，转成对偶问题来做：</p>
+<p><span class="math display">\[
+\begin{align}
+\max ~~ &amp; {z=by} \\
+s.t. ~~ &amp; \sum A_{ji}y_{i} \leq c \\
+    &amp; y\geq 0
+\end{align}
+\]</span></p>
+<p>这还不够，不是最小标准型，把目标函数系数取个负号变成</p>
+<p><span class="math display">\[
+\min{z=-by}
+\]</span></p>
+<p>求解完成后记得把负号乘回来。</p>
+<p>接下来实现构造数据的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Simplex spx;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="type">int</span> s, t, ci;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        spx.<span class="built_in">Init</span>(n + m, m); <span class="comment">// n+m 考虑了m个松弛变量</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">            <span class="comment">// 直接把每天需要的志愿者个数bi读入到对偶问题的目标函数系数`c`向量</span></span><br><span class="line">            <span class="comment">// 这里注意，对偶问题是个 max 问题，需要对目标函数的系数取负变为最小单纯形</span></span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;spx.c[i]), spx.c[i] = -spx.c[i];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;s, &amp;t, &amp;ci);</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = s; j &lt;= t; j ++)</span><br><span class="line">                <span class="comment">// 按对偶问题定义，A的每一行存一类志愿者的工作起止时间标记，哪天能工作哪天就是`1`</span></span><br><span class="line">                spx.a[i][j - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">            spx.a[i][n + i] = <span class="number">1</span>;    <span class="comment">// 存松弛变量系数</span></span><br><span class="line">            spx.b[i] = ci;          <span class="comment">// 把每类志愿者费用存入对偶问题的`b`向量</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 求解后记得负号取回来，`+0.5`用于浮点数修正，比如`5`变成`4.999999...`的时候</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, (<span class="type">int</span>)(-spx.<span class="built_in">Solve</span>() + <span class="number">0.5</span>));  </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>给一份完整代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> inf = <span class="number">1e20</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Simplex</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 标准型：min Σcx, s.t. ax=b, x&gt;=0</span></span><br><span class="line">    vector&lt;<span class="type">double</span>&gt; b, c;</span><br><span class="line">    vector&lt;vector&lt;<span class="type">double</span>&gt; &gt;a;</span><br><span class="line">    <span class="type">double</span> z;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> n_, <span class="type">int</span> m_)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        n = n_, m = m_;</span><br><span class="line">        b.<span class="built_in">resize</span>(m);</span><br><span class="line">        a.<span class="built_in">resize</span>(m);</span><br><span class="line">        c.<span class="built_in">resize</span>(n);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> &amp;x : a) x.<span class="built_in">resize</span>(n + <span class="number">1</span>), <span class="built_in">fill</span>(x.<span class="built_in">begin</span>(), x.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">        std::<span class="built_in">fill</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">        std::<span class="built_in">fill</span>(c.<span class="built_in">begin</span>(), c.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">        z = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Pivot</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> l)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        b[l] /= a[l][k];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(j != k) a[l][j] /= a[l][k];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i != l &amp;&amp; <span class="built_in">fabs</span>(a[i][k]) &gt; <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                b[i] -= a[i][k] * b[l];</span><br><span class="line">                <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">                    <span class="keyword">if</span>(j != k) a[i][j] -= a[i][k] * a[l][j];</span><br><span class="line">                a[i][k] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        z += c[k] * b[l];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(j != k) c[j] -= c[k] * a[l][j];</span><br><span class="line">        c[k] = <span class="number">0</span>;</span><br><span class="line">        a[l][k] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">Solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> k = <span class="number">0</span>, l = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; n &amp;&amp; c[k] &gt;= <span class="number">0</span>; k ++);</span><br><span class="line">            <span class="keyword">if</span>(k == n) <span class="keyword">return</span> z;</span><br><span class="line">            <span class="type">double</span> mn = inf;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>(a[i][k] &gt; <span class="number">0</span> &amp;&amp; mn &gt; b[i] / a[i][k])</span><br><span class="line">                &#123;</span><br><span class="line">                    mn = b[i] / a[i][k];</span><br><span class="line">                    l = i;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(mn == inf) <span class="keyword">return</span> inf;</span><br><span class="line">            <span class="built_in">Pivot</span>(k, l);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">Simplex spx;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="type">int</span> s, t, ci;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        spx.<span class="built_in">Init</span>(n + m, m);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;spx.c[i]), spx.c[i] = -spx.c[i];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;s, &amp;t, &amp;ci);</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = s; j &lt;= t; j ++)</span><br><span class="line">                spx.a[i][j - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">            spx.a[i][n + i] = <span class="number">1</span>;</span><br><span class="line">            spx.b[i] = ci;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, (<span class="type">int</span>)(-spx.<span class="built_in">Solve</span>() + <span class="number">0.5</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>“啊！怎么MLE了，这不是正解啊？！”</p>
+<p>是的，完全按课本来，我们遇到了一个问题，加了松弛变量之后，数据的两个维度都达到了这道题<code>m</code>
+的 <span class="math inline">\(10^4\)</span>
+级，<code>a[][]</code>矩阵达到 <span class="math inline">\(10^8\)</span>
+，虽然过了部分数据，但大数据 <code>Memory Limit Exceed</code> 了。</p>
+<p>看来这个写法只能解决规模没那么大的问题，那么应该怎么办呢？请看下一节。</p>
+<h2 id="改进的实现">2. 改进的实现</h2>
+<h3 id="松弛变量与置换策略">2.1 松弛变量与置换策略</h3>
+<p>对于刚刚的例子，<code>n</code>的范围在 <span
+class="math inline">\(10^3\)</span> ，<code>m</code>的范围在 <span
+class="math inline">\(10^4\)</span> ，如果只是 <span
+class="math inline">\(n\times m\)</span>
+，还不至于MLE，但加上松弛变量，<code>a[][]</code>就要开到 <span
+class="math inline">\((n+m)\times m\)</span> 。</p>
+<p>我们知道松弛变量系数构成的矩阵是个单位矩阵，能不能不显式地保存它，却仍利用它为初始的可行基
+<span class="math inline">\(B\)</span> 进行计算呢？</p>
+<p>在构造数据的时候，先不保存松弛变量，注释掉的即我们调整的地方：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spx.Init(n + m, m); --&gt;</span></span><br><span class="line">spx.<span class="built_in">Init</span>(n, m);</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;s, &amp;t, &amp;ci);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = s; j &lt;= t; j ++)</span><br><span class="line">        spx.a[i][j - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// spx.a[i][n + i] = 1;</span></span><br><span class="line">    spx.b[i] = ci;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后需要对<code>Pivot()</code>进行改变：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Pivot</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> l)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    b[l] /= a[l][k];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">        <span class="keyword">if</span>(j != k) a[l][j] /= a[l][k];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(i != l &amp;&amp; <span class="built_in">fabs</span>(a[i][k]) &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            b[i] -= a[i][k] * b[l];</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">                <span class="keyword">if</span>(j != k) a[i][j] -= a[i][k] * a[l][j];</span><br><span class="line">            <span class="comment">// a[i][k] = 0; --&gt;</span></span><br><span class="line">            a[i][k] /= -a[l][k];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    z += c[k] * b[l];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">        <span class="keyword">if</span>(j != k) c[j] -= c[k] * a[l][j];</span><br><span class="line">    <span class="comment">// c[k] = 0; --&gt;</span></span><br><span class="line">    c[k] /= -a[l][k];</span><br><span class="line">    <span class="comment">// a[l][k] = 1; --&gt;</span></span><br><span class="line">    a[l][k] = <span class="number">1</span> / a[l][k];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们改变了三个地方，对应着特殊的<code>k</code> 这一列。课本上利用
+<span class="math inline">\(H\)</span> 矩阵把 <span
+class="math inline">\(\alpha_{lk}\)</span>
+变为1，<code>k</code>这列的其他 <span
+class="math inline">\(\alpha_{ik}\)</span> 消元为0，对应的 <span
+class="math inline">\(\lambda_{k}\)</span> 也变为了0。</p>
+<p>而改变之后，<code>a[][]</code>数组里没有再存储松弛变量对应的单位矩阵，基变换的过程中也没有了那些列的信息，第<code>k</code>列相应改变了基变换时更新的方式，<code>a[l][k]</code>变为<code>1/a[l][k]</code>，其它的<code>a[i][k]</code>变为<code>-a[i][k]/a[l][k]</code>。</p>
+<p>“不对呀，这跟课本的公式就不一样了啊，为什么按课本的方法要在<code>a[][]</code>里存松弛变量，而这个不用存？不用存就罢了，<code>a[][k]</code>这第<code>k</code>列为什么这样更新？”</p>
+<p>我们需要先理清课本方法做了什么事：</p>
+<p>把<code>a[][]</code>的第<code>k</code>列的<code>a[l][k]</code>变为<code>1</code>，其它<code>a[i][k]</code>变为<code>0</code>，是
+<span class="math inline">\(H\)</span> 矩阵的作用，即让可行基 <span
+class="math inline">\(B\)</span> 乘特意设计的 <span
+class="math inline">\(H\)</span> 矩阵完成基变换，将原始 <span
+class="math inline">\(A\)</span> 矩阵的第 <span
+class="math inline">\(k\)</span> 列换入，基 <span
+class="math inline">\(B\)</span> 的第 <span
+class="math inline">\(l\)</span> 列换出，导致的 <span
+class="math inline">\(\alpha\)</span>
+矩阵的变化。我们需要存储松弛变量对应的那些列，才能完整体现换入和换出的所有信息。</p>
+<p>以这样一组数据为例：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">10 10</span><br><span class="line">8 3 5 2 2 5 5 2 7 9 </span><br><span class="line">9 10 900</span><br><span class="line">6 7 57</span><br><span class="line">1 1 978</span><br><span class="line">4 8 887</span><br><span class="line">8 8 215</span><br><span class="line">3 5 433</span><br><span class="line">4 6 843</span><br><span class="line">5 10 326</span><br><span class="line">8 9 397</span><br><span class="line">1 4 108</span><br></pre></td></tr></table></figure>
+<p>我们以课本方法进行一次换入换出，打印一个中间步骤的<code>l</code>、<code>k</code>、<code>a[][]</code>(
+<span class="math inline">\(\alpha\)</span> )和<code>c</code>( <span
+class="math inline">\(\lambda\)</span> )：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">l:   7 k:   9</span><br><span class="line">a:</span><br><span class="line">  0  0  0  0 -1  0  0 -1  0  0  1  1  0  0  0  0  0 -1  0  0</span><br><span class="line">  0  0  0  0  0  1  1  0  0  0  0  1  0  0  0  0  0  0  0  0</span><br><span class="line">  0 -1 -1 -1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 -1</span><br><span class="line">  0  0  0  1  1  0  0  1  0  0  0 -1  0  1  0  0  0  0  0  0</span><br><span class="line">  0  0  0  0  0  0  0  1  0  0  0  0  0  0  1  0  0  0  0  0</span><br><span class="line">  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0</span><br><span class="line">  0  0  0  1  1  0 -1  0  0  0  0 -1  0  0  0  0  1  0  0  0</span><br><span class="line">  0  0  0  0  1  0  0  1  1  1  0 -1  0  0  0  0  0  1  0  0</span><br><span class="line">  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  1  0</span><br><span class="line">  1  1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1</span><br><span class="line">c:</span><br><span class="line">  0  5  3  6  7  0  0  7  2  0  0 [-4]  0  0  0  0  0  9  0  8</span><br></pre></td></tr></table></figure>
+<p>经过公式计算，第<code>12</code>列的<code>c[]</code>是<code>-4</code>，这里加上了中括号<code>[]</code>方便找到。这一列在<code>a[][]</code>中一开始存储的是松弛变量的系数。</p>
+<p>有一点不要混淆：我们只是因为初始的<code>a[][]</code>恰好等于 <span
+class="math inline">\(\alpha\)</span>
+矩阵，才用<code>a[][]</code>数组继续保存后续的 <span
+class="math inline">\(\alpha\)</span> ，但 <span
+class="math inline">\(A\)</span> 矩阵和 <span
+class="math inline">\(\alpha\)</span> 矩阵并不等价， <span
+class="math inline">\(A\)</span>
+是不会变的，改变的是完成变量置换这个任务的 <span
+class="math inline">\(H\)</span> ，且 <span
+class="math inline">\(\alpha=H^{-1}B^{-1}A\)</span> 。</p>
+<p>如果<code>a[][]</code>中不保存松弛变量系数，则这些列便不再存在，在更新
+<span class="math inline">\(\alpha\)</span>
+的过程中，这一次<code>c[]</code>的第<code>12</code>列为负的信息就无从知晓，本应当在某一次迭代作为换入变量的它却遗失了，导致后续计算错误。</p>
+<p>知道这个情况之后，我们再考虑改进的方法，不保存松弛变量，那么<code>a[][]</code>的第<code>k</code>列新的更新方式是什么原理呢？我们打印一份第一步的结果，对比课本方法带松弛变量系数列的结果，和改进方法不带松弛变量列的结果：</p>
+<p>课本方法：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">l:   9 k:   0</span><br><span class="line">a:</span><br><span class="line">  0  0  0  0  0  0  0  0  1  1  1  0  0  0  0  0  0  0  0  0</span><br><span class="line">  0  0  0  0  0  1  1  0  0  0  0  1  0  0  0  0  0  0  0  0</span><br><span class="line">  0 -1 -1 -1  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0 -1</span><br><span class="line">  0  0  0  1  1  1  1  1  0  0  0  0  0  1  0  0  0  0  0  0</span><br><span class="line">  0  0  0  0  0  0  0  1  0  0  0  0  0  0  1  0  0  0  0  0</span><br><span class="line">  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0</span><br><span class="line">  0  0  0  1  1  1  0  0  0  0  0  0  0  0  0  0  1  0  0  0</span><br><span class="line">  0  0  0  0  1  1  1  1  1  1  0  0  0  0  0  0  0  1  0  0</span><br><span class="line">  0  0  0  0  0  0  0  1  1  0  0  0  0  0  0  0  0  0  1  0</span><br><span class="line">  1  1  1  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1</span><br><span class="line">c:</span><br><span class="line">  0  5  3  6 -2 -5 -5 -2 -7 -9  0  0  0  0  0  0  0  0  0  [8]</span><br></pre></td></tr></table></figure>
+<p>改进方法：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">l:   9 k:   0</span><br><span class="line">a:</span><br><span class="line">  0  0  0  0  0  0  0  0  1  1</span><br><span class="line">  0  0  0  0  0  1  1  0  0  0</span><br><span class="line"> -1 -1 -1 -1  0  0  0  0  0  0</span><br><span class="line">  0  0  0  1  1  1  1  1  0  0</span><br><span class="line">  0  0  0  0  0  0  0  1  0  0</span><br><span class="line">  0  0  1  1  1  0  0  0  0  0</span><br><span class="line">  0  0  0  1  1  1  0  0  0  0</span><br><span class="line">  0  0  0  0  1  1  1  1  1  1</span><br><span class="line">  0  0  0  0  0  0  0  1  1  0</span><br><span class="line">  1  1  1  1  0  0  0  0  0  0</span><br><span class="line">c:</span><br><span class="line">  [8]  5  3  6 -2 -5 -5 -2 -7 -9</span><br></pre></td></tr></table></figure>
+<p>更新的是换入变量<code>k=0</code>列（数组下标从<code>0</code>开始），换出变量<code>l=9</code>列（最后一列）。</p>
+<p>我们看到，课本方法最后一列的 <span
+class="math inline">\(\lambda\)</span> 变为了
+8（用中括号<code>[]</code>标记了），换入变量的<code>k=0</code>的 <span
+class="math inline">\(\lambda\)</span> 变为了0 。</p>
+<p>于是发现，改进方法并不是基于 <span class="math inline">\(H\)</span>
+矩阵更新第<code>k=0</code>列的值，而是把<code>k=0</code>列变成了更新后的<code>l=9</code>那一列的
+<span class="math inline">\(\alpha\)</span> 值。</p>
+<p>这样做，就保留了课本方法里松弛变量对应的那些列的更新信息，不会缺失后期需要变量置换的列的信息。</p>
+<p>“那原本<code>k=0</code>那一列就丢掉了？”</p>
+<p>是的，暂时“丢掉了”，它被“换入”了，一个已经在基中的变量，不可能再次被选中进行换入，所以暂时丢掉它的信息，不影响我们后续寻找用于换入的变量。</p>
+<p>这样每次都用换出变量的列序号（<span
+class="math inline">\(l\)</span>）对应的 <span
+class="math inline">\(\alpha\)</span> 值替换换入变量对应的列（<span
+class="math inline">\(k\)</span>）的 <span
+class="math inline">\(\alpha\)</span>
+值，就使得课本方法里存储的松弛变量那些列序号被换入后的信息，存在了一个“虚空”里，它会基于数学推导的结果被换入换出，而不影响计算结果。</p>
+<h3 id="检验数的选取">2.2 检验数的选取</h3>
+<p>肯定会有多个 <span class="math inline">\(\lambda\)</span>
+分量小于<code>0</code>的情况，无论选哪个都肯定对，这次没换入，下次也就换入了。</p>
+<p>但是如果更深入了解单纯形与凸优化的话，会发现，选取最小的负<span
+class="math inline">\(\lambda_k\)</span>作为换入变量，会让算法收敛更快，起到提速作用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">Solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> k = <span class="number">0</span>, l = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// *****</span></span><br><span class="line">        <span class="comment">// 这里不再遇到小于0的c[k]就停止，而是找最小的那个</span></span><br><span class="line">        <span class="type">double</span> minc = inf;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">            <span class="keyword">if</span>(c[i] &lt; minc)</span><br><span class="line">                minc = c[k = i];</span><br><span class="line">        <span class="keyword">if</span>(minc &gt;= <span class="number">0</span>) <span class="keyword">return</span> z;</span><br><span class="line">        <span class="comment">// *****</span></span><br><span class="line">        <span class="type">double</span> minba = inf;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">            <span class="keyword">if</span>(a[i][k] &gt; <span class="number">0</span> &amp;&amp; minba &gt; b[i] / a[i][k])</span><br><span class="line">                minba = b[i] / a[i][k], l = i;</span><br><span class="line">        <span class="keyword">if</span>(minba == inf) <span class="keyword">return</span> inf;</span><br><span class="line">        <span class="built_in">Pivot</span>(k, l);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="题外话浮点数计算的好习惯">2.3 题外话：浮点数计算的好习惯</h3>
+<p>浮点数在计算过程中有精度损失，一个本应为<code>0</code>的数，就可能在<code>0</code>的左右浮动，如果我们直接判断它是否大于等于<code>0</code>，而恰好浮动在很小的<code>-0.00...01</code>，就得到了错误的判断。</p>
+<p>解决方法是定义一个全局的精度控制<span
+class="math inline">\(eps=10^{-8}\)</span>，这个大小只是经验之谈，<span
+class="math inline">\(10^{-7}\)</span>、<span
+class="math inline">\(10^{-6}\)</span>也不是不行。</p>
+<p>这时我们判断一个数是否大于<code>0</code>，就将<code>if(x &gt; 0)</code>
+改为
+<code>if(x &gt; eps)</code>，如果判断是否大于等于<code>0</code>，就将<code>if(x &gt;= 0)</code>
+改为 <code>if(x &gt; -eps)</code>。</p>
+<p>两数比大小也类似，<code>if(x &gt; y)</code> 改为
+<code>if(x - y &gt; eps)</code>。</p>
+<h3 id="以例题为例的完整代码">2.4 以例题为例的完整代码</h3>
+<p>题目：<a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P3980">P3980
+[NOI2008] 志愿者招募</a></p>
+<p>该代码可做模板保存使用。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;math.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> inf = <span class="number">1e20</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> eps = <span class="number">1e-8</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Simplex</span></span><br><span class="line">&#123;</span><br><span class="line">    vector&lt;<span class="type">double</span>&gt; b, c;</span><br><span class="line">    vector&lt;vector&lt;<span class="type">double</span>&gt; &gt;a;</span><br><span class="line">    <span class="type">double</span> z;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> n_, <span class="type">int</span> m_)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        n = n_, m = m_;</span><br><span class="line">        b.<span class="built_in">resize</span>(m);</span><br><span class="line">        a.<span class="built_in">resize</span>(m);</span><br><span class="line">        c.<span class="built_in">resize</span>(n);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> &amp;x : a) x.<span class="built_in">resize</span>(n + <span class="number">1</span>), <span class="built_in">fill</span>(x.<span class="built_in">begin</span>(), x.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">        std::<span class="built_in">fill</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">        std::<span class="built_in">fill</span>(c.<span class="built_in">begin</span>(), c.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">        z = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Pivot</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> l)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        b[l] /= a[l][k];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(j != k) a[l][j] /= a[l][k];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i != l &amp;&amp; <span class="built_in">fabs</span>(a[i][k]) &gt; eps)</span><br><span class="line">            &#123;</span><br><span class="line">                b[i] -= a[i][k] * b[l];</span><br><span class="line">                <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">                    <span class="keyword">if</span>(j != k) a[i][j] -= a[i][k] * a[l][j];</span><br><span class="line">                a[i][k] /= -a[l][k];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        z += c[k] * b[l];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(j != k) c[j] -= c[k] * a[l][j];</span><br><span class="line">        c[k] /= -a[l][k];</span><br><span class="line">        a[l][k] = <span class="number">1</span> / a[l][k];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">Solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> k = <span class="number">0</span>, l = <span class="number">0</span>;</span><br><span class="line">            <span class="type">double</span> minc = inf;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">                <span class="keyword">if</span>(c[i] &lt; minc)</span><br><span class="line">                    minc = c[k = i];</span><br><span class="line">            <span class="keyword">if</span>(minc &gt; -eps) <span class="keyword">return</span> z;</span><br><span class="line">            <span class="type">double</span> minba = inf;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">                <span class="keyword">if</span>(a[i][k] &gt; eps &amp;&amp; minba - b[i] / a[i][k] &gt; eps)</span><br><span class="line">                    minba = b[i] / a[i][k], l = i;</span><br><span class="line">            <span class="keyword">if</span>(minba == inf) <span class="keyword">return</span> inf;</span><br><span class="line">            <span class="built_in">Pivot</span>(k, l);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">int</span> n, m;</span><br><span class="line">Simplex spx;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> s, t, c;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        spx.<span class="built_in">Init</span>(n, m);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%lf&quot;</span>, &amp;spx.c[i]), spx.c[i] = -spx.c[i];</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;s, &amp;t, &amp;c);</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = s; j &lt;= t; j ++)</span><br><span class="line">                spx.a[i][j - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">            spx.b[i] = c;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, (<span class="type">int</span>)(-spx.<span class="built_in">Solve</span>() + <span class="number">0.5</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="输出解">3. 输出解</h1>
+<p>如果要输出求解 <span class="math inline">\(x\)</span>
+向量的值，我们需要记录换入换出的情况，增加两个数组<code>IdA[], IdB[]</code>
+分别记录原始变量的序号id、基变量的序号id，在<code>Pivot()</code>函数增加换入换出后的序号信息：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Pivot</span><span class="params">(<span class="type">int</span> k, <span class="type">int</span> l)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::<span class="built_in">swap</span>(IdB[l], IdA[k]);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如何初始化<code>IdA</code>与<code>IdB</code>，最终如何输出解，就留给大家尝试吧。</p>
+<hr />
+<p>本文不涉及单纯形的原理和数学证明，仅解析代码实现。</p>
+<p>如有原理性错误欢迎指正。</p>
+<p>主要参考：</p>
+<ul>
+<li>屈婉玲，刘田，张立昂，王捍贫，《算法设计与分析》，清华大学出版社，2014.</li>
+<li>网上的单纯形模板</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021-06-18-Kirchhoff/" rel="prev" title="基尔霍夫矩阵-矩阵树定理">
+                  <i class="fa fa-angle-left"></i> 基尔霍夫矩阵-矩阵树定理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022-11-14-notaboutcsuacm/" rel="next" title="与我有关，又似乎不再那么有关">
+                  与我有关，又似乎不再那么有关 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="CSGOJ指本人开发的一个算法竞赛在线评测系统，OJ即Online Judge，CSG取自竞赛生涯的ID：CSGrandeur的前三个字母，同时有 长沙&#x2F;中南（Central Source）&#x2F;反恐精英（FPS游戏，Counter-Strike）&#x2F;计算机（Computer Science）等若干与我人生相关的缩写 CS + 姓首字母 G">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么做了CSGOJ，又为什么继续做CSGOJ">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2023-10-16-CSGOJ-Why/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="CSGOJ指本人开发的一个算法竞赛在线评测系统，OJ即Online Judge，CSG取自竞赛生涯的ID：CSGrandeur的前三个字母，同时有 长沙&#x2F;中南（Central Source）&#x2F;反恐精英（FPS游戏，Counter-Strike）&#x2F;计算机（Computer Science）等若干与我人生相关的缩写 CS + 姓首字母 G">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2023-10-16-CSGOJ-Why/csgoj_init_wechat.jpg">
+<meta property="article:published_time" content="2023-10-16T12:30:17.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.965Z">
+<meta property="article:author" content="CSGrandeur">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2023-10-16-CSGOJ-Why/csgoj_init_wechat.jpg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2023-10-16-CSGOJ-Why/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2023-10-16-CSGOJ-Why/","path":"2023-10-16-CSGOJ-Why/","title":"为什么做了CSGOJ，又为什么继续做CSGOJ"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>为什么做了CSGOJ，又为什么继续做CSGOJ | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E7%BC%98%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">一、缘起</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%81%9A%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84oj"><span class="nav-number">2.</span> <span class="nav-text">二、做一个自己的OJ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89csgoj%E6%9D%A5%E4%BA%86"><span class="nav-number">3.</span> <span class="nav-text">三、CSGOJ来了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E4%B8%BA%E4%BB%80%E4%B9%88%E7%BB%A7%E7%BB%AD%E5%81%9Acsgoj"><span class="nav-number">4.</span> <span class="nav-text">四、为什么继续做CSGOJ</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E9%97%B2%E8%81%8A%E6%9C%80%E8%BF%912023.10"><span class="nav-number">5.</span> <span class="nav-text">五、闲聊最近（2023.10）</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2023-10-16-CSGOJ-Why/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="为什么做了CSGOJ，又为什么继续做CSGOJ | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为什么做了CSGOJ，又为什么继续做CSGOJ
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-16 20:30:17" itemprop="dateCreated datePublished" datetime="2023-10-16T20:30:17+08:00">2023-10-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>CSGOJ指本人开发的一个算法竞赛在线评测系统，OJ即Online
+Judge，CSG取自竞赛生涯的ID：CSGrandeur的前三个字母，同时有
+长沙/中南（Central
+Source）/反恐精英（FPS游戏，Counter-Strike）/计算机（Computer
+Science）等若干与我人生相关的缩写 CS + 姓首字母 G</p>
+<span id="more"></span>
+<h3 id="一缘起">一、缘起</h3>
+<p>2012年ACM退役，被研究生老板拉去搞省赛的环境，时间仓促环境都被指定好了，硬着头皮在Windows下体验了一把<span
+class="math inline">\(PC^2\)</span>，那疯狂的5小时至今难忘。百般劝说下省赛决定之后用OJ，也是在World
+Final的<span
+class="math inline">\(PC^2\)</span>大潮下较早使用OJ的省赛之一了吧。</p>
+<p>那么就提前开始准备第二年的省赛，在当时最有名的国内开源OJ——HUSTOJ上二次开发，因为省赛有一些特定的团队排名需求，且当时受到之前在武汉打华中南邀请赛时Web提交打印的启发，当时就有了做一站式OJ的想法，把代码打印、气球管理一起做进系统，如果cnblogs（博客园）没挂的话，或许还能找到当年“ajax初尝试”的博客。</p>
+<p>另外觉得当时的 vjudge
+的滚动rank很炫酷（就是常规rank有滚榜的动效），就模仿着做了一个动态rank。</p>
+<p>在经历了半年多的月赛校赛洗礼后，OJ在2013年的省赛运行很顺利，刘汝佳老师出题的数据非常优雅，很小的数据量，仍然可以考察各种复杂的算法，在这一点上也是我后来几年出题的准则之一。</p>
+<h3 id="二做一个自己的oj">二、做一个自己的OJ</h3>
+<p>早些年POJ的名气让很多学校都希望有个自己的品牌OJ，中南在2010年基于HUSTOJ+Wordpress二次开发有了自己的带新闻页的校OJ，不过学长们毕业匆匆，OJ还放在一个犄角旮旯服务器的虚拟机上，加上那时候管理经验不足，大约2012年左右老OJ的代码都遗失了。接下来的若干年，先是用原生HUSTOJ，再然后是我给省赛二次开发的OJ，虽然校内训练够用，但总觉得当不了门面，打不了品牌。</p>
+<p>2017年在经历了几个不大不小的项目后，自我感觉PHP已炉火纯青，带熬夜用一个星期戳了一个全新OJ，当时自己都觉得效率惊人。不过评测机这方面是无法一蹴而就的，加之需要兼容用了这么多年的学校OJ的旧数据，就沿用了开源HUSTOJ的评测机。</p>
+<img src="/2023-10-16-CSGOJ-Why/csgoj_init_wechat.jpg" class="" title="刚做完OJ时发的朋友圈">
+<p>还有当年刚做完OJ时发的博客：http://blog.csgrandeur.cn/2017-03-07-csunewoj/</p>
+<p>虽然没有丰富的前端经验，只是用bootstrap搭界面，但还是在审美上下了许多功夫，在国内众多OJ中不能说多么好看，但绝对是一抹不一样的色彩。</p>
+<p>在校赛和多次训练的验证之后，这一年省赛OJ的惊艳亮相非常成功，之后的湖南多校也以新OJ作为了主场。</p>
+<p>那一年，真正的CSUOJ诞生——没错，是这个名字。</p>
+<h3 id="三csgoj来了">三、CSGOJ来了</h3>
+<p>阴差阳错毕业后没有留在母校，OJ服务校赛和省赛非常稳定，也就好几年都没有做什么更新，或许会成为一个被渐渐遗忘的系统。</p>
+<p>可能是因为放不下当年一念之差没进World
+Final的某些执念，成为了一名ACM教练，那么第一件事就是先搭个OJ。</p>
+<p>这几年MVVM开发已经很普遍了，要不要重构一个呢。不过早已没有了年轻时候的冲动，越发觉得“够用就好”非常的有道理，放下一个颜值还没太落伍、结构成熟的OJ，再去开发一个新的，重复造轮子这事不是太吸引人。于是决定拿出之前的代码好好地升升级。</p>
+<p>容器时代了，首先就全容器化吧，有系统洁癖的我太爱docker了。</p>
+<p>在新学校还是不要让OJ的名字带有校名比较好，所以从源码类名上一起都改为了有个人色彩的名称。</p>
+<p>评测端去掉了用了好多年的直接读写数据库的古早方式，而在数据请求远达不到性能瓶颈的情况下，也不要引入redis等额外的东西了，就保留了基于http请求处理评测机与Web端的通信，简洁明了。</p>
+<p>对多年来一些耿耿于怀不太便捷的功能都做了优化，也与时代接轨更新了诸如多组样例分别独立显示等feature。</p>
+<h3 id="四为什么继续做csgoj">四、为什么继续做CSGOJ</h3>
+<p>18年Domjudge在World
+Final横空出世以来，出现了大量拥趸，但是翻阅一个又一个踩坑博客，一篇又一篇部署记录的文章，冗长的文档，不禁皱了皱眉。</p>
+<p>是不是可以有另一个OJ不需要面对丰富多样的个性化需求，以最简单的方式部署，满足国内通用的比赛场景？</p>
+<p>校赛的时候尝试了一下滚榜，看着ICPC
+tools琳琅满目的介绍，resolver那别别扭扭的对接方式，不禁又皱了皱眉。</p>
+<p>很多功能为什么不可以集成在一起，而要分别去部署工具？</p>
+<p>于是开始尝试把所有XCPC比赛需要的，且能够做进Web的功能都做到一起。截止2023.10.16，有以下这些集成：</p>
+<ol type="1">
+<li>12年开始就已经集成的代码打印：在Web比赛界面里由对应角色进行控制</li>
+<li>12年就已集成的气球全局管理与标记</li>
+<li>新增为每个气球配送员的手机准备的任务队列以及标记操作：从此告别手写便笺或打印小票</li>
+<li>抽签与直接导入：动效抽签，结果直接导入到比赛里</li>
+<li>滚榜（resolver）：就是看不惯官方的resolver，在比赛里直接滚它不好吗</li>
+<li>主动式外榜：可以主动把内榜数据推送至外网，有历史记录信息而非静态html，外榜有滚榜动效，可以直接转为滚榜状态（虽然外榜的滚榜功能没啥用，主要给大家自己娱乐）</li>
+</ol>
+<p>愿景就是让和十几年前的小白的我一样的小白们能够在需要的时候轻松组织比赛，不用踩任何坑地、在一个OJ上便捷的完成比赛的整个流程。</p>
+<h3 id="五闲聊最近2023.10">五、闲聊最近（2023.10）</h3>
+<p>虽然CSGOJ在自己手上的大大小小比赛一直很顺利，上半年与SUA合作的GDCPC在赛前加强了一波补丁，优秀的题目加优秀的高性能工作站，让比赛非常顺利。</p>
+<p>但想让部署用户也能不踩坑一定还有很长的路要走。</p>
+<p>今年的CCPC秦皇岛受王老师邀尝试CSGOJ的整体方案，因为周五白天和周一早八都有课，两头夹的排课让行程很赶。</p>
+<p>与OJ相关的部署、出题人测试、志愿者培训不遗余力，只希望CSGOJ的首次国赛表现能好一些，再好一些。</p>
+<p>然而低配笔记本和见所未见的超大规模评测数据的双重压力下，出现了一个题目概率性OLE的问题。要说硬件性能问题是因，在此环境下其它OJ是否也会暴露问题未可知，但显然不可能甩锅说CSGOJ没有问题。</p>
+<p>于是评测数据行末有空格的PE问题也一并被选手们迁怒于OJ。</p>
+<p>自己也是选手过来的，很理解大学四年满打满算也没几场大赛，特殊情况遇到了怎么气都不为过，“傻逼OJ”已经算克制了吧。</p>
+<p>幕后的气球与代码打印，台前的外榜与滚榜，也不再有人关心与OJ有什么关系，光芒是他人的。</p>
+<p>Domjudge多次成功的比赛自带完美光环，或许CSGOJ在国赛级别的亮相还不是最佳的时候，而应该在开源后，在校赛，在省赛，慢慢地被熟悉与接受。</p>
+<p>并没有多大的野心去推销它，只希望这个OJ能在合适的地方真的帮助到他人。</p>
+<p>初心不改，做一个易用的一站式OJ。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022-11-18-MobiusInversion/" rel="prev" title="莫比乌斯反演">
+                  <i class="fa fa-angle-left"></i> 莫比乌斯反演
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-03-05-01-%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E4%B8%8E%E7%BC%96%E7%A8%8B/" rel="next" title="01.算法竞赛与编程">
+                  01.算法竞赛与编程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

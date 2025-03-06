@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="乘法逆元的定义及用途，以及求逆元的三种算法：扩展欧几里得、费马小定理、递推求逆元。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="乘法逆元">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2021-06-07-MultiplicativeInverse/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="乘法逆元的定义及用途，以及求逆元的三种算法：扩展欧几里得、费马小定理、递推求逆元。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2021-06-07-MultiplicativeInverse/minioncheer.gif">
+<meta property="article:published_time" content="2021-06-07T12:41:27.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.955Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta property="article:tag" content="逆元">
+<meta property="article:tag" content="扩展欧几里得">
+<meta property="article:tag" content="费马小定理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2021-06-07-MultiplicativeInverse/minioncheer.gif">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2021-06-07-MultiplicativeInverse/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2021-06-07-MultiplicativeInverse/","path":"2021-06-07-MultiplicativeInverse/","title":"乘法逆元"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>乘法逆元 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B9%98%E6%B3%95%E9%80%86%E5%85%83"><span class="nav-number">1.</span> <span class="nav-text">乘法逆元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%951%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97"><span class="nav-number">2.</span> <span class="nav-text">方法1：扩展欧几里得</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%B1%82%E9%80%86%E5%85%83"><span class="nav-number">2.1.</span> <span class="nav-text">扩展欧几里得求逆元</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%952%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">方法2：费马小定理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%B9%82%E5%8F%96%E6%A8%A1"><span class="nav-number">3.1.</span> <span class="nav-text">快速幂取模</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86%E6%B1%82%E9%80%86%E5%85%83"><span class="nav-number">3.2.</span> <span class="nav-text">费马小定理求逆元</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%953%E9%80%92%E5%BD%92%E9%80%92%E6%8E%A8%E6%B1%82%E9%80%86%E5%85%83"><span class="nav-number">4.</span> <span class="nav-text">方法3：递归&#x2F;递推求逆元</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%86%E5%85%83%E6%89%93%E8%A1%A8"><span class="nav-number">4.1.</span> <span class="nav-text">逆元打表</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2021-06-07-MultiplicativeInverse/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="乘法逆元 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          乘法逆元
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-06-07 20:41:27" itemprop="dateCreated datePublished" datetime="2021-06-07T20:41:27+08:00">2021-06-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>乘法逆元的定义及用途，以及求逆元的三种算法：扩展欧几里得、费马小定理、递推求逆元。</p>
+<span id="more"></span>
+<h3 id="乘法逆元">乘法逆元</h3>
+<p>首先，数学上的乘法逆元就是指直观的倒数，即 <span
+class="math inline">\(a\)</span> 的逆元是 <span
+class="math inline">\(\frac{1}{a}\)</span>，也即与 <span
+class="math inline">\(a\)</span> 相乘得 1 的数。<span
+class="math inline">\(ax=1\)</span>，则<span
+class="math inline">\(x\)</span>是<span
+class="math inline">\(a\)</span>的乘法逆元。</p>
+<p>这里我们讨论关于取模运算的乘法逆元，即对于整数 <span
+class="math inline">\(a\)</span>，与 <span
+class="math inline">\(a\)</span> 互质的数 <span
+class="math inline">\(b\)</span> 作为模数，当整数 <span
+class="math inline">\(x\)</span> 满足 <span class="math inline">\(ax
+\bmod b \equiv 1\)</span> 时，称 <span class="math inline">\(x\)</span>
+为 <span class="math inline">\(a\)</span> 关于模 <span
+class="math inline">\(b\)</span>
+的逆元，代码表示就是<code>a * x % b == 1</code>。</p>
+<p>在算法竞赛中，经常会遇到求解数据很大，则输出模 <span
+class="math inline">\(10^{9}+7\)</span>
+的解这类要求。加法、减法、乘法等操作，基于同余理论直接取模即可。但遇到除法时，某步中间结果不一定能完成整除，就无法求解了。</p>
+<p>举个例子：求<code>3 * 6 / 3</code> 对 <code>7</code>
+取模的结果。我们直接算出<code>3 * 6 / 3</code>的结果是<code>6</code>，对<code>7</code>取模得最终答案是
+<strong><code>6</code></strong> 。</p>
+<p>但我们通常面对的问题是中间结果超过<code>int</code>甚至<code>long long</code>
+的范围，而不得不在每一步基于同余理论取模，我们用这个例子尝试一下：</p>
+<p>还是求 <code>3 * 6 / 3 % 7</code></p>
+<p>第一步：<code>3 * 6 == 18</code>，<code>18 % 7 == 4</code></p>
+<p>第二步：<code>4</code> 这个中间结果再做 <code>4 / 3</code>
+无法整除，就无法进行下去了。</p>
+<p>但我们可以求出除数 <code>3</code> 关于模数<code>7</code>的逆元
+<code>5</code>（根据逆元定义，<code>5</code> 符合
+<code>3 * 5 % 7 == 1</code>），从而，用乘以<code>5</code>代替除以<code>3</code>。</p>
+<p>上述第二步除法变乘法：
+<code>4 * 5 == 20</code>，<code>20 % 7 == 6</code></p>
+<p>从而也计算出了正确的结果 <strong><code>6</code></strong> 。</p>
+<p>乘法逆元的作用就是：</p>
+<p>设 <span class="math inline">\(m\)</span> 是一个很大的数，<span
+class="math inline">\(a\)</span>、<span
+class="math inline">\(b\)</span>已知，预期要计算（假设答案为 <span
+class="math inline">\(c\)</span>）：</p>
+<p><span class="math display">\[
+m / a \bmod b
+\]</span></p>
+<p>对于 <span class="math inline">\(a\)</span> 的逆元 <span
+class="math inline">\(d\)</span>，能够满足</p>
+<p><span class="math display">\[
+m \cdot d \bmod b = m / a \bmod b = c
+\]</span></p>
+<p>在有些问题中，无法计算最终值很大的 <span
+class="math inline">\(m\)</span> ，只能得到基于同余的一个中间值 <span
+class="math inline">\(m \bmod b = e\)</span> 来计算 <span
+class="math inline">\(e / a \bmod b\)</span> ，而 <span
+class="math inline">\(e\)</span> 可能无法整除 <span
+class="math inline">\(a\)</span>，就可以用 <span
+class="math inline">\(a\)</span> 的逆元 <span
+class="math inline">\(d\)</span>，来计算 <span class="math inline">\(e
+\cdot d \bmod b\)</span>。</p>
+<p>故而我们需要一个算法求 <strong>除数</strong> 的
+<strong>取模逆元</strong>
+，从而在四则运算取模的任务中，用逆元将除法转为乘法。</p>
+<h3 id="方法1扩展欧几里得">方法1：扩展欧几里得</h3>
+<p>先暂时将逆元的事放一放，来看下扩展欧几里得。</p>
+<p>首先大多入门选手知道求两个数最大公约数的算法，即辗转相除：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">GCD</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;<span class="keyword">return</span> b ? <span class="built_in">GCD</span>(b, a % b) : a&#125;</span><br></pre></td></tr></table></figure>
+<p>扩展欧几里得算法则是求 <span class="math inline">\(ax + by = GCD(a,
+b)\)</span> 的一组可行解:</p>
+<p>设两个式子</p>
+<p><span class="math display">\[
+ax + by=GCD(a, b)
+\]</span></p>
+<p><span class="math display">\[
+bx&#39; + (a \bmod b)y&#39;=GCD(b, a \bmod b)
+\]</span></p>
+<p>由欧几里得算法知 <span class="math inline">\(GCD(a, b) = GCD(b, a
+\bmod b)\)</span></p>
+<p>所以</p>
+<p><span class="math display">\[
+ax + by = bx&#39; + (a \bmod b)y&#39;
+\]</span></p>
+<p>而</p>
+<p><span class="math display">\[
+a \bmod b = a - kb
+\]</span></p>
+<p>其中 <span class="math inline">\(k = \left \lfloor a / b \right
+\rfloor\)</span>，<span class="math inline">\(\lfloor
+\rfloor\)</span>表示向下取整。</p>
+<p>所以有</p>
+<p><span class="math display">\[
+ax + by = bx&#39; + (a - kb)y&#39;
+\]</span></p>
+<p>展开移项得：</p>
+<p><span class="math display">\[
+ax + by = ay&#39; + b(x&#39;-ky&#39;)
+\]</span></p>
+<p>根据系数对应关系，可以设</p>
+<p><span class="math inline">\(x = y&#39;\)</span>、<span
+class="math inline">\(y = x&#39;-ky&#39;\)</span>
+来进一步求一个可行解。</p>
+<p>递归地用 <span class="math inline">\(x&#39;\)</span>、<span
+class="math inline">\(y&#39;\)</span> 表示“上一步”的<span
+class="math inline">\(x\)</span>、<span
+class="math inline">\(y\)</span>，就能递归地把问题转换成</p>
+<p><span class="math display">\[
+bx&#39; + (a \bmod b)y&#39;=GCD(b, a \bmod b)
+\]</span></p>
+<p>类似 <code>GCD()</code>
+的递归终点，当扩展欧几里得算法<code>ExGCD()</code>的<span
+class="math inline">\(a&#39;x&#39;+b&#39;y&#39;=GCD(a&#39;,b&#39;)\)</span>中的<span
+class="math inline">\(b&#39;\)</span> 为 0 时，可以得到递归终点的 <span
+class="math inline">\(x&#39;=1,
+y&#39;=0\)</span>，层层回溯套用前面等式</p>
+<p><span class="math display">\[
+x = y&#39;
+\]</span></p>
+<p><span class="math display">\[
+y = x&#39; - ky&#39;
+\]</span></p>
+<p>就能得到 <span class="math inline">\(ax+by=GCD(a, b)\)</span>
+的一组可行解。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"><span class="function">LL <span class="title">ExGCD</span><span class="params">(LL a, LL b, LL &amp;x, LL &amp;y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// x, y 为引用传参，故最终程序结束后，x,y会被赋值为可行解</span></span><br><span class="line">    <span class="keyword">if</span>(b == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 递归终点，ax+by=GCD(a,b)的b为0，故方程变为</span></span><br><span class="line">        <span class="comment">// ax=a，则可行解可以是 x=1, y=0</span></span><br><span class="line">        x = <span class="number">1</span>, y = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">    LL d = <span class="built_in">ExGCD</span>(b, a % b, x, y), t = x;</span><br><span class="line">    x = y, y = t - a / b * x;</span><br><span class="line">    <span class="keyword">return</span> d;  <span class="comment">// 这里返回值是GCD(a,b)的结果，即最大公约数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="扩展欧几里得求逆元">扩展欧几里得求逆元</h4>
+<p>了解了扩展欧几里得，我们来看它与乘法逆元的关系。</p>
+<ul>
+<li>逆元：<span class="math inline">\(a\)</span> 关于 模<span
+class="math inline">\(b\)</span> 的逆元 整数<span
+class="math inline">\(d\)</span> 满足 <span class="math inline">\(ad
+\bmod b \equiv 1\)</span></li>
+<li>扩展欧几里得：求方程 <span class="math inline">\(ax + by = GCD(a,
+b)\)</span> 的一组可行解</li>
+</ul>
+<p>逆元的<span class="math inline">\(ad \bmod b \equiv
+1\)</span>，等价于 <span
+class="math inline">\(ad-kb=1\)</span>，其中<span
+class="math inline">\(k\)</span>为未知整数。</p>
+<p>设 <span class="math inline">\(d\)</span> 为 <span
+class="math inline">\(x\)</span>，<span
+class="math inline">\(-k\)</span> 为 <span
+class="math inline">\(y\)</span>，则<span
+class="math inline">\(ad-kb=1\)</span>转换为 <span
+class="math inline">\(ax+by=1\)</span>，</p>
+<img src="/2021-06-07-MultiplicativeInverse/minioncheer.gif" class="">
+<p>求出 <span class="math inline">\(x\)</span> 就得到了 <span
+class="math inline">\(a\)</span> 关于模 <span
+class="math inline">\(b\)</span> 的逆元。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">ExGcdInv</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="built_in">ExGCD</span>(a, b, x, y);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：大约<code>O(logn)</code>（斐波那契复杂度）。</p>
+<p>适用范围：存在逆元即可求，适用于个数不多但模数<code>b</code>很大的时候，最常用、安全的求逆元方式。</p>
+<h3 id="方法2费马小定理">方法2：费马小定理</h3>
+<p>除了扩展欧几里得，还有另一个方法可以求逆元。</p>
+<p>费马小定理：对于整数 <span class="math inline">\(a\)</span> 与质数
+<span class="math inline">\(b\)</span> ，若 <span
+class="math inline">\(a\)</span> 与 <span
+class="math inline">\(b\)</span> 互质，则有：</p>
+<p><span class="math display">\[
+a^{b − 1} \bmod b \equiv 1
+\]</span></p>
+<h4 id="快速幂取模">快速幂取模</h4>
+<p>快速幂取模大家应该也学过了，这里复习一下：</p>
+<p>求<code>x ^ n % MOD</code>， <code>n</code>
+很大时需要用折半的思想。如下所示求<code>2^15</code>：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">2 2 2 2 2 2 2 2 2 2 2 2 2 2 2</span><br><span class="line">4   4   4   4   4   4   4</span><br><span class="line">16      16      16</span><br><span class="line">256</span><br></pre></td></tr></table></figure>
+<p>可以看到，两两结合的时候，如果数字个数是奇数就会有“零头”，把零头存入<code>ret</code>，最终结果就是<code>256*2*4*16</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">PowMod</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> n, <span class="type">int</span> mod)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(n &amp; <span class="number">1</span>) ret = ret * a % mod;</span><br><span class="line">        a = a * a % mod;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="费马小定理求逆元">费马小定理求逆元</h4>
+<p>上文费马小定理的式子等价于</p>
+<p><span class="math display">\[
+a \cdot a^{b-2} \bmod b \equiv 1
+\]</span></p>
+<p>显然 <span class="math inline">\(a^{b-2}\)</span> 就是 <span
+class="math inline">\(a\)</span> 模 <span
+class="math inline">\(b\)</span> 的逆元。</p>
+<p>求逆元，就用 <code>b-2</code> 和 b 代替 快速幂取模中的 <code>n</code>
+和 <code>mod</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">FermatInv</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">PowMod</span>(a, b - <span class="number">2</span>, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：大约<code>O(log b)</code>。</p>
+<p>适用范围：一般在模数 <code>b</code> 是质数的时候。</p>
+<h3 id="方法3递归递推求逆元">方法3：递归/递推求逆元</h3>
+<p>求 <span class="math inline">\(a\)</span> 在模 <span
+class="math inline">\(b\)</span> 时的逆元（如果 <span
+class="math inline">\(a &gt; b\)</span>，先将 <span
+class="math inline">\(a\)</span> 取模 <span class="math inline">\(a:=a
+\bmod b\)</span> 再求逆元，其中模数 <span
+class="math inline">\(b\)</span> 是质数。</p>
+<p>设 $k = b / a <span class="math inline">\(，\)</span>r = b
+i$，则有</p>
+<p><span class="math inline">\(b = ak + r\)</span></p>
+<p>=&gt;</p>
+<p><span class="math inline">\(ak + r \equiv 0, (\bmod b)\)</span></p>
+<p>=&gt;</p>
+<p><span class="math inline">\(kr^{-1} + a^{-1} \equiv 0, (\bmod
+b)\)</span></p>
+<p>=&gt;</p>
+<p><span class="math inline">\(a^{-1} \equiv -kr^{-1}, (\bmod
+b)\)</span></p>
+<p><span class="math inline">\(a^{-1}\)</span> 和 <span
+class="math inline">\(r^{-1}\)</span> 可分别由其逆元 <span
+class="math inline">\(inv(a)\)</span>和<span
+class="math inline">\(inv(r)\)</span>代替，等式依然成立：</p>
+<p><span class="math inline">\(inv(a) \equiv -k \cdot inv(r), (\bmod
+b)\)</span></p>
+<p>将 <span class="math inline">\(k\)</span> 和 <span
+class="math inline">\(r\)</span> 由 <span
+class="math inline">\(a\)</span>、<span class="math inline">\(b\)</span>
+表达代入得：</p>
+<p><span class="math inline">\(inv(a) \equiv - \lfloor b / a \rfloor
+\cdot inv(b \bmod a), (\bmod b)\)</span></p>
+<p>从而我们得到了由 <span class="math inline">\(inv(b \bmod a)\)</span>
+推出 <span class="math inline">\(inv(a)\)</span> 的递推关系。</p>
+<p>用递归方式计算的话，由于 <span class="math inline">\(b\)</span>
+是质数，<span class="math inline">\(b \bmod (b \bmod (b \bmod
+...a))\)</span> 总会到 <span class="math inline">\(1\)</span>， <span
+class="math inline">\(inv(1) \equiv 1\)</span>，从而达到递归终点。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">Inv</span><span class="params">(LL a, LL b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> (b - b / a) * <span class="built_in">Inv</span>(b % a, b) % b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：大约<code>O(log b)</code></p>
+<p>适用范围： <span class="math inline">\(b\)</span>
+一定要为质数，此方法代码简单，但使用需谨慎。</p>
+<h4 id="逆元打表">逆元打表</h4>
+<p>基于递推方法，就可以打表</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> invList[mod + <span class="number">10</span>];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetInv</span><span class="params">(<span class="type">int</span> mod)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    invList[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt; mod; i ++)</span><br><span class="line">        invList[i] = <span class="number">1LL</span> * (mod - mod / i) * invList[mod % i] % mod;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：显而易见。</p>
+<p>适用场景：频繁调用不同数的逆元。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+              <a href="/tags/%E9%80%86%E5%85%83/" rel="tag"># 逆元</a>
+              <a href="/tags/%E6%89%A9%E5%B1%95%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97/" rel="tag"># 扩展欧几里得</a>
+              <a href="/tags/%E8%B4%B9%E9%A9%AC%E5%B0%8F%E5%AE%9A%E7%90%86/" rel="tag"># 费马小定理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021-04-27-try-to-prove-loop-by-kmp/" rel="prev" title="试证KMP计算循环节方法">
+                  <i class="fa fa-angle-left"></i> 试证KMP计算循环节方法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021-06-18-Kirchhoff/" rel="next" title="基尔霍夫矩阵-矩阵树定理">
+                  基尔霍夫矩阵-矩阵树定理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

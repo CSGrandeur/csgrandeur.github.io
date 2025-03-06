@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="先了解了一下生成模型与判别模型 隐马尔可夫模型 隐马尔可夫模型（HMM）属于生成模型。 组成：两个集合，两个序列，两个矩阵。 这些内容构成了隐马尔可夫模型的整体概念，具体问题中，有的是已知的，有的是未知的，这个模型就是通过已知量建模，进而推算未知量。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="马尔可夫模型到条件随机场，再结合深度学习">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="先了解了一下生成模型与判别模型 隐马尔可夫模型 隐马尔可夫模型（HMM）属于生成模型。 组成：两个集合，两个序列，两个矩阵。 这些内容构成了隐马尔可夫模型的整体概念，具体问题中，有的是已知的，有的是未知的，这个模型就是通过已知量建模，进而推算未知量。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/crf_example.png">
+<meta property="article:published_time" content="2017-04-06T03:15:12.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.955Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="隐马尔可夫">
+<meta property="article:tag" content="条件随机场">
+<meta property="article:tag" content="CRF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/crf_example.png">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/","path":"2017-04-06-mm-crf-imageprocessing/","title":"马尔可夫模型到条件随机场，再结合深度学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>马尔可夫模型到条件随机场，再结合深度学习 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">隐马尔可夫模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E9%9B%86%E5%90%88"><span class="nav-number">1.1.</span> <span class="nav-text">两个集合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E5%BA%8F%E5%88%97"><span class="nav-number">1.2.</span> <span class="nav-text">两个序列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E4%B8%AA%E7%9F%A9%E9%98%B5"><span class="nav-number">1.3.</span> <span class="nav-text">两个矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.4.</span> <span class="nav-text">模型表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">1.5.</span> <span class="nav-text">三个基本问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%9A%8F%E6%9C%BA%E5%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">马尔可夫随机场</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">三个马尔可夫性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B1%82%E6%A6%82%E7%8E%87%E5%88%86%E5%B8%83"><span class="nav-number">2.2.</span> <span class="nav-text">求概率分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%89%E5%B8%83%E6%96%AF%E5%88%86%E5%B8%83"><span class="nav-number">2.3.</span> <span class="nav-text">吉布斯分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%BF%E5%87%BD%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">势函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA"><span class="nav-number">3.</span> <span class="nav-text">条件随机场</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E9%93%BE%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA"><span class="nav-number">3.1.</span> <span class="nav-text">线性链条件随机场</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E9%93%BE%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">3.2.</span> <span class="nav-text">线性链条件随机场基本问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crf%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2"><span class="nav-number">4.</span> <span class="nav-text">CRF图像分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crf%E4%B8%8E%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-number">5.</span> <span class="nav-text">CRF与深度学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="马尔可夫模型到条件随机场，再结合深度学习 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          马尔可夫模型到条件随机场，再结合深度学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-06 11:15:12" itemprop="dateCreated datePublished" datetime="2017-04-06T11:15:12+08:00">2017-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>先了解了一下<a
+href="/2017-04-09-generating-model-and-discriminant-model/">生成模型与判别模型</a></p>
+<h3 id="隐马尔可夫模型">隐马尔可夫模型</h3>
+<p>隐马尔可夫模型（HMM）属于生成模型。</p>
+<p>组成：两个集合，两个序列，两个矩阵。</p>
+<p>这些内容构成了隐马尔可夫模型的整体概念，具体问题中，有的是已知的，有的是未知的，这个模型就是通过已知量建模，进而推算未知量。</p>
+<span id="more"></span>
+<h4 id="两个集合">两个集合</h4>
+<p>状态集合：比如有<code>N</code>个装着黑白两色小球的盒子，当前在第<code>i</code>个盒子就称为状态<code>qi</code>，状态集合<code>Q=&#123;q1, q2,...,qN&#125;</code>。</p>
+<p>观测集合：对一个状态，可以有多种观测结果，从一个盒子里拿出一个球，这个球的颜色是观测值，就可能是黑色或白色，观测集合<code>V=&#123;v1, v2, ..., vM&#125;</code>，对于黑白小球这个例子，<code>M=2</code>。</p>
+<h4 id="两个序列">两个序列</h4>
+<p>状态序列：这个序列可以看作一个时间序列，比如每分钟选一个盒子，当然可以不是时间序列，只是举例子方便些。那一小时就会有一个长度为60的序列，每个元素即对应那一分钟选的盒子编号。状态序列<code>I=(i1, i2, ..., iT)</code>，这里一小时的例子中<code>T=60</code>。</p>
+<p>观测序列：对应状态序列的观测值，假设实实在在地做了一次实验，选了60次盒子，拿了60次小球，记录了这60次小球的颜色，观测序列<code>O=(o1, o2, ..., oT)</code>。</p>
+<h4 id="两个矩阵">两个矩阵</h4>
+<p>状态转移矩阵： <span class="math inline">\(A=[a_{ij}]_{N\times
+N}\)</span>
+即假设“当前状态”是<code>qi</code>（盒子<code>qi</code>），下一分钟转移到状态<code>qj</code>（选盒子<code>qj</code>）的概率是<code>aij</code>。这里当然和模型名字中的“马尔可夫”挂钩了，马尔可夫过程就是<strong>未来的状态只依赖现在的条件，不依赖于过去</strong>，于是由状态转移矩阵和当前状态即可以知道下一个状态的概率，不需要管上一个状态了。</p>
+<p>观测概率矩阵： <span class="math inline">\(B=[b_{j}(k)]_{N\times
+M}\)</span>
+状态<code>qj</code>条件下得到观测<code>vk</code>的概率，比如盒子<code>qj</code>有<code>4</code>个黑球，<code>6</code>个白球，<span
+class="math inline">\(b_{j}(白)\)</span>
+就是拿出一个球是白球的概率呗（0.6）。</p>
+<blockquote>
+<p>盒子与黑白球的例子不算太完美，让人不太习惯的就是怎么选下一个盒子还带“转移概率”的。强行这么理解吧，感觉天气的栗子举起来更难下口。</p>
+</blockquote>
+<h4 id="模型表示">模型表示</h4>
+<p>最开始还没选盒子的时候，总需要有个起始变量。初始状态概率向量 <span
+class="math inline">\(\pi=(\pi_{i})\)</span>
+即最开始的时候，进入状态<code>qi</code>的概率。有初始状态向量 <span
+class="math inline">\(\pi\)</span> ，状态转移矩阵 <span
+class="math inline">\(A\)</span> ，观测概率矩阵 <span
+class="math inline">\(B\)</span>
+，这个模型就可以像一个“自动机”一样跑起来了，可以不断按模型产生状态和观测值。所以隐马尔可夫模型
+<span class="math inline">\(\lambda\)</span> 可以用三元符号表示： <span
+class="math display">\[
+\lambda = (A, B, \pi)
+\]</span></p>
+<p><span class="math inline">\(A, B, \pi\)</span>
+称为马尔可夫模型三要素。</p>
+<h4 id="三个基本问题">三个基本问题</h4>
+<ol type="1">
+<li>概率计算，给定 <span class="math inline">\(\lambda=(A, B,
+\pi)\)</span> 和观测序列 <code>O</code>，计算概率 <span
+class="math inline">\(P(O|\lambda)\)</span>
+，就是已知模型，求能得到特定个观测序列的概率。对这个问题，直接计算的话要枚举所有状态，是指数级的，不可行。而前向法和后向法一个是正推一个是倒推，步步为营递推即可得到结果。</li>
+<li>学习问题，给定<code>O</code>，估计模型 <span
+class="math inline">\(\lambda=(A, B, \pi)\)</span> ，即估算 <span
+class="math inline">\(A, B, \pi\)</span>
+。监督学习方法需要训练数据，人工标注代价很高，有时会利用非监督学习方法——Baum-welch算法（也就是EM算法）。</li>
+<li>预测问题，也称为解码问题，已知模型 <span
+class="math inline">\(\lambda=(A, B, \pi)\)</span> 给定观测序列
+<code>O</code>，求最可能的状态序列
+<code>I</code>。近似算法计算简单，有一定的适用范围，不过有可能有实际不发生的部分，即存在转移概率为0的状态。维比特算法用动态规划求概率最大路径，一条路径对应一个状态序列。</li>
+</ol>
+<p>具体算法这里不细说，可参考《统计学习方法》。</p>
+<h3 id="马尔可夫随机场">马尔可夫随机场</h3>
+<h4 id="三个马尔可夫性">三个马尔可夫性</h4>
+<p>Markov random field (MRF) 也就是概率无向图模型（probabilistic
+undirected graphical model）。</p>
+<p>一个无向图记作<code>G=(V,E)</code>，顶点<code>V</code>表示随机变量<code>Y</code>，边<code>E</code>表示随机变量间的概率依赖关系，则图<code>G</code>表示概率分布<code>P(Y)</code>。</p>
+<ul>
+<li>成对马尔可夫性：</li>
+</ul>
+<p>设<code>u</code>和<code>v</code>是无向图<code>G</code>中任意两个<strong>没有边连接</strong>的结点，对应随机变量
+<span class="math inline">\(Y_{u}\)</span> 和 <span
+class="math inline">\(Y_{v}\)</span>
+，其他所有节点为<code>O</code>，对应随机变量<strong>组</strong> <span
+class="math inline">\(Y_{O}\)</span>，给定 <span
+class="math inline">\(Y_{O}\)</span> 条件下随机变量 <span
+class="math inline">\(Y_{u}\)</span> 和 <span
+class="math inline">\(Y_{v}\)</span> 条件独立，即： <span
+class="math display">\[
+P(Y_{u}, Y_{v}|Y_{O})=P(Y_{u}|Y_{O})P(Y_{v}|Y_{O})
+\]</span></p>
+<blockquote>
+<p><code>u</code>、<code>v</code>不相连，其他变量又已知了，则<code>u</code>、<code>v</code>之间概率自然互不影响</p>
+</blockquote>
+<ul>
+<li>局部马尔可夫性：</li>
+</ul>
+<p>设集合<code>W</code>是与结点<code>v</code>有边连接的所有结点，<code>O</code>是除<code>v</code>、<code>W</code>以外的其他节点，给定
+<span class="math inline">\(Y_{W}\)</span> 情况下 <span
+class="math inline">\(Y_{v}\)</span> 与 <span
+class="math inline">\(Y_{O}\)</span> 独立。
+&gt;同理，只是把上面的<code>u</code>变成集合<code>O</code>了</p>
+<ul>
+<li>全局马尔可夫性：</li>
+</ul>
+<p>结点集合<code>A</code>，<code>B</code>是无向图<code>G</code>中被结点集合<code>C</code>分开的任意结点集合，给定
+<span class="math inline">\(Y_{C}\)</span> 条件下 <span
+class="math inline">\(Y_{A}\)</span> 和 <span
+class="math inline">\(Y_{B}\)</span> 条件独立。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">O---A---C---B</span><br><span class="line">    | \ |   | \</span><br><span class="line">    A---C---B---O</span><br></pre></td></tr></table></figure>
+<p>如果联合概率分布<code>P(Y)</code>满足成对、局部或全局马尔可夫性，就称此联合概率分布为马尔可夫随机场（MRF）或概率无向图模型。</p>
+<h4 id="求概率分布">求概率分布</h4>
+<p><strong>团与最大团</strong>：无向图<code>G</code>中一个结点子集<code>C</code>，若<code>C</code>中任意两个结点都有边连接，则<code>C</code>是一个团。如果无法在<code>C</code>中增加<code>G</code>中的结点并保持团的性质，则<code>C</code>是最大团（maximal
+clique）。</p>
+<p><strong>马尔可夫随机场因子分解</strong>：将图模型的联合概率分布表示为最大团上的随机变量函数乘积形式，称为因子分解。
+<span class="math display">\[
+P(Y)=\frac{1}{Z}\prod\limits_{C} \Psi_{C}(Y_{C})
+\]</span> <code>Z</code>是归一化因子： <span class="math display">\[
+Z=\sum_{Y}\prod\limits_{C} \Psi_{C}(Y_{C})
+\]</span>
+要保证<code>P(Y)</code>构成一个概率分布，即所有情况的概率的和（积分）得是1，所以要有这个归一化因子。函数
+<span class="math inline">\(\prod\limits_{C}\)</span>
+称为<strong>势函数</strong>（potential
+function），这里要求势函数是严格正的，通常定义为指数函数： <span
+class="math display">\[
+\Psi_{C}(Y_{C})=e^{-E(Y_{C})}
+\]</span> <code>C</code>是无向图的最大团， <span
+class="math inline">\(Y_{C}\)</span>
+是<code>C</code>的结点对应的随机变量， <span
+class="math inline">\(\Psi_{C}(Y_{C})\)</span>
+是<code>C</code>上定义的严格正函数，乘积是在无向图所有最大团上进行的。</p>
+<h4 id="吉布斯分布">吉布斯分布</h4>
+<p>吉布斯分布(Gibbs)在随机场的知识中总是伴随马尔可夫随机场出现，搞得人一头雾水。今天来把它掰扯清楚。</p>
+<p>在统计力学与数学中，玻尔兹曼分布（或称吉布斯分布）是系统中的粒子在各种可能微观量子态的概率分布、概率测度或频度分布。在数学上，玻尔兹曼函数更广义的形式为吉布斯测度。在统计学与机器学习中又被称为对数-线性模型。——维基百科</p>
+<p>玻尔兹曼分布是状态能量与系统温度的函数，给出了粒子处于特定状态下的概率。其具有以下形式：
+<span class="math display">\[
+p_{i} =
+\frac{e^{-\varepsilon_{i}/kT}}{\sum_{j=1}^{M}e^{-\varepsilon_{j}/kT}}
+\]</span> 其中 <span class="math inline">\(p_{i}\)</span> 是量子态
+<code>i</code> 的概率， <span class="math inline">\(\varepsilon\)</span>
+为量子态 <code>i</code> 的能量， <code>k</code> 为玻尔兹曼常量，
+<code>T</code> 为系统温度， <code>M</code>
+为系统可具有的量子态数目。</p>
+<p>扯得好像有点远，但是注意观察对比前面的<strong>马尔可夫随机场因子分解</strong>，就是那个最大团随机变量函数乘积，势函数、归一化因子<code>Z</code>，和这里的分子分母形式很像。</p>
+<p>看到这里，我觉得不指望对这个分布有什么感性认识了，只能强行这么看（理性认识...）：符合这个公式（描述了一个概率分布）的分布，就叫做吉布斯分布，而马尔可夫随机场的概率分布可以描述为最大团随机变量函数乘积形式，这个形式与吉布斯分布不谋而合，<a
+target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Hammersley%E2%80%93Clifford_theorem">Hammersley
+Clifford Theorem</a>
+提到马尔可夫随机场和吉布斯分布是一致的（原文说的是“吉布斯随机场满足每一个马尔可夫性质”）。</p>
+<p>这就是吉布斯分布，好像并没有掰扯很清楚，不过上这么多年学过来，不少东西都是强行认识的，比如小时候第一次认识惯性定律的时候那感觉。。。</p>
+<h4 id="势函数">势函数</h4>
+<p>说起来这个势函数也是强行定义的么，追求感性认识的我找了一圈也没见有人解释一下这个东西为啥叫势函数。</p>
+<p>暂时这么理解吧：最大团两两连接，即团内结点两两之间都能<strong>直接</strong>影响到对方，那么这个团得到某种观察状态就是结点们<strong>直接</strong>“达成共识”的结果，这个结果的可能性是可以直接计算的。而<strong>全局</strong>得到一个什么结果，就需要一些“中间人”去协商，因为团内不是所有结点都能直接和别的团的结点“讨论”，<strong>全局</strong>结果是一个“协商”的结果，互相之间有直接关系的小团体（最大团）对最终结果有一个<strong>趋势</strong>，这个就是<strong>势函数</strong>，而全局的结果是各个小团体的趋势互相妥协的结果。</p>
+<h3 id="条件随机场">条件随机场</h3>
+<p>条件随机场（conditional random field,
+CRF）是给定随机变量<code>X</code>条件下，另一组随机变量<code>Y</code>的马尔可夫随机场。</p>
+<p>定义中并没有要求<code>X</code>和<code>Y</code>具有相同的结构，现实中一般假设<code>X</code>和<code>Y</code>有相同的图结构。</p>
+<h4 id="线性链条件随机场">线性链条件随机场</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Y1---Y2---...---Yi--...---Yn</span><br><span class="line">↑    ↑          ↑         ↑</span><br><span class="line">X1   X2         Xi        Xn</span><br></pre></td></tr></table></figure>
+<p><span class="math display">\[
+P(Y_{i}|X,
+Y_{1},...,Y_{i-1},Y_{i+1},...,Y_{n})=P(Y_{i}|X,Y_{i-1},Y_{i+1})
+\]</span>
+上式满足马尔可夫性，<code>X</code>表示输入观测序列，<code>Y</code>表示对应的输出标记序列或状态序列。
+<span class="math inline">\(Y_{i}\)</span> 只与相连的 <span
+class="math inline">\(Y_{i-1}\)</span> 、 <span
+class="math inline">\(Y_{i+1}\)</span> 相关，但是多了个 <span
+class="math inline">\(X\)</span>
+的条件，且可以看到与隐马尔可夫模型的不同，隐马尔可夫链是顺序的链，每个状态只与“上一个”状态相关，而线性链条件随机场是<strong>无向图</strong>，每个状态与直接相连的状态相关（上一个和下一个），且有一个额外的条件<code>X</code>。</p>
+<h4 id="线性链条件随机场基本问题">线性链条件随机场基本问题</h4>
+<ol type="1">
+<li>概率计算问题：给定条件随机场<code>P(Y|X)</code>，输入序列<code>x</code>，输出序列<code>y</code>，计算条件概率
+<span class="math inline">\(P(Y_{i}=y_{i}|x)\)</span> ， <span
+class="math inline">\(P(Y_{i-1}=y_{i-1},Y_{i}=y_{i}|x)\)</span>
+以及相应的数学期望。</li>
+<li>学习算法。</li>
+</ol>
+<blockquote>
+<p>此部分非本篇博文重点，不再详述，《统计学习方法》也讲的很清晰。</p>
+</blockquote>
+<h3 id="crf图像分割">CRF图像分割</h3>
+<p>把图像每个像素当作条件随机场的一个结点，相邻像素连边，结点集合为<code>Y</code>，在这个基础上，加一个和每个像素一一对应的条件<code>X</code>，条件<code>X</code>就是实际看到的图像，要求的<code>Y</code>是分割结果标签，参考前面的线性链条件随机场，就是把一维的链变成二维的图像，<code>Y</code>的每个像素与相邻像素相连，<code>X</code>的每个像素一一对应与<code>Y</code>连一条边，如图：</p>
+<img src="/2017-04-06-mm-crf-imageprocessing/crf_example.png" class="" title="CRF Example">
+<p>于是就是各个资料都说的两个式子了：
+按前面说的吉布斯分布，差不多就是每四个像素一个最大团 <span
+class="math display">\[
+P(Y=y|X)=\frac{1}{Z(X)}e^{-E(y|X)}
+\]</span> 标签能量表示为 <span class="math display">\[
+E(y) = \sum_{i}\Psi_{u}(y_{i}) + \sum_{i&lt;j}\Psi_{p}(y_{i}, y_{j})
+\]</span> <span class="math inline">\(\Psi_{u}\)</span>
+是一元能量项，表示像素<code>i</code>分类为标签<code>yi</code>的能量，
+<span class="math inline">\(\Psi_{p}\)</span> 是二元能量向，表示像素
+<code>i</code>、<code>j</code>同时分类为
+<code>yi</code>、<code>yj</code>的能量，最小化能量总和就是最可能的分割结果。</p>
+<p>能量项可以有不同的定义方式，在求解过程、计算结果等方面都会有不同的影响。</p>
+<h3 id="crf与深度学习">CRF与深度学习</h3>
+<p>按原始定义来说，一般是先用神经网络输出之后，再用CRF进一步处理，两部分是分开的。而我们都更偏爱端到端直接训练的方法，精确度也会有所提高。CRF可以被表示成RNN的结构，和其他的神经网络结合在一起，实现端到端的同时训练。</p>
+<p>这里可以有感性认识，就不放公式了，我自己也没搞太懂。</p>
+<p>前面的标签能量<code>E</code>表示为一元能量项加二元能量项，二元能量项定义为若干个高斯函数的和，高斯函数又由若干表达式组成，概率函数<code>P</code>不方便直接计算，又对式子做了些许改变，可以多次迭代来近似。对分解后的公式分成若干步骤，每次迭代就是若干步的连接，而分解出来的每一步可以由卷积来计算，归一化的步骤可以由Softmax来计算，这样就通过一个RNN网络来迭代逼近<code>P</code>了，相关证明保证迭代的快速收敛。</p>
+<h3 id="参考">参考</h3>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E7%BB%9F%E8%AE%A1%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><code>李航. 统计学习方法[J]. 清华大学出版社, 北京, 2012.</code></a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%8E%BB%E5%B0%94%E5%85%B9%E6%9B%BC%E5%88%86%E5%B8%83">维基百科-玻尔兹曼分布</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/22308032">图像语义分割之FCN和CRF</a></li>
+<li><a target="_blank" rel="noopener" href="http://blog.csdn.net/taigw/article/details/51794283">CRF as
+RNN的原理及Caffe实现</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%9A%90%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB/" rel="tag"># 隐马尔可夫</a>
+              <a href="/tags/%E6%9D%A1%E4%BB%B6%E9%9A%8F%E6%9C%BA%E5%9C%BA/" rel="tag"># 条件随机场</a>
+              <a href="/tags/CRF/" rel="tag"># CRF</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017-03-29-about-norm/" rel="prev" title="关于机器学习中的范数的杂记">
+                  <i class="fa fa-angle-left"></i> 关于机器学习中的范数的杂记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017-04-09-generating-model-and-discriminant-model/" rel="next" title="生成模型与判别模型">
+                  生成模型与判别模型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

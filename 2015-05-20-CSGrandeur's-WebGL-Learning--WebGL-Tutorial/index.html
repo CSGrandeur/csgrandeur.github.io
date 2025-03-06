@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在线查看：http:&#x2F;&#x2F;csgrandeur.gitbooks.io&#x2F;webgl-learn&#x2F;content&#x2F; 源码演示：http:&#x2F;&#x2F;csgrandeur.github.io&#x2F;csgrandeur-webgl-learn&#x2F;Application&#x2F;Test&#x2F;1.html 离线epub：http:&#x2F;&#x2F;csgrandeur.github.io&#x2F;csgrandeur-webgl-learn&#x2F;Applic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSGrandeur的WebGL学习——WebGL教程">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="在线查看：http:&#x2F;&#x2F;csgrandeur.gitbooks.io&#x2F;webgl-learn&#x2F;content&#x2F; 源码演示：http:&#x2F;&#x2F;csgrandeur.github.io&#x2F;csgrandeur-webgl-learn&#x2F;Application&#x2F;Test&#x2F;1.html 离线epub：http:&#x2F;&#x2F;csgrandeur.github.io&#x2F;csgrandeur-webgl-learn&#x2F;Applic">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-05-19T18:32:00.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.945Z">
+<meta property="article:author" content="CSGrandeur">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/","path":"2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/","title":"CSGrandeur的WebGL学习——WebGL教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CSGrandeur的WebGL学习——WebGL教程 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#webgl%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">WebGL是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0webgl%E9%9C%80%E8%A6%81%E4%BB%80%E4%B9%88%E5%9F%BA%E7%A1%80"><span class="nav-number">1.2.</span> <span class="nav-text">学习WebGL需要什么基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E6%9C%AC%E4%B9%A6%E5%B9%B2%E4%BB%80%E4%B9%88"><span class="nav-number">1.3.</span> <span class="nav-text">这本书干什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">1.4.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CSGrandeur的WebGL学习——WebGL教程 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSGrandeur的WebGL学习——WebGL教程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2015-05-20 02:32:00" itemprop="dateCreated datePublished" datetime="2015-05-20T02:32:00+08:00">2015-05-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在线查看：<a
+target="_blank" rel="noopener" href="http://csgrandeur.gitbooks.io/webgl-learn/content/">http://csgrandeur.gitbooks.io/webgl-learn/content/</a></p>
+<p>源码演示：<a
+target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/Test/1.html">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/Test/1.html</a></p>
+<p>离线epub：<a
+target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.epub">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.epub</a></p>
+<p>离线mobi：<a
+target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.mobi">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.mobi</a></p>
+<p>离线pdf：<a
+target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.pdf">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.pdf</a></p>
+<p><del>在线版本会及时更新，离线版本在有较大改动时更新。</del></p>
+<p><strong>内容来自 Learning WebGL
+，他的网站是：http://learningwebgl.com</strong>。我修改了代码适用到gl-matrix
+2.x的版本，把操作dom的代码改成jQuery了。教程没有纯翻译，看着原版理解着写着，不明白的问题在搜了之后补充上了，自己觉得太明白的问题删减掉了。</p>
+<p><del>之后学习的内容会开辟新的章节更新。如有问题欢迎指正。</del></p>
+<p>时光荏苒，造化弄人，我现在不搞这个了，也不会再更新了，大家加油<code>^_^</code>。</p>
+<span id="more"></span>
+<p>——————————以下是教程前言——————————</p>
+<h1 id="简介">简介</h1>
+<h2 id="webgl是什么">WebGL是什么</h2>
+<p>HTML5是当前HTML的新标准，其中一个特性就可以用JavaScript写调用显卡的程序，在新的网页元素Canvas上显示华丽的3D效果，开发WebGL主要使用
+JavaScript语言。</p>
+<p>我学WebGL目前有两点目的：</p>
+<p>Web应该是跨平台最舒服的手段了，没有哪个现代操作系统（哪怕手机系统）不配浏览器吧，HTML5的到来，感觉Web前途一片光明。
+JavaScript开发3D好像舒服很多啊，用C++写OpenGL，编译老半天，调试一步一步扯得蛋疼。
+当然这两点目的可能很傻很天真，不过学点有用的东西总是好的，也不必太较真儿了。</p>
+<h2 id="学习webgl需要什么基础">学习WebGL需要什么基础</h2>
+<p>开始学习WebGL时我的基础：</p>
+<p>具备一点PHP、HTML、JS的基础知识，做过几个Web的小项目。
+做过几年程序设计竞赛，对C/C++语言还算比较熟悉。
+跟着《OpenGL编程指南》第八版学过一点入门知识，懵懂了解可编程渲染管线的概念。
+建议：</p>
+<p>至少具备一些基本的编程技能，理解变量、函数等基础知识。
+不必担心对Web相关领域的陌生，毕竟那不是重点，也不会成为学习WebGL过程中的难点。
+WebGL的学习过程和OpenGL是相似相通的，所以也不必担心是否需要OpenGL的基础知识</p>
+<h2 id="这本书干什么">这本书干什么</h2>
+<p>这本书是我学习WebGL过程的记录，会根据学习的经验写成教程的形式。</p>
+<p>第一章是“Learning
+WebGL”的内容，部分是翻译，部分是自己不懂的地方查阅资料补充的，也省略了一些觉得不必解释过细的内容，可以理解为“Learning
+WebGL”的一个中文版。</p>
+<p>这本书的GitBook主页：https://www.gitbook.com/book/csgrandeur/webgl-learn</p>
+<p>对应的Github主页：https://github.com/CSGrandeur/csgrandeur-webgl-learn</p>
+<p>代码演示：http://csgrandeur.github.io/WebGL_Learn_Code</p>
+<h2 id="参考">参考</h2>
+<p>Learning WebGL 他的网站是：http://learningwebgl.com 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2014-01-15-LeetCode-OJ-Solution/" rel="prev" title="LeetCode 题解">
+                  <i class="fa fa-angle-left"></i> LeetCode 题解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2015-06-11-windows-sublime-latex-ieee/" rel="next" title="Windows下sublime+Latex+IEEE模板配置方法">
+                  Windows下sublime+Latex+IEEE模板配置方法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

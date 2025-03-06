@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="一般来说，监督学习可以看作最小化一个目标函数，即Loss Function加一个约束项： \[ w^{*} &#x3D; \mathop{\arg\min}_{w}\sum_{i}L(y_{i}, f(x_{i}; w)) + \lambda\Omega(w) \] 约束项 \(\Omega(w)\) 通常是模型参数向量的范数的规则化项，比如稀疏表示基础知识中的零范数，用来约束字典权值的稀疏性。 L0范数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于机器学习中的范数的杂记">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2017-03-29-about-norm/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="一般来说，监督学习可以看作最小化一个目标函数，即Loss Function加一个约束项： \[ w^{*} &#x3D; \mathop{\arg\min}_{w}\sum_{i}L(y_{i}, f(x_{i}; w)) + \lambda\Omega(w) \] 约束项 \(\Omega(w)\) 通常是模型参数向量的范数的规则化项，比如稀疏表示基础知识中的零范数，用来约束字典权值的稀疏性。 L0范数">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-03-29T09:00:23.000Z">
+<meta property="article:modified_time" content="2025-03-06T02:27:46.955Z">
+<meta property="article:author" content="CSGrandeur">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2017-03-29-about-norm/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2017-03-29-about-norm/","path":"2017-03-29-about-norm/","title":"关于机器学习中的范数的杂记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>关于机器学习中的范数的杂记 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#l0%E8%8C%83%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">L0范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#l1%E8%8C%83%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">L1范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#l2%E8%8C%83%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">L2范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E8%8C%83%E6%95%B0nuclear-norm"><span class="nav-number">4.</span> <span class="nav-text">核范数(Nuclear Norm)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%97%E7%BD%97%E8%B4%9D%E5%B0%BC%E4%B9%8C%E6%96%AF%E8%8C%83%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">弗罗贝尼乌斯范数</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-03-29-about-norm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="关于机器学习中的范数的杂记 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于机器学习中的范数的杂记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-29 17:00:23" itemprop="dateCreated datePublished" datetime="2017-03-29T17:00:23+08:00">2017-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>一般来说，监督学习可以看作最小化一个目标函数，即Loss
+Function加一个约束项： <span class="math display">\[
+w^{*} = \mathop{\arg\min}_{w}\sum_{i}L(y_{i}, f(x_{i}; w)) +
+\lambda\Omega(w)
+\]</span></p>
+<p>约束项 <span class="math inline">\(\Omega(w)\)</span>
+通常是模型参数向量的范数的规则化项，比如稀疏表示基础知识中的零范数，用来约束字典权值的稀疏性。</p>
+<h3 id="l0范数">L0范数</h3>
+<p>L0范数指向量中非0的元素个数，
+知乎上一个解释很有让人增加对0范数的感性认知的效果<br />
+&gt;几何意义不考虑，单从分析角度。总而言之都是P范数，零范数即是当<code>p</code>趋于零，可以证明这时候的极限
+<span
+class="math inline">\((x_{1}^{p}+x_{2}^{p}+...+x_{n}^{p})^{\frac{1}{p}}\)</span>
+恰好是向量 <span
+class="math inline">\(x=(x_{1},x_{2},...,x_{n})^{T}\)</span>
+非零元素的个数。而无穷范数则是当<code>p</code>趋于无穷的时候的范数。关于这些极限的证明，数学分析的开篇就介绍了，我想这也是为什么当初学习数学分析的时候为什么老是有各种奇形怪状的极限要证明存在性的原因之一。但严格来说，<strong>零范数并不满足数乘率</strong>(
+<span class="math inline">\(|\alpha x|\neq |\alpha||x|\)</span>
+)。之所以最近被多次提到，也是因为压缩感知的火热。<br />
+<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/20473040/answer/121760029">https://www.zhihu.com/question/20473040/answer/121760029</a></p>
+<span id="more"></span>
+<h3 id="l1范数">L1范数</h3>
+<p>L1范数就是向量中各个元素绝对值之和。学术界普遍用L1代替L0做稀疏约束，主要因为在一定条件下L1与L0求解目标等价，但L1是L0的最优凸近似，易于优化求解。</p>
+<blockquote>
+<p>L1是假设参数服从双指数分布，利于保证权值向量的稀疏性</p>
+</blockquote>
+<h3 id="l2范数">L2范数</h3>
+<blockquote>
+<p>L2是假设参数服从高斯分布，利于防止过拟合。</p>
+</blockquote>
+<p>有前面“<code>P</code>范数”的解释，L2范数就很容易知道是向量各元素平方和的平方根。<br />
+L2范数常用来抑制过拟合。机器学习的目标是增大各分量权重<code>w</code>的差异，但产生过拟合时，往往是权重的差异过大，过度拟合了有限的训练数据，而缺乏泛化能力。平方和的平方根求最小值，自然会使所有的数都尽可能小，对训练的过程起到一个反作用。作为一个约束项，也称为惩罚项，即把权重的差异限制到一个范围，类比0范数的作用是让权重的非零项尽可能少，它们都起到<strong>约束</strong>的作用。</p>
+<h3 id="核范数nuclear-norm">核范数(Nuclear Norm)</h3>
+<p>核范数是矩阵奇异值的和，用来约束矩阵的低秩。对于有稀疏性质的数据（如自然图像），这样的矩阵是低秩的，会包含大量冗余信息，可以利用冗余信息恢复数据（如去噪），可以提取特征（如分类）。</p>
+<p>秩（rank）是矩阵非0奇异值的个数，核范数是奇异值的和，把定义放在一起，有种很眼熟的感觉——这就很像用L1范数实现L0范数约束啊。数学角度说，rank是非凸的，或者说又是个NP问题，核范数则是凸的，核范数是rank的凸近似，用核范数最小化来近似实现低秩约束，原因还是好算。</p>
+<h3 id="弗罗贝尼乌斯范数">弗罗贝尼乌斯范数</h3>
+<p>在矩阵中，对于<code>p=2</code>，称为Frobenius Norm(F-Norm)。 <span
+class="math display">\[
+\|A\|_{F}=\sqrt{\sum_{i=1}^{m}\sum_{j=1}^{n}|a_{ij}|^{2}}=\sqrt{trace{A^{*}A}}=\sqrt{\sum_{i=1}^{\min(m,n)}\sigma_{i}^{2}}
+\]</span> <span class="math inline">\(A^{*}\)</span> 表示 <span
+class="math inline">\(A\)</span> 的共轭转置， <span
+class="math inline">\(\sigma_{i}\)</span> 是 <span
+class="math inline">\(A\)</span> 的奇异值。</p>
+<p>参考：</p>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="http://blog.csdn.net/zouxy09/article/details/24971995/">机器学习中的范数规则化之（一）L0、L1与L2范数</a><br />
+</li>
+<li><a
+target="_blank" rel="noopener" href="http://blog.csdn.net/zouxy09/article/details/24972869">机器学习中的范数规则化之（二）核范数与规则项参数选择</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20473040">0 范数、1 范数、2
+范数有什么区别？</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/26471536/answer/85915842">为什么核范数能凸近似矩阵的秩？为什么核范数是凸的？</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017-03-23-ksvd-and-denoising/" rel="prev" title="从稀疏表示到K-SVD，再到图像去噪">
+                  <i class="fa fa-angle-left"></i> 从稀疏表示到K-SVD，再到图像去噪
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017-04-06-mm-crf-imageprocessing/" rel="next" title="马尔可夫模型到条件随机场，再结合深度学习">
+                  马尔可夫模型到条件随机场，再结合深度学习 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
