@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="哈希与字典树 哈希（Hash）也叫散列，记录存储位置与关键字之间存在对应关系 \(Loc(i)&#x3D;H(key_{i})\)，从而在查找数据时可以接近 \(O(1)\) 的效率直接找到位置，而不需要顺序摸排或二分查找。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10.哈希与字典树">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="哈希与字典树 哈希（Hash）也叫散列，记录存储位置与关键字之间存在对应关系 \(Loc(i)&#x3D;H(key_{i})\)，从而在查找数据时可以接近 \(O(1)\) 的效率直接找到位置，而不需要顺序摸排或二分查找。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/hash_base.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/hash_link.gif">
+<meta property="article:published_time" content="2025-03-12T09:48:30.000Z">
+<meta property="article:modified_time" content="2025-03-13T07:51:01.582Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/hash_base.gif">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/","path":"2025-03-12-10-哈希与字典树/","title":"10.哈希与字典树"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>10.哈希与字典树 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">哈希与字典树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%A1%A8%E6%B3%95%E5%A4%84%E7%90%86%E5%93%88%E5%B8%8C%E5%86%B2%E7%AA%81"><span class="nav-number">1.0.1.</span> <span class="nav-text">链表法处理哈希冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stl-%E7%9A%84-map-%E4%B8%8E-unorderd_map"><span class="nav-number">1.0.2.</span> <span class="nav-text">STL 的 map 与
+unorderd_map</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E5%85%B8%E6%A0%91"><span class="nav-number">1.1.</span> <span class="nav-text">字典树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%80%83%E9%A2%98"><span class="nav-number">1.1.1.</span> <span class="nav-text">思考题</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="10.哈希与字典树 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          10.哈希与字典树
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-12 17:48:30" itemprop="dateCreated datePublished" datetime="2025-03-12T17:48:30+08:00">2025-03-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-13 15:51:01" itemprop="dateModified" datetime="2025-03-13T15:51:01+08:00">2025-03-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="哈希与字典树">哈希与字典树</h1>
+<p>哈希（Hash）也叫散列，记录存储位置与关键字之间存在对应关系 <span
+class="math inline">\(Loc(i)=H(key_{i})\)</span>，从而在查找数据时可以接近
+<span class="math inline">\(O(1)\)</span>
+的效率直接找到位置，而不需要顺序摸排或二分查找。</p>
+<span id="more"></span>
+<img src="/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/hash_base.gif" class="" title="哈希基本原理">
+<p>哈希函数自由度很高，能完成数据范围到哈希表范围的映射就可以，映射之后有概率产生冲突，通过一定手段解决冲突即可。</p>
+<p>工程应用中，MD4、SHA-1、SHA-256、SHA-512 等都是哈希算法。</p>
+<h3 id="链表法处理哈希冲突">链表法处理哈希冲突</h3>
+<p>哈希表每个位置对应一条链表，所有散列值相同的元素都放到相同位置对应的链表中</p>
+<img src="/2025-03-12-10-%E5%93%88%E5%B8%8C%E4%B8%8E%E5%AD%97%E5%85%B8%E6%A0%91/hash_link.gif" class="" title="哈希基本原理">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">list&lt;<span class="type">int</span>&gt; hl[maxn];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Find</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ith = <span class="number">0</span>, hsNum = x % maxn;</span><br><span class="line">    list&lt;<span class="type">int</span>&gt;::iterator jt;</span><br><span class="line">    <span class="keyword">for</span>(jt = hl[hsNum].<span class="built_in">begin</span>(); jt != hl[hsNum].<span class="built_in">end</span>(); jt ++, ith ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(*jt == x) <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> jt == hl[hsNum].<span class="built_in">end</span>() ? (hl[hsNum].<span class="built_in">push_front</span>(x), <span class="number">-1</span>) : ith + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="stl-的-map-与-unorderd_map">STL 的 map 与
+<code>unorderd_map</code></h3>
+<p>C++ 的 STL 利用红黑树封装了 <span
+class="math inline">\(O(logn)\)</span> 的 <code>map</code>
+映射，以及一套哈希方案封装的接近<span
+class="math inline">\(O(1)\)</span>的 <code>unordered_map</code>
+映射，用起来很方便。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">std::unordered_map&lt;string, <span class="type">int</span>&gt; mp;</span><br><span class="line">mp[<span class="string">&quot;bob&quot;</span>] = <span class="number">5</span>;</span><br><span class="line">mp[<span class="string">&quot;alice&quot;</span>] = <span class="number">6</span>;</span><br></pre></td></tr></table></figure>
+<p>不同版本的<code>C++</code>，<code>unordered_map</code>内部实现不尽相同，一些题目可能会专门Hack
+<code>unordered_map</code> 导致其退化不再是 <span
+class="math inline">\(O(1)\)</span>，所以比赛中如果理论复杂度用<code>map</code>没问题的话，还是推荐用<code>map</code>。</p>
+<h2 id="字典树">字典树</h2>
+<p>字典树是针对“串”类数据结构的哈希方案，比如对小写英文字符串做哈希，可以构建一个“26叉树”，将任意单词从左到右在树上进行分支查找，完成匹配。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1100</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> cnt;</span><br><span class="line">    <span class="type">int</span> nex[<span class="number">26</span>];</span><br><span class="line">&#125;;</span><br><span class="line">Node trie[maxn];</span><br><span class="line"><span class="type">int</span> tp;</span><br><span class="line"><span class="type">char</span> buf[<span class="number">11</span>];</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Insert</span><span class="params">(<span class="type">int</span> now, <span class="type">char</span> *b)</span> </span>&#123;</span><br><span class="line">    trie[now].cnt ++;</span><br><span class="line">    <span class="keyword">if</span>(!*b) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(!trie[now].nex[*b - <span class="string">&#x27;a&#x27;</span>])</span><br><span class="line">    trie[now].nex[*b - <span class="string">&#x27;a&#x27;</span>] = tp ++;</span><br><span class="line">    <span class="built_in">Insert</span>(trie[now].nex[*b - <span class="string">&#x27;a&#x27;</span>], b + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Search</span><span class="params">(<span class="type">int</span> now, <span class="type">char</span> *b)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 统计以输入字符串为前缀的单次个数</span></span><br><span class="line">    <span class="comment">// 对于其他任务（比如统计多少个单次是输入字符串的前缀）</span></span><br><span class="line">    <span class="comment">// 改变cnt的意义并维护对应值</span></span><br><span class="line">    <span class="type">int</span> nex = trie[now].nex[*b - <span class="string">&#x27;a&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(!*b) <span class="keyword">return</span> trie[now].cnt;</span><br><span class="line">    <span class="keyword">if</span>(!nex) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Search</span>(nex, b + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="思考题">思考题</h3>
+<ol type="1">
+<li>给n个单词，和1个长单词，求有多少个单词是这个长单词的前缀 —— 用 n
+个单词建字典树，节点统计单词个数，长单词去匹配，路径上个数求和</li>
+<li>给n个单词，和1个短单词，求这个短单词是多少个单词的前缀 —— 用 n
+个单词建字典树，节点统计单词个数，短单词匹配成功的节点个数为答案</li>
+<li>给两种语言单词对照表，输入任意单词，输出对照另一个语言的单词</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-03-12-09-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%8E%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81/" rel="prev" title="09.二叉树与哈夫曼编码">
+                  <i class="fa fa-angle-left"></i> 09.二叉树与哈夫曼编码
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/" rel="next" title="11.图结构与基本搜索">
+                  11.图结构与基本搜索 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
