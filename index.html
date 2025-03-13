@@ -221,7 +221,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-13 16:24:27" itemprop="dateModified" datetime="2025-03-13T16:24:27+08:00">2025-03-13</time>
+      <time title="修改时间：2025-03-13 16:28:24" itemprop="dateModified" datetime="2025-03-13T16:28:24+08:00">2025-03-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -248,93 +248,15 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="图结构与基本搜索">图结构与基本搜索</h1>
-<h2 id="图">图</h2>
-<p>由顶点（节点）和边组成的一种非线性数据结构，用于表示对象之间的关系，顶点代表对象，边代表对象之间的连接或关系。</p>
-<p>有向图与无向图</p>
-<img src="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/graph_dire.svg" class="" title="有向图与无向图">
-<p>图的稀疏与稠密</p>
-<img src="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/graph_sparse.svg" class="" title="图的稀疏与稠密">
-<p>概念大全：</p>
-<ul>
-<li>图：由顶点（V）与连接顶点的边（E）构成</li>
-<li>无向图：每条边没有方向的定义</li>
-<li>有向图：每条边有方向，例如表达路的话，一条边就表达一条单向车道</li>
-<li>完全图：任意两个顶点之间都有边（对于有向图则两个方向的边都有）</li>
-<li>稀疏图：边较少的图</li>
-<li>稠密图：边较多的图</li>
-<li>顶点的度：与该点关联的边的个数，如果是有向图则分“出度”和“入度”</li>
-<li>路径：连续的边构成的顶点序列</li>
-<li>路径长度：路径的边长度之和（如果没长度可以是边数量之和）</li>
-<li>回路（环）：第一个顶点和最后一个顶点相同的路径</li>
-<li>简单路径：除起点和终点外，其余顶点皆不相同</li>
-<li>简单回路：起点终点相同，其他顶点皆不相同</li>
-<li>连通图：图中任意两个顶点之间都能找到一个路径</li>
-<li>子图：如果图B的顶点和边都是图A的顶点和边的子集，则B是A的子图</li>
-<li>连通分量（强连通分量）：图B是图A的子图且图B是连通图（即A的连通子图），A中任意不在B中的顶点加入B后，B不再连通，这样的B是A的连通分量</li>
-<li>极小连通子图：图B是图A的连通子图，如果B任意删除一条边后都不再连通，则B是A的极小连通子图</li>
-<li>生成树：包含图 G 的所有顶点的极小连通子图，是图G的生成树</li>
-<li>生成森林：非连通图的各个连通分量的生成树的集合</li>
-<li>最小生成树：边有边权（或长度或其他量），边权之和最小的生成树</li>
-</ul>
-<h2 id="图的存储方式">图的存储方式</h2>
-<p>在代码中存这个图：</p>
-<img src="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/graph_save_graph.svg" class="" title="存储一个图">
-<h3 id="顺序存储邻接矩阵">顺序存储（邻接矩阵）</h3>
-<img src="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/graph_save_mat.svg" class="" title="邻接矩阵存法">
-<p>用一个二维数组存储点与点的关系</p>
-<ul>
-<li><code>n</code> 个顶点， <code>e</code> 条边</li>
-<li>对于无边权的图，<code>g[i][j] == 1</code>表示顶点 <code>i</code>
-与顶点 <code>j</code> 有边，否则无边</li>
-<li>对于有边权的图，可以额外用 <code>w[i][j]</code> 表示边的权值</li>
-<li>无向图则 <code>g[i][j] == g[j][i]</code></li>
-<li>适合<strong style="color:red;">稠密图</strong></li>
-</ul>
-<h3
-id="链式存储竞赛通常用链式前向星">链式存储，竞赛通常用链式前向星</h3>
-<ul>
-<li><code>n</code> 个顶点，<code>e</code>条边</li>
-<li>每一个顶点， 都用一个链表表示与其相连的边</li>
-<li>适合<strong style="color:red;">稀疏图</strong></li>
-<li>对于无向图，则两个方向各建一条有向边</li>
-</ul>
-<blockquote>
-<p>知识点：在面对一道图问题时，一定要先分析图的稠密程度，再决定用邻接矩阵还是链式前向星。
-Tip：大多问题都可以用链式前向星，在一些显著稠密、卡常数的问题中，考虑用邻接矩阵，邻接矩阵代码也相对好写一些。</p>
-</blockquote>
-<p>链式前向星模板参考</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxN = <span class="number">1100</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxM = <span class="number">110000</span>;</span><br><span class="line"><span class="type">int</span> first[maxN];    <span class="comment">// 每个顶点发出的边的边链表头结点，该数组可初始化为 -1 表示每个顶点都还没有边</span></span><br><span class="line"><span class="type">int</span> nex[maxM];      <span class="comment">// 同个顶点发出的边的边结点 next 域</span></span><br><span class="line"><span class="type">int</span> u[maxM];        <span class="comment">// 边的发出顶点</span></span><br><span class="line"><span class="type">int</span> v[maxM];        <span class="comment">// 边的收入顶点</span></span><br><span class="line"><span class="type">int</span> w[maxM];        <span class="comment">// 边的权值</span></span><br><span class="line"><span class="type">int</span> tp;             <span class="comment">// 全局“内存分配”“指针”，就是模拟分配内存时，tp从0开始逐个增加</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 比如 first[1]，表示顶点 V1 发出的第一条边的“指针”，这里就是数组编号</span></span><br><span class="line"><span class="comment">// nex[first[1]] 表示顶点 V1 发出的边的链表的第二个结点编号</span></span><br><span class="line"><span class="comment">// nex[nex[first[1]]] 表示顶点 V1 发出的边的链表的第三个结点编号 ...</span></span><br><span class="line"><span class="comment">// u[first[1]] 顶点 V1</span></span><br><span class="line"><span class="comment">// v[first[1]] 顶点 V1 发出的第一条边的另一端的顶点编号，比如 v[first[1]] == 3 就表示 V1 连着 V3</span></span><br><span class="line"><span class="comment">// w[first[1]] 顶点 V1 发出的第一条边的权值</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddEdge</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e, <span class="type">int</span> weight)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 建图：表示顶点 s 向顶点 e 发出了一条权重为 weight 的有向边</span></span><br><span class="line">    <span class="comment">// 程序开始时 tp 初始为 0</span></span><br><span class="line">    nex[tp] = first[s]; <span class="comment">// 类似链表头插法</span></span><br><span class="line">    first[s] = tp;</span><br><span class="line">    u[tp] = s;</span><br><span class="line">    v[tp] = e;</span><br><span class="line">    w[tp] = weight;</span><br><span class="line">    tp ++;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DbEdge</span><span class="params">(<span class="type">int</span> s, <span class="type">int</span> e, <span class="type">int</span> weight)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 如果表示无向图，那简单，两个方向都建一条有向边就好</span></span><br><span class="line">    <span class="built_in">AddEdge</span>(s, e, weight);</span><br><span class="line">    <span class="built_in">AddEdge</span>(e, s, weight);</span><br><span class="line">    <span class="comment">// 结合 tp 的属性，你会发现，可以很容易找到两个顶点之间成对的双向边</span></span><br><span class="line">    <span class="comment">// 比如 i 是 s 发向 e 的边的编号，那么 i^1 （异或操作） 就是 e 发向 s 的边</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> vis[maxN] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> now)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 以深度优先搜索为例遍历全图，感受前向星的使用</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = first[now]; i != <span class="number">-1</span>; i = nex[i])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 类似链表访问过程，i = first[now] 从头结点获得第一条边的指针</span></span><br><span class="line">        <span class="comment">// i = nex[i] 即链表指针域往后遍历</span></span><br><span class="line">        <span class="comment">// i != -1 即判断是否到链表末尾</span></span><br><span class="line">        <span class="comment">// u[i]、v[i]、w[i] 都是链表结点的数据域，当然你可以把 nex、u、v、w 封装在 struct 里</span></span><br><span class="line">        <span class="keyword">if</span>(!vis[v[i]])</span><br><span class="line">        &#123;</span><br><span class="line">            vis[v[i]] = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">DFS</span>(v[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="棋盘类图问题">棋盘类图问题</h3>
-<p>迷宫、下棋等问题，节点即格点或格子，与其相关的是上下左右四个方向，或者加上斜向共8个方向，用邻接矩阵或链式前向星建图就太麻烦了，可以直接用<code>xy</code>坐标来表达节点，增减<code>xy</code>来找相邻节点。</p>
-<img src="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/graph_board.png" class="" title="棋盘类问题">
-<h2 id="基本的搜索">基本的搜索</h2>
-<h3 id="深度优先搜索deep-first-search-dfs">深度优先搜索（Deep First
-Search, DFS）</h3>
-<p>深度优先搜索，用栈（递归的形式）</p>
-<p>一条路走到底，往回一步，再一条路走到底，往回一步...一般用于求全部解、求一些很“深”的解</p>
-<ol type="1">
-<li>访问起始点v;</li>
-<li>若v的第1个邻接点没访问过，深度遍历此邻接点；</li>
-<li>若当前邻接点已访问过，再找v的第2个邻接点重新遍历；</li>
-<li>如果所有邻接点都已访问，则返回上一个访问的顶点。</li>
-</ol>
-<p>在网格上DFS典型模板</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">110</span>;</span><br><span class="line"><span class="type">int</span> dx[<span class="number">4</span>] = &#123;<span class="number">-1</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line"><span class="type">int</span> dy[<span class="number">4</span>] = &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">-1</span>, <span class="number">1</span>&#125;;</span><br><span class="line"><span class="type">int</span> graph[maxn][maxn];</span><br><span class="line"><span class="type">bool</span> visited[maxn][maxn];</span><br><span class="line"><span class="type">int</span> endX, endY;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x == endX &amp;&amp; y == endY) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        <span class="type">int</span> nextX = x + dx[i], nextY = y + dy[i];</span><br><span class="line">        <span class="comment">// 把 graph[0][各列] 和 graph[各行][0] 设为不能走的哨兵，让实际数据从 1 开始，就不用额外判断坐标范围了</span></span><br><span class="line">        <span class="keyword">if</span> (graph[nextX][nextY] &amp;&amp; !visited[nextX][nextY]) &#123;</span><br><span class="line">            <span class="comment">// 这里 graph[i][j] 为 1 表示能走，为 0 表示不能走</span></span><br><span class="line">            visited[nextX][nextY] = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">DFS</span>(nextX, nextY)) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在图上DFS典型模板</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn;</span><br><span class="line"><span class="type">int</span> g[maxn][maxn];  <span class="comment">// 邻接矩阵</span></span><br><span class="line"><span class="type">bool</span> vis[maxn];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// now: 当前顶点编号</span></span><br><span class="line">    <span class="comment">// n: 顶点个数</span></span><br><span class="line">    <span class="keyword">if</span> (vis[now]) <span class="keyword">return</span>;</span><br><span class="line">    vis[now] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (g[now][i])  <span class="comment">// now 与 i 之间有边</span></span><br><span class="line">            <span class="built_in">DFS</span>(i, n);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="广度优先搜索breath-first-search-bfs">广度优先搜索（Breath First
-Search, BFS）</h3>
-<p>广度优先搜索是一种分层的搜索过程，每向前走一步可能访问一批顶点，不像深度优先搜索那样有回退的情况，因此，广度优先搜索不是一个递归的过程，其算法也不是递归的，就近访问，一圈圈外扩一般用于求最短的路、最近的解。</p>
-<ol type="1">
-<li>在访问了起始点v之后，将 v 的尚未访问的邻接点放入访问队列；</li>
-<li>在队列中出队尚未访问的顶点，进行访问</li>
-<li>直到所有顶点都被访问</li>
-</ol>
-<p>在网格上BFS典型模板</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="built_in">Node</span>() &#123; x = y = <span class="number">0</span>; &#125;</span><br><span class="line">    <span class="built_in">Node</span>(<span class="type">int</span> x_, <span class="type">int</span> y_) &#123;</span><br><span class="line">        x = x_;</span><br><span class="line">        y = y_;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">BFS</span><span class="params">(<span class="type">int</span> startX, <span class="type">int</span> startY)</span> </span>&#123;</span><br><span class="line">    std::queue&lt;Node&gt; q;</span><br><span class="line">    q.<span class="built_in">push</span>(<span class="built_in">Node</span>(startX, startY));</span><br><span class="line">    visited[startX][startY] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        Node now = q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">if</span> (now.x == endX &amp;&amp; now.y == endY) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">            <span class="type">int</span> nextX = now.x + dx[i], nextY = now.y + dy[i];</span><br><span class="line">            <span class="keyword">if</span> (graph[nextX][nextY] &amp;&amp; !visited[nextX][nextY]) &#123;</span><br><span class="line">                visited[nextX][nextY] = <span class="literal">true</span>;</span><br><span class="line">                q.<span class="built_in">push</span>(<span class="built_in">Node</span>(nextX, nextY));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在图上BFS典型模板</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn;</span><br><span class="line"><span class="type">int</span> g[maxn][maxn];  <span class="comment">// 邻接矩阵</span></span><br><span class="line"><span class="type">bool</span> vis[maxn];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BFS</span><span class="params">(<span class="type">int</span> start, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line">    q.<span class="built_in">push</span>(start);</span><br><span class="line">    vis[start] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        <span class="type">int</span> now = q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (g[now][i] &amp;&amp; !vis[i]) &#123;</span><br><span class="line">                vis[i] = <span class="literal">true</span>;</span><br><span class="line">                q.<span class="built_in">push</span>(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p>本章介绍图的基本概念、存储方式以及两种基本图搜索算法——深度优先搜索（DFS）和广度优先搜索（BFS），涵盖图的定义、分类、存储结构及其在代码中的实现，并提供DFS和BFS的典型模板代码。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025-03-12-11-%E5%9B%BE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%9F%BA%E6%9C%AC%E6%90%9C%E7%B4%A2/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
