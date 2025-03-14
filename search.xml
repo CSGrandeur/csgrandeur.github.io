@@ -2914,7 +2914,7 @@ ACM）</li>
 <li>目前国内ICPC信息总站：http://icpc.pku.edu.cn/index.htm</li>
 <li>ICPC官方网站：https://icpc.global/</li>
 </ul>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=808188965&amp;bvid=BV1y34y1B7PQ&amp;cid=484846892&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=808188965&amp;bvid=BV1y34y1B7PQ&amp;cid=484846892&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
 </iframe>
 <p>【ICPC世界总决赛莫斯科站的回忆】
 https://www.bilibili.com/video/BV1y34y1B7PQ/?share_source=copy_web&amp;vd_source=c617b7e2cc89265d6f82e07b3c66bc6c</p>
@@ -2928,15 +2928,15 @@ Contest，CCPC）与ICPC赛制一致，每年也有多个赛站，各赛站优�
 <li>主办方：中国大学生程序设计竞赛组委会</li>
 <li>CCPC官方网站：https://ccpc.io/</li>
 </ul>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=706271009&amp;bvid=BV18Q4y147tZ&amp;cid=1343604196&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=706271009&amp;bvid=BV18Q4y147tZ&amp;cid=1343604196&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
 </iframe>
 <p>【CCPC2023深圳-混剪】
 https://www.bilibili.com/video/BV18Q4y147tZ/?share_source=copy_web&amp;vd_source=c617b7e2cc89265d6f82e07b3c66bc6c</p>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=578432468&amp;bvid=BV1oz4y1w7tB&amp;cid=1332784644&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=578432468&amp;bvid=BV1oz4y1w7tB&amp;cid=1332784644&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
 </iframe>
 <p>【CCPC2023深圳-滚榜及颁奖】
 https://www.bilibili.com/video/BV1oz4y1w7tB/?share_source=copy_web&amp;vd_source=c617b7e2cc89265d6f82e07b3c66bc6c</p>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=280917548&amp;bvid=BV1Xc411X7AH&amp;cid=1332043703&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=280917548&amp;bvid=BV1Xc411X7AH&amp;cid=1332043703&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
 </iframe>
 <p>【CCPC2023深圳-正赛5小时全程直播回放】
 https://www.bilibili.com/video/BV1Xc411X7AH/?share_source=copy_web&amp;vd_source=c617b7e2cc89265d6f82e07b3c66bc6c</p>
@@ -2955,7 +2955,7 @@ CCPC。赛事由广东省计算机学会主办，广东省计算机学会普及�
 <li>主办方：广东省计算机学会</li>
 <li>GDCPC官方网站：http://www.gdcpc.cn/</li>
 </ul>
-<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=229753412&amp;bvid=BV14h411T7PW&amp;cid=1164443946&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
+<iframe src="//player.bilibili.com/player.html?isOutside=true&amp;aid=229753412&amp;bvid=BV14h411T7PW&amp;cid=1164443946&amp;p=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true">
 </iframe>
 <p>【气球飘扬的赛场——第二十届广东省大学生程序设计竞赛（GDCPC）暨中国大学生程序设计竞赛(CCPC)广东省赛】
 https://www.bilibili.com/video/BV14h411T7PW/?share_source=copy_web&amp;vd_source=c617b7e2cc89265d6f82e07b3c66bc6c</p>
@@ -5735,10 +5735,7 @@ class="math inline">\(x\)</span>的第一个元素的位置</li>
 </tr>
 </tbody>
 </table>
-<figure>
-<img src="./resource/linked_list.svg" alt="链表示例" />
-<figcaption aria-hidden="true">链表示例</figcaption>
-</figure>
+<img src="/2025-03-06-05-%E7%BA%BF%E6%80%A7%E8%A1%A8/linked_list.svg" class="" title="链表示例">
 <p>基本定义</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> val;    <span class="comment">// 值</span></span><br><span class="line">    Node *nex;  <span class="comment">// 指针</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddHead</span><span class="params">(Node *hp, <span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将数 x 插入头节点为 head 的链表开头——头插法</span></span><br><span class="line">    Node *p = <span class="keyword">new</span> Node;</span><br><span class="line">    p-&gt;val = x;</span><br><span class="line">    p-&gt;nex = hp-&gt;nex;</span><br><span class="line">    hp-&gt;nex = p;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddTail</span><span class="params">(Node *hp, <span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将数 x 插入头节点为 head 的链表结尾——尾插法</span></span><br><span class="line">    Node *p = <span class="keyword">new</span> Node;</span><br><span class="line">    Node *r;</span><br><span class="line">    <span class="keyword">for</span>(r = hp; r-&gt;nex != <span class="literal">nullptr</span>; r = r-&gt;nex);  <span class="comment">// 找到链表末尾</span></span><br><span class="line">    p-&gt;val = x;</span><br><span class="line">    p-&gt;nex = r-&gt;nex;</span><br><span class="line">    r-&gt;nex = p;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Node *head = <span class="keyword">new</span> Node;  <span class="comment">// 头节点</span></span><br><span class="line">    head-&gt;nex = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="built_in">AddHead</span>(head, <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">AddHead</span>(head, <span class="number">3</span>);</span><br><span class="line">    <span class="built_in">AddTail</span>(head, <span class="number">4</span>);</span><br><span class="line">    <span class="keyword">for</span>(Node *p = head-&gt;nex; p != <span class="literal">nullptr</span>; p = p-&gt;nex) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, p-&gt;val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>基本操作</p>
@@ -5773,15 +5770,9 @@ class="math inline">\(x\)</span>的第一个元素的位置</li>
 <h3 id="循环链表">循环链表</h3>
 <p>给出一个单链表中间某个节点的指针，无法找到它之前的节点。</p>
 <p>如果把链表首尾相连，让最后一个节点指向头节点，就可以从任何位置出发找到所有节点。</p>
-<figure>
-<img src="./resource/linked_list_loop.svg" alt="循环链表" />
-<figcaption aria-hidden="true">循环链表</figcaption>
-</figure>
+<img src="/2025-03-06-05-%E7%BA%BF%E6%80%A7%E8%A1%A8/linked_list_loop.svg" class="" title="循环链表">
 <p>小练习：仅知道尾指针<code>rearA</code>与<code>rearB</code>的情况下合并两个循环链表为一个循环链表</p>
-<figure>
-<img src="./resource/linked_list_loop_merge.svg" alt="循环链表" />
-<figcaption aria-hidden="true">循环链表</figcaption>
-</figure>
+<img src="/2025-03-06-05-%E7%BA%BF%E6%80%A7%E8%A1%A8/linked_list_loop_merge.svg" class="" title="循环链表">
 <p>尝试补全代码</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> val;</span><br><span class="line">    <span class="type">int</span> nex;</span><br><span class="line">&#125;;</span><br><span class="line">Node lst[<span class="number">9999</span>];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Merge</span><span class="params">(<span class="type">int</span> rearA, <span class="type">int</span> rearB)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// lst[rearA]和lst[rearB]分别是两个循环链表最后节点</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="双向链表">双向链表</h3>
