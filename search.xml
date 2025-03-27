@@ -7526,6 +7526,8 @@ class="math inline">\(T(n)=O(n \log^2 n)\)</span></p>
 <p>但可以进一步优化，尝试一次排序，在分治的时候同时划分排序信息，避免每次都排序，自行尝试。</p>
 <p>参考代码</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> inf = <span class="number">0x3f3f3f3f</span>;     <span class="comment">// 定义一个极大值</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="type">int</span> x, y, idx;              <span class="comment">// 坐标及序号</span></span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> Point &amp;b)&#123;<span class="keyword">return</span> x &lt; b.x;&#125; <span class="comment">// 重载“&lt;”用于排序</span></span><br><span class="line">&#125;;</span><br><span class="line">Point p[maxn], csh[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Sqr</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;<span class="keyword">return</span> x * x;&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Dis</span><span class="params">(Point &amp;a, Point &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Sqr</span>(a.x - b.x) + <span class="built_in">Sqr</span>(a.y - b.y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n, ansa, ansb, ansdis;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Update</span><span class="params">(Point &amp;a, Point &amp;b)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 由于答案要输出点对编号，而不仅仅是距离，用此函数更新答案</span></span><br><span class="line">    <span class="type">int</span> na = a.idx, nb = b.idx, dis = <span class="built_in">Dis</span>(a, b);</span><br><span class="line">    <span class="keyword">if</span>(na &gt; nb) std::<span class="built_in">swap</span>(na, nb);</span><br><span class="line">    <span class="keyword">if</span>(ansdis == <span class="number">-1</span> || dis &lt; ansdis || dis == ansdis &amp;&amp; (na &lt; ansa || na == ansa &amp;&amp; nb &lt; ansb))</span><br><span class="line">        ansa = na, ansb = nb, ansdis = dis;</span><br><span class="line">    <span class="keyword">return</span> dis;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Merge</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> mid)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> i = l, j = mid, k = l;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; mid &amp;&amp; j &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(p[i].y &lt; p[j].y) csh[k ++] = p[i ++];</span><br><span class="line">        <span class="keyword">else</span> csh[k ++] = p[j ++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; mid) csh[k ++] = p[i ++];</span><br><span class="line">    <span class="keyword">while</span>(j &lt; r) csh[k ++] = p[j ++];</span><br><span class="line">    <span class="built_in">memcpy</span>(p + l, csh + l, <span class="built_in">sizeof</span>(Point) * (r - l));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">JudgeNearby</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> mid, <span class="type">int</span> r, Point &amp;c)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注意到本算法采用了一个 trick：回溯的同时对 y 坐标做归并排序</span></span><br><span class="line">    <span class="comment">// 说明处理 [l, r) 区间时，[l, mid)和[mid, r)两个子问题已经 y 坐标有序</span></span><br><span class="line">    <span class="comment">// 提取两个子问题到中间点的 x 距离不超过子问题最优解的那些点 pl[] 和 pr[]</span></span><br><span class="line">    <span class="comment">// 只需左右“异步前进”，就能很容易定位左边 pl[] 每个点在右边上下距离不超过当前最优解的那些点</span></span><br><span class="line">    std::vector&lt;Point&gt; pl, pr;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = l; i &lt; mid; i ++)</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Sqr</span>(c.x - p[i].x) &lt;= ansdis) pl.<span class="built_in">push_back</span>(p[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = mid; i &lt; r; i ++)</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Sqr</span>(c.x - p[i].x) &lt;= ansdis) pr.<span class="built_in">push_back</span>(p[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; pl.<span class="built_in">size</span>(); i ++) &#123;    <span class="comment">// 对于左侧 pl[] 的每个点</span></span><br><span class="line">        <span class="comment">// 找到右侧 pr[] 的点中距离 pl[i] 小于目前最优解的序号下界 j</span></span><br><span class="line">        <span class="keyword">while</span>(j &lt; pr.<span class="built_in">size</span>() &amp;&amp; pl[i].y &gt; pr[j].y &amp;&amp; <span class="built_in">Sqr</span>(pl[i].y - pr[j].y) &gt; ansdis) j ++;</span><br><span class="line">        <span class="comment">// 从 j 开始枚举 pr[] 中的点，直到 y 坐标距离超过当前最优解</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> k = j; k &lt; pr.<span class="built_in">size</span>() &amp;&amp; <span class="built_in">Sqr</span>(pl[i].y - pr[k].y) &lt;= ansdis; k ++)</span><br><span class="line">            <span class="built_in">Update</span>(pl[i], pr[k]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">MinDis</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(r - l &lt;= <span class="number">1</span>) <span class="keyword">return</span> inf;          <span class="comment">// 递归终点：子问题中没有点，返回极大距离</span></span><br><span class="line">    <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    Point midp = p[mid];</span><br><span class="line">    <span class="built_in">MinDis</span>(l, mid);                     <span class="comment">// 处理子问题最近点对</span></span><br><span class="line">    <span class="built_in">MinDis</span>(mid, r);                     <span class="comment">// 处理子问题最近点对</span></span><br><span class="line">    <span class="built_in">JudgeNearby</span>(l, mid, r, midp);       <span class="comment">// 两侧子问题取相近点求距离更新答案</span></span><br><span class="line">    <span class="built_in">Merge</span>(l, r, mid);                   <span class="comment">// 对 y 坐标进行归并排序的 Merge 操作</span></span><br><span class="line">    <span class="keyword">return</span> ansdis;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n) != EOF) &#123;</span><br><span class="line">        ansa = ansb = ansdis = inf;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;p[i].x, &amp;p[i].y);</span><br><span class="line">            p[i].idx = i;</span><br><span class="line">        &#125;</span><br><span class="line">        std::<span class="built_in">sort</span>(p, p + n);    <span class="comment">// 按重载的“&lt;”，以x从小到大排序</span></span><br><span class="line">        <span class="built_in">MinDis</span>(<span class="number">0</span>, n);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, ansa, ansb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分治优化策略">分治优化策略</h2>
+<p><strong>用一部分子问题的解表达另一部分子问题，减少计算子问题的个数</strong></p>
 <h3 id="例快速幂">例：快速幂</h3>
 <p><span class="math inline">\(a\)</span>为给定实数，<span
 class="math inline">\(n\)</span>为自然数，求$a^n</p>
@@ -7586,6 +7588,58 @@ f_n &amp; f_{n-1}
 <p>把矩阵类比实数，同样可以用快速幂方法求斐波那契数列第<span
 class="math inline">\(n\)</span>项</p>
 <p><span class="math inline">\(T(n) = O(\log n)\)</span></p>
+<h3 id="例strassen矩阵乘法">例：Strassen矩阵乘法</h3>
+<p>求<span class="math inline">\(n\)</span>阶矩阵<span
+class="math inline">\(A\)</span>与<span
+class="math inline">\(B\)</span>相乘的结果<span
+class="math inline">\(AB\)</span>，其中假设<span
+class="math inline">\(n=2^k\)</span></p>
+<p>直接相乘方法：<span class="math inline">\(T(n)=O(n^3)\)</span></p>
+<p>直接分治： 分解： <span class="math display">\[
+\begin{bmatrix}
+A_{11} &amp; A_{12}\\
+A_{21} &amp; A_{22}
+\end{bmatrix}
+\begin{bmatrix}
+B_{11} &amp; B_{12}\\
+B_{21} &amp; B_{22}
+\end{bmatrix}
+=
+\begin{bmatrix}
+C_{11} &amp; C_{12}\\
+C_{21} &amp; C_{22}
+\end{bmatrix}
+\]</span></p>
+<p>求解：递归按矩阵乘规则求各子矩阵相乘结果</p>
+<p>合并： <span
+class="math display">\[C_{11}=A_{11}B_{11}+A_{12}B_{21}，C_{12}=A_{11}B_{12}+A_{12}B_{22}，\]</span>
+<span
+class="math display">\[C_{21}=A_{21}B_{11}+A_{22}B_{21}，C_{22}=A_{21}B_{12}+A_{22}B_{22}.\]</span></p>
+<p><span
+class="math inline">\(T(n)=8T(n/2)+O(n^2)，T(n)=O(n^3)\)</span>——这样不行</p>
+<p>子问题定义：两个<span
+class="math inline">\(n/2\)</span>规模的子矩阵相乘</p>
+<p>优化合并：将<span
+class="math inline">\(A_{11}B_{11}\)</span>等8个子问题通过相互表示优化为7个</p>
+<p>设<span class="math inline">\(M_1 \sim M_7\)</span>为7个子问题</p>
+<p><span class="math display">\[M_1 = A_{11}(B_{12} - B_{22})\]</span>
+<span class="math display">\[M_2 = (A_{11} + A_{12})B_{22}\]</span>
+<span class="math display">\[M_3 = (A_{21} + A_{22})B_{11}\]</span>
+<span class="math display">\[M_4 = A_{22}(B_{21} - B_{11})\]</span>
+<span class="math display">\[M_5 = (A_{11} + A_{22})(B_{11} +
+B_{22})\]</span> <span class="math display">\[M_6 = (A_{12} -
+A_{22})(B_{21} + B_{22})\]</span> <span class="math display">\[M_7 =
+(A_{11} - A_{21})(B_{11} + B_{12})\]</span></p>
+<p><span class="math display">\[C_{11} = M_5 + M_4 - M_2 + M_6,\]</span>
+<span class="math display">\[C_{12} = M_1 + M_2,\]</span> <span
+class="math display">\[C_{21} = M_3 + M_4,\]</span> <span
+class="math display">\[C_{22} = M_5 + M_1 - M_3 - M_7.\]</span></p>
+<p>即Strassen矩阵乘法用7个子问题完成了<span
+class="math inline">\(C\)</span>矩阵的计算</p>
+<p><span class="math display">\[T(n) = 7T(n/2) + O(n^2)，T(n) =
+O(n^{\log 7}) \approx O(n^{2.81})\]</span></p>
+<p>Coppersmith-Winograd算法为<span
+class="math inline">\(O(n^{2.3727})\)</span></p>
 <h3 id="例快速傅里叶变换">例：快速傅里叶变换</h3>
 <p>使用FFT解决多项式乘法问题</p>
 <p>设两个多项式<span class="math inline">\(F(x)\)</span>和<span
