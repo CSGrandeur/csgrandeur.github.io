@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="暴力枚举  只要复杂度没问题，暴力又如何？  以合理的方式，不重复、不遗漏地枚举一个问题所有可能的答案，找到正确的或最优的那个。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13.暴力枚举">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="暴力枚举  只要复杂度没问题，暴力又如何？  以合理的方式，不重复、不遗漏地枚举一个问题所有可能的答案，找到正确的或最优的那个。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/permutation_tree.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/subset_tree.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/nqueen.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/nqueen_solve.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/color_example.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/color_tree.svg">
+<meta property="article:published_time" content="2025-03-19T03:51:29.000Z">
+<meta property="article:modified_time" content="2025-03-27T02:40:49.436Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/permutation_tree.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/","path":"2025-03-19-13-暴力枚举/","title":"13.暴力枚举"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>13.暴力枚举 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE"><span class="nav-number">1.</span> <span class="nav-text">暴力枚举</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E6%9E%9A%E4%B8%BE"><span class="nav-number">1.1.</span> <span class="nav-text">基本的枚举</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%99%A4%E6%B3%95"><span class="nav-number">1.1.1.</span> <span class="nav-text">例：除法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E7%BB%9F%E8%AE%A1%E6%96%B9%E5%BD%A2"><span class="nav-number">1.1.2.</span> <span class="nav-text">例：统计方形</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%9B%9E%E6%BA%AF"><span class="nav-number">1.2.</span> <span class="nav-text">基本的回溯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E6%8E%92%E5%88%97"><span class="nav-number">1.3.</span> <span class="nav-text">枚举排列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%8F%AF%E9%87%8D%E6%8E%92%E5%88%97"><span class="nav-number">1.3.1.</span> <span class="nav-text">例：可重排列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E5%AD%90%E9%9B%86"><span class="nav-number">1.4.</span> <span class="nav-text">枚举子集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E6%9E%9A%E4%B8%BEr%E5%AD%90%E9%9B%86"><span class="nav-number">1.4.1.</span> <span class="nav-text">例：枚举\(r\)子集</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%9B%9E%E6%BA%AF"><span class="nav-number">1.5.</span> <span class="nav-text">基本回溯</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8Bn%E7%9A%87%E5%90%8E"><span class="nav-number">1.5.1.</span> <span class="nav-text">例：n皇后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E7%9D%80%E8%89%B2%E9%97%AE%E9%A2%98"><span class="nav-number">1.5.2.</span> <span class="nav-text">例：着色问题</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="13.暴力枚举 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          13.暴力枚举
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-19 11:51:29" itemprop="dateCreated datePublished" datetime="2025-03-19T11:51:29+08:00">2025-03-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-27 10:40:49" itemprop="dateModified" datetime="2025-03-27T10:40:49+08:00">2025-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="暴力枚举">暴力枚举</h1>
+<blockquote>
+<p>只要复杂度没问题，暴力又如何？</p>
+</blockquote>
+<p>以合理的方式，不重复、不遗漏地枚举一个问题所有可能的答案，找到正确的或最优的那个。</p>
+<span id="more"></span>
+<h2 id="基本的枚举">基本的枚举</h2>
+<p>暴力需要艺术，不是盲目地暴力，而要通过观察分析问题的特点，有选择地枚举。</p>
+<h3 id="例除法">例：除法</h3>
+<p><code>abcdefghij</code>是<code>0~9</code>的一个排列，给出 <span
+class="math inline">\(2\leq n \leq 79\)</span>，输出所有 <span
+class="math inline">\(abcde / fghij = n\)</span> 的情况</p>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">62</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">79546 / 01283 = 62</span><br><span class="line">94736 / 01528 = 62</span><br></pre></td></tr></table></figure>
+<p>直观的暴力是枚举<code>0~9</code>的所有排列，这是 <span
+class="math inline">\(10!=362880\)</span>
+种情况，或许能通过此题，但数据范围再扩大呢（比如用16进制，甚至更高）？而且枚举排列的代码量也不少。</p>
+<p>如果只枚举
+<code>fghij</code>，复杂度就会极大降低，甚至不用枚举排列，只需要枚举五位数，判断各位是否不同，然后用
+<span class="math inline">\(n * fghij\)</span> 得到 <span
+class="math inline">\(abcde\)</span>，再判断一次各位是否不同就可以了。</p>
+<h3 id="例统计方形">例：统计方形</h3>
+<p>给出 <span class="math inline">\(n\leq 5000, m\leq 5000\)</span>，求
+<span class="math inline">\(n \times m\)</span>
+的方格棋盘正方形、不含正方形的长方形 分别有多少个。</p>
+<p>直观的暴力是枚举所有左上角和右下角，但这过于暴力了， <span
+class="math inline">\(O(n^{2}m^{2})\)</span> 的复杂度也很恐怖。</p>
+<p>而如果想用纯数学方法算出来也可以，就比较烧脑。</p>
+<p>可以充分利用计算机的优势，在可接受复杂度内枚举，并一定程度结合计算，达到思维量和程序复杂性的平衡。</p>
+<p>于是可以这样，枚举右下角，计算以枚举的格子为右下角的正方形个数，和含正方形在内的矩形总个数（这比只算矩形要容易些），进而再计算不含正方形的矩形个数。</p>
+<p>估算一下数量可知，总数应该超过 <code>int</code> 了，得用
+<code>long long</code> 统计</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> sq = <span class="number">0</span>, all = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</span><br><span class="line">            sq += std::<span class="built_in">min</span>(i, j) + <span class="number">1</span>;   <span class="comment">// 以(i,j) 为右下角的正方形个数</span></span><br><span class="line">            all += (i + <span class="number">1</span>) * (j + <span class="number">1</span>);   <span class="comment">// 以(i,j) 为右下角的含正方形矩形个数</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld %lld\n&quot;</span>, sq, all - sq);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="基本的回溯">基本的回溯</h2>
+<p>回溯的本质是搜索，只不过不是在直观的图上搜索，而是在答案所在的空间中，以某种模式去搜索，比如一堆数字的全排列，一堆物件的各种组合（子集）等等。</p>
+<p>不重复不遗漏的搜索过程，构成一棵搜索树，所以某种意义上说，回溯是树上的搜索，通常以深度优先搜索形式实现。</p>
+<h2 id="枚举排列">枚举排列</h2>
+<p>枚举排列就是在 <span class="math inline">\(n\)</span> 个位置放 <span
+class="math inline">\(n\)</span> 个对象，变换他们的顺序，把 <span
+class="math inline">\(n!\)</span> 种顺序都枚举出来。</p>
+<p>定义排列的字典序：第一个不相同的较小元素所在的排列字典序更小，例如1,2,3的字典序小于1,3,2，按字典序输出排列</p>
+<p>思路：尝试第一个数的所有可能，然后第二个……一棵搜索树：</p>
+<img src="/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/permutation_tree.svg" class="" title="排列搜索树">
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;     <span class="comment">// cur 指 &quot;current&quot;, 当前在确定第 cur 个位置是谁</span></span><br><span class="line">    <span class="keyword">if</span>(cur == n) &#123;                              <span class="comment">// 递归终点</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)             <span class="comment">// 输出一个排列</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + !i, record[i]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;                                 <span class="comment">// 注意return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;               <span class="comment">// 枚举每个元素</span></span><br><span class="line">        <span class="keyword">if</span>(vis[i]) <span class="keyword">continue</span>;                    <span class="comment">// 已放元素排除</span></span><br><span class="line">        vis[i] = <span class="literal">true</span>; record[cur] = a[i];      <span class="comment">// 标记已放本次排列第cur个为a[i]</span></span><br><span class="line">        <span class="built_in">DFS</span>(cur + <span class="number">1</span>);                           <span class="comment">// 递归放第cur+1个</span></span><br><span class="line">        vis[i] = <span class="literal">false</span>;                         <span class="comment">// 回溯取消标记</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例可重排列">例：可重排列</h3>
+<p>如果有重复元素怎么办：<span
+class="math inline">\({2,1,1,4}\)</span></p>
+<p>按字典序生成排列为（先从左到右、后从上到下）： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1 1 2 4；1 1 4 2；1 2 1 4；1 2 4 1；1 4 1 2；1 4 2 1</span><br><span class="line">2 1 1 4；2 1 4 1；2 4 1 1；4 1 1 2；4 1 2 1；4 2 1 1</span><br></pre></td></tr></table></figure></p>
+<p>思路：数据排序后处理重复，统计每种数的数量<code>cnt</code>，用<code>cnt</code>“还剩下的可用个数”代替<code>vis</code>所表达的“是否放过”。</p>
+<h2 id="枚举子集">枚举子集</h2>
+<p>给定 <span class="math inline">\(n\)</span>
+元素集合，按字典序输出所有子集</p>
+<p>思路：子集即每个元素取与不取（是否算在递归终点时得到的子集里），可通过二进制方式构造</p>
+<img src="/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/subset_tree.svg" class="" title="子集搜索树">
+<p>枚举排列中的<code>record</code>记录第<code>cur</code>个位置放哪个数，那么在枚举子集中，可以用<code>chose</code>记录第<code>cur</code>个元素取还是没取。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cur == <span class="number">-1</span>) &#123;                             <span class="comment">// 递归终点,所有元素都已确定</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>, flg = <span class="number">1</span>; i &lt; n; i ++)&#123;   <span class="comment">// 输出子集</span></span><br><span class="line">            <span class="keyword">if</span>(!chose[i]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + flg, a[i]); flg = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;                                 <span class="comment">// 注意return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 由n-1~0逆序以便按字典序枚举子集</span></span><br><span class="line">    chose[cur] = <span class="literal">false</span>; <span class="built_in">DFS</span>(cur - <span class="number">1</span>);           <span class="comment">// 不取a[cur]后确定第cur-1个</span></span><br><span class="line">    chose[cur] = <span class="literal">true</span>; <span class="built_in">DFS</span>(cur - <span class="number">1</span>);            <span class="comment">// 取a[cur]后确定第cur-1个</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>指数增长很快，通常需要生成子集的问题不会太大，<code>int</code>的二进制位存得下
+<code>chose</code>
+所表达的信息，从而可以通过枚举连续的整数（二进制位）来枚举子集：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> m = <span class="number">1</span> &lt;&lt; n;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i ++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>, flg = <span class="number">1</span>; j &lt; n; j ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>((i &gt;&gt; j) &amp; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + flg, a[j]);</span><br><span class="line">            flg = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识点：位运算，<code>&lt;&lt;</code>,<code>&gt;&gt;</code>,<code>|</code>,<code>&amp;</code>,<code>^</code>
+是几个针对整数型变量的二进制位进行操作的运算，<code>1&lt;&lt;m</code>指把<code>1</code>的二进制位向“左”移<code>m</code>位。<br />
+<code>int</code>的<code>1</code> 的二进制位是
+<code>0000000000000000000001</code>（<span
+class="math inline">\(31\)</span>个<code>0</code>，<span
+class="math inline">\(1\)</span>个<code>1</code>，共<span
+class="math inline">\(32\)</span>位），左移<code>2</code>位的话，就变成<code>0000000000000000000100</code>，对应表达的数字是
+<code>4</code>。<br />
+<code>(i &gt;&gt; j) &amp; 1</code> 就是把 <code>i</code> 右移
+<code>j</code> 位之后，再与 <code>0000000000000000000001</code>
+每个二进制位分别做一下“与”操作，<code>(i &gt;&gt; j) &amp; 1</code>
+就会过滤掉前<code>31</code>个位（无论<code>0</code>还是<code>1</code>，“与”一下<code>0</code>都会变成<code>0</code>），只看最低的位“与”<code>1</code>之后的结果，用来判断
+<code>i</code>的第<code>j</code>个位是否是<code>j</code>。</p>
+</blockquote>
+<h3 id="例枚举r子集">例：枚举<span
+class="math inline">\(r\)</span>子集</h3>
+<p>枚举特定大小的子集，在枚举过程中只输出“取<span
+class="math inline">\(r\)</span>”个的情况即可。</p>
+<h2 id="基本回溯">基本回溯</h2>
+<h3 id="例n皇后">例：n皇后</h3>
+<p>规定棋子可以攻击同一行、同一列、同一斜线的棋子 求在 <span
+class="math inline">\(n\times n\)</span> 的棋盘上放置 <span
+class="math inline">\(n\)</span> 个棋子，互相攻击不到的方法</p>
+<p><span class="math inline">\(4\)</span> 皇后示例：</p>
+<img src="/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/nqueen.svg" class="" title="n皇后示例">
+<p>以<span class="math inline">\(8\)</span>皇后为例分析问题规模</p>
+<ul>
+<li>枚举每个格子放与不放？<span
+class="math inline">\(2^{64}\)</span>太离谱</li>
+<li><span class="math inline">\(64\)</span> 个格子取 <span
+class="math inline">\(8\)</span> 个？<span
+class="math inline">\(C_{64}^{8}\)</span>也很离谱</li>
+<li>结合约束条件，可极大简化要枚举的内容：每行选 <span
+class="math inline">\(1\)</span>
+列，行行不重复，各行选的列编号拿出来放一起，就是<span
+class="math inline">\(1\sim 8\)</span>的排列！</li>
+</ul>
+<p>进一步优化，对于每个格子，它属于：</p>
+<ul>
+<li><span class="math inline">\(n\)</span>列中的<span
+class="math inline">\(1\)</span>列</li>
+<li><span class="math inline">\(2n−1\)</span>个正斜线的<span
+class="math inline">\(1\)</span>个</li>
+<li><span class="math inline">\(2n−1\)</span>个反斜线的<span
+class="math inline">\(1\)</span>个</li>
+</ul>
+<img src="/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/nqueen_solve.svg" class="" title="n皇后示例">
+<p>枚举排列时，可增加两组斜线占领标记，减少状态枚举。</p>
+<p>参考代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">14</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">int</span> ans[maxn];</span><br><span class="line"><span class="type">bool</span> rcdx[maxn], rcdlr[maxn &lt;&lt; <span class="number">1</span> | <span class="number">1</span>], rcdrl[maxn &lt;&lt; <span class="number">1</span> | <span class="number">1</span>];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cur == n) ans[n] ++;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(rcdx[i] || rcdlr[i - cur + n - <span class="number">1</span>] || rcdrl[i + cur]) </span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        rcdx[i] = <span class="literal">true</span>;</span><br><span class="line">        rcdlr[i - cur + n - <span class="number">1</span>] = <span class="literal">true</span>;  <span class="comment">// 左上-右下 对角线标记</span></span><br><span class="line">        rcdrl[i + cur] = <span class="literal">true</span>;          <span class="comment">// 右上-坐下 对角线标记</span></span><br><span class="line">        <span class="built_in">DFS</span>(cur + <span class="number">1</span>);</span><br><span class="line">        rcdx[i] = <span class="literal">false</span>;</span><br><span class="line">        rcdlr[i - cur + n - <span class="number">1</span>] = <span class="literal">false</span>;</span><br><span class="line">        rcdrl[i + cur] = <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(ans, <span class="number">-1</span>, <span class="built_in">sizeof</span>(ans));</span><br><span class="line">    <span class="built_in">memset</span>(rcdx, <span class="number">0</span>, <span class="built_in">sizeof</span>(rcdx));</span><br><span class="line">    <span class="built_in">memset</span>(rcdlr, <span class="number">0</span>, <span class="built_in">sizeof</span>(rcdlr));</span><br><span class="line">    <span class="built_in">memset</span>(rcdrl, <span class="number">0</span>, <span class="built_in">sizeof</span>(rcdrl));</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(ans[n] == <span class="number">-1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            ans[n] = <span class="number">0</span>;</span><br><span class="line">            <span class="built_in">DFS</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans[n]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例着色问题">例：着色问题</h3>
+<p>给定<span class="math inline">\(n\)</span>个顶点的无向连通图 <span
+class="math inline">\(G\)</span> 和 <span
+class="math inline">\(m\)</span>
+种不同颜色，每个顶点涂一种颜色，要求每条边的两个顶点颜色不同，求方案个数。</p>
+<p>6个点3种颜色示例：</p>
+<img src="/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/color_example.svg" class="" title="6个点3种颜色示例">
+<p>回顾枚举子集：每个点取与不取，取值是<code>0</code>或<code>1</code>，把这个思路扩展一下，每个点颜色有<code>0</code>、<code>1</code>、<code>2</code>
+三种选择，其实和枚举子集是同一套思路。</p>
+<img src="/2025-03-19-13-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE/color_tree.svg" class="" title="3种颜色搜索树">
+<p>参考代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">111</span>;</span><br><span class="line"><span class="type">int</span> n, m, q, u, v, color[maxn], ans;</span><br><span class="line"><span class="type">bool</span> g[maxn][maxn];</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Judge</span><span class="params">(<span class="type">int</span> cur, <span class="type">int</span> ci)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 判断cur是否能涂ci色</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; j ++)</span><br><span class="line">        <span class="keyword">if</span>(color[j] == ci &amp;&amp; g[cur][j])</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cur == n + <span class="number">1</span>) &#123;</span><br><span class="line">        ans ++;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= m; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="built_in">Judge</span>(cur, i)) <span class="keyword">continue</span>;</span><br><span class="line">        color[cur] = i; <span class="comment">// cur节点尝试i颜色</span></span><br><span class="line">        <span class="built_in">DFS</span>(cur + <span class="number">1</span>);</span><br><span class="line">        color[cur] = <span class="number">0</span>; <span class="comment">// 回溯，取消颜色标记</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;n, &amp;m, &amp;q) != EOF) &#123;</span><br><span class="line">        <span class="built_in">memset</span>(g, <span class="number">0</span>, <span class="built_in">sizeof</span>(g));</span><br><span class="line">        <span class="built_in">memset</span>(color, <span class="number">0</span>, <span class="built_in">sizeof</span>(color));</span><br><span class="line">        <span class="keyword">while</span>(q --) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">            g[u][v] = g[v][u] = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        ans = <span class="number">0</span>;</span><br><span class="line">        color[<span class="number">1</span>] = <span class="number">1</span>;  <span class="comment">// 对称问题对节点1只计算一种颜色即可</span></span><br><span class="line">        <span class="built_in">DFS</span>(<span class="number">2</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans * m);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-03-18-12-%E6%A8%A1%E6%8B%9F%E4%B8%8E%E9%AB%98%E7%B2%BE%E5%BA%A6/" rel="prev" title="12.模拟与高精度">
+                  <i class="fa fa-angle-left"></i> 12.模拟与高精度
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-03-27-14-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/" rel="next" title="14.复杂度理论与分治">
+                  14.复杂度理论与分治 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
