@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="莫比乌斯反演是组合数学中的一个重要技巧，可以用一个易解问题表达难解问题，从而得到解答.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="莫比乌斯反演">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2022-11-18-MobiusInversion/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="莫比乌斯反演是组合数学中的一个重要技巧，可以用一个易解问题表达难解问题，从而得到解答.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-18T03:17:37.000Z">
+<meta property="article:modified_time" content="2025-04-02T11:09:50.514Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2022-11-18-MobiusInversion/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2022-11-18-MobiusInversion/","path":"2022-11-18-MobiusInversion/","title":"莫比乌斯反演"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>莫比乌斯反演 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F"><span class="nav-number">1.</span> <span class="nav-text">0. 序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8B%A5%E5%B9%B2%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">1. 若干定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E8%AE%BA%E5%88%86%E5%9D%97"><span class="nav-number">3.</span> <span class="nav-text">2. 数论分块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%AB%E6%AF%94%E4%B9%8C%E6%96%AF%E5%87%BD%E6%95%B0%E7%BA%BF%E6%80%A7%E7%AD%9B"><span class="nav-number">4.</span> <span class="nav-text">3. 莫比乌斯函数线性筛</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E9%99%A4%E5%85%B3%E7%B3%BB%E4%B8%AD%E7%9A%84%E8%8E%AB%E6%AF%94%E4%B9%8C%E6%96%AF%E5%8F%8D%E6%BC%94"><span class="nav-number">5.</span> <span class="nav-text">4. 整除关系中的莫比乌斯反演</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E7%AB%9E%E8%B5%9B%E4%B8%AD%E7%9A%84%E8%8E%AB%E6%AF%94%E4%B9%8C%E6%96%AF%E5%8F%8D%E6%BC%94%E5%A5%97%E8%B7%AF"><span class="nav-number">6.</span> <span class="nav-text">5.
+算法竞赛中的莫比乌斯反演套路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B1"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 例1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B2"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 例2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B3"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 例3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B4"><span class="nav-number">6.4.</span> <span class="nav-text">5.4 例4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B5"><span class="nav-number">6.5.</span> <span class="nav-text">5.5 例5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B8%E5%9E%8B%E5%A5%97%E8%B7%AF"><span class="nav-number">6.6.</span> <span class="nav-text">5.6 典型套路</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%A2%98%E5%8D%95"><span class="nav-number">7.</span> <span class="nav-text">6. 基础题单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">8.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2022-11-18-MobiusInversion/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="莫比乌斯反演 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          莫比乌斯反演
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-18 11:17:37" itemprop="dateCreated datePublished" datetime="2022-11-18T11:17:37+08:00">2022-11-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-02 19:09:50" itemprop="dateModified" datetime="2025-04-02T19:09:50+08:00">2025-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>莫比乌斯反演是组合数学中的一个重要技巧，可以用一个易解问题表达难解问题，从而得到解答.</p>
+<span id="more"></span>
+<h3 id="序">0. 序</h3>
+<blockquote>
+<p>本节用于增加莫比乌斯反演的感性认识，可略读.<br />
+如果详读的话，不排除可能有些劝退，那么也是可以跳过的，对学习算法竞赛的莫反套路影响不大.<br />
+如果读下来的话，应该会有更全面一些的认识.</p>
+</blockquote>
+<p>莫比乌斯反演是定义在偏序关系计数问题的方法.
+要理解偏序，我们先聊全序，比如自然数<span
+class="math inline">\({1,2,3,\cdots}\)</span>，<span
+class="math inline">\(1&lt;2,
+2&lt;3...\)</span>，任意两个不同的自然数都一定有一个小于另一个，那么自然数集合就构成一个全序关系.</p>
+<p>偏序，就是任意两个元素，或者在某种意义上一个小/弱/包含于另一个，或者两个不可比，从而形成一个拓扑关系，比如</p>
+<ul>
+<li>整除关系，<span class="math inline">\(2|4\)</span> 表示<span
+class="math inline">\(2\)</span>能整除<span
+class="math inline">\(4\)</span>，而<span
+class="math inline">\(3\)</span>就不能整除<span
+class="math inline">\(4\)</span>，那么自然数集合能构成一个“关于整除的偏序关系”</li>
+<li>包含关系，集合<span class="math inline">\(\{1,2\}\subseteq
+\{1,2,4\}\)</span>，而<span
+class="math inline">\(\{1,3\}\)</span>和<span
+class="math inline">\(\{1,2\}\)</span>就不存在谁包含谁，不同集合之间可以构成一个“关于包含的偏序关系”</li>
+<li>全序关系可以理解为特殊的偏序关系</li>
+</ul>
+<p>对于偏序关系，我们可以赋予小于等于号“<span
+class="math inline">\(\leq\)</span>”一个更通用的含义来表示各类偏序，即整除关系的“<span
+class="math inline">\(|\)</span>”、包含关系的“<span
+class="math inline">\(\subseteq\)</span>”，在偏序问题中可以通用地用“<span
+class="math inline">\(\leq\)</span>”来表达，那么莫比乌斯反演可以通用的表达为：</p>
+<p>对于一个要求解的问题，表达为函数<span
+class="math inline">\(f(n)\)</span>，可以定义一个函数<span
+class="math inline">\(g(n)=\sum_{d\leq
+n}f(d)\)</span>，则可以反解出<span
+class="math inline">\(f(n)=\sum_{d\leq n}\mu(d)g(d)\)</span>.</p>
+<p>这里出现了一个函数 <span
+class="math inline">\(\mu()\)</span>，称为莫比乌斯函数，<strong>不同的偏序关系下有不同的莫比乌斯函数</strong>.</p>
+<p>解释一下上面的变化过程：</p>
+<ul>
+<li><span class="math inline">\(f(n)\)</span>：一个关于<span
+class="math inline">\(n\)</span>的计算任务，<span
+class="math inline">\(n\)</span>可以是集合，可以是自然数，作为<span
+class="math inline">\(f()\)</span>的输入，<span
+class="math inline">\(f()\)</span>可以是集合的子集个数、自然数的约数个数这类计数问题.</li>
+<li><span class="math inline">\(g(n)=\sum_{d \leq
+n}f(d)\)</span>：一个“强行定义”的函数，这里不用理解为啥这么定义。固定形式就是<span
+class="math inline">\(g(n)\)</span>是所有和<span
+class="math inline">\(n\)</span>符合偏序关系的<span
+class="math inline">\(d\)</span>代入<span
+class="math inline">\(f(d)\)</span>的和. 但是通常<span
+class="math inline">\(g(n)\)</span>能从另一个角度“讲个故事”，从而发现按这个故事
+<strong>用另一种方式很容易计算<span
+class="math inline">\(g(n)\)</span></strong> ，这是关键点.</li>
+<li><span class="math inline">\(f(n)=\sum_{d\leq
+n}\mu(d)g(d)\)</span>：对于特定的偏序关系，莫比乌斯函数<span
+class="math inline">\(\mu(d)\)</span>的形式是固定的，而<span
+class="math inline">\(g(d)\)</span>如果是一个比较好算的东西，那么我们用<span
+class="math inline">\(n\)</span>每个符合偏序关系的<span
+class="math inline">\(d\)</span>代入<span
+class="math inline">\(\mu(d)g(d)\)</span>再求和，就可能较为容易的算出我们要的<span
+class="math inline">\(f(n)\)</span>了.</li>
+</ul>
+<p>以上就是莫比乌斯反演的典型形式和用途，这里需要一个例子更好去理解，我们就用“集合包含于”这个偏序关系举例吧：</p>
+<p>有<span class="math inline">\(n\)</span>个字母组成的集合<span
+class="math inline">\(S\)</span>，<span
+class="math inline">\(n\)</span>个小孩，小孩编号的全集为<span
+class="math inline">\(X_{n}\)</span>，他们分别有自己不喜欢的字母，比如有<span
+class="math inline">\(S=\{a,b,c\}\)</span>共<span
+class="math inline">\(3\)</span>个字母，有小孩<span
+class="math inline">\(X_{n}=\{1,2,3\}\)</span>，<span
+class="math inline">\(1\)</span>号小孩不喜欢<span
+class="math inline">\(A_{1}=\{a,c\}\)</span>，<span
+class="math inline">\(2\)</span>号小孩不喜欢<span
+class="math inline">\(A_{2}=\{c\}\)</span>，<span
+class="math inline">\(3\)</span>号小孩不喜欢<span
+class="math inline">\(A_{3}=\{a\}\)</span>，那么哪些字母是所有小孩都喜欢的？答案是<span
+class="math inline">\(1\)</span>个字母，是<span
+class="math inline">\(\{b\}\)</span>.</p>
+<p>这个问题的数学化描述是</p>
+<ul>
+<li>设全集为 <span class="math inline">\(S=\{a,b,\cdots
+\}\)</span>;</li>
+<li><span
+class="math inline">\(n\)</span>个小孩每个小孩不喜欢的字母集合分别为<span
+class="math inline">\(A_{1}, A_{2}, \cdots, A_{n}\)</span>;</li>
+<li>其中每个<span class="math inline">\(A_{i}=\{若干个S中的字母
+\}\)</span>;</li>
+<li>求 <span class="math inline">\(|\bar{A_{1}}\cap \bar{A_{2}} \cap
+\cdots \cap \bar{A_{n}}|\)</span>，其中 <span
+class="math inline">\(\bar{A_{i}}\)</span> 表示<span
+class="math inline">\(A_{i}\)</span>的补集，“<span
+class="math inline">\(||\)</span>” 表示求集合元素个数.</li>
+</ul>
+<p>你可能看出来这是容斥原理模型，但我们先假设这是个比较难算的问题。</p>
+<p>定义一个拗口的函数 <span
+class="math inline">\(f(K)\)</span>，其中<span
+class="math inline">\(K\)</span> 表示<span
+class="math inline">\(X_{n}\)</span> 的子集，或者说是<span
+class="math inline">\(A_{i}\)</span>的序号——不同的<span
+class="math inline">\(i\)</span>组成的集合，比如 <span
+class="math inline">\(K=\{1,2\}\)</span>表示<span
+class="math inline">\(1\)</span>和<span
+class="math inline">\(2\)</span>这两个序号，<span
+class="math inline">\(f(K)\)</span> 这个函数求的是“序号不在<span
+class="math inline">\(K\)</span>中的那些<span
+class="math inline">\(A_{i}\)</span>集合的交集，且去掉所有序号在<span
+class="math inline">\(K\)</span>中的那些<span
+class="math inline">\(A_{j}\)</span>的元素之后，剩下的元素个数”.</p>
+<p>举个例子：<span class="math inline">\(𝐴_{1} = \{𝑎, 𝑏, 𝑐\}\)</span>，
+<span class="math inline">\(𝐴_{2} = \{𝑎, 𝑐\}\)</span>， <span
+class="math inline">\(𝐴_{3} = \{𝑐, d, e\}\)</span>， <span
+class="math inline">\(𝐴_{4} = \{𝑐, d, e, 𝑓\}\)</span>，<span
+class="math inline">\(𝑋_{𝑛} = \{1,2,3,4\}\)</span>，如果<span
+class="math inline">\(K=\{1,2\}\)</span>，则序号在<span
+class="math inline">\(K\)</span>中的 <span class="math inline">\(A_{1},
+A_{2}\)</span>中出现过的<span class="math inline">\(\{a, b, c\}\)</span>
+都要被排除，序号不在<span class="math inline">\(K\)</span>中的<span
+class="math inline">\(A_{3},A_{4}\)</span>的交集是<span
+class="math inline">\(\{c,d,e\}\)</span>，但要排除前面的<span
+class="math inline">\(\{a,b,c\}\)</span>，所以<span
+class="math inline">\(f(K)\)</span>计数的是<span
+class="math inline">\(\{d,e\}\)</span>，也就是 <span
+class="math inline">\(f(K)=2\)</span>.</p>
+<p><span class="math inline">\(f(K)\)</span>这个函数是个啥呢？
+把序号全集<span class="math inline">\(X_{n}\)</span>
+代进去，你会发现，<span class="math inline">\(f(X_{n})\)</span>
+就是我们要求的<span class="math inline">\(|\bar{A_{1}}\cap \bar{A_{2}}
+\cap \cdots \cap \bar{A_{n}}|\)</span>.</p>
+<p><span class="math inline">\(f(K)\)</span>
+是不是一看就好难算的样子？那么我们开始尝试莫比乌斯反演.</p>
+<p>按照莫比乌斯反演的流程，我们设</p>
+<p><span class="math inline">\(g(K)=\sum\limits_{D\subseteq
+K}f(D)\)</span></p>
+<p>这里不用通用的偏序符号“<span
+class="math inline">\(\leq\)</span>”而用集合的“包含于”符号“<span
+class="math inline">\(\subseteq\)</span>”以免不习惯，套反演公式得</p>
+<p><span class="math inline">\(f(K)=\sum\limits_{D\subseteq
+K}\mu(D,K)g(D)\)</span></p>
+<p>按前面的介绍，<span
+class="math inline">\(g(K)\)</span>应该是个容易计算的东西，那我们试着给<span
+class="math inline">\(g(K)\)</span>讲个故事：</p>
+<p>观察<span class="math inline">\(g(K)=\sum\limits_{D\subseteq
+K}f(D)\)</span> ，它是对于<span
+class="math inline">\(K\)</span>的所有子集<span
+class="math inline">\(D\)</span>，“序号不在<span
+class="math inline">\(D\)</span>中的那些<span
+class="math inline">\(A_{i\notin
+D}\)</span>集合的交集，且去掉所有序号在<span
+class="math inline">\(D\)</span>中的那些<span
+class="math inline">\(A_{j\in
+D}\)</span>的元素之后，剩下的元素个数，枚举每个<span
+class="math inline">\(D\)</span>得到的结果的总和”
+，更拗口了！这是个啥呢？</p>
+<p>它表示的其实是“序号不在<span
+class="math inline">\(K\)</span>中的那些<span
+class="math inline">\(A_{i}\)</span>集合的交集元素个数”. 相对<span
+class="math inline">\(f(K)\)</span>的区别是不用去掉“序号在<span
+class="math inline">\(K\)</span>中的那些<span
+class="math inline">\(A_{j}\)</span>”的元素了.</p>
+<p>数学表述为 <span class="math inline">\(g(K)=\sum\limits_{D\subseteq
+K}f(D)=|\cap_{i\notin K} A_{i} |\)</span>. 证明：</p>
+<p>可以这样考虑，对于每个元素<span
+class="math inline">\(s\)</span>，它在计数时对<span
+class="math inline">\(g(K)\)</span>是否有贡献. 对于每个<span
+class="math inline">\(s\)</span>，所有包含<span
+class="math inline">\(s\)</span>的序号集合<span
+class="math inline">\(M\)</span>（<span class="math inline">\(M=\{i|s\in
+A_{i}\}\)</span>）， 如果<span class="math inline">\(X_{n}-M \subseteq
+K\)</span>，那么<span class="math inline">\(s\)</span>对<span
+class="math inline">\(g(K)\)</span>有贡献. 而<span
+class="math inline">\(X_{n}-M \subseteq K \Leftrightarrow X_{n}-K
+\subseteq M\)</span>，而<span class="math inline">\(X_{n}-K \subseteq
+M\)</span> 意味着<span class="math inline">\(s\)</span>对<span
+class="math inline">\(|\cap_{i\notin K} A_{i}
+|\)</span>有贡献，从而说明，每个对<span
+class="math inline">\(g(K)\)</span>有贡献的<span
+class="math inline">\(s\)</span>，刚好对应着对<span
+class="math inline">\(|\cap_{i\notin K} A_{i} |\)</span>有贡献，即 <span
+class="math inline">\(g(K)=|\cap_{i\notin K} A_{i} |\)</span>.</p>
+<p>“<span class="math inline">\(|\cap_{i\notin K} A_{i} |\)</span> ”
+这个表述可就不拗口了，它就是“序号不在<span
+class="math inline">\(K\)</span>中的集合<span
+class="math inline">\(A_{i\notin
+K}\)</span>交集元素个数”，它的计算要简单得多，也即我们找到了一个容易计算的<span
+class="math inline">\(g(K)\)</span>，来利用莫比乌斯反演计算<span
+class="math inline">\(f(K)\)</span>.</p>
+<p>这里回顾一下上面的问题及莫比乌斯反演过程：</p>
+<ul>
+<li>每个小孩有不喜欢的字母，我们要求所有小孩都喜欢的字母；</li>
+<li>设<span class="math inline">\(f(K)\)</span> 是“序号不在<span
+class="math inline">\(K\)</span>中的那些<span
+class="math inline">\(A_{i\notin K}\)</span>的交集且去掉序号在<span
+class="math inline">\(K\)</span>中的所有<span
+class="math inline">\(A_{j\in K}\)</span>元素的总数；</li>
+<li>则<span
+class="math inline">\(f(X_{n})\)</span>就是所求目标，也即<span
+class="math inline">\(|\bar{A_{1}}\cap \bar{A_{2}} \cap \cdots \cap
+\bar{A_{n}}|\)</span></li>
+<li>设<span class="math inline">\(g(K)=\sum\limits_{D\subseteq
+K}f(D)\)</span>，而<span
+class="math inline">\(g(K)\)</span>是一个容易计算的问题，<span
+class="math inline">\(g(K)=|\cap_{i\notin K} A_{i} |\)</span>；</li>
+<li>莫比乌斯反演得 <span
+class="math inline">\(f(K)=\sum\limits_{D\subseteq
+K}\mu(D,K)g(D)\)</span></li>
+</ul>
+<p>还剩最后一步，<span class="math inline">\(\mu(D,K)\)</span>
+是个啥.</p>
+<p>不同的偏序关系下有不同的莫比乌斯函数，这个问题是定义在“包含关系<span
+class="math inline">\(\subseteq\)</span>”的偏序集上的，包含关系偏序集的莫比乌斯函数是
+<span
+class="math inline">\(\mu(A,B)=(-1)^{|B|-|A|}\)</span>，它可以通过数学归纳法证明，这里证明过程略，感兴趣可以查阅组合数学相关资料.</p>
+<p>最终呈现整个问题的答案：</p>
+<p><span class="math display">\[
+\begin{align*}
+&amp; f(X_{n}) \\
+&amp; = |\bar{A_{1}}\cap \bar{A_{2}} \cap \cdots \cap \bar{A_{n}}| \\
+&amp; = \sum\limits_{D\subseteq X_{n}}\mu(D,X_{n})g(D) \\
+&amp; = \sum\limits_{D\subseteq K}(-1)^{|X_{n}-|D|}|\cap_{i\notin D}
+A_{i} | \\
+&amp; = \sum\limits_{J\subseteq K}(-1)^{J}|\cap_{i\in J} A_{i} | \\
+\end{align*}
+\]</span></p>
+<p>最后一步用<span class="math inline">\(D\)</span>的补集<span
+class="math inline">\(J=X_{n}-D\)</span>做了换元.</p>
+<p>到这里就完成了例题的解答，这就是容斥原理公式啊！<strong>容斥原理是莫比乌斯反演在有限偏序集上的一个实例</strong>.</p>
+<p>大家可能会感兴趣其它的偏序关系的莫比乌斯函数是什么样呢？这里不加证明地给出两个：</p>
+<ul>
+<li><p>线性有序集，即最直观的<span
+class="math inline">\(X_{n}=\{1,2,\cdots,n\}, 1&lt;2&lt;\cdots&lt;
+n\)</span></p>
+<p><span class="math inline">\(\mu(k,l)=\left \{ \begin{matrix}1 &amp;
+l=k \\ -1 &amp; l=k+1 \\ 0 &amp;
+other\end{matrix}\right.\)</span></p></li>
+<li><p>整除关系，比如<span class="math inline">\(3\)</span> 能整除 <span
+class="math inline">\(6\)</span> 即写作“<span
+class="math inline">\(3|6\)</span>”，因为<span
+class="math inline">\(\mu()\)</span>用在枚举符合偏序关系的对象的时候，从而如果<span
+class="math inline">\(a|b\)</span>则<span
+class="math inline">\(\mu(a,b)=\mu(1,\frac{b}{a})\)</span>，于是知道任意<span
+class="math inline">\(n\)</span>的<span
+class="math inline">\(\mu(1,n)\)</span>即可，省略“<span
+class="math inline">\(1\)</span>”简写为<span
+class="math inline">\(\mu(n)\)</span></p>
+<p><span class="math inline">\(\mu(n)=\left \{ \begin{matrix}1 &amp; n=1
+\\ (-1)^k &amp; n是k个互不相同质数之积 \\ 0 &amp;
+other\end{matrix}\right.\)</span></p></li>
+</ul>
+<p>这里“n是k个互不相同质数之积”指<span
+class="math inline">\(n\)</span>的因数分解对应<span
+class="math inline">\(k\)</span>个质数，且每个质数仅出现 1 次，比如
+<span
+class="math inline">\(6=2*3\)</span>，而如果有任何质因数出现多于一次，比如<span
+class="math inline">\(12=2*2*3\)</span>，<span
+class="math inline">\(\mu(12)=0\)</span>就是<span
+class="math inline">\(other\)</span>的情况.</p>
+<p>虽然不同偏序关系的莫比乌斯函数不同，但我们常见的这类问题其实不多，记几个常见的通常就够用了.</p>
+<h3 id="若干定义">1. 若干定义</h3>
+<p>算法竞赛中莫比乌斯反演题目一般是处理数论问题，考虑整除关系、最大公约数、最小公倍数这些，以下内容都围绕这类问题阐述.</p>
+<ul>
+<li>数论函数：定义域为正整数集的函数</li>
+<li>积性函数：对于互质的整数<span
+class="math inline">\(a,b\)</span>，有<span
+class="math inline">\(f(ab)=f(a)f(b)\)</span>的函数
+<ul>
+<li><span class="math inline">\(\phi(n)\)</span>：欧拉函数，不大于<span
+class="math inline">\(n\)</span>的与<span
+class="math inline">\(n\)</span>互质的数的个数</li>
+<li><span
+class="math inline">\(\mu(n)\)</span>：莫比乌斯函数，<strong>这里以及下文特指整除关系偏序下的莫比乌斯函数</strong></li>
+</ul></li>
+<li>完全积性函数：对<span
+class="math inline">\(a,b\)</span>没有互质限制的<span
+class="math inline">\(f(ab)=f(a)f(b)\)</span>的函数
+<ul>
+<li><span
+class="math inline">\(\epsilon(n)=[n=1]\)</span>：单位函数，<span
+class="math inline">\(n\)</span>为1时函数值为<span
+class="math inline">\(1\)</span>，否则为<span
+class="math inline">\(0\)</span>的函数</li>
+<li><span class="math inline">\(id(n)=n\)</span>：恒等函数</li>
+<li><span class="math inline">\(1(n)=1\)</span>：常数函数</li>
+</ul></li>
+<li>狄利克雷卷积：<span
+class="math inline">\((f*g)(n)=\sum\limits_{d|n}f(d)g(\frac{n}{d})\)</span>，像是“函数之间的乘法”，满足交换律、结合律</li>
+</ul>
+<p>下文中的莫比乌斯函数都指整除偏序关系中的莫比乌斯函数，即：</p>
+<p><span class="math display">\[
+\mu(n)=\left \{ \begin{matrix}1 &amp; n=1 \\ (-1)^k &amp;
+n是k个互不相同质数之积 \\ 0 &amp; other\end{matrix}\right.
+\]</span></p>
+<p>且它有<strong>这样一个性质</strong>：</p>
+<p><span class="math display">\[
+(\mu * 1)(n)=\sum\limits_{d|n}\mu(d)=\epsilon(n)=[n=1]
+\]</span></p>
+<p>证明：设<span
+class="math inline">\(n=\prod\limits_{i=1}^{k}p_{i}^{c_{i}}\)</span>，<span
+class="math inline">\(n&#39;=\prod\limits_{i=1}^{k}p_{i}\)</span></p>
+<p><span
+class="math inline">\(\sum\limits_{d|n}\mu(d)=\sum\limits_{d|n&#39;}\mu(d)=\sum\limits_{i=1}^{k}C_{k}^{i}\cdot(-1)^{i}=(1+(-1))^{k}\)</span></p>
+<p>仅当<span class="math inline">\(k=0\)</span>时值为1，<span
+class="math inline">\(k=0\)</span>对应着<span
+class="math inline">\(n=1\)</span>.</p>
+<p>以上是下文会用到的东西，放在这里以便遇到的时候查询.</p>
+<h3 id="数论分块">2. 数论分块</h3>
+<p>这个话题出现在这里有点突兀，但莫比乌斯反演题目经常会需要数论分块，所以这里我们也了解一下.</p>
+<p>我们会遇到“除法向下取整的求和问题”： <span
+class="math inline">\(\sum\limits_{i=1}^{n}\lfloor \frac{n}{i}
+\rfloor\)</span></p>
+<p>如果<span class="math inline">\(n\)</span>很大，直接循环累加<span
+class="math inline">\(O(n)\)</span>的复杂度是无法接受的. 我们会发现
+<span class="math inline">\(\lfloor \frac{n}{i} \rfloor\)</span>
+的值其实是分段的，由一段又一段相等的值组成，我们只要计算出每一段的起止位置，就可以加速整个过程.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>, j; i &lt;= n; i = j + <span class="number">1</span>) &#123;</span><br><span class="line">    j = n / (n / i);</span><br><span class="line">    ret += (n / i) * (j - i + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对每一段的起点 <span class="math inline">\(i\)</span>，对于区间 <span
+class="math inline">\([i, \lfloor \frac{n}{\lfloor\frac{n}{i}\rfloor}
+\rfloor]\)</span>上的所有 <span class="math inline">\(x\)</span>，<span
+class="math inline">\(\lfloor \frac{n}{x} \rfloor\)</span>
+都是相等的.</p>
+<p>问题提高点难度：<span
+class="math inline">\(\sum\limits_{i=1}^{n}\lfloor \frac{n}{i} \rfloor
+\lfloor \frac{m}{i} \rfloor, n&lt; m\)</span></p>
+<p>原理类似，虽然<span class="math inline">\(\lfloor \frac{n}{i}
+\rfloor\)</span> 和 <span class="math inline">\(\lfloor \frac{m}{i}
+\rfloor\)</span>
+各自的区间起止点可能不重叠，但我们可以细分每一个它俩都稳定的小段，代码是类似的.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>, j; i &lt;= n; i = j + <span class="number">1</span>) &#123;</span><br><span class="line">    j = std::<span class="built_in">min</span>(n / (n / i), m / (m / i));</span><br><span class="line">    ret += (n / i) * (m / i) * (j - i + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里要注意，<strong>括号不能乱删</strong>，存在除法向下取整的问题不能随便修改计算顺序.</p>
+<p>再进一步，计算<span
+class="math inline">\(\sum\limits_{i=1}^{n}\mu(i)\lfloor \frac{n}{i}
+\rfloor \lfloor \frac{m}{i} \rfloor, n&lt; m\)</span></p>
+<p>也没有很麻烦，我们预处理莫比乌斯函数 <span
+class="math inline">\(\mu()\)</span>，并处理好它的前缀和，就可以融入到数论分块里了.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>, j; i &lt;= n; i = j + <span class="number">1</span>) &#123;</span><br><span class="line">    j = std::<span class="built_in">min</span>(n / (n / i), m / (m / i));</span><br><span class="line">    ret += (n / i) * (m / i) * (mup[j] - mup[i - <span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里<code>mup[j]</code> 表示莫比乌斯函数前<span
+class="math inline">\(j\)</span>项和 <span
+class="math inline">\(\sum\limits_{t=1}^{j}\mu(t)\)</span></p>
+<h3 id="莫比乌斯函数线性筛">3. 莫比乌斯函数线性筛</h3>
+<p>在开始莫比乌斯反演之旅前，我们再解决一个问题，莫比乌斯函数的计算.</p>
+<p>那一句“n是k个互不相同质数之积”，说得轻巧，对每个<span
+class="math inline">\(n\)</span>做一遍质因数分解，这复杂度也略高了.</p>
+<p>其实<span class="math inline">\(\mu(n)\)</span>
+也可以类似质数、欧拉函数那样筛出来.</p>
+<p>大致原理是在筛质数的过程中，对每个新处理的数<code>i</code>，枚举所有已发现的质数<code>prm[j]</code>，如果<code>prm[j]</code>是<code>i</code>的约数，则<code>prm[j]*i</code>的质因数中<code>prm[j]</code>超过<code>1</code>个，其莫比乌斯函数是<code>mu[prm[j]*i]=0</code>，否则<code>prm[j]*i</code>比<code>i</code>多<code>1</code>个质因数，其莫比乌斯函数是<code>mu[prm[j]*i]=-mu[i]</code>.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; mu, prm, mup;  <span class="comment">// mu为莫比乌斯函数，prm为质数表，mup为莫比乌斯函数前缀和</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MuList</span><span class="params">(<span class="type">int</span> mxn)</span> </span>&#123;</span><br><span class="line">    mu.<span class="built_in">resize</span>(mxn + <span class="number">10</span>); mup.<span class="built_in">resize</span>(mxn + <span class="number">10</span>);</span><br><span class="line">    std::<span class="built_in">fill</span>(mu.<span class="built_in">begin</span>(), mu.<span class="built_in">end</span>(), <span class="number">-2</span>);</span><br><span class="line">    mu[<span class="number">1</span>] = mup[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    prm.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt;= mxn; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (mu[i] == <span class="number">-2</span>) prm.<span class="built_in">push_back</span>(i), mu[i] = <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; prm.<span class="built_in">size</span>() &amp;&amp; i * prm[j] &lt;= mxn; j ++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i % prm[j] == <span class="number">0</span>) &#123;</span><br><span class="line">                mu[i * prm[j]] = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            mu[i * prm[j]] = -mu[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt;= mxn; i ++) mup[i] = mup[i - <span class="number">1</span>] + mu[i];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="整除关系中的莫比乌斯反演">4. 整除关系中的莫比乌斯反演</h3>
+<p>回顾第0节的典型形式：</p>
+<ul>
+<li>已知<span class="math inline">\(f(n)\)</span>是一个数论函数</li>
+<li>设<span
+class="math inline">\(g(n)=\sum\limits_{d|n}f(d)\)</span></li>
+<li>则<span
+class="math inline">\(f(n)=\sum\limits_{d|n}\mu(d)g(\frac{n}{d})\)</span></li>
+</ul>
+<p>不过它还有另一个形式：</p>
+<ul>
+<li>设<span
+class="math inline">\(g(n)=\sum\limits_{n|d}f(d)\)</span></li>
+<li>则<span
+class="math inline">\(f(n)=\sum\limits_{n|d}\mu(\frac{d}{n})g(d)\)</span></li>
+</ul>
+<p>主要区别在于，前一种形式，和式枚举的是每一个能整除<span
+class="math inline">\(n\)</span>的<span
+class="math inline">\(d\)</span>（<span class="math inline">\(d\leq
+n\)</span>），而后一种形式，和式枚举的是每一个<span
+class="math inline">\(n\)</span>能整除的<span
+class="math inline">\(d\)</span>（<span class="math inline">\(n\leq
+d\)</span>）.</p>
+<p>简要证明：<span class="math inline">\(g*\mu=f*1*\mu = f*\epsilon =
+f\)</span></p>
+<h3 id="算法竞赛中的莫比乌斯反演套路">5.
+算法竞赛中的莫比乌斯反演套路</h3>
+<p>先用 例1 感受这类问题的解决推导过程，然后建议对照第 5.6
+节典型套路尝试推导例2～例5.</p>
+<h4 id="例1">5.1 例1</h4>
+<p>求<span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}[gcd(i,j)=1],
+(n&lt; m)\)</span></p>
+<p>设</p>
+<ul>
+<li><span
+class="math inline">\(f(x)=\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}[gcd(i,j)=x]\)</span></li>
+<li><span class="math inline">\(g(x)=\sum\limits_{x|d}f(d)\)</span></li>
+<li><span
+class="math inline">\(f(x)=\sum\limits_{x|d}\mu(\frac{d}{x})g(d)\)</span></li>
+</ul>
+<p>其中 <span
+class="math inline">\(g(x)=\sum\limits_{x|d}f(d)=\sum\limits_{x|d}\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}[gcd(i,j)=d]\)</span>求的<span
+class="math inline">\(gcd(i,j)\)</span>是<span
+class="math inline">\(x\)</span>的倍数的所有情况，其实就是 <span
+class="math inline">\(\lfloor \frac{n}{x} \rfloor \lfloor \frac{m}{x}
+\rfloor\)</span>.</p>
+<p>于是 <span class="math inline">\(f(x)
+=\sum\limits_{x|d}\mu(\frac{d}{x})\lfloor \frac{n}{d} \rfloor \lfloor
+\frac{m}{d} \rfloor\)</span></p>
+<p>回到题目，我们要求的是<span
+class="math inline">\(x=1\)</span>的情况，故</p>
+<p><span class="math display">\[
+\begin{align*}
+f(1) &amp; =\sum\limits_{1|d}\mu(\frac{d}{1})\lfloor \frac{n}{d} \rfloor
+\lfloor \frac{m}{d} \rfloor \\
+&amp; = \sum\limits_{d=1}^{n}\mu(d)\lfloor \frac{n}{d} \rfloor \lfloor
+\frac{m}{d} \rfloor
+\end{align*}
+\]</span></p>
+<p>这里用上一节的数论分块就搞定了.</p>
+<p>不过，每次推导都要设置<span class="math inline">\(f\)</span>和<span
+class="math inline">\(g\)</span>两个函数以及进行莫比乌斯反演的流程可能稍觉麻烦，其实利用第
+1 节的性质</p>
+<p><span class="math inline">\((\mu *
+1)(n)=\sum\limits_{d|n}\mu(d)=\epsilon(n)=[n=1]\)</span></p>
+<p><strong>很多题目都可以直接等价变换而不需要做一遍反演</strong>.</p>
+<p>还以这道题为例，求<span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}[gcd(i,j)=1],
+(n&lt; m)\)</span>，因为</p>
+<p><span
+class="math inline">\(\sum\limits_{d|gcd(i,j)}\mu(d)=\epsilon(gcd(i,j))=[gcd(i,j)=1]\)</span></p>
+<p>式子可直接化为</p>
+<p><span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{d|gcd(i,j)}\mu(d)\)</span></p>
+<p>作求和顺序交换，原则是对求和枚举变量的范围“入内求交，出外求并”，这个知识点可另外了解.</p>
+<p><span
+class="math inline">\(\sum\limits_{d=1}^{n}\mu(d)\sum\limits_{d|i}^{n}\sum\limits_{d|j}^{m}1=\sum\limits_{d=1}^{n}\mu(d)\lfloor
+\frac{n}{d} \rfloor \lfloor \frac{m}{d} \rfloor\)</span></p>
+<p>得到了相同的结果.</p>
+<h4 id="例2">5.2 例2</h4>
+<p><span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}[gcd(i,j)=k],
+(n&lt; m)\)</span><br />
+解：<span class="math inline">\(\sum\limits_{i=1}^{\lfloor
+\frac{n}{k}\rfloor}\sum\limits_{j=1}^{\lfloor
+\frac{m}{k}\rfloor}[gcd(i,j)=1], (n&lt; m)\)</span>，然后同例1.</p>
+<h4 id="例3">5.3 例3</h4>
+<p><span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}ij[gcd(i,j)=k],
+(n&lt; m)\)</span><br />
+解：<span class="math inline">\(k^{2}\cdot \sum\limits_{d=1}^{\lfloor
+\frac{n}{k}\rfloor}\mu(d)\cdot d^2
+\cdot\sum\limits_{i=1}^{\lfloor\frac{n}{kd}\rfloor}i \cdot
+\sum\limits_{j=1}^{\lfloor\frac{m}{kd}\rfloor}j\)</span>，后两个和式是等差数列求和，前面的一样预处理前缀和，整体上数论分块.</p>
+<h4 id="例4">5.4 例4</h4>
+<p><span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}lcm(i,j),
+(n&lt; m)\)</span><br />
+解：<span class="math inline">\(\sum\limits_{d=1}\limits^{n}
+d\sum\limits_{t=1}\limits^{\lfloor \frac{n}{d} \rfloor}t^2\mu(t)
+\sum\limits_{i}\limits^{\lfloor \frac{n}{td} \rfloor
+}\sum\limits_{j}\limits^{\lfloor \frac{m}{td} \rfloor } ij\)</span>，见
+<a
+href="./luoguP1829.md">luoguP1829<code>[国家集训队]Crash的数字表格 / JZPTAB</code></a></p>
+<h4 id="例5">5.5 例5</h4>
+<p><span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}d(i\cdot
+j), (n&lt; m)\)</span>，其中<span
+class="math inline">\(d(k)\)</span>表示<span
+class="math inline">\(k\)</span>的约数个数<br />
+解：<span
+class="math inline">\(\sum\limits_{d}^{\min(n,m)}\mu(d)(\sum_{x=1}^{\lfloor
+\frac{n}{d} \rfloor}\lfloor \frac{n}{xd} \rfloor)(\sum_{y=1}^{\lfloor
+\frac{m}{d} \rfloor}\lfloor \frac{m}{yd} \rfloor)\)</span>，见<a
+href="./luoguP3327.md">luoguP3327<code>[SDOI2015]约数个数和</code></a></p>
+<h4 id="典型套路">5.6 典型套路</h4>
+<ol type="1">
+<li><p><span class="math inline">\(LCM(a,b)\)</span>可转为<span
+class="math inline">\(\frac{ab}{gcd(a,b)}\)</span>.</p></li>
+<li><p><span class="math inline">\(\sum \sum gcd(a,b)\)</span>
+可转为条件求和 <span class="math inline">\(\sum\limits_{d} \sum\sum
+[gcd(a,b)==d]\)</span></p></li>
+<li><p>条件求和<span
+class="math inline">\(\sum\limits^{n}\sum\limits^{m}
+[gcd(a,b)==d]\)</span>可通过换元变为<span
+class="math inline">\(\sum\limits^{\lfloor \frac{n}{d}
+\rfloor}\sum\limits^{\lfloor \frac{m}{d} \rfloor}
+[gcd(a^{&#39;},b^{&#39;})==1]\)</span></p>
+<p>类似的另一种形式<span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}[d|gcd(i,j)]
+\Leftrightarrow \sum\limits_{i=1}^{\lfloor \frac{n}{d}
+\rfloor}\sum\limits_{j=1}^{\lfloor \frac{m}{d}
+\rfloor}1\)</span>，即用枚举<span
+class="math inline">\(xd,jd\)</span>替代枚举<span
+class="math inline">\(i,j\)</span>消除<span
+class="math inline">\([d|gcd(i,j)]\)</span>.</p></li>
+<li><p>可转为莫比乌斯函数表示 <span class="math inline">\([gcd(a,b)==1]
+\Leftrightarrow \sum\limits_{d|gcd(a,b)}\mu(d)\)</span></p></li>
+<li><p>求和顺序交换以消除枚举<span
+class="math inline">\(d|gcd(i,j)\)</span> <span class="math display">\[
+\sum\limits_{i=1}\limits^{n}
+\sum\limits_{j=1}\limits^{m} ij
+\sum\limits_{d|gcd(i,j)}\mu(d)
+\Leftrightarrow
+\sum\limits_{d=1}\limits^{\min(n,m)}\mu(d)
+\sum\limits_{d|i}\limits^{n}
+\sum\limits_{d|j}\limits^{m} ij
+\]</span></p></li>
+<li><p>枚举约数改为枚举全部，观察等价关系： <span
+class="math display">\[
+\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum_{x|i}\sum_{y|j}
+\Leftrightarrow
+\sum_{x=1}^{n}\sum_{y=1}^{m} \lfloor \frac{n}{x} \rfloor \lfloor
+\frac{m}{y}\rfloor
+\]</span> 由所有<span
+class="math inline">\(i,j\)</span>的所有约数和变为枚举所有约数对其倍数的总贡献.</p></li>
+<li><p><span class="math inline">\(\sum\limits_{d|i}^{n} i\)</span>
+可以换元消除约束条件 <span
+class="math inline">\(\sum\limits_{i^{&#39;}}^{\lfloor
+\frac{n}{d}\rfloor}i^{&#39;}\)</span></p></li>
+<li><p>求和提前，式中加“<code>[]</code>”条件： <span
+class="math inline">\(\sum\limits_{x|i}\sum\limits_{y|j}\sum\limits_{p|gcd(x,y)}\mu(p)=\sum\limits_{p=1}^{min(i,j)}\sum\limits_{x|i}\sum\limits_{y|j}[p|gcd(x,y)]\mu(p)\)</span>，相当于把内层<code>for</code>循环提到外层，内层则增加了<code>if</code>.</p></li>
+<li><p><span class="math inline">\(\sum\sum [gcd(i,j)=p]\)</span>
+这类问题适合莫反，设<span
+class="math inline">\(f(x)=\sum\sum[gcd(i,j)=x]\)</span>，则<span
+class="math inline">\(g(x)=\sum\limits_{x|d}f(d)\)</span>，从而莫反得到<span
+class="math inline">\(f(x)=\sum\limits_{x|d}\mu(\lfloor \frac{d}{x}
+\rfloor)g(d)\)</span></p></li>
+<li><p><span
+class="math inline">\(\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{x|d}[gcd(i,j)=d]=\lfloor
+\frac{n}{d} \rfloor \lfloor \frac{m}{d}
+\rfloor\)</span>，即最大公约数为<span
+class="math inline">\(x\)</span>的所有倍数的个数.</p></li>
+</ol>
+<h3 id="基础题单">6. 基础题单</h3>
+<p>其实就对应着上文的例题</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 15%" />
+<col style="width: 32%" />
+<col style="width: 20%" />
+<col style="width: 16%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>序号</th>
+<th>题号</th>
+<th>标题</th>
+<th>题型</th>
+<th>难度评级</th>
+<th style="text-align: left;">题解</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>luogu P3455</td>
+<td>[POI2007]ZAP-Queries</td>
+<td>整除关系的计数问题</td>
+<td>⭐⭐</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/solutions/Math/NumberTheory/MobiusInversion/luoguP3455.md">👍</a></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>luogu P2522</td>
+<td>[HAOI2011]Problem b</td>
+<td>整除关系的计数问题</td>
+<td>⭐⭐⭐</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/solutions/Math/NumberTheory/MobiusInversion/luoguP2522.md">👍</a></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>luogu P2257</td>
+<td>YY的GCD</td>
+<td>整除关系的计数问题</td>
+<td>⭐⭐⭐</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/solutions/Math/NumberTheory/MobiusInversion/luoguP2257.md">👍</a></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>luogu P3327</td>
+<td>[SDOI2015]约数个数和</td>
+<td>整除关系的计数问题</td>
+<td>⭐⭐⭐⭐</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/solutions/Math/NumberTheory/MobiusInversion/luoguP3327.md">👍</a></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>luogu P1829</td>
+<td>[国家集训队]Crash的数字表格 / JZPTAB</td>
+<td>整除关系的计数问题</td>
+<td>⭐⭐⭐⭐</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/solutions/Math/NumberTheory/MobiusInversion/luoguP1829.md">👍</a></td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>SPOJ LCMSUM</td>
+<td>LCM Sum</td>
+<td>整除关系的计数问题</td>
+<td>⭐⭐⭐⭐</td>
+<td style="text-align: left;"><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/solutions/Math/NumberTheory/MobiusInversion/SPOJ-LCMSUM.md">👍</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="参考资料">参考资料</h3>
+<ol type="1">
+<li>Richard A. Brualdi著, 冯速等译. 组合数学(原书第5版). 北京:
+机械工业出版社, 2012</li>
+<li><a target="_blank" rel="noopener" href="https://oi-wiki.org/math/number-theory/mobius/">oi-wiki
+莫比乌斯反演</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://www.luogu.com.cn/blog/An-Amazing-Blog/mu-bi-wu-si-fan-yan-ji-ge-ji-miao-di-dong-xi">An_Account
+莫比乌斯反演-让我们从基础开始</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/peng-ym/p/8647856.html">peng-ym
+莫比乌斯反演</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022-11-14-notaboutcsuacm/" rel="prev" title="与我有关，又似乎不再那么有关">
+                  <i class="fa fa-angle-left"></i> 与我有关，又似乎不再那么有关
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023-10-16-CSGOJ-Why/" rel="next" title="为什么做了CSGOJ，又为什么继续做CSGOJ">
+                  为什么做了CSGOJ，又为什么继续做CSGOJ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
