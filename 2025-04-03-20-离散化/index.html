@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="离散化 离散化是一种将无限空间中的有限个体映射到有限空间中的方法，常用于处理数据范围很大但实际数据量较小的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="20.离散化">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="离散化 离散化是一种将无限空间中的有限个体映射到有限空间中的方法，常用于处理数据范围很大但实际数据量较小的问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/%E7%9F%A9%E5%BD%A2%E7%A6%BB%E6%95%A3%E5%8C%96.svg">
+<meta property="article:published_time" content="2025-04-03T02:20:35.000Z">
+<meta property="article:modified_time" content="2025-04-03T09:07:04.687Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/%E7%9F%A9%E5%BD%A2%E7%A6%BB%E6%95%A3%E5%8C%96.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/","path":"2025-04-03-20-离散化/","title":"20.离散化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>20.离散化 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A6%BB%E6%95%A3%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">离散化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6"><span class="nav-number">1.0.1.</span> <span class="nav-text">例：区间合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E8%BF%87%E5%BA%A6%E7%A7%8D%E6%A4%8D"><span class="nav-number">1.0.2.</span> <span class="nav-text">例：过度种植</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="20.离散化 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          20.离散化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-04-03 10:20:35 / 修改时间：17:07:04" itemprop="dateCreated datePublished" datetime="2025-04-03T10:20:35+08:00">2025-04-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="离散化">离散化</h1>
+<p>离散化是一种将无限空间中的有限个体映射到有限空间中的方法，常用于处理数据范围很大但实际数据量较小的问题。</p>
+<span id="more"></span>
+<p>离散化的核心思想是将大范围的数据映射到小范围，同时保持数据之间的相对关系。通常用于处理以下情况：</p>
+<ol type="1">
+<li>数据范围很大（如 <span class="math inline">\(-2^{31}\)</span> 到
+<span class="math inline">\(2^{31}\)</span>）</li>
+<li>实际数据点较少</li>
+<li>需要处理区间或线段</li>
+</ol>
+<p>场景举例：</p>
+<p>差分专题中的区间改变问题，如果区间是 <span class="math inline">\([(1,
+3353), (534543, 231876390), (3353, 5667)]\)</span>
+这样的大范围，没法开数组到这么大规模做差分标记，但区间的数量不会太多，比如<span
+class="math inline">\(10000\)</span> 个区间，那就至多 <span
+class="math inline">\(20000\)</span> 个坐标点（区间起止会提供 <span
+class="math inline">\(2\)</span>
+个坐标，以及有一些起止点可能重叠）。</p>
+<p>离散化处理</p>
+<ul>
+<li>把 <span class="math inline">\((1, 3353, 534543, 231876390, 3353,
+5667)\)</span> 平铺排开</li>
+<li>排序：<span class="math inline">\((1, 3353, 3353, 5667, 534543,
+231876390)\)</span></li>
+<li>去重：<span class="math inline">\((1, 3353, 5667, 534543,
+231876390)\)</span> （去掉了一个重复的 <span
+class="math inline">\(3353\)</span>）</li>
+<li>用序号代替： <span
+class="math inline">\(([0]=1,[1]=3353,[2]=5667,[3]=534543,[4]=231876390)\)</span></li>
+<li>区间系列 <span class="math inline">\([(1, 3353), (534543,
+231876390), (3353, 5667)]\)</span> 改变为序号 <span
+class="math inline">\([(0, 1), (3, 4), (1, 2)]\)</span></li>
+<li>序号范围显然是坐标点个数以内的，用序号代替原坐标点，就可以开数组做差分或其它区间操作了</li>
+<li>最后处理数据时，用序号查询原始数值，做进一步处理</li>
+</ul>
+<h3 id="例区间合并">例：区间合并</h3>
+<p>给定 <span class="math inline">\(n\)</span> 个区间 <span
+class="math inline">\([a_i, b_i)\)</span>，求所有区间覆盖的总长度。</p>
+<ul>
+<li><p>第一行一个整数 <span
+class="math inline">\(n\)</span>，表示区间数量</p></li>
+<li><p>接下来 <span class="math inline">\(n\)</span> 行，每行两个整数
+<span class="math inline">\(a_i,
+b_i\)</span>，表示一个区间的起点和终点（左闭右开）</p></li>
+<li><p><span class="math inline">\(1 \leq n \leq 2 \times
+10^4\)</span></p></li>
+<li><p><span class="math inline">\(-2^{31} \leq a &lt; b &lt;
+2^{31}\)</span></p></li>
+<li><p>答案小于 <span class="math inline">\(2^{31}\)</span></p></li>
+</ul>
+<p>输出一行一个整数，表示所有区间覆盖的总长度</p>
+<p>输入：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">-1 1</span><br><span class="line">5 11</span><br><span class="line">2 9</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">11</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li>将所有区间的端点收集并排序</li>
+<li>去重得到离散化后的值</li>
+<li>使用差分数组或扫描线算法计算覆盖长度</li>
+</ol>
+<p>参考代码，顺便提供一个离散化参考通用模板</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2e4</span> + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个相对通用的离散化模板，把一个数组传入 Make，会执行去重与排序</span></span><br><span class="line"><span class="comment">// 之后可以用序号找去找第 k 个元素， d[k]，也可以用 Loc 找 x 离散后的序号 d.Loc(x)</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> TP_V&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Discretization</span> &#123;</span><br><span class="line">    std::vector&lt;TP_V&gt; b;</span><br><span class="line">    std::unordered_map&lt;TP_V, <span class="type">int</span>&gt; mp;   <span class="comment">// 二分或hash找离散值对应的序号</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span></span>&#123;b.<span class="built_in">clear</span>(); mp.<span class="built_in">clear</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>()&#123;<span class="built_in">Init</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>(std::vector&lt;TP_V&gt; &amp;a)&#123;<span class="built_in">Make</span>(a);&#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Make</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">Init</span>();</span><br><span class="line">        <span class="built_in">Add</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> i : a) b.<span class="built_in">push_back</span>(i);</span><br><span class="line">        std::<span class="built_in">sort</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>());</span><br><span class="line">        b.<span class="built_in">erase</span>(std::<span class="built_in">unique</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>()), b.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; b.<span class="built_in">size</span>(); i ++) mp[b[i]] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">unsigned</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    TP_V &amp;<span class="keyword">operator</span>[](<span class="type">int</span> ith)&#123;<span class="keyword">return</span> b[ith];&#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">Loc</span><span class="params">(TP_V x)</span> </span>&#123;<span class="keyword">return</span> mp.<span class="built_in">count</span>(x) ? mp[x] : <span class="number">-1</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> fd[maxn &lt;&lt; <span class="number">1</span>];  <span class="comment">// 差分数组，下标是离散后的序号，而非真实坐标</span></span><br><span class="line"><span class="type">int</span> a[maxn &lt;&lt; <span class="number">1</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, s, e;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; a;</span><br><span class="line">    Discretization&lt;<span class="type">int</span>&gt; d;</span><br><span class="line">    <span class="built_in">memset</span>(fd, <span class="number">0</span>, <span class="built_in">sizeof</span>(fd));  <span class="comment">// 注意差分数组初始化为 0</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;s, &amp;e);</span><br><span class="line">        a.<span class="built_in">push_back</span>(s);</span><br><span class="line">        a.<span class="built_in">push_back</span>(e);</span><br><span class="line">    &#125;</span><br><span class="line">    d.<span class="built_in">Make</span>(a);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">        <span class="comment">// 第 i * 2 个元素是一个起点坐标， i * 2 + 1 是它的终点坐标</span></span><br><span class="line">        <span class="type">int</span> s = a[i &lt;&lt; <span class="number">1</span>], e = a[i &lt;&lt; <span class="number">1</span> | <span class="number">1</span>];</span><br><span class="line">        <span class="comment">// Loc找离散化后的序号，用序号做差分，[s,e) 左闭右开</span></span><br><span class="line">        fd[d.<span class="built_in">Loc</span>(s)] ++;</span><br><span class="line">        fd[d.<span class="built_in">Loc</span>(e)] --;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; d.<span class="built_in">size</span>() - <span class="number">1</span>; i ++) &#123;</span><br><span class="line">        <span class="comment">// 还原为点位值，fd[i]的值是 [ d[i], d[i+1] ) 这个左闭右开区间的覆盖次数</span></span><br><span class="line">        fd[i] += i == <span class="number">0</span> ? <span class="number">0</span> : fd[i - <span class="number">1</span>];</span><br><span class="line">        ans += (fd[i] &gt; <span class="number">0</span>)* (d[i + <span class="number">1</span>] - d[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例过度种植">例：过度种植</h3>
+<p>在笛卡尔平面坐标系中，有 <span class="math inline">\(N\)</span>
+(<span class="math inline">\(1 \leq N \leq 1000\)</span>) 个矩形，第
+<span class="math inline">\(i\)</span> 个矩形的左上角坐标是 <span
+class="math inline">\((x_1,y_1)\)</span>，右下角坐标是 <span
+class="math inline">\((x_2,y_2)\)</span>。求这 <span
+class="math inline">\(N\)</span>
+个矩形所覆盖的总面积（被重复覆盖的区域只计算一次）。</p>
+<ul>
+<li><p>第一行，一个整数 <span class="math inline">\(N\)</span> (<span
+class="math inline">\(1 \leq N \leq 1000\)</span>)</p></li>
+<li><p>接下来 <span class="math inline">\(N\)</span> 行，每行四个整数
+<span class="math inline">\(x_1,y_1,x_2,y_2\)</span> (<span
+class="math inline">\(-10^8 \leq x_1,y_1,x_2,y_2 \leq
+10^8\)</span>)</p></li>
+<li><p>输出一个整数，表示被覆盖的总面积</p></li>
+</ul>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">0 5 4 1</span><br><span class="line">2 4 6 2</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">20</span><br></pre></td></tr></table></figure>
+<p>解题思路：</p>
+<ol type="1">
+<li>这是一个二维离散化问题，需要对 <span
+class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span> 坐标分别进行离散化</li>
+<li>使用二维差分记录每个小矩形的覆盖情况</li>
+<li>统计被覆盖的小矩形的面积总和</li>
+</ol>
+<img src="/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/%E7%9F%A9%E5%BD%A2%E7%A6%BB%E6%95%A3%E5%8C%96.svg" class="">
+<p>参考代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 离散化模板</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> TP_V&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Discretization</span> &#123;</span><br><span class="line">    std::vector&lt;TP_V&gt; b;</span><br><span class="line">    std::unordered_map&lt;TP_V, <span class="type">int</span>&gt; mp;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span></span>&#123;b.<span class="built_in">clear</span>(); mp.<span class="built_in">clear</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>()&#123;<span class="built_in">Init</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>(std::vector&lt;TP_V&gt; &amp;a)&#123;<span class="built_in">Make</span>(a);&#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Make</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">Init</span>();</span><br><span class="line">        <span class="built_in">Add</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> i : a) b.<span class="built_in">push_back</span>(i);</span><br><span class="line">        std::<span class="built_in">sort</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>());</span><br><span class="line">        b.<span class="built_in">erase</span>(std::<span class="built_in">unique</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>()), b.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; b.<span class="built_in">size</span>(); i ++) mp[b[i]] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">unsigned</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    TP_V &amp;<span class="keyword">operator</span>[](<span class="type">int</span> ith)&#123;<span class="keyword">return</span> b[ith];&#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">Loc</span><span class="params">(TP_V x)</span> </span>&#123;<span class="keyword">return</span> mp.<span class="built_in">count</span>(x) ? mp[x] : <span class="number">-1</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 矩形结构体</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Rectangle</span> &#123;</span><br><span class="line">    <span class="type">int</span> x1, y1, x2, y2;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 存储所有矩形的坐标</span></span><br><span class="line">    <span class="function">std::vector&lt;Rectangle&gt; <span class="title">rects</span><span class="params">(n)</span></span>;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; x_coords, y_coords;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;rects[i].x1, &amp;rects[i].y1, &amp;rects[i].x2, &amp;rects[i].y2);</span><br><span class="line">        x_coords.<span class="built_in">push_back</span>(rects[i].x1);</span><br><span class="line">        x_coords.<span class="built_in">push_back</span>(rects[i].x2);</span><br><span class="line">        y_coords.<span class="built_in">push_back</span>(rects[i].y1);</span><br><span class="line">        y_coords.<span class="built_in">push_back</span>(rects[i].y2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 对x和y坐标分别进行离散化</span></span><br><span class="line">    <span class="function">Discretization&lt;<span class="type">int</span>&gt; <span class="title">dx</span><span class="params">(x_coords)</span>, <span class="title">dy</span><span class="params">(y_coords)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建二维差分数组</span></span><br><span class="line">    std::vector&lt;std::vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">diff</span>(dx.<span class="built_in">size</span>(), std::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(dy.<span class="built_in">size</span>(), <span class="number">0</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 对每个矩形进行差分标记</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="type">int</span> loc_x1 = dx.<span class="built_in">Loc</span>(rects[i].x1);</span><br><span class="line">        <span class="type">int</span> loc_y1 = dy.<span class="built_in">Loc</span>(rects[i].y1);</span><br><span class="line">        <span class="type">int</span> loc_x2 = dx.<span class="built_in">Loc</span>(rects[i].x2);</span><br><span class="line">        <span class="type">int</span> loc_y2 = dy.<span class="built_in">Loc</span>(rects[i].y2);</span><br><span class="line">        <span class="comment">// 本题是直角坐标系，“左上”的y更大，“右下”的y更小</span></span><br><span class="line">        <span class="comment">// 调整为“左下”和“右上”，以便一个端点的xy坐标都比另一个端点的xy坐标小</span></span><br><span class="line">        std::<span class="built_in">swap</span>(loc_y1, loc_y2);  </span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 二维差分：左上角+1，右上角-1，左下角-1，右下角+1</span></span><br><span class="line">        <span class="comment">// 最大坐标位置有哨兵（建diff的时候dx.size()和dy.size()都 + 1 了）</span></span><br><span class="line">        <span class="comment">// 参考差分章节的例子：</span></span><br><span class="line">        <span class="comment">// x方向差分：               x差分结果再进行y方向差分：</span></span><br><span class="line">        <span class="comment">// 0  0  0  0  0  0         0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// 0  0  0  0  0  0         0 -1  0  0  0 +1</span></span><br><span class="line">        <span class="comment">// 0 +1  0  0  0 -1         0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// 0 +1  0  0  0 -1  ===&gt;   0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// 0 +1  0  0  0 -1         0 +1  0  0  0 -1</span></span><br><span class="line">        <span class="comment">// 0  0  0  0  0  0         0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// PS：上“图”是按二维坐标系，(0,0)坐标在左下绘制，注意别混淆</span></span><br><span class="line">        <span class="comment">// 但注意：本题坐标是矩形端点，而不是方格，端点可以理解为左闭右开，不需要将端点序号加1</span></span><br><span class="line">        diff[loc_x1][loc_y1] ++; <span class="comment">// 左下 + 1</span></span><br><span class="line">        diff[loc_x2][loc_y1] --; <span class="comment">// 右下 - 1</span></span><br><span class="line">        diff[loc_x1][loc_y2] --; <span class="comment">// 左上 - 1</span></span><br><span class="line">        diff[loc_x2][loc_y2] ++; <span class="comment">// 右上 + 1</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; dx.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; dy.<span class="built_in">size</span>() - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(j &gt; <span class="number">0</span>) diff[i][j] += diff[i][j<span class="number">-1</span>];   <span class="comment">// y方向差分恢复原值</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; dx.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; dy.<span class="built_in">size</span>() - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i &gt; <span class="number">0</span>) diff[i][j] += diff[i<span class="number">-1</span>][j];   <span class="comment">// x方向差分恢复原值</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; dx.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; dy.<span class="built_in">size</span>() - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="comment">// 统计答案</span></span><br><span class="line">            ans += <span class="number">1LL</span> * (diff[i][j] &gt; <span class="number">0</span>) * (dx[i<span class="number">+1</span>] - dx[i]) * (dy[j<span class="number">+1</span>] - dy[j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-04-02-19-%E4%B8%89%E5%88%86/" rel="prev" title="19.三分">
+                  <i class="fa fa-angle-left"></i> 19.三分
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

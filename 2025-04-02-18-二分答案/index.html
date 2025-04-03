@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="二分答案 在线性表章节已了解二分查找的基本原理，当一个问题的答案具有单调性时——即随着答案的增大或减小，判定条件的结果也呈现单调变化，比如答案越大条件越容易满足，或者答案越小条件越容易满足，可以通过二分查找，在过程中根据判定条件是否满足来调整二分的方向逼近解的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="18.二分答案">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-04-02-18-%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="二分答案 在线性表章节已了解二分查找的基本原理，当一个问题的答案具有单调性时——即随着答案的增大或减小，判定条件的结果也呈现单调变化，比如答案越大条件越容易满足，或者答案越小条件越容易满足，可以通过二分查找，在过程中根据判定条件是否满足来调整二分的方向逼近解的过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-02T13:44:28.000Z">
+<meta property="article:modified_time" content="2025-04-03T02:18:43.303Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-04-02-18-%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-04-02-18-%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/","path":"2025-04-02-18-二分答案/","title":"18.二分答案"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>18.二分答案 | CSGrandeur's Thinking</title>
+  
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"UA-69787882-2","only_pageview":true,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88"><span class="nav-number">1.</span> <span class="nav-text">二分答案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E4%B8%80%E5%85%83%E4%B8%89%E6%AC%A1%E6%96%B9%E7%A8%8B%E6%B1%82%E8%A7%A3"><span class="nav-number">1.0.1.</span> <span class="nav-text">例：一元三次方程求解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E6%95%B0%E5%88%97%E5%88%92%E5%88%86"><span class="nav-number">1.0.2.</span> <span class="nav-text">例：数列划分</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-04-02-18-%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="18.二分答案 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          18.二分答案
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-02 21:44:28" itemprop="dateCreated datePublished" datetime="2025-04-02T21:44:28+08:00">2025-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-03 10:18:43" itemprop="dateModified" datetime="2025-04-03T10:18:43+08:00">2025-04-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="二分答案">二分答案</h1>
+<p>在线性表章节已了解二分查找的基本原理，当一个问题的答案具有单调性时——即随着答案的增大或减小，判定条件的结果也呈现单调变化，比如答案越大条件越容易满足，或者答案越小条件越容易满足，可以通过二分查找，在过程中根据判定条件是否满足来调整二分的方向逼近解的过程。</p>
+<span id="more"></span>
+<h3 id="例一元三次方程求解">例：一元三次方程求解</h3>
+<p>给定一个一元三次方程 <span class="math inline">\(ax^3 + bx^2 + cx + d
+= 0\)</span>，其中系数 <span class="math inline">\(a, b, c, d\)</span>
+均为实数，并已知该方程有三个不同的实根，这些根的范围在 <span
+class="math inline">\(-100\)</span> 至 <span
+class="math inline">\(100\)</span> 之间，且任意两根间的差的绝对值 <span
+class="math inline">\(\geq
+1\)</span>。请按从小到大的顺序在同一行输出这三个实根（精确到小数点后两位，并留有空格）。</p>
+<p>输入：4个实数</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 -5 -4 20</span><br></pre></td></tr></table></figure>
+<p>输出：3个保留2位小数的实根</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-2.00 2.00 5.00</span><br></pre></td></tr></table></figure>
+<p>题目给的关键条件是数据确保根的距离大于 <span
+class="math inline">\(1\)</span>，也即相邻两个整数的左闭右开区间中至多 1
+个解。如果某个这样的区间有解，则必然两端的 <span
+class="math inline">\(f(x)\)</span> 不可能在 <span
+class="math inline">\(x\)</span> 轴的同一侧，即 <span
+class="math inline">\(f(x_{1})*f(x_{2}) \leq 0\)</span>。</p>
+<p>思路：枚举每个长度为 1 的区间，判断两端是否不在 <span
+class="math inline">\(x\)</span>
+轴同侧，如果不在同侧，说明区间内有解，二分 <span
+class="math inline">\(x\)</span> 的值，直到它的函数值为 0。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">double</span> eps = <span class="number">1e-7</span>;</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">f</span><span class="params">(<span class="type">double</span> x, <span class="type">double</span> a, <span class="type">double</span> b, <span class="type">double</span> c, <span class="type">double</span> d)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a * x * x * x + b * x * x + c * x + d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> a, b, c, d;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%lf&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 在[-100,100]范围内，相邻整数区间最多一个解</span></span><br><span class="line">    <span class="comment">// 遍历每个整数区间，用二分法找解</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">-100</span>; i &lt;= <span class="number">100</span>; i ++) &#123;</span><br><span class="line">        <span class="type">double</span> l = i, r = i + <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 区间两端异号说明有解</span></span><br><span class="line">        <span class="type">double</span> fl = <span class="built_in">f</span>(l, a, b, c, d), fr = <span class="built_in">f</span>(r, a, b, c, d);</span><br><span class="line">        <span class="keyword">if</span>(-eps &lt; fl &amp;&amp; fl &lt; eps) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%.2f &quot;</span>, l); <span class="comment">// 左端点是解</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(-eps &lt; fr &amp;&amp; fr &lt; eps) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;           <span class="comment">// 右端点是解，考虑左闭右开区间，忽略</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(fl * fr &lt; eps) &#123;</span><br><span class="line">            <span class="comment">// l 和 r 之间存在解，二分找解</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j ++) &#123;</span><br><span class="line">                <span class="type">double</span> mid = (l + r) * <span class="number">0.5</span>;</span><br><span class="line">                <span class="type">double</span> fm = <span class="built_in">f</span>(mid, a, b, c, d);</span><br><span class="line">                <span class="keyword">if</span>(fm * fl &lt; eps) r = mid;</span><br><span class="line">                <span class="keyword">else</span> l = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%.2f &quot;</span>, l);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识点： 浮点精度冗余 <code>eps</code>。
+浮点类型在计算机底层也是由有限位的二进制<code>01</code>表达的，就必然有精度限制，不能无限精确地表达任何数字，如果发生乘除法，这种精度会进一步丢失，当判断两个浮点数是否相等、一个浮点数大于0还是小于0的时候，用一个极小的浮点数作为精度冗余，比如对浮点数
+<code>fl</code>， <code>if(fl == 0)</code>
+就是不安全的，它在丧失一定精度后，可能是
+<code>0.0000312141</code>，也可能是<code>-0.0000012131</code>，
+<code>eps</code>
+是我们对特定问题期望的一个“可接受”精度，<code>const double eps=1e-7</code>
+就表示在 <code>10^&#123;-7&#125;</code>（<code>0.0000001</code>）
+范围内的误差都认为相等，<code>1e-7</code>
+是算法题比较常用的一个精度，视具体问题，也有时会用
+<code>1e-6</code>或<code>1e-8</code>。</p>
+</blockquote>
+<blockquote>
+<p>知识点： 浮点数二分的时候，<code>while(r - l &gt; eps)</code>
+是循环条件的常见写法，但一些刁钻的题可能精度不好把握，<code>for(int j = 0; j &lt; 100; j ++)</code>
+直接二分<code>100</code>次，基本什么精度都能达到了，在分析好算法复杂度满足题意的情况下，这样写更加稳定。</p>
+</blockquote>
+<h3 id="例数列划分">例：数列划分</h3>
+<p>给一个有 <span class="math inline">\(n\)</span>
+个正整数的序列，连续地将其分为互不重叠的 <span
+class="math inline">\(k\)</span>
+份，即每一份都是该序列的一个子串，不能调换顺序。</p>
+<p>求一个划分方案，使数字之和最大的那一份，其和在所有划分方案里最小。</p>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">9 3</span><br><span class="line">10 20 30 40 50 60 70 80 90</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10 20 30 40 50 / 60 70 / 80 90</span><br></pre></td></tr></table></figure>
+<p>二分答案常常伴随着<strong>贪心</strong>策略——二分可能的答案数值，在验证判定条件时，往往会需要一个复杂度较低的策略，当判定条件支持贪心时，就有更大的可能让二分答案的复杂度低于其它方案。</p>
+<p>当指定一个“数字之和最大的那一份”的限制时，实际就是尝试构造一个划分，让每一份都不超过这个限制，如果无法实现，则判定为“否”，如果能实现，则判定为“是”，限制值与判定关系是单调的——值够大就一定能成功划分，值小到一定程度就一定无法划分，那么能否完成划分的临界点，就是本题答案——最大那一份最小的划分。</p>
+<p>划分的判定采用贪心策略，因为划分并不改变顺序，那就让每一份尽可能的靠近限制值，直到装不下，再开始划分下一份。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> n, k, a[maxn];</span><br><span class="line"><span class="type">bool</span> split[maxn];</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Judge</span><span class="params">(<span class="type">int</span> mid)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> cnt = <span class="number">1</span>, tmpsum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a[i] &gt; mid) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (tmpsum + a[i] &gt; mid) tmpsum = <span class="number">0</span>, cnt++;</span><br><span class="line">        tmpsum += a[i];</span><br><span class="line">        <span class="keyword">if</span> (cnt &gt; k) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;k) != EOF) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = <span class="number">1e9</span>, mid;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            mid = left + right &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">Judge</span>(mid))</span><br><span class="line">                right = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> tmpsum = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">memset</span>(split, <span class="number">0</span>, <span class="built_in">sizeof</span>(split));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (tmpsum + a[i] &gt; left || i + <span class="number">1</span> &lt; k - cnt)</span><br><span class="line">                tmpsum = <span class="number">0</span>, split[i] = <span class="literal">true</span>, cnt++;</span><br><span class="line">            tmpsum += a[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + !i, a[i]);</span><br><span class="line">            <span class="keyword">if</span> (split[i]) <span class="built_in">printf</span>(<span class="string">&quot; /&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-04-02-17-%E8%B4%AA%E5%BF%83/" rel="prev" title="17.贪心">
+                  <i class="fa fa-angle-left"></i> 17.贪心
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-04-02-19-%E4%B8%89%E5%88%86/" rel="next" title="19.三分">
+                  19.三分 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

@@ -7775,14 +7775,6 @@ class="math display">\[B(\omega_n) = a_1 + a_3 \omega_n^1 + a_5
 <p>大整数乘法参考代码</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">double</span> pi = <span class="built_in">acos</span>(<span class="number">-1</span>);</span><br><span class="line"><span class="type">const</span> <span class="type">double</span> eps = <span class="number">1e-6</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">4e6</span> + <span class="number">10</span>;</span><br><span class="line"><span class="keyword">typedef</span> std::complex&lt;<span class="type">double</span>&gt; Complex;</span><br><span class="line"><span class="type">char</span> a[maxn], b[maxn];</span><br><span class="line">Complex xa[maxn], xb[maxn];</span><br><span class="line"><span class="type">int</span> lena, lenb, len2;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BitRevChange</span><span class="params">(Complex y[], <span class="type">int</span> len)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">rev</span><span class="params">(len, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i ++) </span><br><span class="line">    &#123;</span><br><span class="line">        rev[i] = rev[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &amp; <span class="number">1</span>) rev[i] |= len &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; ++i) </span><br><span class="line">        <span class="keyword">if</span> (i &lt; rev[i]) std::<span class="built_in">swap</span>(y[i], y[rev[i]]);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FFT</span><span class="params">(Complex y[], <span class="type">int</span> len, <span class="type">int</span> on=<span class="number">1</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">BitRevChange</span>(y, len);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> h = <span class="number">2</span>; h &lt;= len; h &lt;&lt;= <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">Complex <span class="title">wn</span><span class="params">(cos(<span class="number">2</span> * pi / h), on * sin(<span class="number">2</span> * pi / h))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; len; j += h)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">Complex <span class="title">w</span><span class="params">(<span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k = j; k &lt; j + h / <span class="number">2</span>; k ++)</span><br><span class="line">            &#123;</span><br><span class="line">                Complex u = y[k];</span><br><span class="line">                Complex t = w * y[k + h / <span class="number">2</span>];</span><br><span class="line">                y[k] = u + t;</span><br><span class="line">                y[k + h / <span class="number">2</span>] = u - t;</span><br><span class="line">                w = w * wn;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(on != <span class="number">-1</span>) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i ++) y[i].<span class="built_in">real</span>(y[i].<span class="built_in">real</span>() / len);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%s%s&quot;</span>, a, b) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        lena = <span class="built_in">strlen</span>(a); lenb = <span class="built_in">strlen</span>(b);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; a[i]; i ++) xa[i] = a[lena - i - <span class="number">1</span>] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; b[i]; i ++) xb[i] = b[lenb - i - <span class="number">1</span>] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="keyword">for</span>(len2 = <span class="number">1</span>; len2 &lt; lena + lenb; len2 &lt;&lt;= <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = lena; i &lt; len2; i ++) xa[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = lenb; i &lt; len2; i ++) xb[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">FFT</span>(xa, len2); <span class="built_in">FFT</span>(xb, len2);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len2; i ++) xa[i] *= xb[i];</span><br><span class="line">        <span class="built_in">FFT</span>(xa, len2, <span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len2; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            a[i] = (<span class="type">int</span>)(xa[i].<span class="built_in">real</span>() + <span class="number">0.5</span>) % <span class="number">10</span> + <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            xa[i + <span class="number">1</span>].<span class="built_in">real</span>(xa[i + <span class="number">1</span>].<span class="built_in">real</span>() + (<span class="type">int</span>)(xa[i].<span class="built_in">real</span>() + <span class="number">0.5</span>) / <span class="number">10</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(lena = len2 - <span class="number">1</span>; a[lena] == <span class="string">&#x27;0&#x27;</span> &amp;&amp; lena &gt; <span class="number">0</span>; lena --);</span><br><span class="line">        <span class="keyword">for</span>(; lena &gt;= <span class="number">0</span> &amp;&amp; <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a[lena]); lena --);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
-      <categories>
-        <category>ACM</category>
-        <category>ACMCOURSE</category>
-      </categories>
-      <tags>
-        <tag>ACM</tag>
-        <tag>Algorithm</tag>
-      </tags>
   </entry>
   <entry>
     <title>12.模拟与高精度</title>
@@ -7827,6 +7819,1191 @@ n\leq
 <p>比加法稍复杂一点，仍然是小学竖式的模拟。可以简化处理的是，可以把进位放在各位相乘之后再统一处理，每个位就只需要处理一次进位了。</p>
 <p>以下代码仅供参考，具体实现可以有不同风格，选择自己易理解易记忆的方式。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">char</span> a[<span class="number">2111</span>], b[<span class="number">2111</span>];</span><br><span class="line"><span class="comment">// 进位累加过程中可能 char 的128存不下，存结果用int</span></span><br><span class="line"><span class="comment">// 两数相乘结果的位数不小于两数位数之和，数组开大一倍</span></span><br><span class="line"><span class="type">int</span> c[<span class="number">4111</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%s%s&quot;</span>, a, b);</span><br><span class="line">    <span class="type">int</span> alen = <span class="built_in">strlen</span>(a), blen = <span class="built_in">strlen</span>(b), clen = <span class="number">0</span>;</span><br><span class="line">    std::<span class="built_in">reverse</span>(a, a + alen);</span><br><span class="line">    std::<span class="built_in">reverse</span>(b, b + blen);</span><br><span class="line">    <span class="built_in">memset</span>(c, <span class="number">0</span>, <span class="built_in">sizeof</span>(c));    <span class="comment">// 初始化 c 数组，确保全为 0</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; alen; i ++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; blen; j ++) &#123;</span><br><span class="line">            <span class="comment">// 比如 80 * 900，其 8（下标1） * 9（下标2） = 72 应该落在 72000（下标3）上</span></span><br><span class="line">            <span class="comment">// 进位可结束之后再统一处理</span></span><br><span class="line">            c[i + j] += (a[i] - <span class="string">&#x27;0&#x27;</span>) * (b[j] - <span class="string">&#x27;0&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(; clen &lt; alen + blen + <span class="number">5</span>; clen ++) &#123;</span><br><span class="line">        c[clen + <span class="number">1</span>] += c[clen] / <span class="number">10</span>;</span><br><span class="line">        c[clen] %= <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 去掉高位前导 0，且即使c是0也至少有 1 位数</span></span><br><span class="line">    <span class="keyword">for</span>(; clen &gt; <span class="number">1</span> &amp;&amp; c[clen - <span class="number">1</span>] == <span class="number">0</span>; clen --);    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = clen - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i --) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, c[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>14.基本递推</title>
+    <url>/2025-03-26-14-%E5%9F%BA%E6%9C%AC%E9%80%92%E6%8E%A8/</url>
+    <content><![CDATA[<h1 id="基本递推">基本递推</h1>
+<p>递推是编程中最常用的技能，规模较大的问题可以由规模较小的问题计算得到，从规模较小的问题开始，按一定的顺序推导更大问题的解的过程。</p>
+<span id="more"></span>
+<h3 id="例斐波那契数列">例：斐波那契数列</h3>
+<p><span class="math inline">\(f_{1}=1, f_{2}=1,
+f_{n}=f_{n-1}+f_{n-2}\)</span>.</p>
+<p>求数列的第 <span class="math inline">\(n\)</span> 项.</p>
+<p>当这类问题存在多次提问时，可以用一个数组把序列的表提前算好，俗称“打表”.</p>
+<blockquote>
+<p>知识点：有的问题（或函数，或数列）随着自变量的增大，增长非常快，这样稍大一些的时候，<code>long long</code>
+都存不下。出题人为了考察这类问题，会要求输出答案对一个较大的质数取模的结果，这个结果正确，就认为答案正确。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 斐波那契数列前 1000 项，每项都是对 10^9+7 取模的结果</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> f[<span class="number">1111</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    f[<span class="number">1</span>] = f[<span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">3</span>; i &lt;= <span class="number">1000</span>; i ++) &#123;</span><br><span class="line">        f[i] = (f[i - <span class="number">1</span>] + f[i - <span class="number">2</span>]) % mod;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> n;  <span class="comment">// 不断询问的第“n”项</span></span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n) != EOF) &#123; <span class="comment">// EOF是scanf读到输入文件末尾时的返回值</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, f[n]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例传染">例：传染</h3>
+<p>数量不限个健康动物，一个生病动物每轮会传染 <span
+class="math inline">\(x\)</span> 个健康动物， 求 <span
+class="math inline">\(n\)</span> 轮后染病动物总数。</p>
+<p>输入 <span class="math inline">\(x\)</span> 和 <span
+class="math inline">\(n\)</span></p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">10 2</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">121</span><br></pre></td></tr></table></figure>
+<p>每轮结束时，染病动物总数应当是传染的数量加上已染病的数量，形成递推关系。</p>
+<p>如果涉及多次查询，就开数组大表，否则用一个变量递推就行。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> x, n;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> ans = <span class="number">1</span>;          <span class="comment">// 最开始的一个，指数级增长要注意查看题目数据范围</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;x, &amp;n);            </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">        ans = ans * x + ans;    <span class="comment">// 传染的加上已有的</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="常见注意点小结">常见注意点小结</h2>
+<ul>
+<li>注意递推问题的增长规模与数据范围，选择性使用
+<code>long long</code></li>
+<li>题目答案要求对特定数取模，要注意不仅仅是结果取模，要避免计算过程中超类型范围
+<ul>
+<li>递推式多项累加，要分析中间结果是否会超<code>long long</code>，如果会，则要随时取模：
+<code>f[n] = ((f[n - 1] + f[n - 2]) % mod + f[n - 3]) % mod</code></li>
+<li>递推式带有乘法，虽然取模数不超 <code>int</code> ，但乘法计算超：
+用“1LL”去乘中间结果临时转 <code>long long</code>：
+<code>f[n] = 1LL * f[n-1] * f[n - 2] % mod</code>;</li>
+</ul></li>
+</ul>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>15.复杂度理论与分治</title>
+    <url>/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/</url>
+    <content><![CDATA[<h1 id="复杂度理论与分治">复杂度理论与分治</h1>
+<p>本章探讨了算法分析的核心概念，通过求解最大连续和问题展示了不同算法设计策略的效率差异，并引入了复杂性理论、分治法以及它们在优化算法时间复杂度上的应用。从简单的枚举方法到高效的动态规划与分治策略，逐步揭示了解决问题时算法选择的重要性及其对计算资源消耗的深远影响。</p>
+<span id="more"></span>
+<h2 id="感知复杂度">感知复杂度</h2>
+<p>给一个数字序列，求解一段连续的数字最大的和</p>
+<p>输入：序列长度<span class="math inline">\(n\)</span>，序列<span
+class="math inline">\(\{A_1, A_2, \ldots, A_n\}\)</span>，<span
+class="math inline">\(A_i\)</span> 为任意整数</p>
+<p>输出：找到<span class="math inline">\(1 \leq i \leq j \leq
+n\)</span>，使得<span class="math inline">\(A_i + A_{i+1} + \ldots +
+A_{j-1} + A_j\)</span>和最大</p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%92%8C_%E9%A2%98%E7%9B%AE.svg" class="" title="最大连续和">
+<p>方法1：枚举所有的连续序列，找和最大的序列</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> best = A[<span class="number">1</span>];                        <span class="comment">// 初始化答案</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++)            <span class="comment">// 枚举起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = i; j &lt;= n; j ++) &#123;      <span class="comment">// 枚举终点</span></span><br><span class="line">        <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> k = i; k &lt;= j; k ++)    <span class="comment">// 序列求和</span></span><br><span class="line">            sum += A[k];</span><br><span class="line">        <span class="keyword">if</span>(sum &gt; best) best = sum;      <span class="comment">// 更新答案</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>对任意输入个数<span class="math inline">\(n\)</span>，加法（
+<code>sum += A[k];</code> ）的执行次数<span
+class="math inline">\(T(n)\)</span>是多少？</p>
+<ul>
+<li>第一层for循环 <span class="math inline">\(\sum_{i=1}^n
+\ldots\)</span></li>
+<li>第二层for循环<span class="math inline">\(\sum_{j=i}^n
+\ldots\)</span></li>
+<li>第三层for循环<span class="math inline">\(\sum_{k=i}^j 1 = j - i +
+1\)</span></li>
+</ul>
+<p><span class="math inline">\(T(n) = \sum_{i=1}^n \sum_{j=i}^n (j - i +
+1) = \frac{n(n+1)(n+2)}{6}\)</span></p>
+<p>我们取个比较大的<span
+class="math inline">\(n=10,000\)</span>，此时<span
+class="math inline">\(T(n)=166,716,670,000\)</span>。</p>
+<p>方法2：先计算前缀和，前<span
+class="math inline">\(j\)</span>个数的和减去前<span
+class="math inline">\(i-1\)</span>个数的和可以方便地得到<span
+class="math inline">\(i~j\)</span>这一连续序列的和<span
+class="math inline">\(A_i + A_{i+1} + \ldots + A_j\)</span></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">pre[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) pre[i] = pre[i - <span class="number">1</span>] + A[i];</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = i; j &lt;= n; j ++)</span><br><span class="line">        best = <span class="built_in">max</span>(best, pre[j] - pre[i - <span class="number">1</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此方法<span class="math inline">\(T(n) = n + \sum_{i=1}^n (n - i + 1)
+= n + \frac{n(n+1)}{2}\)</span></p>
+<p><span class="math inline">\(n=10,000\)</span>时<span
+class="math inline">\(T(n)=50,015,000\)</span></p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%92%8C_%E5%89%8D%E7%BC%80%E5%92%8C.svg" class="" title="前缀和">
+<p>方法3：递归地划分问题为左右两半，看左半边的解（最大连续和）大，还是右半边的解大，还是从中间往左右延申的一段连续和大。</p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%92%8C_%E5%88%86%E6%B2%BB.svg" class="" title="分治">
+<p>此方法<span class="math inline">\(T(n) = 2T(n/2) +
+n\)</span>，中间往左右延申最坏情况就是走到头</p>
+<p><span class="math inline">\(n=10,000\)</span>时<span
+class="math inline">\(T(n) \approx n\log n \approx 130,000\)</span></p>
+<p>方法4：考虑这样一个情况，当连续地累加时，只要和不为负，前面累加的值肯定对后面继续累加有贡献，反之若累加到某个位置为负，则可以抛弃前面的累加值。</p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%92%8C_DP.svg" class="" title="DP">
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E6%9C%80%E5%A4%A7%E8%BF%9E%E7%BB%AD%E5%92%8C_DP_example.svg" class="" title="DP示例">
+<p>此方法<span class="math inline">\(T(n) =
+n\)</span>，只需要从前往后每个数考虑一次</p>
+<p><span class="math inline">\(n=10,000\)</span>时<span
+class="math inline">\(T(n)=10,000\)</span></p>
+<p>算法不同，处理同一个问题的基础运算次数可能有非常大的差距</p>
+<h2 id="复杂性理论">复杂性理论</h2>
+<p>算法更关心随着<span class="math inline">\(n\)</span>无限增长，<span
+class="math inline">\(T(n)\)</span>的增长速度——<strong style="color:red;">渐进效率</strong></p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E6%B8%90%E8%BF%9B%E6%95%88%E7%8E%87.svg" class="" title="渐进效率">
+<p>通常称渐进效率的高低为“阶”的高低，阶更高的函数增长率更高。</p>
+<p>表达渐进效率有 5 个符号：</p>
+<ul>
+<li>大写<span class="math inline">\(O\)</span>，<span
+class="math inline">\(f(n) = O(g(n))\)</span>，表示<span
+class="math inline">\(f(n)\)</span>的阶不大于<span
+class="math inline">\(g(n)\)</span>的阶；</li>
+<li>大写<span class="math inline">\(\Omega\)</span>，<span
+class="math inline">\(f(n) = \Omega(g(n))\)</span>，表示<span
+class="math inline">\(f(n)\)</span>的阶不小于<span
+class="math inline">\(g(n)\)</span>的阶；</li>
+<li>小写<span class="math inline">\(o\)</span>，<span
+class="math inline">\(f(n) = o(g(n))\)</span>，表示<span
+class="math inline">\(f(n)\)</span>的阶严格小于<span
+class="math inline">\(g(n)\)</span>的阶；</li>
+<li>小写<span class="math inline">\(\omega\)</span>，<span
+class="math inline">\(f(n) = \omega(g(n))\)</span>，表示<span
+class="math inline">\(f(n)\)</span>的阶严格大于<span
+class="math inline">\(g(n)\)</span>的阶；</li>
+<li>大写<span class="math inline">\(\Theta\)</span>，<span
+class="math inline">\(f(n) = \Theta(g(n))\)</span>，表示<span
+class="math inline">\(f(n)\)</span>的阶与<span
+class="math inline">\(g(n)\)</span>的阶相同。</li>
+</ul>
+<p>最常用的是大<span
+class="math inline">\(O\)</span>表示，注意<strong>不大于</strong>这个描述，即
+<span class="math inline">\(n=O(n^2)\)</span>、<span
+class="math inline">\(n^2+n=O(n^2)\)</span> 这类表述都是正确的，大 <span
+class="math inline">\(O\)</span>
+关心的是一个算法复杂度的“上界”，至于是不是严格等于这个上界就不那么重要了，这样更方便评估一个算法的效率是否“可用”。</p>
+<p>算法复杂度<span
+class="math inline">\(T(n)\)</span>是关于输入规模<span
+class="math inline">\(n\)</span>的函数，如果这个函数包含多项，比如 <span
+class="math inline">\(5^{n}+2n^{2}+3n\dots\)</span>，大<span
+class="math inline">\(O\)</span>表示法只保留阶最高的项，且不关心常数系数，这个例子的大<span
+class="math inline">\(O\)</span>表示应该简化为 <span
+class="math inline">\(O(5^{n})\)</span></p>
+<h3 id="空间复杂度">空间复杂度</h3>
+<p>算法启动后需要的额外空间。</p>
+<p>通常先指定一个常数级别的基本单位，比如 <code>int</code>（4个字节）
+大小的内存、长度为<code>10</code>的<code>char</code>等等，根据具体的算法指定一个合乎逻辑的基本单位，统计基本单位的使用数量，得到一个关于输入规模
+<span class="math inline">\(n\)</span> 的函数。</p>
+<h3 id="时间复杂度">时间复杂度</h3>
+<p>算法基本运算执行的次数，基本运算是一个或一组有限时间内结束的、算法中执行频率最高的运算，比如加法、乘法、比较、常数级别的矩阵乘法等等。</p>
+<h2 id="分治">分治</h2>
+<p>递归地调用自身解决紧密相关的若干子问题，步骤如下：</p>
+<ol type="1">
+<li>分解原问题为若干互不相交的子问题<br />
+这些子问题是原问题规模较小的实例，与原问题属性相同</li>
+<li>解决这些子问题，递归进行<br />
+如果子问题规模足够小则直接求解</li>
+<li>合并这些子问题的解为原问题的解<br />
+递归的各子问题解决完后回到上一层进行合并</li>
+</ol>
+<p>以归并排序为例</p>
+<ol type="1">
+<li>分解：待排序的<span
+class="math inline">\(n\)</span>个元素序列分解为两个<span
+class="math inline">\(n/2\)</span>个元素的序列</li>
+<li>解决：递归地对两个子序列执行归并排序，长度为1则直接返回</li>
+<li>合并：“回升”阶段将两个已排序的子序列合并为一个已排序的结果</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">MergeSort</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(l &gt;= r - <span class="number">1</span>) <span class="keyword">return</span>;     <span class="comment">// 【解决】最小规模</span></span><br><span class="line">    <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">MergeSort</span>(a, l, mid);      <span class="comment">// 【分解】并【解决】</span></span><br><span class="line">    <span class="built_in">MergeSort</span>(a, mid, r);      <span class="comment">// 【分解】并【解决】</span></span><br><span class="line">    <span class="comment">// 【合并】阶段开始</span></span><br><span class="line">    <span class="type">int</span> i = l, j = mid, tp = l;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; mid &amp;&amp; j &lt; r) &#123;</span><br><span class="line">        <span class="keyword">if</span>(a[j] &lt; a[i]) tmp[tp ++] = a[j ++];</span><br><span class="line">        <span class="keyword">else</span> tmp[tp ++] = a[i ++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; mid) tmp[tp ++] = a[i ++];</span><br><span class="line">    <span class="keyword">while</span>(j &lt; r) tmp[tp ++] = a[j ++];</span><br><span class="line">    <span class="built_in">memcpy</span>(a + l, tmp + l, <span class="built_in">sizeof</span>(<span class="type">int</span>) * (r - l));</span><br><span class="line">    <span class="comment">// 【合并】阶段结束，【解决】了当前子问题[l,r)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="分治的时间复杂度分析">分治的时间复杂度分析</h3>
+<p>归并排序要解决 <span class="math inline">\(2\)</span> 个 <span
+class="math inline">\(n/2\)</span> 规模的子问题，把 <span
+class="math inline">\(2\)</span> 个子问题的结果合并为一个有序数组有
+<span class="math inline">\(O(n)\)</span> 的代价，复杂度函数表示为</p>
+<p><span class="math inline">\(T(n) = 2T( n/2 ) + O(n)\)</span></p>
+<p>这种原始问题（规模为<span
+class="math inline">\(n\)</span>）的复杂度<span
+class="math inline">\(T(n)\)</span>由拆分的若干个（<span
+class="math inline">\(a\)</span>个）、相同方法解决的子问题（<span
+class="math inline">\(n\)</span>减小的某个规模）复杂度函数<span
+class="math inline">\(T(n/b)\)</span>和合并子问题的复杂度<span
+class="math inline">\(f(n)\)</span>组成的式子称为递归式，求得由 <span
+class="math inline">\(n\)</span> 的公式直接表达 <span
+class="math inline">\(T(n)\)</span>
+的结果的过程称为解递归式，递归式的解就是这个分治算法的时间复杂度。典型形式为：</p>
+<p>多个相同规模子问题：<span
+class="math inline">\(T(n)=aT(n/b)+f(n)\)</span>，
+多个不同规模子问题：<span
+class="math inline">\(T(n)=T(n/b)+T(n/c)+\dots+f(n)\)</span></p>
+<p>最直观的方法是通过<strong>递归树</strong>求解：</p>
+<p>每个结点表示单一子问题合并工作的代价（<span
+class="math inline">\(f(n)\)</span>），树中每层代价求和，所有层的代价求和</p>
+<p>对于<span class="math inline">\(T(n) = 2T(n/2) + n\)</span>，</p>
+<p>此处我们仍假设<span class="math inline">\(n\)</span>是2的幂</p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E9%80%92%E5%BD%92%E6%A0%91_%E6%9E%84%E9%80%A0.svg" class="" title="递归树构造">
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E9%80%92%E5%BD%92%E6%A0%91_%E8%AE%A1%E7%AE%97%E5%A4%8D%E6%9D%82%E5%BA%A6.svg" class="" title="用递归树计算复杂度">
+<h3 id="例线性平均情况第k小">例：线性（平均情况）第k小</h3>
+<p><span class="math inline">\(n\)</span>个未排序的数，选择其中第<span
+class="math inline">\(k\)</span>小的数。<strong>线性</strong>算法指算法复杂度
+<span class="math inline">\(T(n)\)</span> 是关于 <span
+class="math inline">\(n\)</span> 的一次函数。</p>
+<p>假设数据规模不允许基数排序等特殊排序方法，则快速排序、归并排序等方式需要
+<span class="math inline">\(nlogn\)</span>，不满足线性。</p>
+<p>设数组为<span
+class="math inline">\(S\)</span>，以“快速排序”的思想进行划分</p>
+<ol type="1">
+<li>分解：选一个数<span
+class="math inline">\(m^{*}\)</span>，按大小划分为<span
+class="math inline">\(S_1\)</span>和<span
+class="math inline">\(S_2\)</span>（<span
+class="math inline">\(m^{*}\)</span>在两集合之间），即数组所有比 <span
+class="math inline">\(m^{*}\)</span> 小的放它左边，比 <span
+class="math inline">\(m^{*}\)</span> 大的放它右边。</li>
+<li>解决：
+<ul>
+<li>若<span class="math inline">\(k \leq |S_1|\)</span>，则在<span
+class="math inline">\(S_1\)</span>中找第<span
+class="math inline">\(k\)</span>小</li>
+<li>若<span class="math inline">\(k &gt; |S_1| + 1\)</span>，则在<span
+class="math inline">\(S_2\)</span>中找第<span class="math inline">\(k -
+|S_1|\)</span>小</li>
+<li>若<span class="math inline">\(k = |S_1| + 1\)</span>，则第<span
+class="math inline">\(k\)</span>小为<span
+class="math inline">\(m^{*}\)</span></li>
+</ul></li>
+<li>合并：第<span class="math inline">\(k\)</span>小的数只会存在于<span
+class="math inline">\(S_1\)</span>、<span
+class="math inline">\(S_2\)</span>、<span
+class="math inline">\(m^{*}\)</span>其中一个，在这一边递归找</li>
+</ol>
+<p>分析：平均情况下，子问题规模（左半边或右半边）<span
+class="math inline">\(n/2\)</span>，因为只会在一边找，所以只需要解决
+<span class="math inline">\(1\)</span>
+个子问题，合并子问题的工作集中在划分这件事上，即“比 <span
+class="math inline">\(m^{*}\)</span> 小的放它左边，比 <span
+class="math inline">\(m^{*}\)</span> 大的放它右边”，这个操作是 <span
+class="math inline">\(O(n)\)</span> 的，所以递归式为：</p>
+<p><span class="math inline">\(T(n)=T(n/2)+n\)</span></p>
+<p>解递归式得 <span class="math inline">\(T(n)=O(n)\)</span>
+，在平均情况下是线性的。</p>
+<p>为什么要说“平均情况”呢？因为选<span
+class="math inline">\(m^{*}\)</span>划分的时候，有可能大多数都分到了一侧，这种不均衡会导致<span
+class="math inline">\(T(n)\)</span>不再是线性的，但选择<span
+class="math inline">\(m^{*}\)</span>的随机性很高，可以认为较大概率不会很偏，或从统计角度讲，多次执行的平均运算量是线性的。</p>
+<p>其实这个问题有一个理论上更强大的解法，在<strong>最坏情况下</strong>也是<span
+class="math inline">\(O(n)\)</span>的，可以在熟练掌握分治后进一步了解。</p>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e8</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> n, m, k;</span><br><span class="line"><span class="type">int</span> a[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">GetK</span><span class="params">(<span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> k)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left == right - <span class="number">1</span>) <span class="keyword">return</span> a[left];</span><br><span class="line">    <span class="type">int</span> low = left, high = right - <span class="number">1</span>, center = a[low];</span><br><span class="line">    <span class="keyword">while</span>(low &lt; high)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span>(low &lt; high &amp;&amp; a[high] &gt;= center) high --;</span><br><span class="line">        a[low] = a[high];</span><br><span class="line">        <span class="keyword">while</span>(low &lt; high &amp;&amp; a[low] &lt;= center) low ++;</span><br><span class="line">        a[high] = a[low];</span><br><span class="line">    &#125;</span><br><span class="line">    a[low] = center;</span><br><span class="line">    <span class="keyword">if</span>(low - left &gt;= k) <span class="keyword">return</span> <span class="built_in">GetK</span>(left, low, k);</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(low - left + <span class="number">1</span> == k) <span class="keyword">return</span> a[low];</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="built_in">GetK</span>(low + <span class="number">1</span>, right, k - (low - left) - <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;n, &amp;m, &amp;k) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        a[<span class="number">0</span>] = m;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i ++)</span><br><span class="line">            a[i] = <span class="number">1LL</span> * a[i - <span class="number">1</span>] * m % mod;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, <span class="built_in">GetK</span>(<span class="number">0</span>, n, k));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例平面最近点对">例：平面最近点对</h3>
+<p>平面有<span class="math inline">\(n\)</span>个点，位置以<span
+class="math inline">\((x,
+y)\)</span>坐标表示，求最近的两个点及其距离。</p>
+<p>设两个子问题最优解距离为<span class="math inline">\(d\)</span></p>
+<p>每个小矩形内至多1个点</p>
+<ul>
+<li>考虑小矩形内两点最远距离（即对角线<span
+class="math inline">\(r\)</span>）</li>
+<li><span
+class="math inline">\(r=\sqrt{(d/2)^2+(2d/3)^2}=5d/6&lt;d\)</span>，</li>
+<li>如有多个点则与子问题最优解矛盾</li>
+</ul>
+<p>合并时，左侧任一点<span
+class="math inline">\(P\)</span>在右侧至多考虑6个点</p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/%E5%B9%B3%E9%9D%A2%E6%9C%80%E8%BF%91%E7%82%B9%E5%AF%B9.svg" class="" title="平面最近点对">
+<p><span class="math inline">\(T(n)=2T(n/2)+O(n \log n)\)</span>，<span
+class="math inline">\(T(n)=O(n \log^2 n)\)</span></p>
+<p>虽然左边每个点考查右边 <span class="math inline">\(6\)</span>
+个点应当是 <span class="math inline">\(O(n)\)</span>
+的，但是要快速找到这 <span class="math inline">\(6\)</span>
+个点，就不得不排序，所以合并子问题的工作量稍大了些。</p>
+<p>但可以进一步优化，尝试一次排序，在分治的时候同时划分排序信息，避免每次都排序，自行尝试。</p>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> inf = <span class="number">0x3f3f3f3f</span>;     <span class="comment">// 定义一个极大值</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="type">int</span> x, y, idx;              <span class="comment">// 坐标及序号</span></span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> Point &amp;b)&#123;<span class="keyword">return</span> x &lt; b.x;&#125; <span class="comment">// 重载“&lt;”用于排序</span></span><br><span class="line">&#125;;</span><br><span class="line">Point p[maxn], csh[maxn];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">Sqr</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;<span class="keyword">return</span> x * x;&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Dis</span><span class="params">(Point &amp;a, Point &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Sqr</span>(a.x - b.x) + <span class="built_in">Sqr</span>(a.y - b.y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> n, ansa, ansb, ansdis;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Update</span><span class="params">(Point &amp;a, Point &amp;b)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 由于答案要输出点对编号，而不仅仅是距离，用此函数更新答案</span></span><br><span class="line">    <span class="type">int</span> na = a.idx, nb = b.idx, dis = <span class="built_in">Dis</span>(a, b);</span><br><span class="line">    <span class="keyword">if</span>(na &gt; nb) std::<span class="built_in">swap</span>(na, nb);</span><br><span class="line">    <span class="keyword">if</span>(ansdis == <span class="number">-1</span> || dis &lt; ansdis || dis == ansdis &amp;&amp; (na &lt; ansa || na == ansa &amp;&amp; nb &lt; ansb))</span><br><span class="line">        ansa = na, ansb = nb, ansdis = dis;</span><br><span class="line">    <span class="keyword">return</span> dis;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Merge</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r, <span class="type">int</span> mid)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> i = l, j = mid, k = l;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; mid &amp;&amp; j &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(p[i].y &lt; p[j].y) csh[k ++] = p[i ++];</span><br><span class="line">        <span class="keyword">else</span> csh[k ++] = p[j ++];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(i &lt; mid) csh[k ++] = p[i ++];</span><br><span class="line">    <span class="keyword">while</span>(j &lt; r) csh[k ++] = p[j ++];</span><br><span class="line">    <span class="built_in">memcpy</span>(p + l, csh + l, <span class="built_in">sizeof</span>(Point) * (r - l));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">JudgeNearby</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> mid, <span class="type">int</span> r, Point &amp;c)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 注意到本算法采用了一个 trick：回溯的同时对 y 坐标做归并排序</span></span><br><span class="line">    <span class="comment">// 说明处理 [l, r) 区间时，[l, mid)和[mid, r)两个子问题已经 y 坐标有序</span></span><br><span class="line">    <span class="comment">// 提取两个子问题到中间点的 x 距离不超过子问题最优解的那些点 pl[] 和 pr[]</span></span><br><span class="line">    <span class="comment">// 只需左右“异步前进”，就能很容易定位左边 pl[] 每个点在右边上下距离不超过当前最优解的那些点</span></span><br><span class="line">    std::vector&lt;Point&gt; pl, pr;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = l; i &lt; mid; i ++)</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Sqr</span>(c.x - p[i].x) &lt;= ansdis) pl.<span class="built_in">push_back</span>(p[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = mid; i &lt; r; i ++)</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">Sqr</span>(c.x - p[i].x) &lt;= ansdis) pr.<span class="built_in">push_back</span>(p[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; i &lt; pl.<span class="built_in">size</span>(); i ++) &#123;    <span class="comment">// 对于左侧 pl[] 的每个点</span></span><br><span class="line">        <span class="comment">// 找到右侧 pr[] 的点中距离 pl[i] 小于目前最优解的序号下界 j</span></span><br><span class="line">        <span class="keyword">while</span>(j &lt; pr.<span class="built_in">size</span>() &amp;&amp; pl[i].y &gt; pr[j].y &amp;&amp; <span class="built_in">Sqr</span>(pl[i].y - pr[j].y) &gt; ansdis) j ++;</span><br><span class="line">        <span class="comment">// 从 j 开始枚举 pr[] 中的点，直到 y 坐标距离超过当前最优解</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> k = j; k &lt; pr.<span class="built_in">size</span>() &amp;&amp; <span class="built_in">Sqr</span>(pl[i].y - pr[k].y) &lt;= ansdis; k ++)</span><br><span class="line">            <span class="built_in">Update</span>(pl[i], pr[k]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">MinDis</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(r - l &lt;= <span class="number">1</span>) <span class="keyword">return</span> inf;          <span class="comment">// 递归终点：子问题中没有点，返回极大距离</span></span><br><span class="line">    <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    Point midp = p[mid];</span><br><span class="line">    <span class="built_in">MinDis</span>(l, mid);                     <span class="comment">// 处理子问题最近点对</span></span><br><span class="line">    <span class="built_in">MinDis</span>(mid, r);                     <span class="comment">// 处理子问题最近点对</span></span><br><span class="line">    <span class="built_in">JudgeNearby</span>(l, mid, r, midp);       <span class="comment">// 两侧子问题取相近点求距离更新答案</span></span><br><span class="line">    <span class="built_in">Merge</span>(l, r, mid);                   <span class="comment">// 对 y 坐标进行归并排序的 Merge 操作</span></span><br><span class="line">    <span class="keyword">return</span> ansdis;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n) != EOF) &#123;</span><br><span class="line">        ansa = ansb = ansdis = inf;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;p[i].x, &amp;p[i].y);</span><br><span class="line">            p[i].idx = i;</span><br><span class="line">        &#125;</span><br><span class="line">        std::<span class="built_in">sort</span>(p, p + n);    <span class="comment">// 按重载的“&lt;”，以x从小到大排序</span></span><br><span class="line">        <span class="built_in">MinDis</span>(<span class="number">0</span>, n);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, ansa, ansb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分治优化策略">分治优化策略</h2>
+<p><strong>用一部分子问题的解表达另一部分子问题，减少计算子问题的个数</strong></p>
+<h3 id="例快速幂">例：快速幂</h3>
+<p><span class="math inline">\(a\)</span>为给定实数，<span
+class="math inline">\(n\)</span>为自然数，求<span
+class="math inline">\(a^n\)</span></p>
+<ol type="1">
+<li>分解：两份<span class="math inline">\(n/2\)</span>个<span
+class="math inline">\(a\)</span>相乘</li>
+<li>解决：对于奇数个的子问题，剩下的1个保留，乘在最终结果上</li>
+<li>合并：两个子问题的解相乘</li>
+</ol>
+<p>但两个子问题结果相同，不必递归计算两遍</p>
+<p><span class="math inline">\(T(n) = T(n/2) + \Theta(1)\)</span>，<span
+class="math inline">\(T(n) = O(\log n)\)</span></p>
+<p>奇数个数会有“零头”，这个零头令开一个变量“屯”起来。</p>
+<p>问题比较简单，可以“自底向上”地合并，不需要递归了。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">PowMod</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> mod)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(;b; b &gt;&gt;= <span class="number">1</span>, a = <span class="number">1LL</span> * a * a % mod)</span><br><span class="line">        <span class="keyword">if</span>(b &amp; <span class="number">1</span>) ret = <span class="number">1LL</span> * ret * a % mod;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例快速幂计算斐波那契数列第-n-项">例：快速幂计算斐波那契数列第
+<span class="math inline">\(n\)</span> 项</h3>
+<p>设<span class="math inline">\(f_0=0\)</span>, <span
+class="math inline">\(f_1=1\)</span>, <span
+class="math inline">\(f_n=f_{n-1}+f_{n-2}\)</span>，放入2×2的矩阵，发现：</p>
+<p><span class="math display">\[
+\left(\begin{array}{cc}
+f_{n+1} &amp; f_n \\
+f_n &amp; f_{n-1}
+\end{array}\right)
+\times
+\left(\begin{array}{cc}
+1 &amp; 1 \\
+1 &amp; 0
+\end{array}\right)
+=
+\left(\begin{array}{cc}
+f_{n+1} + f_n &amp; f_{n+1} \\
+f_n + f_{n-1} &amp; f_n
+\end{array}\right)
+=
+\left(\begin{array}{cc}
+f_{n+2} &amp; f_{n+1} \\
+f_{n+1} &amp; f_n
+\end{array}\right)
+\]</span></p>
+<p>即矩阵每一项都变成了斐波那契数列对应位置的下一项。</p>
+<p>从而，</p>
+<p><span class="math display">\[
+\left(\begin{array}{cc}
+f_{n+1} &amp; f_n \\
+f_n &amp; f_{n-1}
+\end{array}\right)
+=
+\left(\begin{array}{cc}
+1 &amp; 1 \\
+1 &amp; 0
+\end{array}\right)^n
+\]</span></p>
+<p>把矩阵类比实数，同样可以用快速幂方法求斐波那契数列第<span
+class="math inline">\(n\)</span>项</p>
+<p><span class="math inline">\(T(n) = O(\log n)\)</span></p>
+<h3 id="例strassen矩阵乘法">例：Strassen矩阵乘法</h3>
+<p>求<span class="math inline">\(n\)</span>阶矩阵<span
+class="math inline">\(A\)</span>与<span
+class="math inline">\(B\)</span>相乘的结果<span
+class="math inline">\(AB\)</span>，其中假设<span
+class="math inline">\(n=2^k\)</span></p>
+<p>直接相乘方法：<span class="math inline">\(T(n)=O(n^3)\)</span></p>
+<p>直接分治： 分解： <span class="math display">\[
+\left[\begin{array}{cc}
+A_{11} &amp; A_{12}\\
+A_{21} &amp; A_{22}
+\end{array}\right]
+\left[\begin{array}{cc}
+B_{11} &amp; B_{12}\\
+B_{21} &amp; B_{22}
+\end{array}\right]
+=
+\left[\begin{array}{cc}
+C_{11} &amp; C_{12}\\
+C_{21} &amp; C_{22}
+\end{array}\right]
+\]</span></p>
+<p>求解：递归按矩阵乘规则求各子矩阵相乘结果</p>
+<p>合并： <span
+class="math display">\[C_{11}=A_{11}B_{11}+A_{12}B_{21}，C_{12}=A_{11}B_{12}+A_{12}B_{22}，\]</span>
+<span
+class="math display">\[C_{21}=A_{21}B_{11}+A_{22}B_{21}，C_{22}=A_{21}B_{12}+A_{22}B_{22}.\]</span></p>
+<p><span
+class="math inline">\(T(n)=8T(n/2)+O(n^2)，T(n)=O(n^3)\)</span>——这样不行</p>
+<p>子问题定义：两个<span
+class="math inline">\(n/2\)</span>规模的子矩阵相乘</p>
+<p>优化合并：将<span
+class="math inline">\(A_{11}B_{11}\)</span>等8个子问题通过相互表示优化为7个</p>
+<p>设<span class="math inline">\(M_1 \sim M_7\)</span>为7个子问题</p>
+<p><span class="math display">\[M_1 = A_{11}(B_{12} - B_{22})\]</span>
+<span class="math display">\[M_2 = (A_{11} + A_{12})B_{22}\]</span>
+<span class="math display">\[M_3 = (A_{21} + A_{22})B_{11}\]</span>
+<span class="math display">\[M_4 = A_{22}(B_{21} - B_{11})\]</span>
+<span class="math display">\[M_5 = (A_{11} + A_{22})(B_{11} +
+B_{22})\]</span> <span class="math display">\[M_6 = (A_{12} -
+A_{22})(B_{21} + B_{22})\]</span> <span class="math display">\[M_7 =
+(A_{11} - A_{21})(B_{11} + B_{12})\]</span></p>
+<p><span class="math display">\[C_{11} = M_5 + M_4 - M_2 + M_6,\]</span>
+<span class="math display">\[C_{12} = M_1 + M_2,\]</span> <span
+class="math display">\[C_{21} = M_3 + M_4,\]</span> <span
+class="math display">\[C_{22} = M_5 + M_1 - M_3 - M_7.\]</span></p>
+<p>即Strassen矩阵乘法用7个子问题完成了<span
+class="math inline">\(C\)</span>矩阵的计算</p>
+<p><span class="math display">\[T(n) = 7T(n/2) + O(n^2)，T(n) =
+O(n^{\log 7}) \approx O(n^{2.81})\]</span></p>
+<p>Coppersmith-Winograd算法为<span
+class="math inline">\(O(n^{2.3727})\)</span></p>
+<h3 id="例快速傅里叶变换">例：快速傅里叶变换</h3>
+<p>使用FFT解决多项式乘法问题</p>
+<p>设两个多项式<span class="math inline">\(F(x)\)</span>和<span
+class="math inline">\(G(x)\)</span>如下：</p>
+<p><span class="math display">\[
+F(x) = a_0 + a_1x + a_2x^2 + \ldots
+\]</span></p>
+<p><span class="math display">\[
+G(x) = b_0 + b_1x + b_2x^2 + \ldots
+\]</span></p>
+<p>它们的乘积可以表示为：</p>
+<p><span class="math display">\[
+F(x)G(x) = \sum_{i=0} \sum_{j=0}^{i} a_j b_{i-j} x^i
+\]</span></p>
+<p>应用到大整数乘法</p>
+<p>如果把<span
+class="math inline">\(x\)</span>换成10，就解决了大整数乘法问题。例如：</p>
+<p><span class="math display">\[
+314159 = 9 + 5 \times 10 + 1 \times 10^2 + 4 \times 10^3 + 1 \times 10^4
++ 3 \times 10^5
+\]</span></p>
+<p>对多项式 <span class="math inline">\(y = a_0 + a_1x + a_2x^2 + \ldots
++ a_{n-1}x^{n-1}\)</span> 做一个反向思考：</p>
+<p>A同学有多项式，知道所有系数<span class="math inline">\(a_0, a_1,
+\ldots, a_{n-1}\)</span>（都是已知常数）</p>
+<p>B同学只知道多项式的形式，但不知道多项式具体是什么</p>
+<p>A同学向多项式代入<span class="math inline">\(n\)</span>个不同的<span
+class="math inline">\(x_i\)</span>，算出<span
+class="math inline">\(n\)</span>个不同的<span
+class="math inline">\(y_i\)</span></p>
+<p>得到<span class="math inline">\((x_1, y_1), (x_2, y_2), \ldots, (x_n,
+y_n)\)</span>，可以视作“点”</p>
+<p>思考：B同学拿到<span class="math inline">\(n\)</span>“对”<span
+class="math inline">\((x_i, y_i)\)</span>，他能否反向算出<span
+class="math inline">\(a_0, a_1, \ldots, a_{n-1}\)</span>的值？</p>
+<p><span class="math inline">\(a_0, a_1, \ldots a_{n-1}\)</span>与<span
+class="math inline">\((x_1,y_1),(x_2,y_2),\ldots(x_n,y_n)\)</span>都唯一确定一个多项式</p>
+<p>系数表示法： <span class="math inline">\(a_0,a_1,\ldots
+a_{n-1}\)</span></p>
+<p>点值表示法： <span
+class="math inline">\((x_1,y_1),(x_2,y_2),\ldots(x_n,y_n)\)</span></p>
+<p>系数表示法的多项式乘法是 <span class="math display">\[
+F(x)G(x)=\sum_{i=0} \sum_{j=0}^i a_j b_{i-j} x^i
+\]</span></p>
+<p>思考：点值表示法的多项式乘法如何进行？</p>
+<p>对每个特定 <span class="math inline">\(x\)</span>
+，两个点表示法的多项式相乘，就是 <span class="math inline">\(y\)</span>
+的值相乘。<span
+class="math inline">\(F(x)G(x)\)</span>的点值表示法是<span
+class="math inline">\((x_1, (y_{a1} * y_{b1})), (x_2, (y_{a2} *
+y_{b2})), \ldots\)</span></p>
+<p>如何利用点值表示法加速多项式乘法？直接代入<span
+class="math inline">\(n\)</span>个不同的<span
+class="math inline">\(x\)</span>并不能实质降低复杂度，仍然要<span
+class="math inline">\(O(n^2)\)</span>得到所有点值：</p>
+<ul>
+<li><span class="math inline">\(x_1\)</span> 代入<span
+class="math inline">\(F(x)=a_0+a_1 x+\ldots a_{n-1}
+x^{n-1}\)</span>得到<span class="math inline">\(y_1\)</span>需要<span
+class="math inline">\(O(n)\)</span>时间</li>
+<li><span class="math inline">\(n\)</span>个不同的<span
+class="math inline">\(x_i\)</span>分别代入，总共就要<span
+class="math inline">\(O(n^2)\)</span>的时间</li>
+</ul>
+<p>设计特殊的<span class="math inline">\(n\)</span>个不同的<span
+class="math inline">\(x\)</span>，加速每个点的计算。</p>
+<p>复数域下，<span class="math inline">\(x^n=1\)</span>的<span
+class="math inline">\(x\)</span>是<span
+class="math inline">\(n\)</span>次单位根 <span
+class="math display">\[x_k=e^{i 2k\pi/n}, \quad k=0,1,2,\ldots
+n-1\]</span></p>
+<p>用它作为<span class="math inline">\(n\)</span>个不同的<span
+class="math inline">\(x\)</span>，相当于等分了圆周角 <span
+class="math display">\[x_k=e^{i 2k\pi/n}=e^{i 2\pi/n
+k}=\omega_n^k\]</span></p>
+<p>欧拉公式<span class="math inline">\(e^{i2k\pi}=\cos 2k\pi + i \sin
+2k\pi = 1\)</span></p>
+<p><span class="math inline">\(e^{i2k\pi}\)</span>开<span
+class="math inline">\(n\)</span>次根<span class="math inline">\(e^{i
+2k\pi/n}\)</span>就是一个解</p>
+<img src="/2025-03-27-15-%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%90%86%E8%AE%BA%E4%B8%8E%E5%88%86%E6%B2%BB/FFT.svg" class="" title="FFT">
+<p><span class="math inline">\(F(x) = F(\omega_n) = a_0 + a_1 \omega_n +
+\ldots + a_{n-1} \omega_n^{n-1}\)</span></p>
+<p>奇偶系数分开定义新多项式</p>
+<p><span class="math display">\[A(\omega_n) = a_0 + a_2 \omega_n^1 + a_4
+\omega_n^2 + \ldots + a_{n-2} \omega_n^{n/2-1}\]</span> <span
+class="math display">\[B(\omega_n) = a_1 + a_3 \omega_n^1 + a_5
+\omega_n^2 + \ldots + a_{n-1} \omega_n^{n/2-1}\]</span> <span
+class="math display">\[F(\omega_n) = A(\omega_n^2) + \omega_n
+B(\omega_n^2)\]</span></p>
+<p><span class="math inline">\(F(\omega_n) = A(\omega_n^2) + \omega_n
+B(\omega_n^2)\)</span>，分别代入<span
+class="math inline">\(\omega_n^k\)</span>和<span
+class="math inline">\(\omega_n^{k+n/2}\)</span></p>
+<p><span class="math inline">\(F(\omega_n^k) = A(\omega_n^{2k}) +
+\omega_n^k B(\omega_n^{2k})\)</span> <span class="math inline">\(=
+A(\omega_{n/2}^k) + \omega_n^k B(\omega_{n/2}^k)\)</span></p>
+<p><span class="math inline">\(F(\omega_n^{k+n/2}) = A(\omega_n^{2k+n})
++ \omega_n^{k+n/2} B(\omega_n^{2k+n})\)</span> <span
+class="math inline">\(= A(\omega_{n/2}^k) - \omega_n^k
+B(\omega_{n/2}^k)\)</span></p>
+<p><span class="math inline">\(F(\omega_n^k) = A(\omega_{n/2}^k) +
+\omega_n^k B(\omega_{n/2}^k)\)</span></p>
+<p><span class="math inline">\(F(\omega_n^{k+n/2}) = A(\omega_{n/2}^k) -
+\omega_n^k B(\omega_{n/2}^k)\)</span></p>
+<p>分治！</p>
+<p>解决“多项式代入求值”的子问题<span
+class="math inline">\(A(\omega_{(n/2)}^k)\)</span>和<span
+class="math inline">\(B(\omega_{(n/2)}^k)\)</span> 就能求出<span
+class="math inline">\((x_k, y_k)\)</span>，<span
+class="math inline">\((x_{(k+n/2)}, y_{(k+n/2)})\)</span>两个点</p>
+<p><span class="math inline">\(A(\omega_{n/2}^k)\)</span>和<span
+class="math inline">\(B(\omega_{n/2}^k)\)</span>的规模（多项式系数个数）都是原问题的一半</p>
+<h4 id="fft反变换">FFT反变换</h4>
+<p>前面讨论了如何将多项式从系数表示法转换为点值表示法，现在需要解决如何从点值表示法转换回系数表示法，这个过程称为FFT反变换(IFFT)。</p>
+<p>对于点值表示法<span
+class="math inline">\((x_1,y_1),(x_2,y_2),\ldots,(x_n,y_n)\)</span>，需要求解方程组（<span
+class="math inline">\(a_{i}\)</span>是未知数）：</p>
+<p><span class="math display">\[
+\begin{cases}
+a_0 + a_1x_1 + a_2x_1^2 + \ldots + a_{n-1}x_1^{n-1} = y_1 \\
+a_0 + a_1x_2 + a_2x_2^2 + \ldots + a_{n-1}x_2^{n-1} = y_2 \\
+\vdots \\
+a_0 + a_1x_n + a_2x_n^2 + \ldots + a_{n-1}x_n^{n-1} = y_n
+\end{cases}
+\]</span></p>
+<p>这个方程组可以写成矩阵形式：</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1 &amp; x_1 &amp; x_1^2 &amp; \ldots &amp; x_1^{n-1} \\
+1 &amp; x_2 &amp; x_2^2 &amp; \ldots &amp; x_2^{n-1} \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+1 &amp; x_n &amp; x_n^2 &amp; \ldots &amp; x_n^{n-1}
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\
+a_1 \\
+\vdots \\
+a_{n-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{bmatrix}
+\]</span></p>
+<p>当<span class="math inline">\(x_k =
+\omega_n^k\)</span>时，这个矩阵是范德蒙德矩阵，其逆矩阵有特殊性质。实际上，
+IFFT 的矩阵就是 FFT 得到的矩阵的共轭转置除以<span
+class="math inline">\(n\)</span>。</p>
+<p>因此， IFFT 的计算过程与FFT非常相似，只需要： 1. 将输入序列取共轭 2.
+执行FFT 3. 将结果取共轭并除以<span class="math inline">\(n\)</span></p>
+<p>所以在FFT代码中改动一小部分逻辑就能完成 IFFT。</p>
+<h4 id="蝴蝶变换">蝴蝶变换</h4>
+<p><span class="math display">\[A(\omega_n) = a_0 + a_2 \omega_n^1 + a_4
+\omega_n^2 + \ldots + a_{n-2} \omega_n^{n/2-1}\]</span> <span
+class="math display">\[B(\omega_n) = a_1 + a_3 \omega_n^1 + a_5
+\omega_n^2 + \ldots + a_{n-1} \omega_n^{n/2-1}\]</span></p>
+<p>观察系数序号与原始多项式的关系，在继续分治过程中，序号变化：</p>
+<ul>
+<li>初始序号：0, 1, 2, 3, 4, 5, 6, 7</li>
+<li>第一次分组：0, 2, 4, 6 | 1, 3, 5, 7</li>
+<li>第二次分组：0, 4 | 2, 6 | 1, 5 | 3, 7</li>
+</ul>
+<p>能否直接得到递归终点的序号序列<br />
+0,4 | 2,6 | 1,5 |3,7 的二进制：<br />
+000, 100, 010, 110, 001, 101, 011, 111<br />
+所有二进制反向：<br />
+000, 001, 010, 011, 100, 101, 110, 111</p>
+<p>蝴蝶变换代码参考</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BitRevChange</span><span class="params">(Complex y[], <span class="type">int</span> len)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// len 需要补齐到 2^k</span></span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">rev</span><span class="params">(len, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i ++) &#123;</span><br><span class="line">        rev[i] = rev[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (i &amp; <span class="number">1</span>) rev[i] |= len &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; ++i) </span><br><span class="line">        <span class="keyword">if</span> (i &lt; rev[i]) std::<span class="built_in">swap</span>(y[i], y[rev[i]]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="大整数乘法参考代码">大整数乘法参考代码</h4>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 注释文字由AI阅读代码后生成，仅供参考</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">double</span> pi = <span class="built_in">acos</span>(<span class="number">-1</span>);             <span class="comment">// 圆周率，用于计算单位根</span></span><br><span class="line"><span class="type">const</span> <span class="type">double</span> eps = <span class="number">1e-6</span>;                <span class="comment">// 浮点数精度误差</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">4e6</span> + <span class="number">10</span>;              <span class="comment">// 最大数组长度，需要是2的幂次</span></span><br><span class="line"><span class="keyword">typedef</span> std::complex&lt;<span class="type">double</span>&gt; Complex;   <span class="comment">// 复数类型，用于FFT计算</span></span><br><span class="line"><span class="type">char</span> a[maxn], b[maxn];                  <span class="comment">// 输入的两个大整数字符串</span></span><br><span class="line">Complex xa[maxn], xb[maxn];             <span class="comment">// 转换为复数数组，用于FFT计算</span></span><br><span class="line"><span class="type">int</span> lena, lenb, len2;                   <span class="comment">// 两个数的长度和FFT计算长度</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 蝴蝶变换：将系数按照二进制反转重新排列</span></span><br><span class="line"><span class="comment">// 例如：000,001,010,011,100,101,110,111 -&gt; 000,100,010,110,001,101,011,111</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BitRevChange</span><span class="params">(Complex y[], <span class="type">int</span> len)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">rev</span><span class="params">(len, <span class="number">0</span>)</span></span>;        <span class="comment">// 存储每个位置的反转序号</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i ++) </span><br><span class="line">    &#123;</span><br><span class="line">        rev[i] = rev[i &gt;&gt; <span class="number">1</span>] &gt;&gt; <span class="number">1</span>;       <span class="comment">// 利用递推关系计算反转序号</span></span><br><span class="line">        <span class="keyword">if</span> (i &amp; <span class="number">1</span>) rev[i] |= len &gt;&gt; <span class="number">1</span>;   <span class="comment">// 处理最低位</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; ++i) </span><br><span class="line">        <span class="keyword">if</span> (i &lt; rev[i]) std::<span class="built_in">swap</span>(y[i], y[rev[i]]);  <span class="comment">// 只交换一次，避免重复</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// FFT主函数：将多项式从系数表示转换为点值表示</span></span><br><span class="line"><span class="comment">// on=1表示FFT，on=-1表示IFFT</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FFT</span><span class="params">(Complex y[], <span class="type">int</span> len, <span class="type">int</span> on=<span class="number">1</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">BitRevChange</span>(y, len);               <span class="comment">// 先进行蝴蝶变换</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> h = <span class="number">2</span>; h &lt;= len; h &lt;&lt;= <span class="number">1</span>)   <span class="comment">// h是当前处理的子问题规模</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 计算单位根：w_n = e^(2πi/n)</span></span><br><span class="line">        <span class="function">Complex <span class="title">wn</span><span class="params">(cos(<span class="number">2</span> * pi / h), on * sin(<span class="number">2</span> * pi / h))</span></span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; len; j += h)  <span class="comment">// 处理每个子问题</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">Complex <span class="title">w</span><span class="params">(<span class="number">1</span>, <span class="number">0</span>)</span></span>;             <span class="comment">// 单位根的幂次</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> k = j; k &lt; j + h / <span class="number">2</span>; k ++)</span><br><span class="line">            &#123;</span><br><span class="line">                Complex u = y[k];        <span class="comment">// 子问题A的结果</span></span><br><span class="line">                Complex t = w * y[k + h / <span class="number">2</span>];  <span class="comment">// 子问题B的结果</span></span><br><span class="line">                y[k] = u + t;            <span class="comment">// 合并结果：A + w*B</span></span><br><span class="line">                y[k + h / <span class="number">2</span>] = u - t;    <span class="comment">// 合并结果：A - w*B</span></span><br><span class="line">                w = w * wn;              <span class="comment">// 更新单位根的幂次</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(on != <span class="number">-1</span>) <span class="keyword">return</span>;                 <span class="comment">// FFT不需要除以n</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i ++) y[i].<span class="built_in">real</span>(y[i].<span class="built_in">real</span>() / len);  <span class="comment">// IFFT需要除以n</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%s%s&quot;</span>, a, b) != EOF)</span><br><span class="line">    &#123;</span><br><span class="line">        lena = <span class="built_in">strlen</span>(a); lenb = <span class="built_in">strlen</span>(b);</span><br><span class="line">        <span class="comment">// 将字符串转换为复数数组，注意要倒序存储</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; a[i]; i ++) xa[i] = a[lena - i - <span class="number">1</span>] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; b[i]; i ++) xb[i] = b[lenb - i - <span class="number">1</span>] - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 计算FFT需要的长度，必须是2的幂次</span></span><br><span class="line">        <span class="keyword">for</span>(len2 = <span class="number">1</span>; len2 &lt; lena + lenb; len2 &lt;&lt;= <span class="number">1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 补零到len2长度</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = lena; i &lt; len2; i ++) xa[i] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = lenb; i &lt; len2; i ++) xb[i] = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 对两个数进行FFT变换</span></span><br><span class="line">        <span class="built_in">FFT</span>(xa, len2); <span class="built_in">FFT</span>(xb, len2);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 在点值表示下直接相乘</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len2; i ++) xa[i] *= xb[i];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 进行IFFT变换，得到乘积的系数表示</span></span><br><span class="line">        <span class="built_in">FFT</span>(xa, len2, <span class="number">-1</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 处理进位，将结果转换回字符串</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len2; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            a[i] = (<span class="type">int</span>)(xa[i].<span class="built_in">real</span>() + <span class="number">0.5</span>) % <span class="number">10</span> + <span class="string">&#x27;0&#x27;</span>;  <span class="comment">// 四舍五入并取模</span></span><br><span class="line">            xa[i + <span class="number">1</span>].<span class="built_in">real</span>(xa[i + <span class="number">1</span>].<span class="built_in">real</span>() + (<span class="type">int</span>)(xa[i].<span class="built_in">real</span>() + <span class="number">0.5</span>) / <span class="number">10</span>);  <span class="comment">// 处理进位</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 去除前导零</span></span><br><span class="line">        <span class="keyword">for</span>(lena = len2 - <span class="number">1</span>; a[lena] == <span class="string">&#x27;0&#x27;</span> &amp;&amp; lena &gt; <span class="number">0</span>; lena --);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 输出结果</span></span><br><span class="line">        <span class="keyword">for</span>(; lena &gt;= <span class="number">0</span> &amp;&amp; <span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, a[lena]); lena --);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>16.前缀和、差分</title>
+    <url>/2025-04-02-16-%E5%89%8D%E7%BC%80%E5%92%8C%E3%80%81%E5%B7%AE%E5%88%86/</url>
+    <content><![CDATA[<h1 id="前缀和差分">前缀和、差分</h1>
+<p>前缀和与差分作为互补技术，分别通过预处理和逆运算高效处理数组的区间查询与批量修改问题。</p>
+<span id="more"></span>
+<h2 id="前缀和">前缀和</h2>
+<h3 id="例区间和">例：区间和</h3>
+<p>给定 <span class="math inline">\(n\)</span> 个正整数组成的数列 <span
+class="math inline">\(a_1,a_2,\cdots,a_n\)</span> 和 <span
+class="math inline">\(m\)</span> 个区间 <span
+class="math inline">\([l_i,r_i]\)</span>，分别求这 <span
+class="math inline">\(m\)</span> 个区间的区间和。</p>
+<p>对于所有测试数据，<span class="math inline">\(n,m\leq
+10^5\)</span>，<span class="math inline">\(a_i\leq 10^4\)</span></p>
+<p>这个问题涉及多次询问，每次都加一遍效率很低。</p>
+<p>前缀和是一种简单而强大的预处理技术。它通过预先计算数组中从第一个元素到每个位置的元素之和，使得我们能够在O(1)的时间内求出任意区间的和。</p>
+<p>对于一个数组 <span
+class="math inline">\(a_1,a_2,\cdots,a_n\)</span>，我们定义前缀和数组
+<span class="math inline">\(s_i\)</span> 为:</p>
+<p><span class="math inline">\(s_i = \sum_{j=1}^i a_j\)</span></p>
+<p>也就是说: - <span class="math inline">\(s_1 = a_1\)</span> - <span
+class="math inline">\(s_2 = a_1 + a_2\)</span> - <span
+class="math inline">\(s_3 = a_1 + a_2 + a_3\)</span> - ...以此类推</p>
+<p>有了前缀和数组后，要求区间 <span class="math inline">\([l,r]\)</span>
+的和，只需要用 <span class="math inline">\(s_r - s_{l-1}\)</span>
+即可。这是因为: - <span class="math inline">\(s_r\)</span> 包含了 <span
+class="math inline">\(a_1\)</span> 到 <span
+class="math inline">\(a_r\)</span> 的所有元素之和 - <span
+class="math inline">\(s_{l-1}\)</span> 包含了 <span
+class="math inline">\(a_1\)</span> 到 <span
+class="math inline">\(a_{l-1}\)</span> 的所有元素之和 - 两者相减就得到了
+<span class="math inline">\(a_l\)</span> 到 <span
+class="math inline">\(a_r\)</span> 的和</p>
+<p>这样，我们只需要O(n)的时间预处理出前缀和数组，就可以在O(1)的时间内回答任意区间和的询问。对于有大量询问的情况，这种方法比每次都重新计算区间和要高效得多。</p>
+<p>例如对于数组 [1,2,3,4,5]: - 前缀和数组为 [1,3,6,10,15] -
+要求区间[2,4]的和，只需计算 s[4] - s[1] = 10 - 1 = 9</p>
+<p>用递推的方式<span
+class="math inline">\(O(n)\)</span>就可以得到一个数组的前缀和数组，设数组为<code>a[maxn]</code>，前缀和数组为<code>pre[maxn]</code></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">pre[<span class="number">0</span>] = <span class="number">0</span>;  <span class="comment">// 假设数组数据从下标 1 开始，用 0 作为“哨兵”</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">    pre[i] = pre[i - <span class="number">1</span>] + a[i];  <span class="comment">// 递推计算前缀和</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对任意<span
+class="math inline">\([i,j]\)</span>（闭区间为例）区间和，<code>pre[j] - pre[i - 1]</code>
+可以得到</p>
+<h3 id="例最大加权矩形">例：最大加权矩形</h3>
+<p>给定一个 <span class="math inline">\(n\times n\)</span>
+的矩阵，矩阵中的每个元素都是整数，范围在 <span
+class="math inline">\([−127,127]\)</span>
+之间。求矩阵中所有可能的矩形中，元素和最大的那个矩形的和。</p>
+<p>例如对于矩阵： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"> 0 –2 –7  0 </span><br><span class="line"> 9  2 –6  2</span><br><span class="line">-4  1 –4  1 </span><br><span class="line">-1  8  0 –2</span><br></pre></td></tr></table></figure></p>
+<p>左下角的 <span class="math inline">\(3\times 2\)</span> 矩形：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">9  2</span><br><span class="line">-4  1</span><br><span class="line">-1  8</span><br></pre></td></tr></table></figure>
+<p>和为 15。</p>
+<p>先考虑最直观的思路，枚举所有矩形的“左上点”和“右下点”，就算提前计算了所有点的“左上方”的和，至少也是
+<span class="math inline">\(O(n^4)\)</span> 的复杂度了。</p>
+<p>在复杂度理论中已了解过最大连续和的<span
+class="math inline">\(O(n)\)</span>解法，假设最大矩形是 左上点<span
+class="math inline">\((r_{1},c_{1})\)</span>，右下点 <span
+class="math inline">\((r_{2},c_{2})\)</span>之间的矩形，如果把矩阵其它行都去掉，只保留<span
+class="math inline">\([r_{1},r_{2}]\)</span>
+这些行，把每一列的和看作一个整体，就能得到一个 <span
+class="math inline">\(n\)</span>
+元素序列，这个序列的最大连续和，就是<span
+class="math inline">\((r_{1},c_{1}),
+(r_{2},c_{2})\)</span>这个矩形的和。</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">..........</span><br><span class="line">..........</span><br><span class="line">##@@@@#### ┐</span><br><span class="line">##@@@@####  &gt; 这些行的每一列的和看作一个元素（一列#相加），求最大连续和（@那些列）</span><br><span class="line">##@@@@#### ┘</span><br><span class="line">..........</span><br></pre></td></tr></table></figure>
+<p>对于任意行起点<span class="math inline">\(r_{1}\)</span>、行终点<span
+class="math inline">\(r_{2}\)</span>，只要能快速得到这些行的各列之和，就能<span
+class="math inline">\(O(n)\)</span>求它的最大连续和。</p>
+<p>预处理每一列的前缀和（<span
+class="math inline">\(O(n^2)\)</span>），这一列的任意起点到终点的和就能立刻得到，枚举行起点（<span
+class="math inline">\(O(n)\)</span>）和行终点（<span
+class="math inline">\(O(n)\)</span>）以及计算这些行的最大连续和（<span
+class="math inline">\(O(n)\)</span>），取最大就是最大矩形了，这个方案的复杂度是<span
+class="math inline">\(n^2+n^3=O(n^3)\)</span>。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">211</span>;</span><br><span class="line"><span class="comment">// 预处理每一列的前缀和</span></span><br><span class="line"><span class="type">int</span> n, a[maxn][maxn];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i][j]);</span><br><span class="line">            a[i][j] += i == <span class="number">0</span> ? <span class="number">0</span> :a[i - <span class="number">1</span>][j]; <span class="comment">// 原地保存列方向前缀和</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans = a[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> r1 = <span class="number">0</span>; r1 &lt; n; r1 ++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> r2 = r1; r2 &lt; n; r2 ++) &#123;</span><br><span class="line">            <span class="type">int</span> pre = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">                pre += a[r2][i] - (r1 == <span class="number">0</span> ? <span class="number">0</span> : a[r1 - <span class="number">1</span>][i]); <span class="comment">// 列方向[r1,r2]这一段的和作为一个元素</span></span><br><span class="line">                ans = std::<span class="built_in">max</span>(ans, pre);</span><br><span class="line">                <span class="keyword">if</span>(pre &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                    pre = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="差分">差分</h2>
+<p>差分是前缀和的逆运算。对于一个数组 <span
+class="math inline">\(a\)</span>，它的差分数组 <span
+class="math inline">\(b\)</span> 定义为：</p>
+<p><span class="math inline">\(b_1 = a_1\)</span> <span
+class="math inline">\(b_i = a_i - a_{i-1}\)</span> <span
+class="math inline">\((i&gt;1)\)</span></p>
+<p>容易发现，原数组的任意一个元素都可以通过差分数组的前缀和还原：</p>
+<p><span class="math inline">\(a_i = \sum\limits_{j=1}^i
+b_j\)</span></p>
+<p>差分的一个重要性质是：如果要对原数组的一个区间 <span
+class="math inline">\([l,r]\)</span> 同时加上一个数 <span
+class="math inline">\(x\)</span>，只需要： - 令 <span
+class="math inline">\(b_l\)</span> 加上 <span
+class="math inline">\(x\)</span>：因为<span
+class="math inline">\(a_{l}\)</span>加了<span
+class="math inline">\(x\)</span>而<span
+class="math inline">\(a_{l-1}\)</span>没加，<span
+class="math inline">\(b_{l}=a_{l}-a{l-1}\)</span>所以加<span
+class="math inline">\(x\)</span>； - <span
+class="math inline">\(b_{l+1}\sim b_{r}\)</span> 不变，因为<span
+class="math inline">\(a_{l}\sim a_{r}\)</span> 都加了 <span
+class="math inline">\(x\)</span>，它们相邻的差不变； - 令 <span
+class="math inline">\(b_{r+1}\)</span> 减去 <span
+class="math inline">\(x\)</span> （如果 <span
+class="math inline">\(r+1\)</span> 存在的话），因为<span
+class="math inline">\(a_{r+1}\)</span>没有加<span
+class="math inline">\(x\)</span> - 后面的不变</p>
+<p>也即<strong>原数在一个区间同时加一个数，差分数组只需要改变区间首尾两个数</strong>。</p>
+<h3 id="例区间变化">例：区间变化</h3>
+<p>给定一个长度为 <span class="math inline">\(n\)</span> 的数组 <span
+class="math inline">\(a\)</span>，有 <span
+class="math inline">\(p\)</span> 次操作，每次操作给定三个数 <span
+class="math inline">\(x\)</span>、<span
+class="math inline">\(y\)</span>、<span
+class="math inline">\(z\)</span>，表示将数组 <span
+class="math inline">\(a\)</span> 中从第 <span
+class="math inline">\(x\)</span> 个到第 <span
+class="math inline">\(y\)</span> 个元素（包括这两个位置）都加上 <span
+class="math inline">\(z\)</span>。最后求整个数组中的最小值。</p>
+<p>模拟这个过程复杂度会很高，如果能把区间修改问题转换为单点修改问题，就会快很多。</p>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">5e6</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> n, p, a[maxn], l, r, x;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;p);</span><br><span class="line">    a[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = n; i &gt;= <span class="number">1</span>; i --) &#123;</span><br><span class="line">        <span class="comment">// 原地计算差分，for循环逆序是避免要用的值被先覆盖</span></span><br><span class="line">        a[i] -= a[i - <span class="number">1</span>];   </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(p --) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;l, &amp;r, &amp;x);</span><br><span class="line">        a[l] += x;</span><br><span class="line">        <span class="keyword">if</span>(r + <span class="number">1</span> &lt;= n) &#123;</span><br><span class="line">            a[r + <span class="number">1</span>] -= x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans = a[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">        a[i] += a[i - <span class="number">1</span>];</span><br><span class="line">        ans = std::<span class="built_in">min</span>(ans, a[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例二维区间修改">例：二维区间修改</h3>
+<p>给定一个 <span class="math inline">\(n\times n\)</span> 的网格，有
+<span class="math inline">\(m\)</span>
+次操作，每次操作给定四个数，表示将左上角为 <span
+class="math inline">\((r_1,c_1)\)</span>，右下角为 <span
+class="math inline">\((r_2,c_2)\)</span> 的矩形区域内的每个格子都加
+<span
+class="math inline">\(1\)</span>。最后输出每个格子被加了多少次。</p>
+<p>数据范围 <span class="math inline">\(n,m \leq 1000\)</span></p>
+<p>根据题目给的数据范围，这道题可以想简单点，对于每个 左上 <span
+class="math inline">\((r_1,c_1)\)</span>、右下 <span
+class="math inline">\((r_2,c_2)\)</span> 的矩形，都可以看作 <span
+class="math inline">\(r_{1}\sim r_{2}\)</span>
+这些行分别进行一次区间增长，分别用差分来单点更新：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">0  0  0  0  0  0</span><br><span class="line">0 +1  0  0  0 -1</span><br><span class="line">0 +1  0  0  0 -1</span><br><span class="line">0 +1  0  0  0 -1</span><br><span class="line">0 +1  0  0  0 -1</span><br><span class="line">0  0  0  0  0  0</span><br></pre></td></tr></table></figure>
+<p>复杂度分析：初始化计算每一行差分数组，<span
+class="math inline">\(O(n^2)\)</span>，<span
+class="math inline">\(m\)</span> 个操作、每个操作最坏对 <span
+class="math inline">\(n\)</span> 行的差分数组做 <span
+class="math inline">\(O(1)\)</span> 操作，总复杂度 <span
+class="math inline">\(n^{2}+mn=O(mn)\)</span>，<span
+class="math inline">\(n,m \leq 1000\)</span>，复杂度可接受。</p>
+<p>更多思考：一些同学可能想到两次差分，把多行多次差分数组更新变成首尾两次：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">0  0  0  0  0  0</span><br><span class="line">0 +1  0  0  0 -1</span><br><span class="line">0  0  0  0  0  0</span><br><span class="line">0  0  0  0  0  0</span><br><span class="line">0  0  0  0  0  0</span><br><span class="line">0 -1  0  0  0 +1</span><br></pre></td></tr></table></figure>
+<p>而这道题<span class="math inline">\(m\)</span>和<span
+class="math inline">\(n\)</span>范围一致，即使把 <span
+class="math inline">\(O(mn)\)</span> 优化到 <span
+class="math inline">\(O(m)\)</span>，初始差分表也有个 <span
+class="math inline">\(O(n^2)\)</span> 在，<span
+class="math inline">\(n^{2}+m=O(n^2)\)</span>
+，复杂度没有本质提升。不过如果 <span class="math inline">\(m\)</span> 比
+<span class="math inline">\(n\)</span>
+大很多，那么这个优化还是有意义的，可以尝试。</p>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>17.贪心</title>
+    <url>/2025-04-02-17-%E8%B4%AA%E5%BF%83/</url>
+    <content><![CDATA[<h1 id="贪心">贪心</h1>
+<p>贪心算法是一种在每一步选择中都采取当前状态下最好或最优的选择，从而希望导致结果是最好或最优的算法策略。</p>
+<span id="more"></span>
+<h2 id="重在证明">重在证明</h2>
+<p>局部最优就能得到全局最优，这是一件很美好的事情，使决策变得简单易执行。</p>
+<p>当然不是所有问题都能这样得到最优解，所以一个问题是否可以用贪心方式解决，就需要先证明贪心策略的正确性。</p>
+<p>否定一个贪心策略很容易，找到一个反面例子。</p>
+<p>所以尝试贪心方法的大体思路就是：</p>
+<ol type="1">
+<li>想一些拍脑门就有的局部最优策略</li>
+<li>尝试举反例否定它们</li>
+<li>对暂时找不到反例的思路，尝试证明正确性</li>
+</ol>
+<p>比较典型的证明方法：</p>
+<ul>
+<li>反证法：作否定假设，则有更优解，进而推出矛盾</li>
+<li>归纳法：证<span class="math inline">\(n=1\)</span>成立，假设<span
+class="math inline">\(n\)</span>成立，推<span
+class="math inline">\(n+1\)</span>成立</li>
+<li>交换论证：交换贪心方案的两个元素，答案不会变得更好，或假设任意最优解，能通过等价交换得到贪心的方案</li>
+</ul>
+<h2 id="背包类问题">背包类问题</h2>
+<h3 id="例最优装载">例：最优装载</h3>
+<p><span class="math inline">\(n\)</span> 个物体，第 <span
+class="math inline">\(i\)</span> 个物体重量<span
+class="math inline">\(w_i\)</span>，求总重量不超过<span
+class="math inline">\(C\)</span>的最多物体个数</p>
+<p>交换论证： 假设存在最优解<span class="math inline">\(w_{s_1} \leq
+w_{s_2} \leq \ldots \leq w_{s_k}\)</span>，不是轻者优先 则存在<span
+class="math inline">\(w_i \leq w_{s_k}\)</span>，用<span
+class="math inline">\(w_i\)</span>替换<span
+class="math inline">\(w_{s_k}\)</span>仍然不会超过容量，且个数不变
+不断执行该替换，总能得到轻者优先的方案</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> ans = <span class="number">0</span>, tc = C;</span><br><span class="line">std::<span class="built_in">sort</span>(w, w + n);</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n &amp;&amp; tc &gt;= w[i]; tc -= w[i ++], ans ++);</span><br></pre></td></tr></table></figure>
+<h3 id="例分数背包">例：分数背包</h3>
+<p>有<span class="math inline">\(n\)</span>个物品，每个物品<span
+class="math inline">\(i \in [1,n]\)</span>的重量<span
+class="math inline">\(w_i\)</span>，价值<span
+class="math inline">\(v_i\)</span>（分别只有1个）
+有一个背包可装总重不超过<span class="math inline">\(b\)</span>的物品
+求背包能装物品的最大总价值
+物品可进行任意精度的分割（可以理解为金沙、液体等）</p>
+<p>分数背包 贪心策略：“性价比”<span
+class="math inline">\(\frac{v_i}{w_i}\)</span> 排序，高者优先</p>
+<p>对0-1背包 不适用</p>
+<p>举反例：</p>
+<p><span class="math inline">\(W=\{3,4,5,2\}\)</span>，<span
+class="math inline">\(V=\{7,9,9,2\}\)</span>，<span
+class="math inline">\(C=6\)</span></p>
+<p><span class="math inline">\(\frac{7}{3} &gt; \frac{9}{4} &gt;
+\frac{9}{5} &gt; \frac{2}{2}\)</span></p>
+<p>贪心解<span class="math inline">\(3+2=5&lt;6\)</span>，<span
+class="math inline">\(7+2=9\)</span></p>
+<p>最优解<span class="math inline">\(4+2=6\)</span>，<span
+class="math inline">\(9+2=11&gt;9\)</span></p>
+<h2 id="区间类问题">区间类问题</h2>
+<h3 id="例活动选择">例：活动选择</h3>
+<p>给出<span class="math inline">\(n\)</span>项活动的起止时间<span
+class="math inline">\([s_i,f_i](i=1,2,\ldots,n)\)</span>，最多选出多少个活动时间互不重叠(<span
+class="math inline">\(s_i \geq f_j\)</span> 或 <span
+class="math inline">\(f_i \leq s_j\)</span>) 例：</p>
+<table>
+<thead>
+<tr class="header">
+<th>i</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(s_{i}\)</span></td>
+<td>1</td>
+<td>3</td>
+<td>5</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(f_{i}\)</span></td>
+<td>4</td>
+<td>5</td>
+<td>7</td>
+<td>9</td>
+<td>10</td>
+<td>11</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\{1,3,6\}\)</span>是最优解之一</p>
+<p>思考：</p>
+<ul>
+<li>策略1：开始时间早的优先</li>
+<li>策略2：占用时间少的优先</li>
+<li>策略3：结束早的优先</li>
+</ul>
+<p>反例：</p>
+<p>策略1：<img src="/2025-04-02-17-%E8%B4%AA%E5%BF%83/%E6%B4%BB%E5%8A%A8%E9%80%89%E6%8B%A9_%E7%AD%96%E7%95%A51%E5%8F%8D%E4%BE%8B.svg" class="" title="开始时间早的优先反例"><br />
+策略2：<img src="/2025-04-02-17-%E8%B4%AA%E5%BF%83/%E6%B4%BB%E5%8A%A8%E9%80%89%E6%8B%A9_%E7%AD%96%E7%95%A52%E5%8F%8D%E4%BE%8B.svg" class="" title="占用时间少的优先反例"></p>
+<p>证明策略3结束早的优先能得到最优解——安排最多的活动</p>
+<p>假设活动已按结束时间排序，<span class="math inline">\(f_1 \leq f_2
+\leq \ldots \leq f_n\)</span></p>
+<p>归纳基础：存在最优解包含可选活动里结束最早的活动。考虑多解情况，换种说法就是选最早结束的活动，不会导致得不到最优解。</p>
+<p>交换论证，如果存在最优解不包含活动1，活动1一定可以代替该最优解中结束时间最早的那个活动，仍然是最优解</p>
+<img src="/2025-04-02-17-%E8%B4%AA%E5%BF%83/%E6%B4%BB%E5%8A%A8%E9%80%89%E6%8B%A9_%E7%AD%96%E7%95%A53%E5%BD%92%E7%BA%B3%E5%9F%BA%E7%A1%80.svg" class="" title="存在最优解包含可选活动里结束最早的活动">
+<p>归纳论证：按此策略选了 <span class="math inline">\(k\)</span>
+个活动后，剩下的可选活动里选第 <span class="math inline">\(k+1\)</span>
+个活动时，选结束最早的那个，不会导致得不到最优解。</p>
+<img src="/2025-04-02-17-%E8%B4%AA%E5%BF%83/%E6%B4%BB%E5%8A%A8%E9%80%89%E6%8B%A9_%E7%AD%96%E7%95%A53%E5%BD%92%E7%BA%B3%E8%AE%BA%E8%AF%81.svg" class="" title="归纳论证">
+<p>图中 <span class="math inline">\(S&#39;\)</span> 是选了 <span
+class="math inline">\(k\)</span>
+个活动后，剩下的不冲突的可选活动，如果把 <span
+class="math inline">\(S&#39;\)</span>
+看作一个独立的活动选择问题，这个问题的最优解是 <span
+class="math inline">\(B\)</span> 集合，则可以用反证法证明 <span
+class="math inline">\(B\)</span> 集合和前面的 <span
+class="math inline">\(k\)</span>
+个活动合起来，是原来整个问题的最优解。</p>
+<blockquote>
+<p>为了防止新手绕晕，关于这个需要反证的论断可以先跳过，读完证明后再返回来看：<span
+class="math inline">\(S&#39;\)</span> 的最优解 <span
+class="math inline">\(B\)</span>，<span class="math inline">\(B \cup
+\{i_1,i_2,\ldots,i_k\}\)</span>
+是全局最优解，反证法证明它，可以做一个否定的假设——<span
+class="math inline">\(S&#39;\)</span> 的最优解 <span
+class="math inline">\(B\)</span>，<span class="math inline">\(B \cup
+\{i_1,i_2,\ldots,i_k\}\)</span>
+<strong>不</strong>是全局最优解，那必然存在 <span
+class="math inline">\(S&#39;\)</span> 的另一个子集 <span
+class="math inline">\(B*\)</span>，<span class="math inline">\(B* \cup
+\{i_1,i_2,\ldots,i_k\}\)</span>是全局最优解（总得有个最优解吧），那<span
+class="math inline">\(\{i_1,i_2,\ldots,i_k\}\)</span>都不变，只能是
+<span class="math inline">\(B*\)</span> 比 <span
+class="math inline">\(B\)</span> 元素多。既然 <span
+class="math inline">\(B*\)</span> 也是 <span
+class="math inline">\(S&#39;\)</span> 的子集，又比 <span
+class="math inline">\(B\)</span> 元素多，那为啥 <span
+class="math inline">\(B*\)</span> 不是 <span
+class="math inline">\(S&#39;\)</span>
+最优解呢，这就得到矛盾了，于是推翻反证法的否定假设，原命题成立。</p>
+</blockquote>
+<ul>
+<li>既然<span
+class="math inline">\(B\)</span>是整个问题最优解的一部分，那么第<span
+class="math inline">\(k+1\)</span>个活动可以包含在<span
+class="math inline">\(B\)</span>中（考虑多解问题，这里用“可以”来表述，仍然表达的是“不会导致得不到最优解”这个含义）</li>
+<li>而 <span class="math inline">\(B\)</span> 又同时是 <span
+class="math inline">\(S&#39;\)</span>
+这个独立问题的最优解，根据归纳基础——存在最优解包含可选活动里结束最早的活动</li>
+<li>那么第<span class="math inline">\(k+1\)</span>个活动就可以是<span
+class="math inline">\(S&#39;\)</span>结束最早的活动</li>
+</ul>
+<p>到这里，就说明了，不断选剩下的可选活动里结束最早的活动，能够一步步走向最优解（因为每一步都不会导致得不到最优解）。</p>
+<h3 id="例最小延迟调度">例：最小延迟调度</h3>
+<p>给出 <span class="math inline">\(n\)</span> 个任务的执行时长 <span
+class="math inline">\(t_i\)</span> 与预期截止时间 <span
+class="math inline">\(d_i\)</span> <span
+class="math inline">\((i=1,2,…,n)\)</span>，求一个调度方案，使超时最严重的任务的超时时长最小。</p>
+<p>例：<span class="math inline">\(T=\{5,8,4,10,3\}\)</span>，<span
+class="math inline">\(D=\{10,12,15,11,20\}\)</span></p>
+<p>调度1：顺序安排 延迟：<span
+class="math inline">\(0,1,2,16,10\)</span> 最大延迟：<span
+class="math inline">\(16\)</span></p>
+<p>调度2：截止时间安排 延迟：<span
+class="math inline">\(0,4,11,12,10\)</span> 最大延迟：<span
+class="math inline">\(12\)</span></p>
+<img src="/2025-04-02-17-%E8%B4%AA%E5%BF%83/%E6%9C%80%E5%B0%8F%E5%BB%B6%E8%BF%9F%E8%B0%83%E5%BA%A6_%E6%A0%B7%E4%BE%8B%E8%B0%83%E5%BA%A6.svg" class="" title="最小延迟调度_样例调度">
+<ul>
+<li>策略1：按照 <span class="math inline">\(t_i\)</span>
+从小到大安排</li>
+<li>策略2：按照 <span class="math inline">\(d_i - t_i\)</span>
+从小到大安排</li>
+<li>策略3：按照 <span class="math inline">\(d_i\)</span>
+从小到大安排</li>
+</ul>
+<p>反例：</p>
+<ul>
+<li>策略1: <span class="math inline">\(t_1=1, d_1=100, t_2=10,
+d_2=10\)</span></li>
+<li>策略2:：<span class="math inline">\(t_1=1, d_1=2, t_2=10,
+d_2=10\)</span></li>
+</ul>
+<p>交换论证证明策略3：按照 <span class="math inline">\(d_i\)</span>
+从小到大安排</p>
+<p>如果有相邻的<span
+class="math inline">\(2\)</span>个任务，前一个比后一个 <span
+class="math inline">\(d_i\)</span>
+大，交换这两个任务，不会让延迟增加。</p>
+<style>.xdegjcdgqfxf{width: 400px;}</style>
+<img src="/2025-04-02-17-%E8%B4%AA%E5%BF%83/%E6%9C%80%E5%B0%8F%E5%BB%B6%E8%BF%9F%E8%B0%83%E5%BA%A6_%E7%AD%96%E7%95%A53%E4%BA%A4%E6%8D%A2%E8%AE%BA%E8%AF%81.svg" class="xdegjcdgqfxf" title="策略3交换论证">
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>18.二分答案</title>
+    <url>/2025-04-02-18-%E4%BA%8C%E5%88%86%E7%AD%94%E6%A1%88/</url>
+    <content><![CDATA[<h1 id="二分答案">二分答案</h1>
+<p>在线性表章节已了解二分查找的基本原理，当一个问题的答案具有单调性时——即随着答案的增大或减小，判定条件的结果也呈现单调变化，比如答案越大条件越容易满足，或者答案越小条件越容易满足，可以通过二分查找，在过程中根据判定条件是否满足来调整二分的方向逼近解的过程。</p>
+<span id="more"></span>
+<h3 id="例一元三次方程求解">例：一元三次方程求解</h3>
+<p>给定一个一元三次方程 <span class="math inline">\(ax^3 + bx^2 + cx + d
+= 0\)</span>，其中系数 <span class="math inline">\(a, b, c, d\)</span>
+均为实数，并已知该方程有三个不同的实根，这些根的范围在 <span
+class="math inline">\(-100\)</span> 至 <span
+class="math inline">\(100\)</span> 之间，且任意两根间的差的绝对值 <span
+class="math inline">\(\geq
+1\)</span>。请按从小到大的顺序在同一行输出这三个实根（精确到小数点后两位，并留有空格）。</p>
+<p>输入：4个实数</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">1 -5 -4 20</span><br></pre></td></tr></table></figure>
+<p>输出：3个保留2位小数的实根</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">-2.00 2.00 5.00</span><br></pre></td></tr></table></figure>
+<p>题目给的关键条件是数据确保根的距离大于 <span
+class="math inline">\(1\)</span>，也即相邻两个整数的左闭右开区间中至多 1
+个解。如果某个这样的区间有解，则必然两端的 <span
+class="math inline">\(f(x)\)</span> 不可能在 <span
+class="math inline">\(x\)</span> 轴的同一侧，即 <span
+class="math inline">\(f(x_{1})*f(x_{2}) \leq 0\)</span>。</p>
+<p>思路：枚举每个长度为 1 的区间，判断两端是否不在 <span
+class="math inline">\(x\)</span>
+轴同侧，如果不在同侧，说明区间内有解，二分 <span
+class="math inline">\(x\)</span> 的值，直到它的函数值为 0。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">double</span> eps = <span class="number">1e-7</span>;</span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">f</span><span class="params">(<span class="type">double</span> x, <span class="type">double</span> a, <span class="type">double</span> b, <span class="type">double</span> c, <span class="type">double</span> d)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a * x * x * x + b * x * x + c * x + d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> a, b, c, d;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf%lf&quot;</span>, &amp;a, &amp;b, &amp;c, &amp;d);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 在[-100,100]范围内，相邻整数区间最多一个解</span></span><br><span class="line">    <span class="comment">// 遍历每个整数区间，用二分法找解</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">-100</span>; i &lt;= <span class="number">100</span>; i ++) &#123;</span><br><span class="line">        <span class="type">double</span> l = i, r = i + <span class="number">1</span>;</span><br><span class="line">        <span class="comment">// 区间两端异号说明有解</span></span><br><span class="line">        <span class="type">double</span> fl = <span class="built_in">f</span>(l, a, b, c, d), fr = <span class="built_in">f</span>(r, a, b, c, d);</span><br><span class="line">        <span class="keyword">if</span>(-eps &lt; fl &amp;&amp; fl &lt; eps) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%.2f &quot;</span>, l); <span class="comment">// 左端点是解</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(-eps &lt; fr &amp;&amp; fr &lt; eps) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;           <span class="comment">// 右端点是解，考虑左闭右开区间，忽略</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(fl * fr &lt; eps) &#123;</span><br><span class="line">            <span class="comment">// l 和 r 之间存在解，二分找解</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">100</span>; j ++) &#123;</span><br><span class="line">                <span class="type">double</span> mid = (l + r) * <span class="number">0.5</span>;</span><br><span class="line">                <span class="type">double</span> fm = <span class="built_in">f</span>(mid, a, b, c, d);</span><br><span class="line">                <span class="keyword">if</span>(fm * fl &lt; eps) r = mid;</span><br><span class="line">                <span class="keyword">else</span> l = mid;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%.2f &quot;</span>, l);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>知识点： 浮点精度冗余 <code>eps</code>。
+浮点类型在计算机底层也是由有限位的二进制<code>01</code>表达的，就必然有精度限制，不能无限精确地表达任何数字，如果发生乘除法，这种精度会进一步丢失，当判断两个浮点数是否相等、一个浮点数大于0还是小于0的时候，用一个极小的浮点数作为精度冗余，比如对浮点数
+<code>fl</code>， <code>if(fl == 0)</code>
+就是不安全的，它在丧失一定精度后，可能是
+<code>0.0000312141</code>，也可能是<code>-0.0000012131</code>，
+<code>eps</code>
+是我们对特定问题期望的一个“可接受”精度，<code>const double eps=1e-7</code>
+就表示在 <code>10^&#123;-7&#125;</code>（<code>0.0000001</code>）
+范围内的误差都认为相等，<code>1e-7</code>
+是算法题比较常用的一个精度，视具体问题，也有时会用
+<code>1e-6</code>或<code>1e-8</code>。</p>
+</blockquote>
+<blockquote>
+<p>知识点： 浮点数二分的时候，<code>while(r - l &gt; eps)</code>
+是循环条件的常见写法，但一些刁钻的题可能精度不好把握，<code>for(int j = 0; j &lt; 100; j ++)</code>
+直接二分<code>100</code>次，基本什么精度都能达到了，在分析好算法复杂度满足题意的情况下，这样写更加稳定。</p>
+</blockquote>
+<h3 id="例数列划分">例：数列划分</h3>
+<p>给一个有 <span class="math inline">\(n\)</span>
+个正整数的序列，连续地将其分为互不重叠的 <span
+class="math inline">\(k\)</span>
+份，即每一份都是该序列的一个子串，不能调换顺序。</p>
+<p>求一个划分方案，使数字之和最大的那一份，其和在所有划分方案里最小。</p>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">9 3</span><br><span class="line">10 20 30 40 50 60 70 80 90</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">10 20 30 40 50 / 60 70 / 80 90</span><br></pre></td></tr></table></figure>
+<p>二分答案常常伴随着<strong>贪心</strong>策略——二分可能的答案数值，在验证判定条件时，往往会需要一个复杂度较低的策略，当判定条件支持贪心时，就有更大的可能让二分答案的复杂度低于其它方案。</p>
+<p>当指定一个“数字之和最大的那一份”的限制时，实际就是尝试构造一个划分，让每一份都不超过这个限制，如果无法实现，则判定为“否”，如果能实现，则判定为“是”，限制值与判定关系是单调的——值够大就一定能成功划分，值小到一定程度就一定无法划分，那么能否完成划分的临界点，就是本题答案——最大那一份最小的划分。</p>
+<p>划分的判定采用贪心策略，因为划分并不改变顺序，那就让每一份尽可能的靠近限制值，直到装不下，再开始划分下一份。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;complex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> n, k, a[maxn];</span><br><span class="line"><span class="type">bool</span> split[maxn];</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Judge</span><span class="params">(<span class="type">int</span> mid)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> cnt = <span class="number">1</span>, tmpsum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (a[i] &gt; mid) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (tmpsum + a[i] &gt; mid) tmpsum = <span class="number">0</span>, cnt++;</span><br><span class="line">        tmpsum += a[i];</span><br><span class="line">        <span class="keyword">if</span> (cnt &gt; k) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;k) != EOF) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">        <span class="type">int</span> left = <span class="number">0</span>, right = <span class="number">1e9</span>, mid;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            mid = left + right &gt;&gt; <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">Judge</span>(mid))</span><br><span class="line">                right = mid;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                left = mid + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> tmpsum = <span class="number">0</span>, cnt = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">memset</span>(split, <span class="number">0</span>, <span class="built_in">sizeof</span>(split));</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (tmpsum + a[i] &gt; left || i + <span class="number">1</span> &lt; k - cnt)</span><br><span class="line">                tmpsum = <span class="number">0</span>, split[i] = <span class="literal">true</span>, cnt++;</span><br><span class="line">            tmpsum += a[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + !i, a[i]);</span><br><span class="line">            <span class="keyword">if</span> (split[i]) <span class="built_in">printf</span>(<span class="string">&quot; /&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>19.三分</title>
+    <url>/2025-04-02-19-%E4%B8%89%E5%88%86/</url>
+    <content><![CDATA[<h1 id="三分">三分</h1>
+<p>三分是一种用于求解<strong>单峰/单谷函数</strong>极值的搜索算法，通过每次将区间分成三份并比较两个分点的函数值来缩小搜索范围。</p>
+<span id="more"></span>
+<p>对于一个单峰函数，在区间 <span class="math inline">\([l,r]\)</span>
+上有唯一的极大值点。可以取两个三分点：</p>
+<ul>
+<li><span class="math inline">\(mid1 = l + \frac{r-l}{3}\)</span></li>
+<li><span class="math inline">\(mid2 = r - \frac{r-l}{3}\)</span></li>
+</ul>
+<img src="/2025-04-02-19-%E4%B8%89%E5%88%86/trisection.svg" class="">
+<p>比较 <span class="math inline">\(f(mid1)\)</span> 和 <span
+class="math inline">\(f(mid2)\)</span> 的大小:</p>
+<ul>
+<li>如果 <span class="math inline">\(f(mid1) &lt;
+f(mid2)\)</span>，说明极大值点在 <span
+class="math inline">\([mid1,r]\)</span> 区间内，令 <span
+class="math inline">\(l = mid1\)</span></li>
+<li>如果 <span class="math inline">\(f(mid1) &gt;
+f(mid2)\)</span>，说明极大值点在 <span
+class="math inline">\([l,mid2]\)</span> 区间内，令 <span
+class="math inline">\(r = mid2\)</span></li>
+<li>如果 <span class="math inline">\(f(mid1) =
+f(mid2)\)</span>，说明极大值点在 <span
+class="math inline">\([mid1,mid2]\)</span> 区间内，令 <span
+class="math inline">\(l = mid1, r = mid2\)</span></li>
+</ul>
+<p>每次迭代可以将区间长度缩小为原来的 <span
+class="math inline">\(\frac{2}{3}\)</span>。</p>
+<p>对于单谷函数，只需要将比较符号反向即可求出极小值点。</p>
+<p>三分的基本框架如下:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 三分求单峰函数极大值点</span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">TrisectionMax</span><span class="params">(<span class="type">double</span> l, <span class="type">double</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> mid1, mid2;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i ++) &#123;</span><br><span class="line">        mid1 = l + (r - l) / <span class="number">3</span>;</span><br><span class="line">        mid2 = r - (r - l) / <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">f</span>(mid1) &lt; <span class="built_in">f</span>(mid2)) l = mid1;</span><br><span class="line">        <span class="keyword">else</span> r = mid2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 三分求单谷函数极小值点</span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">TrisectionMin</span><span class="params">(<span class="type">double</span> l, <span class="type">double</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> mid1, mid2;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i ++) &#123;</span><br><span class="line">        mid1 = l + (r - l) / <span class="number">3</span>;</span><br><span class="line">        mid2 = r - (r - l) / <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">f</span>(mid1) &gt; <span class="built_in">f</span>(mid2)) l = mid1;</span><br><span class="line">        <span class="keyword">else</span> r = mid2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="示例">示例</h2>
+<h3 id="例三分函数">例：三分|函数</h3>
+<p>给定 <span class="math inline">\(n\)</span> 个二次函数 <span
+class="math inline">\(f_1(x), f_2(x), \ldots, f_n(x)\)</span>（均形如
+<span class="math inline">\(ax^2 + bx + c\)</span>），设 <span
+class="math inline">\(F(x) = \max\{f_1(x), f_2(x), \ldots,
+f_n(x)\}\)</span>，求 <span class="math inline">\(F(x)\)</span> 在区间
+<span class="math inline">\([0, 1000]\)</span> 上的最小值。</p>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br><span class="line">2 0 0</span><br><span class="line">2</span><br><span class="line">2 0 0</span><br><span class="line">2 -4 2</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">0.0000</span><br><span class="line">0.5000</span><br></pre></td></tr></table></figure>
+<p>分析：都是朝上的二次函数，画画图可以发现，两个口朝上的单峰函数取较大函数值叠加，仍然是口朝上的单峰函数，那么无数个叠加也仍然是，可以用三分求极值。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e4</span> + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Func</span> &#123;</span><br><span class="line">    <span class="type">double</span> a, b, c;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">calc</span><span class="params">(<span class="type">double</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a * x * x + b * x + c;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; f[maxn];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">F</span><span class="params">(<span class="type">double</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> ret = f[<span class="number">0</span>].<span class="built_in">calc</span>(x);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++)</span><br><span class="line">        ret = std::<span class="built_in">max</span>(ret, f[i].<span class="built_in">calc</span>(x));</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">TrisectionMin</span><span class="params">(<span class="type">double</span> l, <span class="type">double</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> mid1, mid2;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i ++) &#123;</span><br><span class="line">        mid1 = l + (r - l) / <span class="number">3</span>;</span><br><span class="line">        mid2 = r - (r - l) / <span class="number">3</span>;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">F</span>(mid1) &gt; <span class="built_in">F</span>(mid2)) l = mid1;</span><br><span class="line">        <span class="keyword">else</span> r = mid2;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> l;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> T;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;T);</span><br><span class="line">    <span class="keyword">while</span>(T--) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%lf%lf%lf&quot;</span>, &amp;f[i].a, &amp;f[i].b, &amp;f[i].c);</span><br><span class="line">            </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%.4f\n&quot;</span>, <span class="built_in">F</span>(<span class="built_in">TrisectionMin</span>(<span class="number">0</span>, <span class="number">1000</span>)));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>20.离散化</title>
+    <url>/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/</url>
+    <content><![CDATA[<h1 id="离散化">离散化</h1>
+<p>离散化是一种将无限空间中的有限个体映射到有限空间中的方法，常用于处理数据范围很大但实际数据量较小的问题。</p>
+<span id="more"></span>
+<p>离散化的核心思想是将大范围的数据映射到小范围，同时保持数据之间的相对关系。通常用于处理以下情况：</p>
+<ol type="1">
+<li>数据范围很大（如 <span class="math inline">\(-2^{31}\)</span> 到
+<span class="math inline">\(2^{31}\)</span>）</li>
+<li>实际数据点较少</li>
+<li>需要处理区间或线段</li>
+</ol>
+<p>场景举例：</p>
+<p>差分专题中的区间改变问题，如果区间是 <span class="math inline">\([(1,
+3353), (534543, 231876390), (3353, 5667)]\)</span>
+这样的大范围，没法开数组到这么大规模做差分标记，但区间的数量不会太多，比如<span
+class="math inline">\(10000\)</span> 个区间，那就至多 <span
+class="math inline">\(20000\)</span> 个坐标点（区间起止会提供 <span
+class="math inline">\(2\)</span>
+个坐标，以及有一些起止点可能重叠）。</p>
+<p>离散化处理</p>
+<ul>
+<li>把 <span class="math inline">\((1, 3353, 534543, 231876390, 3353,
+5667)\)</span> 平铺排开</li>
+<li>排序：<span class="math inline">\((1, 3353, 3353, 5667, 534543,
+231876390)\)</span></li>
+<li>去重：<span class="math inline">\((1, 3353, 5667, 534543,
+231876390)\)</span> （去掉了一个重复的 <span
+class="math inline">\(3353\)</span>）</li>
+<li>用序号代替： <span
+class="math inline">\(([0]=1,[1]=3353,[2]=5667,[3]=534543,[4]=231876390)\)</span></li>
+<li>区间系列 <span class="math inline">\([(1, 3353), (534543,
+231876390), (3353, 5667)]\)</span> 改变为序号 <span
+class="math inline">\([(0, 1), (3, 4), (1, 2)]\)</span></li>
+<li>序号范围显然是坐标点个数以内的，用序号代替原坐标点，就可以开数组做差分或其它区间操作了</li>
+<li>最后处理数据时，用序号查询原始数值，做进一步处理</li>
+</ul>
+<h3 id="例区间合并">例：区间合并</h3>
+<p>给定 <span class="math inline">\(n\)</span> 个区间 <span
+class="math inline">\([a_i, b_i)\)</span>，求所有区间覆盖的总长度。</p>
+<ul>
+<li><p>第一行一个整数 <span
+class="math inline">\(n\)</span>，表示区间数量</p></li>
+<li><p>接下来 <span class="math inline">\(n\)</span> 行，每行两个整数
+<span class="math inline">\(a_i,
+b_i\)</span>，表示一个区间的起点和终点（左闭右开）</p></li>
+<li><p><span class="math inline">\(1 \leq n \leq 2 \times
+10^4\)</span></p></li>
+<li><p><span class="math inline">\(-2^{31} \leq a &lt; b &lt;
+2^{31}\)</span></p></li>
+<li><p>答案小于 <span class="math inline">\(2^{31}\)</span></p></li>
+</ul>
+<p>输出一行一个整数，表示所有区间覆盖的总长度</p>
+<p>输入：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">3</span><br><span class="line">-1 1</span><br><span class="line">5 11</span><br><span class="line">2 9</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">11</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li>将所有区间的端点收集并排序</li>
+<li>去重得到离散化后的值</li>
+<li>使用差分数组或扫描线算法计算覆盖长度</li>
+</ol>
+<p>参考代码，顺便提供一个离散化参考通用模板</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">2e4</span> + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个相对通用的离散化模板，把一个数组传入 Make，会执行去重与排序</span></span><br><span class="line"><span class="comment">// 之后可以用序号找去找第 k 个元素， d[k]，也可以用 Loc 找 x 离散后的序号 d.Loc(x)</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> TP_V&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Discretization</span> &#123;</span><br><span class="line">    std::vector&lt;TP_V&gt; b;</span><br><span class="line">    std::unordered_map&lt;TP_V, <span class="type">int</span>&gt; mp;   <span class="comment">// 二分或hash找离散值对应的序号</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span></span>&#123;b.<span class="built_in">clear</span>(); mp.<span class="built_in">clear</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>()&#123;<span class="built_in">Init</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>(std::vector&lt;TP_V&gt; &amp;a)&#123;<span class="built_in">Make</span>(a);&#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Make</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">Init</span>();</span><br><span class="line">        <span class="built_in">Add</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> i : a) b.<span class="built_in">push_back</span>(i);</span><br><span class="line">        std::<span class="built_in">sort</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>());</span><br><span class="line">        b.<span class="built_in">erase</span>(std::<span class="built_in">unique</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>()), b.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; b.<span class="built_in">size</span>(); i ++) mp[b[i]] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">unsigned</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    TP_V &amp;<span class="keyword">operator</span>[](<span class="type">int</span> ith)&#123;<span class="keyword">return</span> b[ith];&#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">Loc</span><span class="params">(TP_V x)</span> </span>&#123;<span class="keyword">return</span> mp.<span class="built_in">count</span>(x) ? mp[x] : <span class="number">-1</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> fd[maxn &lt;&lt; <span class="number">1</span>];  <span class="comment">// 差分数组，下标是离散后的序号，而非真实坐标</span></span><br><span class="line"><span class="type">int</span> a[maxn &lt;&lt; <span class="number">1</span>];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, s, e;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; a;</span><br><span class="line">    Discretization&lt;<span class="type">int</span>&gt; d;</span><br><span class="line">    <span class="built_in">memset</span>(fd, <span class="number">0</span>, <span class="built_in">sizeof</span>(fd));  <span class="comment">// 注意差分数组初始化为 0</span></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;s, &amp;e);</span><br><span class="line">        a.<span class="built_in">push_back</span>(s);</span><br><span class="line">        a.<span class="built_in">push_back</span>(e);</span><br><span class="line">    &#125;</span><br><span class="line">    d.<span class="built_in">Make</span>(a);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">        <span class="comment">// 第 i * 2 个元素是一个起点坐标， i * 2 + 1 是它的终点坐标</span></span><br><span class="line">        <span class="type">int</span> s = a[i &lt;&lt; <span class="number">1</span>], e = a[i &lt;&lt; <span class="number">1</span> | <span class="number">1</span>];</span><br><span class="line">        <span class="comment">// Loc找离散化后的序号，用序号做差分，[s,e) 左闭右开</span></span><br><span class="line">        fd[d.<span class="built_in">Loc</span>(s)] ++;</span><br><span class="line">        fd[d.<span class="built_in">Loc</span>(e)] --;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; d.<span class="built_in">size</span>() - <span class="number">1</span>; i ++) &#123;</span><br><span class="line">        <span class="comment">// 还原为点位值，fd[i]的值是 [ d[i], d[i+1] ) 这个左闭右开区间的覆盖次数</span></span><br><span class="line">        fd[i] += i == <span class="number">0</span> ? <span class="number">0</span> : fd[i - <span class="number">1</span>];</span><br><span class="line">        ans += (fd[i] &gt; <span class="number">0</span>)* (d[i + <span class="number">1</span>] - d[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, ans);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例过度种植">例：过度种植</h3>
+<p>在笛卡尔平面坐标系中，有 <span class="math inline">\(N\)</span>
+(<span class="math inline">\(1 \leq N \leq 1000\)</span>) 个矩形，第
+<span class="math inline">\(i\)</span> 个矩形的左上角坐标是 <span
+class="math inline">\((x_1,y_1)\)</span>，右下角坐标是 <span
+class="math inline">\((x_2,y_2)\)</span>。求这 <span
+class="math inline">\(N\)</span>
+个矩形所覆盖的总面积（被重复覆盖的区域只计算一次）。</p>
+<ul>
+<li><p>第一行，一个整数 <span class="math inline">\(N\)</span> (<span
+class="math inline">\(1 \leq N \leq 1000\)</span>)</p></li>
+<li><p>接下来 <span class="math inline">\(N\)</span> 行，每行四个整数
+<span class="math inline">\(x_1,y_1,x_2,y_2\)</span> (<span
+class="math inline">\(-10^8 \leq x_1,y_1,x_2,y_2 \leq
+10^8\)</span>)</p></li>
+<li><p>输出一个整数，表示被覆盖的总面积</p></li>
+</ul>
+<p>输入</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">0 5 4 1</span><br><span class="line">2 4 6 2</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">20</span><br></pre></td></tr></table></figure>
+<p>解题思路：</p>
+<ol type="1">
+<li>这是一个二维离散化问题，需要对 <span
+class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span> 坐标分别进行离散化</li>
+<li>使用二维差分记录每个小矩形的覆盖情况</li>
+<li>统计被覆盖的小矩形的面积总和</li>
+</ol>
+<img src="/2025-04-03-20-%E7%A6%BB%E6%95%A3%E5%8C%96/%E7%9F%A9%E5%BD%A2%E7%A6%BB%E6%95%A3%E5%8C%96.svg" class="">
+<p>参考代码：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 离散化模板</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> TP_V&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Discretization</span> &#123;</span><br><span class="line">    std::vector&lt;TP_V&gt; b;</span><br><span class="line">    std::unordered_map&lt;TP_V, <span class="type">int</span>&gt; mp;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span></span>&#123;b.<span class="built_in">clear</span>(); mp.<span class="built_in">clear</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>()&#123;<span class="built_in">Init</span>();&#125;</span><br><span class="line">    <span class="built_in">Discretization</span>(std::vector&lt;TP_V&gt; &amp;a)&#123;<span class="built_in">Make</span>(a);&#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Make</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">Init</span>();</span><br><span class="line">        <span class="built_in">Add</span>(a);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Add</span><span class="params">(std::vector&lt;TP_V&gt; &amp;a)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span> i : a) b.<span class="built_in">push_back</span>(i);</span><br><span class="line">        std::<span class="built_in">sort</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>());</span><br><span class="line">        b.<span class="built_in">erase</span>(std::<span class="built_in">unique</span>(b.<span class="built_in">begin</span>(), b.<span class="built_in">end</span>()), b.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; b.<span class="built_in">size</span>(); i ++) mp[b[i]] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">unsigned</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> b.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    TP_V &amp;<span class="keyword">operator</span>[](<span class="type">int</span> ith)&#123;<span class="keyword">return</span> b[ith];&#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">Loc</span><span class="params">(TP_V x)</span> </span>&#123;<span class="keyword">return</span> mp.<span class="built_in">count</span>(x) ? mp[x] : <span class="number">-1</span>;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 矩形结构体</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Rectangle</span> &#123;</span><br><span class="line">    <span class="type">int</span> x1, y1, x2, y2;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 存储所有矩形的坐标</span></span><br><span class="line">    <span class="function">std::vector&lt;Rectangle&gt; <span class="title">rects</span><span class="params">(n)</span></span>;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; x_coords, y_coords;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d%d&quot;</span>, &amp;rects[i].x1, &amp;rects[i].y1, &amp;rects[i].x2, &amp;rects[i].y2);</span><br><span class="line">        x_coords.<span class="built_in">push_back</span>(rects[i].x1);</span><br><span class="line">        x_coords.<span class="built_in">push_back</span>(rects[i].x2);</span><br><span class="line">        y_coords.<span class="built_in">push_back</span>(rects[i].y1);</span><br><span class="line">        y_coords.<span class="built_in">push_back</span>(rects[i].y2);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 对x和y坐标分别进行离散化</span></span><br><span class="line">    <span class="function">Discretization&lt;<span class="type">int</span>&gt; <span class="title">dx</span><span class="params">(x_coords)</span>, <span class="title">dy</span><span class="params">(y_coords)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建二维差分数组</span></span><br><span class="line">    std::vector&lt;std::vector&lt;<span class="type">int</span>&gt;&gt; <span class="built_in">diff</span>(dx.<span class="built_in">size</span>(), std::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt;(dy.<span class="built_in">size</span>(), <span class="number">0</span>));</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 对每个矩形进行差分标记</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="type">int</span> loc_x1 = dx.<span class="built_in">Loc</span>(rects[i].x1);</span><br><span class="line">        <span class="type">int</span> loc_y1 = dy.<span class="built_in">Loc</span>(rects[i].y1);</span><br><span class="line">        <span class="type">int</span> loc_x2 = dx.<span class="built_in">Loc</span>(rects[i].x2);</span><br><span class="line">        <span class="type">int</span> loc_y2 = dy.<span class="built_in">Loc</span>(rects[i].y2);</span><br><span class="line">        <span class="comment">// 本题是直角坐标系，“左上”的y更大，“右下”的y更小</span></span><br><span class="line">        <span class="comment">// 调整为“左下”和“右上”，以便一个端点的xy坐标都比另一个端点的xy坐标小</span></span><br><span class="line">        std::<span class="built_in">swap</span>(loc_y1, loc_y2);  </span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 二维差分：左上角+1，右上角-1，左下角-1，右下角+1</span></span><br><span class="line">        <span class="comment">// 最大坐标位置有哨兵（建diff的时候dx.size()和dy.size()都 + 1 了）</span></span><br><span class="line">        <span class="comment">// 参考差分章节的例子：</span></span><br><span class="line">        <span class="comment">// x方向差分：               x差分结果再进行y方向差分：</span></span><br><span class="line">        <span class="comment">// 0  0  0  0  0  0         0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// 0  0  0  0  0  0         0 -1  0  0  0 +1</span></span><br><span class="line">        <span class="comment">// 0 +1  0  0  0 -1         0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// 0 +1  0  0  0 -1  ===&gt;   0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// 0 +1  0  0  0 -1         0 +1  0  0  0 -1</span></span><br><span class="line">        <span class="comment">// 0  0  0  0  0  0         0  0  0  0  0  0</span></span><br><span class="line">        <span class="comment">// PS：上“图”是按二维坐标系，(0,0)坐标在左下绘制，注意别混淆</span></span><br><span class="line">        <span class="comment">// 但注意：本题坐标是矩形端点，而不是方格，端点可以理解为左闭右开，不需要将端点序号加1</span></span><br><span class="line">        diff[loc_x1][loc_y1] ++; <span class="comment">// 左下 + 1</span></span><br><span class="line">        diff[loc_x2][loc_y1] --; <span class="comment">// 右下 - 1</span></span><br><span class="line">        diff[loc_x1][loc_y2] --; <span class="comment">// 左上 - 1</span></span><br><span class="line">        diff[loc_x2][loc_y2] ++; <span class="comment">// 右上 + 1</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; dx.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; dy.<span class="built_in">size</span>() - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(j &gt; <span class="number">0</span>) diff[i][j] += diff[i][j<span class="number">-1</span>];   <span class="comment">// y方向差分恢复原值</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; dx.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; dy.<span class="built_in">size</span>() - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(i &gt; <span class="number">0</span>) diff[i][j] += diff[i<span class="number">-1</span>][j];   <span class="comment">// x方向差分恢复原值</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; dx.<span class="built_in">size</span>() - <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; dy.<span class="built_in">size</span>() - <span class="number">1</span>; j++) &#123;</span><br><span class="line">            <span class="comment">// 统计答案</span></span><br><span class="line">            ans += <span class="number">1LL</span> * (diff[i][j] &gt; <span class="number">0</span>) * (dx[i<span class="number">+1</span>] - dx[i]) * (dy[j<span class="number">+1</span>] - dy[j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>ACM</category>
