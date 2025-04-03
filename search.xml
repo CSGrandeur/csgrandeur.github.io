@@ -8032,7 +8032,7 @@ class="math inline">\(x\)</span>：因为<span
 class="math inline">\(a_{l}\)</span>加了<span
 class="math inline">\(x\)</span>而<span
 class="math inline">\(a_{l-1}\)</span>没加，<span
-class="math inline">\(b_{l}=a_{l}-a{l-1}\)</span>所以加<span
+class="math inline">\(b_{l}=a_{l}-a_{l-1}\)</span>所以加<span
 class="math inline">\(x\)</span>；</li>
 <li><span class="math inline">\(b_{l+1}\sim b_{r}\)</span>
 不变，因为<span class="math inline">\(a_{l}\sim a_{r}\)</span> 都加了
