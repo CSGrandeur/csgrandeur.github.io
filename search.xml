@@ -8017,9 +8017,11 @@ class="math inline">\(n^2+n^3=O(n^3)\)</span>。</p>
 <p>差分是前缀和的逆运算。对于一个数组 <span
 class="math inline">\(a\)</span>，它的差分数组 <span
 class="math inline">\(b\)</span> 定义为：</p>
-<p><span class="math inline">\(b_1 = a_1\)</span> <span
-class="math inline">\(b_i = a_i - a_{i-1}\)</span> <span
-class="math inline">\((i&gt;1)\)</span></p>
+<ul>
+<li><span class="math inline">\(b_1 = a_1\)</span></li>
+<li><span class="math inline">\(b_i = a_i - a_{i-1}\)</span> <span
+class="math inline">\((i&gt;1)\)</span></li>
+</ul>
 <p>容易发现，原数组的任意一个元素都可以通过差分数组的前缀和还原：</p>
 <p><span class="math inline">\(a_i = \sum\limits_{j=1}^i
 b_j\)</span></p>
