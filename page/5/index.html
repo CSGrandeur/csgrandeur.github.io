@@ -148,7 +148,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">56</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -176,6 +176,466 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-04-09-generating-model-and-discriminant-model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-04-09-generating-model-and-discriminant-model/" class="post-title-link" itemprop="url">生成模型与判别模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-09 16:15:09" itemprop="dateCreated datePublished" datetime="2017-04-09T16:15:09+08:00">2017-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>有监督学习</strong>方法可以分为<strong>生成方法</strong>和<strong>判别方法</strong>，学习得到的模型对应称为生成模型与判别模型。</p>
+<p>事物的状态是有概率的，设输入集合是 <code>X</code> , 可以输出的集合是
+<code>Y</code>，那么
+<code>P(Y|X)</code>表示已知<code>X</code>情况下标签是<code>Y</code>的概率模型，即给出任意<code>xi</code>,
+<code>yj</code>，都可求出<code>p(yj|xi)</code>；<code>P(Y,X)</code>表示<code>Y</code>和<code>X</code>一起发生的概率模型，同理就是求出所有的<code>p(yj, xi)</code>。</p>
+<p>对于分类问题，就是输入<code>X</code>，输出标签<code>Y</code>，从概率角度说，就是已知<code>X</code>，找概率最大的<code>Y</code>，即条件概率分布<code>P(Y|X)</code>。</p>
+<ul>
+<li>生成模型：生成数据的分布，也就是求联合分布
+<code>P(Y, X)</code>，再通过贝叶斯理论计算 <code>P(Y|X)</code>。</li>
+<li>判别模型：判别输出结果的模型，直接训练条件分布<code>P(Y|X)</code>。</li>
+</ul>
+<p>生成模型的<code>P(Y,X)</code>可以计算出<code>P(Y|X)</code>，反之则不行。联合分布具有更多的信息，所以会有更广的普适性。可以处理存在隐变量的情况，也是这篇博客接下来要讲的。</p>
+<p>判别模型由于直接学习条件分布<code>P(Y|X)</code>，所以允许对输入进行抽象，比如降维，从而简化学习问题，</p>
+<p>于是就比较容易理解常见的判别方法有SVM、逻辑回归等；
+常见的生成方法有朴素贝叶斯法、隐马尔可夫模型等。</p>
+<h3 id="参考">参考</h3>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/20446337">机器学习“判定模型”和“生成模型”有什么区别？</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-04-06-mm-crf-imageprocessing/" class="post-title-link" itemprop="url">马尔可夫模型到条件随机场，再结合深度学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-06 11:15:12" itemprop="dateCreated datePublished" datetime="2017-04-06T11:15:12+08:00">2017-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>先了解了一下<a
+href="/2017-04-09-generating-model-and-discriminant-model/">生成模型与判别模型</a></p>
+<h3 id="隐马尔可夫模型">隐马尔可夫模型</h3>
+<p>隐马尔可夫模型（HMM）属于生成模型。</p>
+<p>组成：两个集合，两个序列，两个矩阵。</p>
+<p>这些内容构成了隐马尔可夫模型的整体概念，具体问题中，有的是已知的，有的是未知的，这个模型就是通过已知量建模，进而推算未知量。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017-04-06-mm-crf-imageprocessing/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-03-29-about-norm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-03-29-about-norm/" class="post-title-link" itemprop="url">关于机器学习中的范数的杂记</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-29 17:00:23" itemprop="dateCreated datePublished" datetime="2017-03-29T17:00:23+08:00">2017-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>一般来说，监督学习可以看作最小化一个目标函数，即Loss
+Function加一个约束项： <span class="math display">\[
+w^{*} = \mathop{\arg\min}_{w}\sum_{i}L(y_{i}, f(x_{i}; w)) +
+\lambda\Omega(w)
+\]</span></p>
+<p>约束项 <span class="math inline">\(\Omega(w)\)</span>
+通常是模型参数向量的范数的规则化项，比如稀疏表示基础知识中的零范数，用来约束字典权值的稀疏性。</p>
+<h3 id="l0范数">L0范数</h3>
+<p>L0范数指向量中非0的元素个数，
+知乎上一个解释很有让人增加对0范数的感性认知的效果<br />
+&gt;几何意义不考虑，单从分析角度。总而言之都是P范数，零范数即是当<code>p</code>趋于零，可以证明这时候的极限
+<span
+class="math inline">\((x_{1}^{p}+x_{2}^{p}+...+x_{n}^{p})^{\frac{1}{p}}\)</span>
+恰好是向量 <span
+class="math inline">\(x=(x_{1},x_{2},...,x_{n})^{T}\)</span>
+非零元素的个数。而无穷范数则是当<code>p</code>趋于无穷的时候的范数。关于这些极限的证明，数学分析的开篇就介绍了，我想这也是为什么当初学习数学分析的时候为什么老是有各种奇形怪状的极限要证明存在性的原因之一。但严格来说，<strong>零范数并不满足数乘率</strong>(
+<span class="math inline">\(|\alpha x|\neq |\alpha||x|\)</span>
+)。之所以最近被多次提到，也是因为压缩感知的火热。<br />
+<a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/20473040/answer/121760029">https://www.zhihu.com/question/20473040/answer/121760029</a></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017-03-29-about-norm/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-03-23-ksvd-and-denoising/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-03-23-ksvd-and-denoising/" class="post-title-link" itemprop="url">从稀疏表示到K-SVD，再到图像去噪</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-23 16:16:33" itemprop="dateCreated datePublished" datetime="2017-03-23T16:16:33+08:00">2017-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>初学入门，将来有了更深的理解回来纠正错误。</p>
+<p>MathJax需要加载，公式如未显示请稍候。</p>
+<h3 id="稀疏表示">稀疏表示</h3>
+<h4 id="稀疏性的理解">稀疏性的理解</h4>
+<p>最初稀疏性产生于信号处理领域，自然界信号低频居多，高频主要是噪声，图像处理中的频率域滤波是个典型例子。</p>
+<p>假设有一个干净没有噪声的图像，经过传输，收到的是一个受到干扰有了噪声的图像，而噪声主要是高频分量，对图片做二维傅里叶变换，对低频的波形保持，高频的一刀切，还原回来的图像就平滑了许多，大部分高频噪声就去除了。这个假设的场景就是个“信号恢复”的过程。如果把所有的频率的波都看作一个个相互正交的向量，恢复数据就是给这些向量找到一组系数，它们一乘、一合并，得到原始信号，频率从大到小是有无穷多个的，而由于自然界信号的“稀疏性”，对于图像而言，就是指有用的频率主要是低频，那么对应高频的系数基本都是<code>0</code>了，低频部分也不见得全是非<code>0</code>，这一系列系数<code>0</code>很多，非<code>0</code>很少，就很“稀疏”。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017-03-23-ksvd-and-denoising/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-03-07-csunewoj/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-03-07-csunewoj/" class="post-title-link" itemprop="url">CSU-ACM新官网上线</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-03-07 21:32:45" itemprop="dateCreated datePublished" datetime="2017-03-07T21:32:45+08:00">2017-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>花了一个多星期给CSUACM做了个新网站。</p>
+<p><a target="_blank" rel="noopener" href="http://acm.csu.edu.cn">acm.csu.edu.cn</a></p>
+<p>本来只是想在学校OJ刷刷题，然而觉得各种丑，之前也一直因为代码不是自己的，想调整内容、增减功能总是不那么得心应手，这次也算心血来潮做个新的UI，做着做着就干脆把官网和报名网站也整合了。</p>
+<p>这几天太累了也不想打太多字了，做篇日志留念。也许什么时候有空了再写个新的Judge端吧。</p>
+<p>多年过去了，发现自己对中南ACM队伍还是深爱着。。。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017-03-07-csunewoj/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -584,461 +1044,6 @@ admin，但是退役后就没怎么管OJ了，都是每年的在役队员在加�
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016-05-10-python-threadpool-processpool/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2015-08-29-2015hncpc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015-08-29-2015hncpc/" class="post-title-link" itemprop="url">2015省赛</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-08-29 16:13:30" itemprop="dateCreated datePublished" datetime="2015-08-29T16:13:30+08:00">2015-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>很忙很累的就不多说了。</p>
-<p>比赛顺利开始之后，整个一天就在忙外网rank了。。。</p>
-<p>没有独立IP，没有端口映射，数据库同步这个之前配过一次被吓着了好麻烦不打算用。</p>
-<p>于是考虑把数据从内网往外推。
-总不可能频繁复制数据库，最终决定推rank页的html。</p>
-<p>然后问题来了。</p>
-<h2 id="section">
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015-08-29-2015hncpc/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2015-06-11-windows-sublime-latex-ieee/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015-06-11-windows-sublime-latex-ieee/" class="post-title-link" itemprop="url">Windows下sublime+Latex+IEEE模板配置方法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-06-11 14:44:00" itemprop="dateCreated datePublished" datetime="2015-06-11T14:44:00+08:00">2015-06-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="装好sublime-text3">装好<a
-target="_blank" rel="noopener" href="http://www.sublimetext.com/">Sublime Text</a>3</h3>
-<p>去<a target="_blank" rel="noopener" href="http://www.sublimetext.com/">官网</a> ### <a
-target="_blank" rel="noopener" href="https://packagecontrol.io/installation">Package Control</a> 下载<a
-target="_blank" rel="noopener" href="https://packagecontrol.io/Package%20Control.sublime-package">Package
-Control.sublime-package</a>，放到sublime的Installed
-Packages文件夹里（在sublime中Preferences-&gt;Browse
-Packages，上层目录就能看到Installed Packages文件夹）。</p>
-<p>重启sublime，如果在Perferences-&gt;package settings中看到package
-control这一项，则安装成功。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015-06-11-windows-sublime-latex-ieee/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/" class="post-title-link" itemprop="url">CSGrandeur的WebGL学习——WebGL教程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-05-20 02:32:00" itemprop="dateCreated datePublished" datetime="2015-05-20T02:32:00+08:00">2015-05-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>在线查看：<a
-target="_blank" rel="noopener" href="http://csgrandeur.gitbooks.io/webgl-learn/content/">http://csgrandeur.gitbooks.io/webgl-learn/content/</a></p>
-<p>源码演示：<a
-target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/Test/1.html">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/Test/1.html</a></p>
-<p>离线epub：<a
-target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.epub">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.epub</a></p>
-<p>离线mobi：<a
-target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.mobi">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.mobi</a></p>
-<p>离线pdf：<a
-target="_blank" rel="noopener" href="http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.pdf">http://csgrandeur.github.io/csgrandeur-webgl-learn/Application/webgl-learn.pdf</a></p>
-<p><del>在线版本会及时更新，离线版本在有较大改动时更新。</del></p>
-<p><strong>内容来自 Learning WebGL
-，他的网站是：http://learningwebgl.com</strong>。我修改了代码适用到gl-matrix
-2.x的版本，把操作dom的代码改成jQuery了。教程没有纯翻译，看着原版理解着写着，不明白的问题在搜了之后补充上了，自己觉得太明白的问题删减掉了。</p>
-<p><del>之后学习的内容会开辟新的章节更新。如有问题欢迎指正。</del></p>
-<p>时光荏苒，造化弄人，我现在不搞这个了，也不会再更新了，大家加油<code>^_^</code>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015-05-20-CSGrandeur's-WebGL-Learning--WebGL-Tutorial/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2014-01-15-LeetCode-OJ-Solution/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2014-01-15-LeetCode-OJ-Solution/" class="post-title-link" itemprop="url">LeetCode 题解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2014-01-15 15:34:00" itemprop="dateCreated datePublished" datetime="2014-01-15T15:34:00+08:00">2014-01-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>LeetCode OJ is a platform for preparing technical coding
-interviews.</p>
-<p>LeetCode OJ 是为与写代码有关的技术工作面试者设计的训练平台。</p>
-<p>LeetCode OJ:<a
-target="_blank" rel="noopener" href="http://oj.leetcode.com/">http://oj.leetcode.com/</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2014-01-15-LeetCode-OJ-Solution/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2013-07-07-About-ACM-About-CSU/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2013-07-07-About-ACM-About-CSU/" class="post-title-link" itemprop="url">关于ACM，关于CSU</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2013-07-07 09:02:00" itemprop="dateCreated datePublished" datetime="2013-07-07T09:02:00+08:00">2013-07-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>原帖地址：<a
-target="_blank" rel="noopener" href="http://tieba.baidu.com/p/2432943599">http://tieba.baidu.com/p/2432943599</a></p>
-<p>作者： 郭大侠爱写代码</p>
-<hr />
-<p>前言：
-即将进入研二，ACM的事情也渐渐远去，记忆终将模糊，但那段奋斗永远让人热血沸腾。开个贴讲讲ACM与中南的故事，当是宣泄，也当是一种宣传吧。多年不写作文，也不知如今的文笔能否打动更多的有志青年为中南ACM梦想而奋斗。
-用时间序好了，不定时更新。一层楼对应一个时期或一年，有补充就在那层楼的回复中。也许真写起来故事不长，就这样吧。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2013-07-07-About-ACM-About-CSU/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
