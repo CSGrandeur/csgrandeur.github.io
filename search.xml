@@ -8599,7 +8599,8 @@ class="math inline">\(k\)</span>
 个询问，每个询问给出一个正整数 <span
 class="math inline">\(x\)</span>，求所有不大于<span
 class="math inline">\(x\)</span>的数的立方根向下取整之和：</p>
-<p>[_{j=1}^{x} ]</p>
+<p><span class="math inline">\(\sum_{j=1}^{x} \lfloor \sqrt[3]{j}
+\rfloor\)</span></p>
 <p>其中 <span class="math inline">\(\lfloor x \rfloor\)</span> 表示对
 <span class="math inline">\(x\)</span> 向下取整。</p>
 <p>题目按从小到大的顺序给出这些 <span
@@ -8607,7 +8608,7 @@ class="math inline">\(x\)</span></p>
 <p>分析：<span class="math inline">\(x\)</span>范围很大，挨个枚举不大于
 <span class="math inline">\(x\)</span>
 的数必超时。但"立方根向下取整"的值其实是一段一段相同的值组成的，比如<span
-class="math inline">\(1\sim 10\)</span> 的里放歌是 <span
+class="math inline">\(1\sim 10\)</span> 的立方根是 <span
 class="math inline">\(1,1,1,1,1,1,1,2,2,2\)</span>，把立方根相同的一段段数看作一个又一个的"块"，块内相同的值乘以块的长度，就能大跨步计算立方根向下取整之和。</p>
 <p>这道题又按从小到大顺序给 <span
 class="math inline">\(x\)</span>，那么也不用开数组存前缀结果了，保存之前计算过的最后一块即可。</p>
@@ -8626,10 +8627,12 @@ class="math inline">\(x\)</span>，那么也不用开数组存前缀结果了，
 <p>第一行：两个整数 <span class="math inline">\(n,m\)</span>
 (灯的数量和操作次数)</p>
 <p>接下来 <span class="math inline">\(m\)</span> 行：每行三个整数 <span
-class="math inline">\(c,a,b\)</span> - <span
-class="math inline">\(c=0\)</span>：区间翻转操作 - <span
-class="math inline">\(c=1\)</span>：区间查询操作 - <span
-class="math inline">\([a,b]\)</span>：操作区间范围</p>
+class="math inline">\(c,a,b\)</span></p>
+<ul>
+<li><span class="math inline">\(c=0\)</span>：区间翻转操作</li>
+<li><span class="math inline">\(c=1\)</span>：区间查询操作</li>
+<li><span class="math inline">\([a,b]\)</span>：操作区间范围</li>
+</ul>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">4 5</span><br><span class="line">0 1 2</span><br><span class="line">0 2 4</span><br><span class="line">1 2 3</span><br><span class="line">0 2 4</span><br><span class="line">1 1 4</span><br></pre></td></tr></table></figure>
 <h3 id="输出">输出</h3>
 <p>对每个查询操作输出一行，表示区间内开启的灯数量</p>
