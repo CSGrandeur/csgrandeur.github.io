@@ -8989,4 +8989,635 @@ r]\)</span>，只要这个问题可重复贡献，这两个预处理过的答案
         <tag>Algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>26.动态规划入门</title>
+    <url>/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="动态规划入门">动态规划入门</h1>
+<ul>
+<li>动态（Dynamic）：问题的解因时间或决策而变化</li>
+<li>规划（Programming）：分解子问题，利用子问题之间关系求解</li>
+</ul>
+<span id="more"></span>
+<h2 id="递推与带备忘递归">递推与带备忘递归</h2>
+<p>数字三角形：从顶部出发，只能沿箭头走，到底部的哪个路线经过的所有数字之和最大</p>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2_%E4%BB%80%E4%B9%88%E6%98%AF%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92.svg" class="">
+<p>给每个格子编号</p>
+<style>.nphjpxdthauv{height: 300px;}</style>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2_%E7%BC%96%E5%8F%B7.svg" class="nphjpxdthauv" title="给每个格子编号">
+<p>思考 2 件事：</p>
+<ol type="1">
+<li><p><strong>最优子结构</strong>：数学化定义问题，分析该问题哪些更小规模的子问题的解可以直接影响它的解</p>
+<ul>
+<li>定义 <span class="math inline">\(d(i,j)\)</span> 是从 <span
+class="math inline">\((i,j)\)</span> 出发到底的最大和</li>
+<li>可知 <span class="math inline">\(d(1,1)\)</span> 是问题的最优解</li>
+<li><span class="math inline">\(d(i,j)\)</span> 与 <span
+class="math inline">\(d(i+1,j)\)</span>、<span
+class="math inline">\(d(i+1,j+1)\)</span> 直接相关——有这俩就能确定 <span
+class="math inline">\(d(i,j)\)</span></li>
+</ul></li>
+<li><p><strong>状态转移方程</strong>：对于特定规模的问题，能直接影响它的子问题以什么方式计算能推导到它</p>
+<ul>
+<li>设 <span class="math inline">\(a(i,j)\)</span> 是 <span
+class="math inline">\((i,j)\)</span> 格子的值</li>
+<li><span
+class="math inline">\(d(i,j)=a(i,j)+\max(d(i+1,j),d(i+1,j+1))\)</span></li>
+</ul></li>
+</ol>
+<p>动态规划的两种等价实现方法，渐进复杂度通常一致</p>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92_%E9%80%92%E6%8E%A8%E4%B8%8E%E9%80%92%E5%BD%92.svg" class="" title="动态规划递推与递归">
+<p><strong>自底向上的递推</strong></p>
+<p>从小到大逐个解决子问题</p>
+<p>优势：没有频繁的递归调用，常数更小</p>
+<p>劣势：思维量——需要预先确定好子问题规模大小，即求解的顺序</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">DP</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; j ++) dp[n][j] = a[n][j];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">1</span>; i --)    <span class="comment">// 自底向上递推</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= i; j ++)</span><br><span class="line">            dp[i][j] = std::<span class="built_in">max</span>(dp[i + <span class="number">1</span>][j], dp[i + <span class="number">1</span>][j + <span class="number">1</span>]) + a[i][j];</span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">1</span>][<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>自顶向下的带备忘递归</strong>（记忆化搜索）</p>
+<p>对需要但尚未解决的子问题进行递归求解，否则直接返回备忘</p>
+<p>优势：</p>
+<ol type="1">
+<li>思维量相对小，直接按状态转移方程实现</li>
+<li>有的特殊情况下能跳过很多子问题</li>
+</ol>
+<p>劣势：递归开销，甚至面对有些过大的问题没有足够的递归栈</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">DPS</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(i &gt; n) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> &amp;ans = dp[i][j];</span><br><span class="line">    <span class="keyword">if</span>(ans != <span class="number">-1</span>) <span class="keyword">return</span> ans;</span><br><span class="line">    ans = std::<span class="built_in">max</span>(<span class="built_in">DPS</span>(i + <span class="number">1</span>, j), <span class="built_in">DPS</span>(i + <span class="number">1</span>, j + <span class="number">1</span>)) + a[i][j];</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="有向无环图dp">有向无环图DP</h2>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/DAG.svg" class="" title="有向无环图">
+<p>有向无环图（Directed Acyclic
+Graph，DAG）是指不存在环的有向图，从任意点出发沿有向边走，不会再回到该点。</p>
+<p>很多动态规划问题可以转换为DAG上的最长/最短路或路径计数。</p>
+<h3 id="例矩形嵌套">例：矩形嵌套</h3>
+<p>给出一系列矩形的长和宽，矩形𝐴能够嵌套在𝐵内部当且仅当𝐴的长与宽都对应严格小于𝐵的长与宽，求这些矩形能够组成的最深嵌套</p>
+<p>构建DAG：</p>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E7%9F%A9%E5%BD%A2%E5%B5%8C%E5%A5%97_%E5%BB%BADAG.svg" class="" title="矩形嵌套建DAG">
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li>"可嵌套"关系可以建模为图：<span class="math inline">\((i,j)\in
+E\)</span>表示<span class="math inline">\(j\)</span>能嵌套在<span
+class="math inline">\(i\)</span>内，有向边<span
+class="math inline">\(i\rightarrow j\)</span>，该图是DAG</li>
+<li><span class="math inline">\(d(i)\)</span>表示<span
+class="math inline">\(i\)</span>为最外层时的最深嵌套，只与<span
+class="math inline">\((i,j)\in E\)</span>的<span
+class="math inline">\(j\)</span>有关</li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(i)=\max\{d(j)+1|(i,j)\in
+E\}\)</span></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">DPS</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> &amp;ans = dp[i];</span><br><span class="line">    <span class="keyword">if</span>(ans != <span class="number">-1</span>) <span class="keyword">return</span> ans;</span><br><span class="line">    ans = <span class="number">1</span>;    <span class="comment">// 至少包含自身</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; j ++) </span><br><span class="line">        <span class="keyword">if</span>(g[i][j] &amp;&amp; <span class="built_in">DPS</span>(j) + <span class="number">1</span> &gt; ans)&#123;</span><br><span class="line">            ans = <span class="built_in">DPS</span>(j) + <span class="number">1</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>思考：如果不止要求最深嵌套层数，还要求把最深嵌套的各个节点按顺序输出，怎么做？</p>
+<p>提示：状态转移时记录转移方向</p>
+<p>复杂度分析：</p>
+<p>要填一个<code>dp[]</code>，有<span
+class="math inline">\(O(n)\)</span>项。每一项要一个<span
+class="math inline">\(O(n)\)</span>的循环才能得到最终结果，所以<span
+class="math inline">\(O(n^2)\)</span>。</p>
+<blockquote>
+<p>知识点：动态规划的复杂度分析技巧。动态规划就是一个"填表游戏"，其复杂度就由表的大小和完成表的每一项最坏情况的复杂度决定。</p>
+</blockquote>
+<p>扩展题：有<span
+class="math inline">\(n\)</span>种立方体（每种数量无限），选一些堆成尽可能高的柱子，上方的立方体底面长宽必须严格小于下方的立方体。</p>
+<p>提示：立方体可以任选一个棱作为高，则另外两个棱构成底面长宽。</p>
+<h2 id="区间dp">区间DP</h2>
+<h3 id="例括号匹配">例：括号匹配</h3>
+<p>给定一个只包含<code>&#123;&#125;</code>、<code>()</code>、<code>[]</code>的字符串
+括号嵌套可能不合法，如"<code>&#123;(] )</code>"
+给出添加符号最少的方案，使括号嵌套合法</p>
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(i,j)\)</span> 表示 <span
+class="math inline">\([i, j]\)</span>
+这段符号的最优解，即最少添加使之合法的方案</li>
+<li>可以从 3 个方向转移
+<ul>
+<li>左边加一个让 <span class="math inline">\(j\)</span> 匹配</li>
+<li>右边加一个让 <span class="math inline">\(i\)</span> 匹配，</li>
+<li>如果<span class="math inline">\(i\)</span>和<span
+class="math inline">\(j\)</span>位置恰好匹配，那么不用加，让它俩匹配</li>
+</ul></li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(i,j)=\begin{cases} \min(d(i+1,j-1),
+d(i+1,j)+1, d(i,j-1)+1) &amp; \text{如果}s[i]\text{和}s[j]\text{匹配} \\
+\min(d(i+1,j)+1, d(i,j-1)+1) &amp; \text{否则} \end{cases}\)</span></li>
+</ul>
+<h3 id="例矩阵链乘法">例：矩阵链乘法</h3>
+<blockquote>
+<p>还没学过线性代数的同学，可以简单了解下<strong>矩阵是什么，如何相乘</strong>：</p>
+<ul>
+<li>两个矩阵相乘，则第一个的列数必须等于第二个的行数，比如第一个 <span
+class="math inline">\(a\times b\)</span>，第二个必须 <span
+class="math inline">\(b\times c\)</span></li>
+<li>矩阵相乘的结果是第一个的行数、第二个的列数，即<span
+class="math inline">\(a\times b\)</span> 和 <span
+class="math inline">\(b\times c\)</span> 两个矩阵相乘得到 <span
+class="math inline">\(a \times c\)</span></li>
+<li>相乘方式：结果矩阵的 <span class="math inline">\((i,j)\)</span>
+位置的值，是前一个的第 <span class="math inline">\(i\)</span>
+行与后一个的第 <span class="math inline">\(j\)</span>
+列一一对应相乘再加起来的结果</li>
+</ul>
+<p><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> x[a][b], y[b][c], z[a][c];</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; a; i ++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; c; j ++) &#123;</span><br><span class="line">        z[i][j] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">0</span>; k &lt; b; k ++) &#123;</span><br><span class="line">            z[i][j] += x[i][k] * y[k][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure> 两个矩阵的基本元素乘法次数也显而易见了</p>
+</blockquote>
+<p>计算<span class="math inline">\(n\)</span>个矩阵序列的乘积<span
+class="math inline">\(A_1 A_2\cdots
+A_n\)</span>，矩阵规模保证能够合法相乘。</p>
+<p>矩阵乘满足结合律，任何加括号方法计算结果相同。不同加括号方式，元素相乘次数不同。求一个矩阵乘法次序，使得元素相乘次数最少。</p>
+<p>例：<span class="math inline">\(\langle A_1,A_2,A_3
+\rangle\)</span>规模分别为<span class="math inline">\(10\times
+100\)</span>、<span class="math inline">\(100\times 5\)</span>、<span
+class="math inline">\(5\times 50\)</span></p>
+<ul>
+<li><span class="math inline">\(((A_1 A_2 ) A_3)\)</span>：<span
+class="math inline">\(10\cdot 100\cdot 5+10\cdot 5\cdot
+50=7500\)</span>次</li>
+<li><span class="math inline">\((A_1 (A_2 A_3))\)</span>：<span
+class="math inline">\(100\cdot 5\cdot 50+10\cdot 100\cdot
+50=75000\)</span>次</li>
+</ul>
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li>最后一次矩阵乘法可以发生在任意位置<span
+class="math inline">\(k\)</span>，即<span
+class="math inline">\((A_1\cdots A_k)(A_{k+1}\cdots A_n)\)</span></li>
+<li><span class="math inline">\(d(i,j)\)</span>：<span
+class="math inline">\(A_i A_{i+1}\cdots A_{j-1}
+A_j\)</span>这一区间的最优解</li>
+<li>每一个<span
+class="math inline">\(k\)</span>作为该区间最后一次乘法，都是潜在的最优方案</li>
+<li>对应子问题为<span class="math inline">\(d(i,k)\)</span>与<span
+class="math inline">\(d(k+1,j)\)</span></li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li>设<span
+class="math inline">\(p_0,p_1,\dots,p_n\)</span>是矩阵序列的规模，如<span
+class="math inline">\(A_1\)</span>为<span
+class="math inline">\(p_0\times p_i\)</span>，<span
+class="math inline">\(A_i\)</span>为<span
+class="math inline">\(p_{i-1}\times p_i\)</span></li>
+<li><span class="math display">\[
+d(i,j)=\begin{cases}
+0 &amp; \text{如果}i=j \\
+\min\limits_{i\leq k\leq j}\{d(i,k)+d(k+1,j)+p_{i-1}p_kp_j\} &amp;
+\text{如果}i&lt;j
+\end{cases}
+\]</span></li>
+</ul>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E7%9F%A9%E9%98%B5%E9%93%BE_%E6%9C%80%E5%90%8E%E4%B9%98%E6%B3%95%E4%BD%8D%E7%BD%AE.svg" class="" title="矩阵链_最后乘法位置">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">DPS</span><span class="params">(<span class="type">int</span> l, <span class="type">int</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 基本情况：如果区间长度为1，不需要乘法</span></span><br><span class="line">    <span class="keyword">if</span>(l == r - <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 使用引用减少重复代码，ans是dp[l][r]的引用，修改它就会修改dp[l][r]</span></span><br><span class="line">    <span class="type">int</span> &amp;ans = dp[l][r];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果已经计算过，直接返回结果（记忆化）</span></span><br><span class="line">    <span class="keyword">if</span>(ans != <span class="number">-1</span>) <span class="keyword">return</span> ans;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化：设置为一个足够大的值，表示无穷大</span></span><br><span class="line">    ans = <span class="number">0x3f3f3f3f</span>;   </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 尝试所有可能的最后一次乘法位置</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = l + <span class="number">1</span>; i &lt; r; i ++)</span><br><span class="line">        <span class="comment">// 状态转移：dp[l][r] = min(dp[l][i] + dp[i][r] + p[l]*p[i]*p[r])</span></span><br><span class="line">        <span class="comment">// 其中p[l]*p[i]*p[r]是最后一次乘法的代价</span></span><br><span class="line">        ans = std::<span class="built_in">min</span>(ans, <span class="built_in">DPS</span>(l, i) + <span class="built_in">DPS</span>(i, r) + p[l] * p[i] * p[r]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 返回区间[l,r]的最优解</span></span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>递推也可以写，分析计算顺序，大区间依赖小区间，那么按区间从小到大计算就可以写递推式DP了</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 初始化：单个矩阵不需要乘法，所以dp[i][i] = 0</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++)</span><br><span class="line">    dp[i][i] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第一重循环：枚举子问题大小，从小到大处理子问题</span></span><br><span class="line"><span class="comment">// 从长度为2的区间开始，一直到长度为n的区间</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> len = <span class="number">2</span>; len &lt;= n; len ++) &#123;</span><br><span class="line">    <span class="comment">// 第二重循环：枚举子问题的起点</span></span><br><span class="line">    <span class="comment">// 对于每个长度，计算所有可能的起点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> l = <span class="number">1</span>; l &lt;= n - len + <span class="number">1</span>; l ++) &#123;</span><br><span class="line">        <span class="comment">// 计算子问题的终点</span></span><br><span class="line">        <span class="type">int</span> r = l + len - <span class="number">1</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 初始化dp[l][r]为一种可能的方案：将第一个矩阵与剩余矩阵相乘</span></span><br><span class="line">        dp[l][r] = dp[l + <span class="number">1</span>][r] + <span class="number">1LL</span> * p[l - <span class="number">1</span>] * p[l] * p[r];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 第三重循环：枚举最后一次矩阵乘法发生的位置</span></span><br><span class="line">        <span class="comment">// 尝试所有可能的切分点，找到最优解</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = l + <span class="number">1</span>; i &lt; r; i ++)</span><br><span class="line">            <span class="comment">// 状态转移：dp[l][r] = min(dp[l][i] + dp[i+1][r] + p[l-1]*p[i]*p[r])</span></span><br><span class="line">            <span class="comment">// 其中p[l-1]*p[i]*p[r]是最后一次乘法的代价</span></span><br><span class="line">            dp[l][r] = std::<span class="built_in">min</span>(</span><br><span class="line">                dp[l][r], </span><br><span class="line">                dp[l][i] + dp[i + <span class="number">1</span>][r] + p[l - <span class="number">1</span>] * p[i] * p[r]</span><br><span class="line">            );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="背包dp">背包DP</h2>
+<h3 id="例完全背包">例：完全背包</h3>
+<p>有<span class="math inline">\(n\)</span>种物品，每种物品<span
+class="math inline">\(i \in [1,n]\)</span>的重量<span
+class="math inline">\(w_i\)</span>，价值<span
+class="math inline">\(v_i\)</span>，数量不限。有一个背包可装总重不超过<span
+class="math inline">\(b\)</span>的物品，求背包能装物品的最大总价值。</p>
+<p>例：</p>
+<p><span class="math inline">\(n=4\)</span>，<span
+class="math inline">\(b=10\)</span></p>
+<p><span class="math inline">\(v_1=1\)</span>，<span
+class="math inline">\(v_2=3\)</span>，<span
+class="math inline">\(v_3=6\)</span>，<span
+class="math inline">\(v_4=9\)</span></p>
+<p><span class="math inline">\(w_1=2\)</span>，<span
+class="math inline">\(w_2=3\)</span>，<span
+class="math inline">\(w_3=4\)</span>，<span
+class="math inline">\(w_4=7\)</span></p>
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li><span class="math inline">\(k\)</span>：只考虑前<span
+class="math inline">\(k\)</span>种物品</li>
+<li><span class="math inline">\(y\)</span>：背包装物品总重限制到<span
+class="math inline">\(y\)</span> (<span class="math inline">\(y \leq
+b\)</span>)</li>
+<li><span class="math inline">\(d(k,y)\)</span>：前<span
+class="math inline">\(k\)</span>种物品装入容量<span
+class="math inline">\(y\)</span>的背包的最优解</li>
+<li><span class="math inline">\(d(k,y)\)</span>只与<span
+class="math inline">\(d(k,y-w_k)\)</span>和<span
+class="math inline">\(d(k-1,y)\)</span>有关</li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(k,y) = \max\{d(k,y-w_k)+v_k,
+d(k-1,y)\}\)</span></li>
+</ul>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E8%83%8C%E5%8C%85_%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85.svg" class="" title="完全背包">
+<p><strong>直接DP</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; k ++)</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> y = <span class="number">0</span>; y &lt;= b; y ++) &#123;</span><br><span class="line">        dp[k][y] = dp[k - <span class="number">1</span>][y];  <span class="comment">// 用前i-1种物品方案初始化前i种物品方案</span></span><br><span class="line">        <span class="keyword">if</span>(y &gt;= w[k])</span><br><span class="line">            dp[k][y] = std::<span class="built_in">max</span>(dp[k][y - w[k]] + v[k], dp[k - <span class="number">1</span>][y]);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(dp[i-1][\ldots]\)</span>只在计算<span
+class="math inline">\(dp[i][\ldots]\)</span>时被用到，实际上并不需要二维数组。</p>
+<p><strong>滚动数组优化</strong>：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; k ++)</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> y = w[k]; y &lt;= b; y ++)</span><br><span class="line">        dp[y] = std::<span class="built_in">max</span>(dp[y - w[k]] + v[k], dp[y]);</span><br></pre></td></tr></table></figure>
+<p><strong>滚动数组</strong>：</p>
+<ul>
+<li>重复在一个数组内计算不同信息，减少空间复杂度</li>
+<li>确保未处理的信息不被覆盖</li>
+</ul>
+<p><strong>劣势</strong>：</p>
+<ul>
+<li>丢失了过程信息，无法还原完整方案</li>
+</ul>
+<h3 id="例01背包">例：01背包</h3>
+<p>有<span class="math inline">\(n\)</span>个物品，每个物品<span
+class="math inline">\(i \in [1,n]\)</span>的重量<span
+class="math inline">\(w_i\)</span>，价值<span
+class="math inline">\(v_i\)</span>（分别只有1个）。有一个背包可装总重不超过<span
+class="math inline">\(b\)</span>的物品，求背包能装物品的最大总价值。</p>
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li><span class="math inline">\(k\)</span>：只考虑前<span
+class="math inline">\(k\)</span>种物品</li>
+<li><span class="math inline">\(y\)</span>：背包装物品总重限制到<span
+class="math inline">\(y\)</span> (<span class="math inline">\(y \leq
+b\)</span>)</li>
+<li><span class="math inline">\(d(k,y)\)</span>：前<span
+class="math inline">\(k\)</span>种物品装入容量<span
+class="math inline">\(y\)</span>的背包的最优解</li>
+<li><span class="math inline">\(d(k,y)\)</span>只与<span
+class="math inline">\(d(k-1,y-w_k)\)</span>和<span
+class="math inline">\(d(k-1,y)\)</span>有关</li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(k,y) = \max\{d(k-1,y-w_k)+v_k,
+d(k-1,y)\}\)</span></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; k ++)</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> y = b; y &gt;= w[k]; y --)</span><br><span class="line">        dp[y] = std::<span class="built_in">max</span>(dp[y - w[k]] + v[k], dp[y]);</span><br></pre></td></tr></table></figure>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E8%83%8C%E5%8C%85_01%E8%83%8C%E5%8C%85.svg" class="" title="01背包">
+<p><strong>其他背包问题</strong>：</p>
+<ul>
+<li>多重背包：每种物品有<span class="math inline">\(k_i\)</span>个</li>
+<li>混合背包：有的1个，有的无限个，有的<span
+class="math inline">\(k_i\)</span>个</li>
+<li>二维背包：每个物品占<span
+class="math inline">\(w_i\)</span>重量和<span
+class="math inline">\(a_i\)</span>体积，重量体积都有上限</li>
+</ul>
+<p>背包是一类多阶段决策问题：每做一次决策就可以得到解的一部分。</p>
+<p>经典资料参考：<a
+href="https://docs.qq.com/pdf/DRHdIcGltTllSVVVp">背包九讲</a></p>
+<h2 id="线性结构dp">线性结构DP</h2>
+<h3 id="例最长上升子序列">例：最长上升子序列</h3>
+<p>给定<span class="math inline">\(n\)</span>个整数<span
+class="math inline">\(A_1,A_2,\ldots,A_n\)</span>，找出最长的递增子序列。</p>
+<p>例：1 5 3 6 9 8 10</p>
+<p>最长上升子序列为：1&lt;3&lt;6&lt;9&lt;10</p>
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(k)\)</span>：以第<span
+class="math inline">\(k\)</span>个元素结尾的最长上升子序列长度</li>
+<li><span class="math inline">\(d(k)\)</span>与<span
+class="math inline">\(i&lt;k\)</span>的每个<span
+class="math inline">\(d(i)\)</span>有关</li>
+<li>对任意<span class="math inline">\(i&lt;k\)</span>，如果<span
+class="math inline">\(A_i&lt;A_k\)</span>，则<span
+class="math inline">\(A_k\)</span>续在以<span
+class="math inline">\(A_i\)</span>结尾的子序列的后面</li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(k) = \max\{d(i) | i&lt;k \text{且}
+A_i&lt;A_k\} + 1\)</span></li>
+</ul>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97.svg" class="" title="最长上升子序列">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> ans = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; k ++) &#123;</span><br><span class="line">    dp[k] = <span class="number">1</span>;  <span class="comment">// 至少自身有1的长度</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt; k; j ++)</span><br><span class="line">        <span class="keyword">if</span>(a[j] &lt; a[k] &amp;&amp; dp[j] + <span class="number">1</span> &gt; dp[k])</span><br><span class="line">            dp[k] = dp[j] + <span class="number">1</span>;</span><br><span class="line">    ans = std::<span class="built_in">max</span>(dp[k], ans);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>优化</strong>：</p>
+<ol type="1">
+<li>另存一个"尾元素"序列，表示各长度子序列的末尾元素</li>
+<li>从左到右对每个数<span
+class="math inline">\(X\)</span>在尾元素序列中二分查找不小于<span
+class="math inline">\(X\)</span>的第一个<span
+class="math inline">\(Y\)</span></li>
+<li>如果找到：用<span class="math inline">\(X\)</span>替换<span
+class="math inline">\(Y\)</span>，即该长度的子序列找到了更小的末尾元素</li>
+<li>如果找不到：把<span
+class="math inline">\(X\)</span>插入尾元素序列末尾，答案增长</li>
+</ol>
+<img src="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/%E6%9C%80%E9%95%BF%E4%B8%8A%E5%8D%87%E5%AD%90%E5%BA%8F%E5%88%97_%E5%B0%BE%E5%85%83%E7%B4%A0%E5%BA%8F%E5%88%97.svg" class="" title="最长上升子序列">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> tlen = <span class="number">0</span>;   <span class="comment">// 尾元素个数，指向尾元素数组最后一个元素的下一个位置</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">    <span class="type">int</span> ith = std::<span class="built_in">upper_bound</span>(b, b + tlen, a[i]) - b;  <span class="comment">// 找到不小于a[i]的第一个数</span></span><br><span class="line">    b[ith] = a[i];              <span class="comment">// 用a[i]替换找到的位置，没找到则ith就是末尾位置</span></span><br><span class="line">    <span class="keyword">if</span>(ith == tlen) tlen ++;    <span class="comment">// 没有不小于a[i]的数，长度增加</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例最长公共子序列">例：最长公共子序列</h3>
+<p>给两个序列<span class="math inline">\(A\)</span>和<span
+class="math inline">\(B\)</span>，求长度最大的公共子序列。</p>
+<p>例：</p>
+<ul>
+<li><span class="math inline">\(A\)</span>序列：1,3,2,8,6,5,7</li>
+<li><span class="math inline">\(B\)</span>序列：2,1,4,8,5,7,9</li>
+</ul>
+<p>最长公共子序列长度是4，即2,8,5,7</p>
+<p><strong>最优子结构</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(i,j)\)</span>：<span
+class="math inline">\(A\)</span>的前<span
+class="math inline">\(i\)</span>个元素与<span
+class="math inline">\(B\)</span>的前<span
+class="math inline">\(j\)</span>个元素的LCS</li>
+<li>与<span class="math inline">\(d(i-1,j-1)\)</span>、<span
+class="math inline">\(d(i,j-1)\)</span>、<span
+class="math inline">\(d(i-1,j)\)</span>有关：考察<span
+class="math inline">\(A_i\)</span>与<span
+class="math inline">\(B_j\)</span>是否相等</li>
+<li>如果<span class="math inline">\(A_i=B_j\)</span>，<span
+class="math inline">\(A_i\)</span>与<span
+class="math inline">\(B_j\)</span>配对一定可以作为<span
+class="math inline">\(d(i,j)\)</span>的一个解的结尾</li>
+<li>如果<span class="math inline">\(A_i \neq B_j\)</span>，那么<span
+class="math inline">\(d(i,j)\)</span>的解一定是<span
+class="math inline">\(d(i-1,j)\)</span>和<span
+class="math inline">\(d(i,j-1)\)</span>的其中一个</li>
+</ul>
+<p><strong>状态转移方程</strong>：</p>
+<ul>
+<li><span class="math inline">\(d(i,j) = \begin{cases} d(i-1,j-1)+1
+&amp; \text{若}A_i=B_j \\ \max(d(i,j-1), d(i-1,j)) &amp; \text{若}A_i
+\neq B_j \end{cases}\)</span></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">LCS</span><span class="params">(<span class="type">char</span> a[], <span class="type">int</span> alen, <span class="type">char</span> b[], <span class="type">int</span> blen)</span> </span>&#123;</span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = dp[<span class="number">0</span>][<span class="number">1</span>] = dp[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">0</span>;     <span class="comment">// 假设a、b下标从1开始</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= alen; i ++) &#123;       <span class="comment">// a的游标</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= blen; j ++) &#123;   <span class="comment">// b的游标</span></span><br><span class="line">            <span class="keyword">if</span>(a[i] == b[j]) &#123;</span><br><span class="line">                <span class="comment">// a[i] == b[j]时，加入a的前i-1、b的前j-1的LCS</span></span><br><span class="line">                dp[i][j] = dp[i - <span class="number">1</span>][j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// a[i] != b[j]时，从另外两个子问题较大的转移</span></span><br><span class="line">                dp[i][j] = std::<span class="built_in">max</span>(dp[i - <span class="number">1</span>][j], dp[i][j - <span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[alen][blen];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其它dp前瞻">其它DP前瞻</h2>
+<h3 id="状态压缩dp">状态压缩DP</h3>
+<p>将子问题当作"状态"，状态转移方程就是状态的变化。把描述子问题的"状态"压缩为一个整数，优化状态转移效率。</p>
+<p><strong>例题：互不侵犯</strong></p>
+<p><span class="math inline">\(N \times N\)</span>的棋盘放置<span
+class="math inline">\(K\)</span>个国王，国王攻击范围为周围8个格子。多少种摆放方案，能够互相不在攻击范围。</p>
+<p><span class="math inline">\(d(i,j,l)\)</span>：前<span
+class="math inline">\(i\)</span>行，第<span
+class="math inline">\(i\)</span>行状态为<span
+class="math inline">\(j\)</span>，已放置<span
+class="math inline">\(l\)</span>个国王的方案数。 <span
+class="math inline">\(j\)</span>就是压缩的状态：0~8格子有/没有国王是一个01串，用<span
+class="math inline">\(int\)</span>表示。</p>
+<p>状态压缩示意图（<span class="math inline">\(j=41_{(10)} =
+101001_{(2)}\)</span>）： <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">+---+---+---+---+---+---+</span><br><span class="line">| 1 | 0 | 1 | 0 | 0 | 1 |</span><br><span class="line">+---+---+---+---+---+---+</span><br><span class="line">| K |   | K |   |   | K |</span><br><span class="line">+---+---+---+---+---+---+</span><br></pre></td></tr></table></figure>
+其中K表示放置国王，空格表示不放置国王。这个二进制数101001表示在第1、3、6列放置国王。</p>
+<h3 id="数位dp">数位DP</h3>
+<p>统计满足一定条件的数的数量，把数字拆解一位一位地用DP处理。</p>
+<p><strong>例题：数字计数</strong></p>
+<p>给定两个正整数<span class="math inline">\(a,b\)</span>，求<span
+class="math inline">\([a,b]\)</span>范围内各数位0~9各出现多少次。</p>
+<p>假设<span
+class="math inline">\(d(i)\)</span>统计"1"出现的次数（0~9次数都相等）：
+<span class="math inline">\(d(i) = d(i-1) \times 10 +
+10^{i-1}\)</span>，然后做进一步作后续处理……</p>
+<h3 id="树形dp">树形DP</h3>
+<p>在树结构上DP。</p>
+<p><strong>例题：树上的最远点对</strong></p>
+<p><span
+class="math inline">\(n\)</span>个结点的树，找两个点，它们的距离最远。</p>
+<p><span class="math inline">\(d(i)\)</span>：节点<span
+class="math inline">\(i\)</span>的子树中根到叶子的最大距离。 <span
+class="math inline">\(d(i) = \max\{d(j)\} + 1\)</span>，<span
+class="math inline">\(j\)</span>为<span
+class="math inline">\(i\)</span>的子节点。 所有<span
+class="math inline">\(d(j)\)</span>最大的<span
+class="math inline">\(j=u\)</span>和<span
+class="math inline">\(j=v\)</span>，<span
+class="math inline">\(d(u)+d(v)+2\)</span>为答案。</p>
+<h3 id="轮廓线dp插头dp">轮廓线DP（插头DP）</h3>
+<p>轮廓线DP是一种处理网格类问题的动态规划方法，特别适用于需要记录连通性信息的场景。其核心思想是沿着网格的轮廓线进行状态转移，通过记录轮廓线上每个格子的"插头"状态（如是否有路径经过、路径的方向等）来压缩状态空间。插头DP常用于解决哈密顿回路、路径覆盖、连通性等问题，如"回路计数"、"棋盘覆盖"等经典问题。通过巧妙的状态设计和转移规则，插头DP能够高效处理看似复杂的状态转移，是解决特定类型网格问题的重要工具。</p>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>27.分支限界与剪枝</title>
+    <url>/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/</url>
+    <content><![CDATA[<h1 id="分支限界与剪枝">分支限界与剪枝</h1>
+<p>分支限界与剪枝通过跳过不可能产生最优解的搜索路径，有效加速寻找最佳解决方案的过程。</p>
+<span id="more"></span>
+<h2 id="回顾回溯">回顾回溯</h2>
+<p>回顾：<a href="/2025-03-19-13-暴力枚举/">13.暴力枚举</a></p>
+<p>利用回溯可以枚举排列、子集，比如：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;     <span class="comment">// cur 指 &quot;current&quot;, 当前在确定第 cur 个位置是谁</span></span><br><span class="line">    <span class="keyword">if</span>(cur == n) &#123;                              <span class="comment">// 递归终点</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)             <span class="comment">// 输出一个排列</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + !i, record[i]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;                                 <span class="comment">// 注意return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;               <span class="comment">// 枚举每个元素</span></span><br><span class="line">        <span class="keyword">if</span>(vis[i]) <span class="keyword">continue</span>;                    <span class="comment">// 已放元素排除</span></span><br><span class="line">        vis[i] = <span class="literal">true</span>; record[cur] = a[i];      <span class="comment">// 标记已放本次排列第cur个为a[i]</span></span><br><span class="line">        <span class="built_in">DFS</span>(cur + <span class="number">1</span>);                           <span class="comment">// 递归放第cur+1个</span></span><br><span class="line">        vis[i] = <span class="literal">false</span>;                         <span class="comment">// 回溯取消标记</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>回溯本质上是<strong>在约束条件下</strong>枚举每个元素的所有可能性，其复杂度必然是指数级的，输入规模稍大，时间复杂度就会难以接受。</p>
+<p>回溯的结构是搜索树，八皇后等例子已经体验到，搜索树的一些子树可以跳过不搜。跳过整个子树的操作称为<strong>剪枝</strong>。</p>
+<p>如果有一个固定的套路可以跳过尽可能多的子树，即进行尽可能多的<strong>剪枝</strong>，就可以一定程度上让回溯跑的更快。</p>
+<h2 id="分支限界">分支限界</h2>
+<p>最优化问题，即每一种可能性（排列或组合）都对应某种收益，希望这个收益最大化，找最优的可能性。</p>
+<p>当回溯用来处理最优化问题，就可以维护一个搜索过程中的最好收益——每当搜到某个方案收益更大，就更新最好收益。</p>
+<p>针对搜索树的一棵子树，如果能估算子树可能取得的最好结果，当最好结果不及已经搜到的最好收益时，这棵子树就没有搜索下去的必要，完成一次剪枝。</p>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C_%E7%95%8C%E4%B8%8E%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0.svg" class="">
+<h3 id="例用回溯解01背包">例：用回溯解01背包</h3>
+<p>回溯解01背包，就是枚举所有子集，在能装进背包的子集中更新获得价值的最大值。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cur == <span class="number">-1</span>) &#123;                             <span class="comment">// 递归终点,所有元素都已确定</span></span><br><span class="line">        <span class="comment">// 这里计算搜到的子集能否装进背包及价值</span></span><br><span class="line">        <span class="keyword">return</span>;                                 <span class="comment">// 注意return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 由n-1~0逆序以便按字典序枚举子集</span></span><br><span class="line">    chose[cur] = <span class="literal">false</span>; <span class="built_in">DFS</span>(cur - <span class="number">1</span>);           <span class="comment">// 不取a[cur]后确定第cur-1个</span></span><br><span class="line">    chose[cur] = <span class="literal">true</span>; <span class="built_in">DFS</span>(cur - <span class="number">1</span>);            <span class="comment">// 取a[cur]后确定第cur-1个</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当某一刻搜索到第 <span class="math inline">\(k\)</span> 层，即第<span
+class="math inline">\(1\sim k-1\)</span>
+个物品是否取已经有一个临时决定时，就在面对一棵子树，估算这棵子树（即第<span
+class="math inline">\(k\sim
+n\)</span>个物品取与不取）所有可能性中收益<strong>不可能超越</strong>的上限，有很多思路，其中一个思路如图：</p>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/01%E8%83%8C%E5%8C%85%E7%9A%84%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C.svg" class="">
+<p>用背包容量扣除已经放入背包的物品（<span class="math inline">\(1\sim k
+- 1\)</span>
+的某个子集），剩余容量全放单价最高的，且强行塞满，做一个价值估值。如果这个估值不大于之前已经搜到的最优方案，那这棵子树就不必搜下去了，即当前<span
+class="math inline">\(1\sim k - 1\)</span> 选定了特定子集前提下，<span
+class="math inline">\(k\sim n\)</span> 的任何子集都不用尝试了。</p>
+<p>估算子树的最优可能性不需要是合理的方案，只需要让这个估值必定优于子树所有可能性即可。</p>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur, <span class="type">int</span> lft, <span class="type">int</span> vcur)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// cur: 当前物品编号； lft: 剩余容量； vcur: 当前已装入价值</span></span><br><span class="line">    <span class="keyword">if</span>(cur == n) &#123;</span><br><span class="line">        ans = std::<span class="built_in">max</span>(vcur, ans);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ************************************************** //</span></span><br><span class="line">    <span class="comment">// 最理想情况不如已有解，剪枝</span></span><br><span class="line">    <span class="comment">// vsum[cur]为cur之后物品价值之和；maxvw[cur]为cur之后最高单价</span></span><br><span class="line">    <span class="keyword">if</span>(vcur + std::<span class="built_in">min</span>(vsum[cur], lft * maxvw[cur]) &lt;= ans) <span class="keyword">return</span>; </span><br><span class="line">    <span class="comment">// ************************************************** //</span></span><br><span class="line">    <span class="comment">// 尝试第cur个物品装或不装</span></span><br><span class="line">    <span class="keyword">if</span>(lft &gt;= w[cur]) <span class="built_in">DFS</span>(cur + <span class="number">1</span>, lft - w[cur], vcur + v[cur]);</span><br><span class="line">    <span class="built_in">DFS</span>(cur + <span class="number">1</span>, lft, vcur);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>// ***</code>
+之间的这部分代码，就是在枚举子集的基础上增加的分支限界规则。</p>
+<h3 id="例用回溯解旅行商问题">例：用回溯解旅行商问题</h3>
+<p>若干城市两两之间有路，从一个城市出发，每个城市恰好经过一次并回到原点，总路程最小的方案。</p>
+<style>.zriwqsndcuns{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/tsp.svg" class="zriwqsndcuns">
+<p>枚举排列——行走城市的顺序</p>
+<p>子树最优可能性估算策略，即搜索到 <span
+class="math inline">\(k\)</span>
+步某个走法情况下，后面所有走法里路程最短可能性：</p>
+<ul>
+<li>剩下每一步都走全局最短边</li>
+<li>剩下每一步都走剩下最短边</li>
+<li>剩下每一步都走所在点发出的最短边</li>
+</ul>
+<p>以上策略是否都“对”，哪个最“好”</p>
+<p>“对”的策略：估算的值一定比所有可能性都优，因为当估值差于已经得到的解，就剪枝，如果估值不能保证比所有可能性更优，就可能导致剪枝错杀，错过了潜在最优解。</p>
+<p>“好”的策略：估值比所有可能性更优的前提下，越贴近实际可能性越好。因为估值瞎猜一个很极端的值，也能做到是“对”的，但“对”不表明有用，它越贴近真实可能值，就越有可能比已经得到的解差，才越可能实现剪枝。不能剪枝的估值没什么用。</p>
+<h3 id="例回溯解圆排列">例：回溯解圆排列</h3>
+<p>给定若干圆的半径，各圆与底相切，求横向宽度最小的摆放顺序</p>
+<style>.hzbufhggkqpn{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E7%A4%BA%E6%84%8F.svg" class="hzbufhggkqpn">
+<p>先解决个小问题：两圆横向距离计算</p>
+<style>.mjaiwatpmtnw{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97.svg" class="mjaiwatpmtnw">
+<p>枚举排列，找宽度最小的排列。</p>
+<p>子树估算方案：假设剩下的圆全用剩下的最小的那个</p>
+<blockquote>
+<p>当想不出更“好”的估值方案时，简单粗暴但“对”的估值方案仍然有用</p>
+</blockquote>
+<h2 id="剪枝">剪枝</h2>
+<p>相对分支限界，剪枝是一个更宽泛的概念，无论用什么方式，减少搜索树的子树，都是可用的剪枝技巧</p>
+<h3 id="例等长的木棒">例：等长的木棒</h3>
+<p>有一堆长短不一的木棒是由等长的木棒切割成的</p>
+<p>已知各个木棒的长度，求原先那些等长的木棒最短可能的长度</p>
+<p>例1：5,2,1,5,2,1,5,2,1</p>
+<p>原先为4个长度为6的木棒</p>
+<p>例2：1,2,3,4</p>
+<p>原先为2个长度为5的木棒</p>
+<p>从小到大枚举等长木棒的长度，回溯尝试所有木棒拼凑出整数个该长度</p>
+<p>一些可以尝试的剪枝思路：</p>
+<ul>
+<li>枚举可能的长度去拼凑，这个枚举的长度至少要被总长度整除</li>
+<li>短木棒更“灵活”，所以排序优先尝试使用更长的木棒</li>
+<li>某次构建使用的第一个最长木棒没成功，则直接回溯</li>
+</ul>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>28.搜索加速技巧</title>
+    <url>/2025-04-23-28-%E6%90%9C%E7%B4%A2%E5%8A%A0%E9%80%9F%E6%8A%80%E5%B7%A7/</url>
+    <content><![CDATA[<h1 id="搜索加速技巧">搜索加速技巧</h1>
+<p>双向搜索、A<em>、IDA</em>等 BFS、DFS 的改进策略。</p>
+<span id="more"></span>
+<h2 id="双向bfs">双向BFS</h2>
+<p>回顾BFS</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="built_in">Node</span>() &#123; x = y = <span class="number">0</span>; &#125;</span><br><span class="line">    <span class="built_in">Node</span>(<span class="type">int</span> x_, <span class="type">int</span> y_) &#123;</span><br><span class="line">        x = x_;</span><br><span class="line">        y = y_;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">BFS</span><span class="params">(<span class="type">int</span> startX, <span class="type">int</span> startY)</span> </span>&#123;</span><br><span class="line">    std::queue&lt;Node&gt; q;</span><br><span class="line">    q.<span class="built_in">push</span>(<span class="built_in">Node</span>(startX, startY));</span><br><span class="line">    visited[startX][startY] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">while</span> (!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        Node now = q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">if</span> (now.x == endX &amp;&amp; now.y == endY) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">            <span class="type">int</span> nextX = now.x + dx[i], nextY = now.y + dy[i];</span><br><span class="line">            <span class="keyword">if</span> (graph[nextX][nextY] &amp;&amp; !visited[nextX][nextY]) &#123;</span><br><span class="line">                visited[nextX][nextY] = <span class="literal">true</span>;</span><br><span class="line">                q.<span class="built_in">push</span>(<span class="built_in">Node</span>(nextX, nextY));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>BFS利用队列实现从一点出发，一层一层外扩式搜索。</p>
+<p>当知道起点与终点，目的是找到合法最短路时，从起点和终点同时搜索可以极大减小搜索空间。</p>
+<p>相比单向BFS,双向BFS可以大大减少搜索空间。假设单向广搜需要搜索到第d层才能到达终点,搜索空间约为<span
+class="math inline">\(b^d\)</span>(b为每个节点平均分支数)。而双向广搜只需要各自搜索到第d/2层,搜索空间约为<span
+class="math inline">\(2b^{d/2}\)</span>,远小于<span
+class="math inline">\(b^d\)</span>。</p>
+<img src="/2025-04-23-28-%E6%90%9C%E7%B4%A2%E5%8A%A0%E9%80%9F%E6%8A%80%E5%B7%A7/%E5%8F%8C%E5%90%91%E5%B9%BF%E6%90%9C.svg" class="">
+<h2 id="双向dfs">双向DFS</h2>
+<p>思想类似，如回溯枚举子集找最优解的问题中，搜索一部分元素的所有子集，再搜索另一部分元素的所有子集，进而拼凑符合条件的方案，也能指数级降低复杂度。</p>
+<h3 id="例重量背包">例：重量背包</h3>
+<p><span class="math inline">\(n\)</span>
+个物品，每个物品有一定重量，在不超过背包容量前提下，最多装多少重量的物品。</p>
+<p>思路：</p>
+<ul>
+<li>回溯枚举前半数物品所有子集，记录能凑出的所有重量，记录并排序。</li>
+<li>回溯枚举后半数物品的所有子集，每得到一个子集，用背包容量减去这个子集的重量，剩余重量二分查找前半数物品能凑出的不超出的最大值。</li>
+</ul>
+<h2 id="a">A*</h2>
+<p><code>A*</code>是BFS的改进算法，将BFS的队列改为优先级队列，其优先级是一个“启发式”的函数，每个节点的优先级为:</p>
+<p><span class="math inline">\(f(n) = g(n) + h(n)\)</span></p>
+<p>其中: - <span
+class="math inline">\(g(n)\)</span>是从起点到当前节点<span
+class="math inline">\(n\)</span>的实际代价 - <span
+class="math inline">\(h(n)\)</span>是从当前节点<span
+class="math inline">\(n\)</span>到终点的估计代价(启发函数)</p>
+<p>常见的启发函数:</p>
+<ul>
+<li>曼哈顿距离:适用于网格图,只能上下左右移动。两点间的曼哈顿距离为 <span
+class="math inline">\(|x1-x2| +
+|y1-y2|\)</span>，即横向和纵向距离之和</li>
+<li>欧几里得距离:适用于八方向移动。两点间的欧几里得距离为 <span
+class="math inline">\(sqrt((x1-x2)^2 +
+(y1-y2)^2)\)</span>，即直线距离</li>
+<li>对角线距离:适用于网格图,可以斜向移动。两点间的对角线距离为 <span
+class="math inline">\(max(|x1-x2|,
+|y1-y2|)\)</span>，因为可以斜着走,只需要走最长的那条边的距离</li>
+</ul>
+<p>A*算法相比BFS,通过启发函数引导搜索朝目标方向进行,可以大大减少搜索空间。但如果启发函数设计不当,可能会失去最优性。</p>
+<h3 id="例八数码">例：八数码</h3>
+<style>.sdolvzxvlios{}</style>
+<img src="/2025-04-23-28-%E6%90%9C%E7%B4%A2%E5%8A%A0%E9%80%9F%E6%8A%80%E5%B7%A7/%E5%85%AB%E6%95%B0%E7%A0%81.png" class="sdolvzxvlios">
+<p>九宫格放<span class="math inline">\(1\sim
+8\)</span>八个数，一个空格可以看作<span
+class="math inline">\(0\)</span>，<span
+class="math inline">\(0\)</span>周围的格子可以移到<span
+class="math inline">\(0\)</span>上，找一个移动方案将<span
+class="math inline">\(1\sim
+8\)</span>归位到从上到下、从左到右按顺序的排列。</p>
+<p><span class="math inline">\(h\)</span>
+函数可以定义为每个数距离目标位置的曼哈顿距离、不在应该在的位置的棋子个数等。</p>
+<h2 id="迭代加深iddfs">迭代加深（IDDFS）</h2>
+<p>“以DFS方式实现的BFS”</p>
+<p>BFS从近到远一点点向外搜索，用队列实现。而IDDFS也是从近到远一点点扩大搜索范围，每次限制一个DFS深度，进行DFS，到达深度就返回，搜完没找到答案时，扩大深度限制，再进行一次DFS。</p>
+<p>当BFS的搜索空间过大时，考虑用IDDFS，适合场景：</p>
+<ul>
+<li>解的深度未知</li>
+<li>搜索空间巨大</li>
+<li>内存受限</li>
+</ul>
+<h2 id="ida">IDA*</h2>
+<p><code>IDA*</code>是迭代加深搜索(IDDFS)和<code>A*</code>的结合。它使用迭代加深的框架，但每次深度限制不是搜索深度，而是启发函数值的限制。</p>
+<p>具体来说:</p>
+<ol type="1">
+<li>设定初始的启发函数值限制</li>
+<li>用DFS方式搜索,但当 <span class="math inline">\(f(n) = g(n) +
+h(n)\)</span> 超过限制时就返回</li>
+<li>如果没找到解，增大启发函数值限制，重新搜索</li>
+<li>重复以上步骤直到找到解</li>
+</ol>
+<p><code>IDA*</code>相比<code>A*</code>的优点:</p>
+<ul>
+<li>空间复杂度低,因为用DFS实现</li>
+<li>不需要维护开放列表和关闭列表</li>
+<li>适合搜索空间巨大的问题</li>
+</ul>
+<p>缺点是可能会重复搜索一些状态。</p>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>29.并查集</title>
+    <url>/2025-04-23-29-%E5%B9%B6%E6%9F%A5%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="并查集">并查集</h1>
+<p>普通并查集与带权并查集，快速实现元素集合的合并与查询。</p>
+<span id="more"></span>
+<h2 id="普通并查集">普通并查集</h2>
+<p>每个集合都有一些点，两个集合之间的任意点连接，则认为两个集合合并</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">集合A:    集合B:</span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2         6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br><span class="line"></span><br><span class="line">当2和6相连时，认为集合合并</span><br><span class="line"></span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2 --------6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br></pre></td></tr></table></figure>
+<p>此时想知道 <span class="math inline">\(4\)</span> 和 <span
+class="math inline">\(8\)</span> 是否在一个集合中，就不得不 DFS
+一下，很费时间。</p>
+<p>已在同个集合的两点不再连边，则每个集合都可以看作一个树形结构。</p>
+<p>并查集通过<strong>路径压缩</strong>树变得“扁平”</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">      <span class="number">1</span>             </span><br><span class="line">    /   \           </span><br><span class="line">   <span class="number">2</span>     <span class="number">4</span>               <span class="number">1</span></span><br><span class="line">  /           ====&gt;   / | | \  </span><br><span class="line"><span class="number">3</span>                    <span class="number">2</span>  <span class="number">3</span> <span class="number">4</span>  <span class="number">5</span>    </span><br><span class="line">  \                     </span><br><span class="line">    <span class="number">5</span>                   </span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">        p[i] = i;   <span class="comment">// 初始每个元素自己是一个集合</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 找到 x 所在集合的树的根节点，同时进行路径压缩：</span></span><br><span class="line"><span class="comment">// 即 x 到根 路径上每个点都摘出来重新直接连到根节点上</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">fa</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;<span class="keyword">return</span> p[x] = x == p[x] ? x : <span class="built_in">fa</span>(p[x]);&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Join</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将 i 与 j 连接，即将它们所在的集合合并为一个</span></span><br><span class="line">    p[<span class="built_in">fa</span>(i)] = <span class="built_in">fa</span>(j);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>int fa(int x) &#123;return p[x] = x == p[x] ? x : fa(p[x]);&#125;</code>
+这行代码是并查集的精髓，拆解分析：</p>
+<ul>
+<li><code>p[x] =</code> 是在为 <code>x</code>
+设置父节点，<code>p[x]</code>设为谁，谁就是<code>x</code>的直接父节点</li>
+<li><code>x == p[x] ?</code>
+三元运算符，如果<code>x</code>自己就是<code>p[x]</code>，说明<code>x</code>是所在集合树的根节点</li>
+<li><code>fa(p[x])</code> 如果 <code>x != p[x]</code>，则递归调用
+<code>fa(p[x])</code> ，即从 <code>x</code> 父节点继续向上递归找根节点
+<ul>
+<li>这个递归会返回根节点，从而前面的 <code>p[x] =</code>
+赋值就是根节点的编号</li>
+<li><code>fa(p[x])</code> 会继续递归处理 <code>x</code> 的父节点
+<code>p[x]</code>，那么 <code>p[p[x]]</code>
+也会赋值为根节点，<code>p[p[p[[x]]</code>也会……</li>
+<li>从而完成路径压缩——<code>x</code>到根的一路的节点都把父节点设为了根节点</li>
+</ul></li>
+</ul>
+<h2 id="带权并查集">带权并查集</h2>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
 </search>

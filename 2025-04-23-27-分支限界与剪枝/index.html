@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="分支限界与剪枝 分支限界与剪枝通过跳过不可能产生最优解的搜索路径，有效加速寻找最佳解决方案的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="27.分支限界与剪枝">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="分支限界与剪枝 分支限界与剪枝通过跳过不可能产生最优解的搜索路径，有效加速寻找最佳解决方案的过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C_%E7%95%8C%E4%B8%8E%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/01%E8%83%8C%E5%8C%85%E7%9A%84%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/tsp.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E7%A4%BA%E6%84%8F.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97.svg">
+<meta property="article:published_time" content="2025-04-23T10:31:55.000Z">
+<meta property="article:modified_time" content="2025-04-24T05:07:09.489Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C_%E7%95%8C%E4%B8%8E%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/","path":"2025-04-23-27-分支限界与剪枝/","title":"27.分支限界与剪枝"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>27.分支限界与剪枝 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D"><span class="nav-number">1.</span> <span class="nav-text">分支限界与剪枝</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE%E5%9B%9E%E6%BA%AF"><span class="nav-number">1.1.</span> <span class="nav-text">回顾回溯</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C"><span class="nav-number">1.2.</span> <span class="nav-text">分支限界</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E7%94%A8%E5%9B%9E%E6%BA%AF%E8%A7%A301%E8%83%8C%E5%8C%85"><span class="nav-number">1.2.1.</span> <span class="nav-text">例：用回溯解01背包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E7%94%A8%E5%9B%9E%E6%BA%AF%E8%A7%A3%E6%97%85%E8%A1%8C%E5%95%86%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.2.</span> <span class="nav-text">例：用回溯解旅行商问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%9B%9E%E6%BA%AF%E8%A7%A3%E5%9C%86%E6%8E%92%E5%88%97"><span class="nav-number">1.2.3.</span> <span class="nav-text">例：回溯解圆排列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%AA%E6%9E%9D"><span class="nav-number">1.3.</span> <span class="nav-text">剪枝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E7%AD%89%E9%95%BF%E7%9A%84%E6%9C%A8%E6%A3%92"><span class="nav-number">1.3.1.</span> <span class="nav-text">例：等长的木棒</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">60</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="27.分支限界与剪枝 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          27.分支限界与剪枝
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-04-23 18:31:55" itemprop="dateCreated datePublished" datetime="2025-04-23T18:31:55+08:00">2025-04-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-04-24 13:07:09" itemprop="dateModified" datetime="2025-04-24T13:07:09+08:00">2025-04-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="分支限界与剪枝">分支限界与剪枝</h1>
+<p>分支限界与剪枝通过跳过不可能产生最优解的搜索路径，有效加速寻找最佳解决方案的过程。</p>
+<span id="more"></span>
+<h2 id="回顾回溯">回顾回溯</h2>
+<p>回顾：<a href="/2025-03-19-13-暴力枚举/">13.暴力枚举</a></p>
+<p>利用回溯可以枚举排列、子集，比如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;     <span class="comment">// cur 指 &quot;current&quot;, 当前在确定第 cur 个位置是谁</span></span><br><span class="line">    <span class="keyword">if</span>(cur == n) &#123;                              <span class="comment">// 递归终点</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)             <span class="comment">// 输出一个排列</span></span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot; %d&quot;</span> + !i, record[i]);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;                                 <span class="comment">// 注意return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;               <span class="comment">// 枚举每个元素</span></span><br><span class="line">        <span class="keyword">if</span>(vis[i]) <span class="keyword">continue</span>;                    <span class="comment">// 已放元素排除</span></span><br><span class="line">        vis[i] = <span class="literal">true</span>; record[cur] = a[i];      <span class="comment">// 标记已放本次排列第cur个为a[i]</span></span><br><span class="line">        <span class="built_in">DFS</span>(cur + <span class="number">1</span>);                           <span class="comment">// 递归放第cur+1个</span></span><br><span class="line">        vis[i] = <span class="literal">false</span>;                         <span class="comment">// 回溯取消标记</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>回溯本质上是<strong>在约束条件下</strong>枚举每个元素的所有可能性，其复杂度必然是指数级的，输入规模稍大，时间复杂度就会难以接受。</p>
+<p>回溯的结构是搜索树，八皇后等例子已经体验到，搜索树的一些子树可以跳过不搜。跳过整个子树的操作称为<strong>剪枝</strong>。</p>
+<p>如果有一个固定的套路可以跳过尽可能多的子树，即进行尽可能多的<strong>剪枝</strong>，就可以一定程度上让回溯跑的更快。</p>
+<h2 id="分支限界">分支限界</h2>
+<p>最优化问题，即每一种可能性（排列或组合）都对应某种收益，希望这个收益最大化，找最优的可能性。</p>
+<p>当回溯用来处理最优化问题，就可以维护一个搜索过程中的最好收益——每当搜到某个方案收益更大，就更新最好收益。</p>
+<p>针对搜索树的一棵子树，如果能估算子树可能取得的最好结果，当最好结果不及已经搜到的最好收益时，这棵子树就没有搜索下去的必要，完成一次剪枝。</p>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C_%E7%95%8C%E4%B8%8E%E4%BB%A3%E4%BB%B7%E5%87%BD%E6%95%B0.svg" class="">
+<h3 id="例用回溯解01背包">例：用回溯解01背包</h3>
+<p>回溯解01背包，就是枚举所有子集，在能装进背包的子集中更新获得价值的最大值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(cur == <span class="number">-1</span>) &#123;                             <span class="comment">// 递归终点,所有元素都已确定</span></span><br><span class="line">        <span class="comment">// 这里计算搜到的子集能否装进背包及价值</span></span><br><span class="line">        <span class="keyword">return</span>;                                 <span class="comment">// 注意return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 由n-1~0逆序以便按字典序枚举子集</span></span><br><span class="line">    chose[cur] = <span class="literal">false</span>; <span class="built_in">DFS</span>(cur - <span class="number">1</span>);           <span class="comment">// 不取a[cur]后确定第cur-1个</span></span><br><span class="line">    chose[cur] = <span class="literal">true</span>; <span class="built_in">DFS</span>(cur - <span class="number">1</span>);            <span class="comment">// 取a[cur]后确定第cur-1个</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当某一刻搜索到第 <span class="math inline">\(k\)</span> 层，即第<span
+class="math inline">\(1\sim k-1\)</span>
+个物品是否取已经有一个临时决定时，就在面对一棵子树，估算这棵子树（即第<span
+class="math inline">\(k\sim
+n\)</span>个物品取与不取）所有可能性中收益<strong>不可能超越</strong>的上限，有很多思路，其中一个思路如图：</p>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/01%E8%83%8C%E5%8C%85%E7%9A%84%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C.svg" class="">
+<p>用背包容量扣除已经放入背包的物品（<span class="math inline">\(1\sim k
+- 1\)</span>
+的某个子集），剩余容量全放单价最高的，且强行塞满，做一个价值估值。如果这个估值不大于之前已经搜到的最优方案，那这棵子树就不必搜下去了，即当前<span
+class="math inline">\(1\sim k - 1\)</span> 选定了特定子集前提下，<span
+class="math inline">\(k\sim n\)</span> 的任何子集都不用尝试了。</p>
+<p>估算子树的最优可能性不需要是合理的方案，只需要让这个估值必定优于子树所有可能性即可。</p>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur, <span class="type">int</span> lft, <span class="type">int</span> vcur)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// cur: 当前物品编号； lft: 剩余容量； vcur: 当前已装入价值</span></span><br><span class="line">    <span class="keyword">if</span>(cur == n) &#123;</span><br><span class="line">        ans = std::<span class="built_in">max</span>(vcur, ans);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ************************************************** //</span></span><br><span class="line">    <span class="comment">// 最理想情况不如已有解，剪枝</span></span><br><span class="line">    <span class="comment">// vsum[cur]为cur之后物品价值之和；maxvw[cur]为cur之后最高单价</span></span><br><span class="line">    <span class="keyword">if</span>(vcur + std::<span class="built_in">min</span>(vsum[cur], lft * maxvw[cur]) &lt;= ans) <span class="keyword">return</span>; </span><br><span class="line">    <span class="comment">// ************************************************** //</span></span><br><span class="line">    <span class="comment">// 尝试第cur个物品装或不装</span></span><br><span class="line">    <span class="keyword">if</span>(lft &gt;= w[cur]) <span class="built_in">DFS</span>(cur + <span class="number">1</span>, lft - w[cur], vcur + v[cur]);</span><br><span class="line">    <span class="built_in">DFS</span>(cur + <span class="number">1</span>, lft, vcur);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>// ***</code>
+之间的这部分代码，就是在枚举子集的基础上增加的分支限界规则。</p>
+<h3 id="例用回溯解旅行商问题">例：用回溯解旅行商问题</h3>
+<p>若干城市两两之间有路，从一个城市出发，每个城市恰好经过一次并回到原点，总路程最小的方案。</p>
+<style>.zriwqsndcuns{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/tsp.svg" class="zriwqsndcuns">
+<p>枚举排列——行走城市的顺序</p>
+<p>子树最优可能性估算策略，即搜索到 <span
+class="math inline">\(k\)</span>
+步某个走法情况下，后面所有走法里路程最短可能性：</p>
+<ul>
+<li>剩下每一步都走全局最短边</li>
+<li>剩下每一步都走剩下最短边</li>
+<li>剩下每一步都走所在点发出的最短边</li>
+</ul>
+<p>以上策略是否都“对”，哪个最“好”</p>
+<p>“对”的策略：估算的值一定比所有可能性都优，因为当估值差于已经得到的解，就剪枝，如果估值不能保证比所有可能性更优，就可能导致剪枝错杀，错过了潜在最优解。</p>
+<p>“好”的策略：估值比所有可能性更优的前提下，越贴近实际可能性越好。因为估值瞎猜一个很极端的值，也能做到是“对”的，但“对”不表明有用，它越贴近真实可能值，就越有可能比已经得到的解差，才越可能实现剪枝。不能剪枝的估值没什么用。</p>
+<h3 id="例回溯解圆排列">例：回溯解圆排列</h3>
+<p>给定若干圆的半径，各圆与底相切，求横向宽度最小的摆放顺序</p>
+<style>.hzbufhggkqpn{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E7%A4%BA%E6%84%8F.svg" class="hzbufhggkqpn">
+<p>先解决个小问题：两圆横向距离计算</p>
+<style>.mjaiwatpmtnw{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97.svg" class="mjaiwatpmtnw">
+<p>枚举排列，找宽度最小的排列。</p>
+<p>子树估算方案：假设剩下的圆全用剩下的最小的那个</p>
+<blockquote>
+<p>当想不出更“好”的估值方案时，简单粗暴但“对”的估值方案仍然有用</p>
+</blockquote>
+<h2 id="剪枝">剪枝</h2>
+<p>相对分支限界，剪枝是一个更宽泛的概念，无论用什么方式，减少搜索树的子树，都是可用的剪枝技巧</p>
+<h3 id="例等长的木棒">例：等长的木棒</h3>
+<p>有一堆长短不一的木棒是由等长的木棒切割成的</p>
+<p>已知各个木棒的长度，求原先那些等长的木棒最短可能的长度</p>
+<p>例1：5,2,1,5,2,1,5,2,1</p>
+<p>原先为4个长度为6的木棒</p>
+<p>例2：1,2,3,4</p>
+<p>原先为2个长度为5的木棒</p>
+<p>从小到大枚举等长木棒的长度，回溯尝试所有木棒拼凑出整数个该长度</p>
+<p>一些可以尝试的剪枝思路：</p>
+<ul>
+<li>枚举可能的长度去拼凑，这个枚举的长度至少要被总长度整除</li>
+<li>短木棒更“灵活”，所以排序优先尝试使用更长的木棒</li>
+<li>某次构建使用的第一个最长木棒没成功，则直接回溯</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-04-16-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%85%A5%E9%97%A8/" rel="prev" title="26.动态规划入门">
+                  <i class="fa fa-angle-left"></i> 26.动态规划入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-04-23-28-%E6%90%9C%E7%B4%A2%E5%8A%A0%E9%80%9F%E6%8A%80%E5%B7%A7/" rel="next" title="28.搜索加速技巧">
+                  28.搜索加速技巧 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
