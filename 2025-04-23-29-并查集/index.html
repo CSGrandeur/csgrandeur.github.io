@@ -27,7 +27,7 @@
 <meta property="og:description" content="并查集 普通并查集与带权并查集，快速实现元素集合的合并与查询。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-04-23T13:25:34.000Z">
-<meta property="article:modified_time" content="2025-04-24T05:07:09.489Z">
+<meta property="article:modified_time" content="2025-04-24T10:53:47.625Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="ACM">
 <meta property="article:tag" content="Algorithm">
@@ -142,7 +142,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.1.</span> <span class="nav-text">普通并查集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E6%9D%83%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.2.</span> <span class="nav-text">带权并查集</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.</span> <span class="nav-text">并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.1.</span> <span class="nav-text">普通并查集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E6%9D%83%E5%B9%B6%E6%9F%A5%E9%9B%86"><span class="nav-number">1.2.</span> <span class="nav-text">带权并查集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E9%A3%9F%E7%89%A9%E9%93%BE"><span class="nav-number">1.2.1.</span> <span class="nav-text">例：食物链</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -229,7 +229,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-04-24 13:07:09" itemprop="dateModified" datetime="2025-04-24T13:07:09+08:00">2025-04-24</time>
+      <time title="修改时间：2025-04-24 18:53:47" itemprop="dateModified" datetime="2025-04-24T18:53:47+08:00">2025-04-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -259,13 +259,13 @@
 <span id="more"></span>
 <h2 id="普通并查集">普通并查集</h2>
 <p>每个集合都有一些点，两个集合之间的任意点连接，则认为两个集合合并</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">集合A:    集合B:</span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2         6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br><span class="line"></span><br><span class="line">当2和6相连时，认为集合合并</span><br><span class="line"></span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2 --------6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br></pre></td></tr></table></figure>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">集合A:    集合B:</span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2         6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br><span class="line"></span><br><span class="line">当2和6相连时，认为集合合并</span><br><span class="line"></span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2 --------6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br></pre></td></tr></table></figure>
 <p>此时想知道 <span class="math inline">\(4\)</span> 和 <span
 class="math inline">\(8\)</span> 是否在一个集合中，就不得不 DFS
 一下，很费时间。</p>
 <p>已在同个集合的两点不再连边，则每个集合都可以看作一个树形结构。</p>
-<p>并查集通过<strong>路径压缩</strong>树变得“扁平”</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">      <span class="number">1</span>             </span><br><span class="line">    /   \           </span><br><span class="line">   <span class="number">2</span>     <span class="number">4</span>               <span class="number">1</span></span><br><span class="line">  /           ====&gt;   / | | \  </span><br><span class="line"><span class="number">3</span>                    <span class="number">2</span>  <span class="number">3</span> <span class="number">4</span>  <span class="number">5</span>    </span><br><span class="line">  \                     </span><br><span class="line">    <span class="number">5</span>                   </span><br></pre></td></tr></table></figure>
+<p>并查集通过<strong>路径压缩</strong>树变得"扁平"</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">      1             </span><br><span class="line">    /   \           </span><br><span class="line">   2     4               1</span><br><span class="line">  /           ====&gt;   / | | \  </span><br><span class="line">3                    2  3 4  5    </span><br><span class="line">  \                     </span><br><span class="line">    5                   </span><br></pre></td></tr></table></figure>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">        p[i] = i;   <span class="comment">// 初始每个元素自己是一个集合</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 找到 x 所在集合的树的根节点，同时进行路径压缩：</span></span><br><span class="line"><span class="comment">// 即 x 到根 路径上每个点都摘出来重新直接连到根节点上</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">fa</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;<span class="keyword">return</span> p[x] = x == p[x] ? x : <span class="built_in">fa</span>(p[x]);&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Join</span><span class="params">(<span class="type">int</span> i, <span class="type">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 将 i 与 j 连接，即将它们所在的集合合并为一个</span></span><br><span class="line">    p[<span class="built_in">fa</span>(i)] = <span class="built_in">fa</span>(j);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>int fa(int x) &#123;return p[x] = x == p[x] ? x : fa(p[x]);&#125;</code>
 这行代码是并查集的精髓，拆解分析：</p>
@@ -286,6 +286,152 @@ class="math inline">\(8\)</span> 是否在一个集合中，就不得不 DFS
 </ul></li>
 </ul>
 <h2 id="带权并查集">带权并查集</h2>
+<p>普通并查集的图，边只表示“是同一个集合”。而有一类表达关系的图，“边”带有关系属性。</p>
+<h3 id="例食物链">例：食物链</h3>
+<p>有 <span class="math inline">\(N\)</span> 个元素，编号为 <span
+class="math inline">\(1∼N\)</span>。每个元素属于 <span
+class="math inline">\(A\)</span>、<span
+class="math inline">\(B\)</span>、<span class="math inline">\(C\)</span>
+三种类型之一（比如石头剪刀布），但具体类型未知。</p>
+<p>给定 <span class="math inline">\(K\)</span>
+条信息，每条信息有两种形式：</p>
+<ul>
+<li><span class="math inline">\(1\)</span> <span
+class="math inline">\(X\)</span> <span
+class="math inline">\(Y\)</span>：表示 <span
+class="math inline">\(X\)</span> 和 <span
+class="math inline">\(Y\)</span> 是同一类型</li>
+<li><span class="math inline">\(2\)</span> <span
+class="math inline">\(X\)</span> <span
+class="math inline">\(Y\)</span>：表示 <span
+class="math inline">\(X\)</span> 吃 <span
+class="math inline">\(Y\)</span>（<span class="math inline">\(A\)</span>
+吃 <span class="math inline">\(B\)</span>，<span
+class="math inline">\(B\)</span> 吃 <span
+class="math inline">\(C\)</span>，<span class="math inline">\(C\)</span>
+吃 <span class="math inline">\(A\)</span>，形成环形）</li>
+</ul>
+<p>判断这 <span class="math inline">\(K\)</span>
+条信息中有多少条是假信息。一条信息在以下情况下为假：</p>
+<ul>
+<li>与之前的信息冲突（<span class="math inline">\(A\)</span>吃<span
+class="math inline">\(B\)</span>，<span
+class="math inline">\(B\)</span>吃<span
+class="math inline">\(C\)</span>，但<span
+class="math inline">\(A\)</span>又吃<span
+class="math inline">\(C\)</span>，不符合循环，就是一种冲突）</li>
+<li><span class="math inline">\(X\)</span> 或 <span
+class="math inline">\(Y\)</span> 大于 <span
+class="math inline">\(N\)</span>（出现了不存在的编号）</li>
+<li><span class="math inline">\(X\)</span> 吃 <span
+class="math inline">\(X\)</span>（自相矛盾）</li>
+</ul>
+<p>输入：第一行 <span class="math inline">\(N\)</span> <span
+class="math inline">\(K\)</span>（<span class="math inline">\(N\)</span>
+个元素，<span class="math inline">\(K\)</span> 条信息），接下来 <span
+class="math inline">\(K\)</span> 行每行三个整数 <span
+class="math inline">\(D\)</span> <span class="math inline">\(X\)</span>
+<span class="math inline">\(Y\)</span>（<span
+class="math inline">\(D\)</span> 为 <span
+class="math inline">\(1\)</span> 或 <span
+class="math inline">\(2\)</span>）。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">100 7</span><br><span class="line">1 101 1</span><br><span class="line">2 1 2</span><br><span class="line">2 2 3</span><br><span class="line">2 3 3</span><br><span class="line">1 1 3</span><br><span class="line">2 3 1</span><br><span class="line">1 5 5</span><br></pre></td></tr></table></figure>
+<p>输出格式：一行，假信息的数量。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3</span><br></pre></td></tr></table></figure>
+<p>对于石头剪子布，<span class="math inline">\(X\)</span>与<span
+class="math inline">\(Y\)</span> 有 3 种边：<span
+class="math inline">\(X\)</span> 吃 <span
+class="math inline">\(Y\)</span>、<span class="math inline">\(Y\)</span>
+吃 <span class="math inline">\(X\)</span>、<span
+class="math inline">\(X\)</span>和<span
+class="math inline">\(Y\)</span>同类，用集合表示“知道它们两两之间的关系”这个概念，还用这个图来理解：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">集合A:    集合B:</span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2         6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br><span class="line"></span><br><span class="line">当2和6相连时，认为集合合并</span><br><span class="line"></span><br><span class="line">  1         5</span><br><span class="line">  |         |</span><br><span class="line">  2 --------6---8</span><br><span class="line">  |         |</span><br><span class="line">  3         7---9</span><br><span class="line">  |     </span><br><span class="line">  4     </span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(1,2,3,4\)</span> 知道两两相克关系，<span
+class="math inline">\(5,6,7,8,9\)</span>
+知道两两相克关系，但是两个集合之间相克关系为止。</p>
+<p>当某一刻告知了 <span class="math inline">\(2\)</span> 吃 <span
+class="math inline">\(6\)</span>，或 <span
+class="math inline">\(6\)</span> 吃 <span
+class="math inline">\(2\)</span>，或 <span
+class="math inline">\(2\)</span> 与 <span
+class="math inline">\(6\)</span> 同类，那么<span
+class="math inline">\(1\sim 9\)</span>
+的两两相克关系就全都能知道了。</p>
+<p>这很像并查集的模型，但又不能简单地用父子节点的树来表达。需要让边带权，在路径压缩的时候也要压缩这个权值。</p>
+<p><strong>权值定义为：子节点与父节点的“顺时针”距离。</strong></p>
+<p>在石头剪子布里，距离就定义为：</p>
+<ul>
+<li>从石头到剪子、从剪子到布、从布到石头的距离都是 <span
+class="math inline">\(1\)</span></li>
+<li>从石头到布、从剪子到石头、从布道剪子的距离都是 <span
+class="math inline">\(2\)</span>。</li>
+</ul>
+<p>有这个顺时针距离，就可以确定相克关系。</p>
+<p>路径压缩时，仍然是把树“扁平化”，因为维护了任意子节点到父节点的“食物链顺时针”距离，那么就可以压缩出节点到根节点的“食物链顺时针”距离。</p>
+<p>用 <span class="math inline">\(A-B\)</span> 表示计算从 <span
+class="math inline">\(B\)</span> 出发到 <span
+class="math inline">\(A\)</span> 的距离，来演练一下这个合并：</p>
+<p>设 <span class="math inline">\(A\)</span>、<span
+class="math inline">\(AR\)</span> 是一个集合，<span
+class="math inline">\(AR\)</span> 是根节点， <span
+class="math inline">\(B\)</span>、<span
+class="math inline">\(BR\)</span> 是一个集合，<span
+class="math inline">\(BR\)</span> 是根节点。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    AR     BR</span><br><span class="line">   /        \</span><br><span class="line"> ...         ...</span><br><span class="line"> /            \</span><br><span class="line">A              B</span><br></pre></td></tr></table></figure>
+<p>当告知 <span class="math inline">\(A\)</span> 与 <span
+class="math inline">\(B\)</span>
+的相克关系时，集合合并。先路径压缩，让<span
+class="math inline">\(A\)</span>称为<span
+class="math inline">\(AR\)</span>的直接子节点，<span
+class="math inline">\(B\)</span> 也称为 <span
+class="math inline">\(BR\)</span> 的直接子节点</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  AR     BR</span><br><span class="line"> /        \</span><br><span class="line">A           B</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">fa</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> rt = x == p[x] ? x : <span class="built_in">fa</span>(p[x]);</span><br><span class="line">    d[x] = (d[x] + d[p[x]]) % <span class="number">3</span>;</span><br><span class="line">    p[x] = rt;</span><br><span class="line">    <span class="keyword">return</span> rt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中 <code>p[x]</code> 维护 <code>x</code> 的父节点，
+<code>d[x]</code> 维护 <code>x</code>到父节点的“食物链顺时针”距离。</p>
+<p>然后 <span class="math inline">\(A\)</span> 与 <span
+class="math inline">\(B\)</span> 相克关系得知，合并集合，将 <span
+class="math inline">\(AR\)</span> 作为 <span
+class="math inline">\(BR\)</span> 的子节点：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    BR</span><br><span class="line">   /  \</span><br><span class="line">  AR   B</span><br><span class="line"> /</span><br><span class="line">A</span><br></pre></td></tr></table></figure>
+<p>$B-A = (B - BR) + (BR - AR) + (AR-A) $</p>
+<p>这里 <code>AR-A</code> 就是代码中的
+<code>d[A]</code>，<code>BR-AR</code> 是
+<code>d[AR]</code>，<code>BR-B</code>（即<code>-(B-BR)</code> 是
+<code>d[B]</code></p>
+<p>因为集合合并是 将 <span class="math inline">\(AR\)</span> 作为 <span
+class="math inline">\(BR\)</span> 的子节点，所以在集合合并前后， <span
+class="math inline">\(A\)</span>与<span class="math inline">\(B\)</span>
+的直接父节点（这一刻<span
+class="math inline">\(A\)</span>没有进一步路径压缩）不变，从而<code>d[A]</code>、<code>d[B]</code>不变。</p>
+<p>而 <code>d[AR]</code> 本来作为根节点是<code>0</code>，要根据 <span
+class="math inline">\(A\)</span>与<span class="math inline">\(B\)</span>
+的关系，在连为<span class="math inline">\(BR\)</span>
+的子节点后发生变化，即</p>
+<p><span class="math inline">\((BR-AR) = (BR-B) - (AR-A) +
+(B-A)\)</span></p>
+<p><code>d[AR] = d[B] - d[A] + &lt;A到B的食物链顺时针距离&gt;</code></p>
+<ul>
+<li>当<span class="math inline">\(A\)</span>与<span
+class="math inline">\(B\)</span>是同类，则<span
+class="math inline">\(B-A=0\)</span>，即
+<code>d[AR]= d[B] - d[A] + 0</code></li>
+<li>当 <span class="math inline">\(A\)</span>吃<span
+class="math inline">\(B\)</span>，则<span
+class="math inline">\(B-A=1\)</span>，<code>d[AR]= d[B] - d[A] + 1</code></li>
+</ul>
+<p>从而集合基于 <span class="math inline">\(A\)</span> 与 <span
+class="math inline">\(B\)</span>
+的关系合并，在两个集合各自路径压缩后，只需要 <span
+class="math inline">\(2\)</span> 步：</p>
+<ol type="1">
+<li>确定 <span class="math inline">\(AR\)</span> 到 <span
+class="math inline">\(BR\)</span> 的距离，就是更新
+<code>d[AR]</code></li>
+<li>把 <span class="math inline">\(AR\)</span> 接到 <span
+class="math inline">\(BR\)</span> 作为子节点，就是更新
+<code>p[AR]</code></li>
+</ol>
 
     </div>
 
