@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="图论基础1 优先队列 优先队列（Priority Queue）：  每次出队的元素都是队列中优先级最高的元素 可以自定义元素的优先级比较方式   在C++中，我们可以使用STL的priority_queue来实现优先队列 123456789101112131415#include &lt;queue&gt;using namespace std;&#x2F;&#x2F; 默认是大顶堆（大的元素优先级高）priorit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="30.图论基础1">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="图论基础1 优先队列 优先队列（Priority Queue）：  每次出队的元素都是队列中优先级最高的元素 可以自定义元素的优先级比较方式   在C++中，我们可以使用STL的priority_queue来实现优先队列 123456789101112131415#include &lt;queue&gt;using namespace std;&#x2F;&#x2F; 默认是大顶堆（大的元素优先级高）priorit">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E5%A0%86.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E5%89%8D%E5%90%91%E6%98%9F.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/prim.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/kruskal.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/dijkstra.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/topo.gif">
+<meta property="article:published_time" content="2025-05-08T03:49:26.000Z">
+<meta property="article:modified_time" content="2025-05-08T09:58:54.366Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/","path":"2025-05-08-30-图论基础1/","title":"30.图论基础1"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>30.图论基础1 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801"><span class="nav-number">1.</span> <span class="nav-text">图论基础1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="nav-number">1.1.</span> <span class="nav-text">优先队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%A0%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">底层原理:堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A0%86%E4%B8%8E%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97"><span class="nav-number">1.1.2.</span> <span class="nav-text">堆与优先队列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91"><span class="nav-number">1.2.</span> <span class="nav-text">最小生成树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F%E5%BB%BA%E5%9B%BE"><span class="nav-number">1.2.1.</span> <span class="nav-text">回顾链式前向星建图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prim%E7%AE%97%E6%B3%95%E6%9C%B4%E7%B4%A0%E7%89%88"><span class="nav-number">1.2.2.</span> <span class="nav-text">Prim算法（朴素版）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kruskal%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.3.</span> <span class="nav-text">Kruskal算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E7%9F%AD%E8%B7%AF"><span class="nav-number">1.3.</span> <span class="nav-text">最短路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9A%B4%E5%8A%9B%E6%9C%80%E7%9F%AD%E8%B7%AFfloyd"><span class="nav-number">1.3.1.</span> <span class="nav-text">暴力最短路——Floyd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E6%BA%90%E6%9C%80%E7%9F%AD%E8%B7%AFdijkstra%E6%9C%B4%E7%B4%A0%E7%89%88"><span class="nav-number">1.3.2.</span> <span class="nav-text">单源最短路——Dijkstra（朴素版）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A0%86%E4%BC%98%E5%8C%96%E7%9A%84prim%E4%B8%8Edijkstra"><span class="nav-number">1.4.</span> <span class="nav-text">堆优化的Prim与Dijkstra</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F"><span class="nav-number">1.5.</span> <span class="nav-text">拓扑排序</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="30.图论基础1 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          30.图论基础1
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-05-08 11:49:26 / 修改时间：17:58:54" itemprop="dateCreated datePublished" datetime="2025-05-08T11:49:26+08:00">2025-05-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="图论基础1">图论基础1</h1>
+<h2 id="优先队列">优先队列</h2>
+<p>优先队列（Priority Queue）：</p>
+<ol type="1">
+<li>每次出队的元素都是队列中优先级最高的元素</li>
+<li>可以自定义元素的优先级比较方式</li>
+</ol>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97.svg" class="">
+<p>在C++中，我们可以使用STL的<code>priority_queue</code>来实现优先队列</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认是大顶堆（大的元素优先级高）</span></span><br><span class="line">priority_queue&lt;<span class="type">int</span>&gt; pq;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 小顶堆（小的元素优先级高）</span></span><br><span class="line">priority_queue&lt;<span class="type">int</span>, vector&lt;<span class="type">int</span>&gt;, greater&lt;<span class="type">int</span>&gt;&gt; pq;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 常用操作</span></span><br><span class="line">pq.<span class="built_in">push</span>(x);    <span class="comment">// 入队</span></span><br><span class="line">pq.<span class="built_in">top</span>();      <span class="comment">// 获取队首元素（优先级最高的元素）</span></span><br><span class="line">pq.<span class="built_in">pop</span>();      <span class="comment">// 出队</span></span><br><span class="line">pq.<span class="built_in">empty</span>();    <span class="comment">// 判断队列是否为空</span></span><br><span class="line">pq.<span class="built_in">size</span>();     <span class="comment">// 获取队列大小</span></span><br></pre></td></tr></table></figure>
+<p>如果想自定义优先级别,可以定义结构体并<strong>重载</strong>比较符号</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> Node&amp; that) <span class="type">const</span> &#123;</span><br><span class="line">        <span class="comment">// 这里定义优先级比较规则</span></span><br><span class="line">        <span class="comment">// 返回 true 表示 this 的优先级低于 that</span></span><br><span class="line">        <span class="comment">// 返回 false 表示 this 的优先级高于或等于 that</span></span><br><span class="line">        <span class="comment">// 这里以 x * y 大的优先级高为例</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.x * <span class="keyword">this</span>.y &lt; that.x * that.y;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">priority_queue&lt;Node&gt; pq;</span><br></pre></td></tr></table></figure>
+<h3 id="底层原理堆">底层原理:堆</h3>
+<p>一个除最后一层都"靠左"外，上面每一层都是"满"的二叉树——完全二叉树</p>
+<p>但它不是有序的二叉树，它只保证一个性质：</p>
+<p><strong>任意节点的值，都是它作为根的子树的最优值，但和兄弟节点之间大小关系随机</strong>，即每个子树都是一个"堆"</p>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E5%A0%86.svg" class="">
+<p>回顾完全二叉树：</p>
+<ul>
+<li>任意节点 <span class="math inline">\(i\)</span> 的父节点编号是 <span
+class="math inline">\(\lfloor i / 2 \rfloor\)</span></li>
+<li>任意节点 <span class="math inline">\(i\)</span> 的左子节点编号 <span
+class="math inline">\(i * 2\)</span>，右子节点编号 <span
+class="math inline">\(i * 2 + 1\)</span></li>
+</ul>
+<p>当一个点<code>s</code>除了自身外，它的子节点都已是堆时，通过这个代码可以把它调整成一个堆</p>
+<p>设：</p>
+<ul>
+<li>保存这个完全二叉树的数组是<code>a[]</code></li>
+<li>某个节点是<code>s</code>
+<ul>
+<li><code>s</code>所有子孙的树都是堆，但<code>s</code>作为根的这棵树还不是堆</li>
+</ul></li>
+<li><code>e</code>是最大节点编号</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">HeapAdjust</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> s, <span class="type">int</span> e)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 假设在构建 小根 堆，即目标是任意节点都比它所有子孙节点小</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> nex = s &lt;&lt; <span class="number">1</span>; nex &lt;= e; nex &lt;&lt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// nex 指向 s 的左子节点，看 nex 和 nex+1 哪个子节点小，如果右边更小则 nex++ 指向右边</span></span><br><span class="line">        <span class="keyword">if</span>(nex + <span class="number">1</span> &lt;= e &amp;&amp; a[nex + <span class="number">1</span>] &lt; a[nex]) nex ++; </span><br><span class="line">        <span class="comment">// 如果 a[s] 比 左右子节点都小，由于子树已经是堆了，a[s]又更小，那么已经完成了堆的调整，可退出</span></span><br><span class="line">        <span class="keyword">if</span>(a[s] &lt;= a[nex]) <span class="keyword">break</span>;</span><br><span class="line">        <span class="comment">// 否则，将左右子节点较小的与 a[s] 交换，目的是把较大的值往叶子方向换，把较小的&quot;往上提&quot;</span></span><br><span class="line">        <span class="built_in">Swap</span>(a[s], a[nex]);</span><br><span class="line">        <span class="comment">// s 追着 nex 跑，保持 s 是 nex 父节点</span></span><br><span class="line">        s = nex;                    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以前面的图为例，从编号为 <span class="math inline">\(6\)</span>
+的节点开始，让 <code>s</code> 作为 <span
+class="math inline">\(6,5,4,3,2,1\)</span> 的顺序分别执行一次
+<code>HeapAdjust</code> ，就让整个完全二叉树成为堆了。</p>
+<p>注意这个顺序不能变，不能是 <span
+class="math inline">\(1,2,3,4,5,6\)</span> 的顺序，因为对 <code>s</code>
+执行 <code>HeapAdjust</code> 的前提是 <code>s</code>
+的子孙树们都已经是堆。从<span
+class="math inline">\(6\)</span>开始往前来的话，每个点处理之前，就都已经把它的子孙树点处理为堆了。</p>
+<h3 id="堆与优先队列">堆与优先队列</h3>
+<p>一个堆，它的堆顶元素就是优先队列出队时最优先的元素。</p>
+<p>当堆顶（<code>a[1]</code>）离开</p>
+<ol type="1">
+<li>需要有元素补位</li>
+<li>需要让它仍然是一个堆</li>
+</ol>
+<p>方法是让最后一个元素 <code>a[e]</code> 补位到 <code>a[1]</code>，然后
+<code>e--</code>，此时只有堆顶不符合堆要求，调用一次<code>HeapAdjust</code>就可以了</p>
+<p>当加入新元素，</p>
+<ol type="1">
+<li>先把新元素放到数组末尾（<code>a[++ e] = new_val;</code>）</li>
+<li>然后从下往上调整，直到满足堆的性质</li>
+</ol>
+<p>这个过程与<code>HeapAdjust</code>相似，只不过方向相反，是从叶子往上去，示例代码仍然以小根堆为例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">HeapInsert</span><span class="params">(<span class="type">int</span> a[], <span class="type">int</span> &amp;e, <span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// e 是当前堆中最后一个元素的下标</span></span><br><span class="line">    <span class="comment">// 先把新元素放到末尾</span></span><br><span class="line">    a[++e] = x;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 从下往上调整</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = e; i &gt; <span class="number">1</span>; i &gt;&gt;= <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// 如果当前节点比父节点更优，则交换</span></span><br><span class="line">        <span class="keyword">if</span>(a[i] &lt; a[i &gt;&gt; <span class="number">1</span>]) &#123; </span><br><span class="line">            <span class="built_in">Swap</span>(a[i], a[i &gt;&gt; <span class="number">1</span>]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">break</span>;  <span class="comment">// 已经满足堆的性质，可以退出</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="最小生成树">最小生成树</h2>
+<h3 id="回顾链式前向星建图">回顾链式前向星建图</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1100</span>;      <span class="comment">// 最大点数</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxm = <span class="number">110000</span>;    <span class="comment">// 最大边数</span></span><br><span class="line"><span class="type">int</span> first[maxn];    <span class="comment">// 每个顶点发出的边的边链表头顶点，可初始化为 -1 </span></span><br><span class="line"><span class="type">int</span> nex[maxm];      <span class="comment">// 同个顶点发出的边的边顶点 next 域</span></span><br><span class="line"><span class="type">int</span> u[maxm];        <span class="comment">// 边的发出顶点</span></span><br><span class="line"><span class="type">int</span> v[maxm];        <span class="comment">// 边的收入顶点</span></span><br><span class="line"><span class="type">int</span> w[maxm];        <span class="comment">// 边的权值</span></span><br><span class="line"><span class="type">int</span> tp;             <span class="comment">// 全局&quot;内存分配&quot;&quot;指针&quot;，就是模拟分配内存时，tp从0开始逐个增加</span></span><br></pre></td></tr></table></figure>
+<p>如果不习惯数组式组织数据，写成结构体也可以</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Edge</span> &#123;</span><br><span class="line">    <span class="type">int</span> nex;</span><br><span class="line">    <span class="type">int</span> u;</span><br><span class="line">    <span class="type">int</span> v;</span><br><span class="line">    <span class="type">int</span> w;</span><br><span class="line">&#125;;</span><br><span class="line">Edge e[maxn];</span><br><span class="line"><span class="type">int</span> first[maxn]</span><br><span class="line"><span class="type">int</span> tp;</span><br></pre></td></tr></table></figure>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/%E5%89%8D%E5%90%91%E6%98%9F.svg" class="">
+<h3 id="prim算法朴素版">Prim算法（朴素版）</h3>
+<p>假设我们需要在 <span class="math inline">\(n\)</span>
+个城市之间建立通信网络。为了确保所有城市都能相互通信，我们需要铺设 <span
+class="math inline">\(n-1\)</span> 条线路。</p>
+<p>虽然任意两个城市之间都可以铺设线路（总共有 <span
+class="math inline">\(\frac{n(n-1)}{2}\)</span>
+条可能的线路），但每条线路都有不同的建设成本。我们的目标是选择 <span
+class="math inline">\(n-1\)</span> 条线路，使得总成本最小。</p>
+<p>Prim算法采用贪心的思想来解决这个问题：</p>
+<ol type="1">
+<li>从任意一个城市开始，将其加入已选城市集合</li>
+<li>在已选城市集合和未选城市集合之间，选择成本最低的线路</li>
+<li>将这条线路连接的新城市加入已选城市集合</li>
+<li>重复步骤2和3，直到所有城市都被选中</li>
+</ol>
+<p>这种算法特别适合城市数量较多、线路较密集的情况。</p>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/prim.gif" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注释由 AI 生成</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">110</span>;                       <span class="comment">// 最大城市数量</span></span><br><span class="line"><span class="type">int</span> g[maxn][maxn];                          <span class="comment">// 邻接矩阵，存储城市间的距离</span></span><br><span class="line"><span class="type">int</span> key[maxn];                              <span class="comment">// 每个城市到已选城市集合的最小距离</span></span><br><span class="line"><span class="type">int</span> fixed[maxn];                            <span class="comment">// 标记城市是否已加入生成树</span></span><br><span class="line"><span class="type">int</span> last[maxn];                             <span class="comment">// 记录每个城市是通过哪个城市加入生成树的</span></span><br><span class="line"><span class="type">int</span> t, n, m, tmpLen, start;                 <span class="comment">// t:测试用例数 n:城市数 m:线路数 start:起始城市</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Prim</span><span class="params">(<span class="type">int</span> start)</span> </span>&#123;                           <span class="comment">// Prim算法实现，返回最小生成树的总长度</span></span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;                                <span class="comment">// 最小生成树的总长度</span></span><br><span class="line">    <span class="built_in">memset</span>(key, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(key));             <span class="comment">// 初始化所有城市到已选集合的距离为无穷大</span></span><br><span class="line">    <span class="built_in">memset</span>(fixed, <span class="number">0</span>, <span class="built_in">sizeof</span>(fixed));            <span class="comment">// 初始化所有城市都未加入生成树</span></span><br><span class="line">    key[start] = <span class="number">0</span>;                             <span class="comment">// 起始城市到已选集合的距离为0</span></span><br><span class="line">    last[start] = <span class="number">-1</span>;                           <span class="comment">// 起始城市没有前驱城市</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;                <span class="comment">// 循环n次，每次选择一个城市加入生成树</span></span><br><span class="line">        <span class="type">int</span> minKey = <span class="number">0x3f3f3f3f</span>;                <span class="comment">// 当前未选城市到已选集合的最小距离</span></span><br><span class="line">        <span class="type">int</span> minKeyNode;                         <span class="comment">// 对应的城市编号</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++)              <span class="comment">// 遍历所有城市</span></span><br><span class="line">            <span class="keyword">if</span>(!fixed[j] &amp;&amp; key[j] &lt; minKey) &#123;  <span class="comment">// 如果城市未加入生成树且距离更小</span></span><br><span class="line">                minKey = key[j];                <span class="comment">// 更新最小距离</span></span><br><span class="line">                minKeyNode = j;                 <span class="comment">// 记录对应的城市</span></span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        fixed[minKeyNode] = <span class="literal">true</span>;               <span class="comment">// 将选中的城市加入生成树</span></span><br><span class="line">        ret += key[minKeyNode];                 <span class="comment">// 累加这条边的长度</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j++)              <span class="comment">// 更新其他未选城市到已选集合的距离</span></span><br><span class="line">            <span class="keyword">if</span>(!fixed[j] &amp;&amp; g[minKeyNode][j] != <span class="number">0</span> &amp;&amp; g[minKeyNode][j] &lt; key[j]) &#123;</span><br><span class="line">                key[j] = g[minKeyNode][j];      <span class="comment">// 如果通过新加入的城市距离更短，则更新</span></span><br><span class="line">                last[j] = minKeyNode;           <span class="comment">// 记录是通过哪个城市加入的</span></span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;                                 <span class="comment">// 返回最小生成树的总长度</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(O(n^2)\)</span>，$n为顶点数。</p>
+<h3 id="kruskal算法">Kruskal算法</h3>
+<p>Kruskal算法采用了另一种思路：</p>
+<ol type="1">
+<li>首先将所有可能的线路按照成本从低到高排序</li>
+<li>从成本最低的线路开始，依次检查每条线路</li>
+<li>如果这条线路连接的两个城市还没有通过其他线路连通，就选择这条线路</li>
+<li>重复步骤2和3，直到所有城市都能相互通信</li>
+</ol>
+<p>这种算法特别适合城市数量较多、但实际线路较少的情况。</p>
+<p>Kruskal算法需要频繁判断两个城市是否已经连通，这正好是并查集的强项。在实现中：</p>
+<ol type="1">
+<li>初始时，每个城市自成一个集合</li>
+<li>当选择一条线路时，将线路连接的两个城市所在的集合合并</li>
+<li>判断两个城市是否连通，只需看它们是否在同一个集合中</li>
+</ol>
+<p>并查集通过路径压缩优化，使得查找和合并操作的时间复杂度接近 <span
+class="math inline">\(O(1)\)</span>。</p>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/kruskal.gif" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注释由 AI 生成</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">KNode</span> &#123;                                      <span class="comment">// 存储边的信息</span></span><br><span class="line">    <span class="type">int</span> len;                                        <span class="comment">// 边的长度</span></span><br><span class="line">    <span class="type">int</span> s, e;                                       <span class="comment">// 边的起点和终点</span></span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> KNode &amp;b) <span class="type">const</span> &#123;          <span class="comment">// 重载小于运算符，用于排序</span></span><br><span class="line">        <span class="keyword">return</span> len == b.len ? s &lt; b.s : len &lt; b.len;<span class="comment">// 长度相同时按起点编号排序</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">KNode</span>() &#123;&#125;</span><br><span class="line">    <span class="built_in">KNode</span>(<span class="type">int</span> l_, <span class="type">int</span> s_, <span class="type">int</span> e_): <span class="built_in">len</span>(l_), <span class="built_in">s</span>(s_), <span class="built_in">e</span>(e_) &#123;&#125; <span class="comment">// 构造函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">KNode eg[maxn * maxn];                              <span class="comment">// 存储所有可能的边</span></span><br><span class="line"><span class="type">int</span> etp;                                            <span class="comment">// 边的数量</span></span><br><span class="line"><span class="type">int</span> p[maxn];                                        <span class="comment">// 并查集数组</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">fa</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;                                     <span class="comment">// 查找i所在集合的代表元素</span></span><br><span class="line">    <span class="keyword">return</span> p[i] == i ? i : p[i] = <span class="built_in">fa</span>(p[i]);        <span class="comment">// 路径压缩</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Kruskal</span><span class="params">()</span> </span>&#123;                                    <span class="comment">// Kruskal算法实现</span></span><br><span class="line">    etp = <span class="number">0</span>;                                        <span class="comment">// 初始化边的数量</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)                      <span class="comment">// 遍历所有城市对</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i + <span class="number">1</span>; j &lt; n; j++)</span><br><span class="line">            <span class="keyword">if</span>(g[i][j] != <span class="number">0</span>)                        <span class="comment">// 如果两个城市之间有线路</span></span><br><span class="line">                eg[etp++] = <span class="built_in">KNode</span>(g[i][j], i, j);   <span class="comment">// 将这条边加入数组</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">sort</span>(eg, eg + etp);                             <span class="comment">// 按边的长度排序</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)                      <span class="comment">// 初始化并查集</span></span><br><span class="line">        p[i] = i;                                   <span class="comment">// 每个城市自成一个集合</span></span><br><span class="line">    </span><br><span class="line">    rtp = <span class="number">0</span>;                                        <span class="comment">// 初始化结果边的数量</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; etp; i++) &#123;                  <span class="comment">// 遍历所有边</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">fa</span>(eg[i].s) == <span class="built_in">fa</span>(eg[i].e))             <span class="comment">// 如果边的两个端点已经在同一个集合中</span></span><br><span class="line">            <span class="keyword">continue</span>;                               <span class="comment">// 跳过这条边</span></span><br><span class="line">        </span><br><span class="line">        p[<span class="built_in">fa</span>(eg[i].s)] = <span class="built_in">fa</span>(eg[i].e);              <span class="comment">// 合并两个集合</span></span><br><span class="line">        res[rtp][<span class="number">0</span>] = eg[i].s;                      <span class="comment">// 记录这条边的起点</span></span><br><span class="line">        res[rtp][<span class="number">1</span>] = eg[i].e;                      <span class="comment">// 记录这条边的终点</span></span><br><span class="line">        rtp++;                                      <span class="comment">// 结果边数加1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(O(mlogm)\)</span>，<span
+class="math inline">\(m\)</span>为边数。</p>
+<h2 id="最短路">最短路</h2>
+<h3 id="暴力最短路floyd">暴力最短路——Floyd</h3>
+<p>求图中<strong>两两之间最短路</strong>。</p>
+<p>基于动态规划思想的算法:</p>
+<p>对于任意两点 <span class="math inline">\(i\)</span> 和 <span
+class="math inline">\(j\)</span>
+之间的最短路径,要么是直接相连的边,要么需要经过其他点作为中转。可以枚举所有可能的中转点
+<span class="math inline">\(k\)</span>,不断更新 <span
+class="math inline">\(i\)</span> 到 <span
+class="math inline">\(j\)</span> 的最短距离。</p>
+<p>具体来说:</p>
+<ol type="1">
+<li><span class="math inline">\(d_k(i,j)\)</span> 表示从 i 到 j
+路径上编号不超过 k 的最短路长度</li>
+<li>初始状态: <span class="math inline">\(d_0(i,j) =
+w(i,j)\)</span></li>
+<li>状态转移: <span class="math inline">\(d_k(i,j) = min\{d_{k-1}(i,j),
+d_{k-1}(i,k) + d_{k-1}(k,j)\}\)</span>, 其中 <span
+class="math inline">\(1 \leq i,j,k \leq n, i \neq k, j \neq
+k\)</span></li>
+</ol>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> g[maxn][maxn];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Floyd</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;  <span class="comment">// 节点范围[1, n]</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> k = <span class="number">1</span>; k &lt;= n; k ++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">1</span>; j &lt;= n; j ++)</span><br><span class="line">                g[i][j] = <span class="built_in">min</span>(g[i][k] + g[k][j], g[i][j]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(O(n^3)\)</span></p>
+<h3 id="单源最短路dijkstra朴素版">单源最短路——Dijkstra（朴素版）</h3>
+<p>一个特定的顶点，到一个特定的终点的最短路 —— Dijkstra算法</p>
+<p>算法思想类似最小生成树的 Prim</p>
+<p>区别：每次优先的顶点不再是连通分量发出的最短边指向的顶点，而是与源点总距离最短的顶点，直到终点是优先点为止</p>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/dijkstra.gif" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Dijkstra</span><span class="params">(<span class="type">int</span> start)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(dis, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(dis));</span><br><span class="line">    <span class="built_in">memset</span>(fixed, <span class="number">0</span>, <span class="built_in">sizeof</span>(fixed));</span><br><span class="line">    last[start] = <span class="number">-1</span>;</span><br><span class="line">    dis[start] = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> minDisNode, minDis;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        minDis = INF;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(!fixed[j] &amp;&amp; dis[j] &lt; minDis) </span><br><span class="line">                minDisNode = j, minDis = dis[j];</span><br><span class="line">        fixed[minDisNode] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="keyword">if</span>(g[minDisNode][j] != <span class="number">0</span> &amp;&amp; minDis + g[minDisNode][j] &lt; dis[j])</span><br><span class="line">                dis[j] = minDis + g[minDisNode][j], last[j] = minDisNode;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><span class="math inline">\(O(n^2)\)</span></p>
+<h2 id="堆优化的prim与dijkstra">堆优化的Prim与Dijkstra</h2>
+<ul>
+<li>Prim 每一步要在已选和未选之间找成本最低边</li>
+<li>Dijkstra 每一步要在未确定距离点中找距离源点最近点</li>
+</ul>
+<p>这两件事都可以把待考查集合由优先队列管理，每次快速找到</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; pii; <span class="comment">// 预定义数据对，first为结点与起点距离，second为结点编号</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Dijkstra</span><span class="params">(<span class="type">int</span> start)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 此处 “, vector&lt;pii&gt;, greater&lt;pii&gt; ” 用于让优先队列构建大顶堆，从而每次出队为最小值</span></span><br><span class="line">    priority_queue&lt;pii, vector&lt;pii&gt;, greater&lt;pii&gt; &gt; q;</span><br><span class="line">    <span class="built_in">memset</span>(dis, <span class="number">0x3f</span>, <span class="built_in">sizeof</span>(dis)); <span class="comment">// 初始化结点与起点距离为无穷大</span></span><br><span class="line">    dis[start] = <span class="number">0</span>;                 <span class="comment">// 起点距离起点为0</span></span><br><span class="line">    q.<span class="built_in">push</span>(<span class="built_in">pii</span>(<span class="number">0</span>, start));          <span class="comment">// 起点放入优先级队列</span></span><br><span class="line">    last[start] = <span class="number">-1</span>;               <span class="comment">// 记录路径，起点的“上一个”为空</span></span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        pii now = q.<span class="built_in">top</span>();  <span class="comment">// 优先级队列队顶用“top”而不用“front”</span></span><br><span class="line">        q.<span class="built_in">pop</span>();            <span class="comment">// 出队</span></span><br><span class="line">        <span class="comment">// 如果出队结点记录的距离不是最新的距离，则丢弃该出队结点</span></span><br><span class="line">        <span class="keyword">if</span>(now.first != dis[now.second]) <span class="keyword">continue</span>;  </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 对每个与 now.second 相连接的结点，看是否能更新该结点与起点的距离</span></span><br><span class="line">            <span class="comment">// 能更新则更新后将该结点入队</span></span><br><span class="line">            <span class="keyword">if</span>(g[now.second][i] != <span class="number">0</span> &amp;&amp; now.first + g[now.second][i] &lt; dis[i])</span><br><span class="line">            &#123;</span><br><span class="line">                dis[i] = now.first + g[now.second][i];</span><br><span class="line">                q.<span class="built_in">push</span>(<span class="built_in">pii</span>(dis[i], i));</span><br><span class="line">                last[i] = now.second;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用堆优化后的 Prim 算法时间复杂度为 <span
+class="math inline">\(O(m\log n)\)</span>，其中 <span
+class="math inline">\(n\)</span> 为顶点数，<span
+class="math inline">\(m\)</span>
+为边数。对于稀疏图（即边数远小于顶点数平方，<span
+class="math inline">\(m \ll n^2\)</span>），这个复杂度明显优于朴素 Prim
+算法的 <span class="math inline">\(O(n^2)\)</span> 复杂度。</p>
+<p>总的来说，各算法在使用堆优化后的时间复杂度如下：</p>
+<ul>
+<li>Prim 算法：堆优化前 <span class="math inline">\(O(n^2)\)</span>
+，堆优化后 <span class="math inline">\(O(m\log n)\)</span></li>
+<li>Dijkstra 算法：堆优化前 <span class="math inline">\(O(n^2)\)</span>
+，堆优化后 <span class="math inline">\(O((m+n)\log n)\)</span></li>
+</ul>
+<p>效果要看 <span class="math inline">\(m\)</span> 与 <span
+class="math inline">\(n\)</span> 的大小关系，越稀疏（边数少），<span
+class="math inline">\(m\)</span>越接近<span
+class="math inline">\(n\)</span>，堆优化效果越好；越稠密，<span
+class="math inline">\(m\)</span>越接近<span
+class="math inline">\(n^2\)</span>，效果就变差了。</p>
+<h2 id="拓扑排序">拓扑排序</h2>
+<p>有向无环图简称DAG（directed acycline
+graph）图，任何点无法通过一系列有向边回到该点，因为无环，顶点就有前后顺序（允许并列）</p>
+<p>例：一项工程，有a、b、c、...一系列任务，有的任务必须在其它特定任务完成后才能执行，比如
+a 执行后才能开始执行
+b，等等一系列规则，假如只能单线程执行任务，在此规则下，给出一个可行的任务执行顺序。</p>
+<p>任务执行的先后关系就可以作为有向边，合法的数据不可能出现a-&gt;b-&gt;c-&gt;a的死锁，那就是先有鸡还是先有蛋的问题了，所以工程的任务会建成一个
+DAG 图，一个正确的拓扑排序，便是一个可行的任务执行顺序——可以有多种解</p>
+<p><strong>入度与出度</strong></p>
+<p>对于无向图，一个点发出一条边就是一个度</p>
+<p>对于有向图，一个点发出一条边就是一个出度，收入一条边就是一个入度。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">C--&gt;A--&gt;B</span><br><span class="line">    ^</span><br><span class="line">    |</span><br><span class="line">    D</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">点</th>
+<th style="text-align: center;">入度</th>
+<th style="text-align: center;">出度</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">A</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">B</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">C</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">D</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+<p>基于入度的拓扑排序算法：以工程例题来说</p>
+<ul>
+<li>一个顶点入度为 0 ，则意味着该顶点不需要完成其它任务即可开始</li>
+<li>当执行完该任务，则依赖该任务的其它任务都可以减少一个入度——减少了一个依赖</li>
+<li>继续寻找入度为 0 的顶点，重复操作直至所有任务执行</li>
+</ul>
+<img src="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/topo.gif" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">TopoSort</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> i, j, k;</span><br><span class="line">    rtp = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 初始化，用于接下来统计入度</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; i ++) ind[i] = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; i ++) </span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; n; j ++)</span><br><span class="line">            <span class="comment">// g[i][j] 表示存在 i 到 j 的有向边</span></span><br><span class="line">            ind[j] += g[i][j];</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; n &amp;&amp; ind[j]; j ++);</span><br><span class="line">        <span class="comment">// 找到一个入度为 0 的顶点 j</span></span><br><span class="line">        res[rtp ++] = j;</span><br><span class="line">        ind[j] = <span class="number">-1</span>;  <span class="comment">// 标记该顶点已取出</span></span><br><span class="line">        <span class="comment">// 顶点 j 发出的有向边指向的顶点入度都减1</span></span><br><span class="line">        <span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; n; k ++)</span><br><span class="line">            ind[k] -= g[j][k];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-04-23-29-%E5%B9%B6%E6%9F%A5%E9%9B%86/" rel="prev" title="29.并查集">
+                  <i class="fa fa-angle-left"></i> 29.并查集
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
