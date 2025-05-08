@@ -9774,6 +9774,9 @@ class="math inline">\(BR\)</span> 的距离，就是更新
     <title>30.图论基础1</title>
     <url>/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/</url>
     <content><![CDATA[<h1 id="图论基础1">图论基础1</h1>
+<p>优先队列及其底层堆结构原理、最小生成树的 Prim 与 Kruskal
+算法、最短路的 Floyd 和 Dijkstra 算法及堆优化版本，以及拓扑排序。</p>
+<span id="more"></span>
 <h2 id="优先队列">优先队列</h2>
 <p>优先队列（Priority Queue）：</p>
 <ol type="1">
