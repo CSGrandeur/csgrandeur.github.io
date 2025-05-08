@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_图层_1" data-name="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 938 529">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        font-family: AdobeSongStd-Light-GBpc-EUC-H, 'Adobe Song Std';
+        font-weight: 300;
+      }
+
+      .cls-4 {
+        stroke: rgba(192, 192, 192, .24);
+      }
+
+      .cls-4, .cls-5, .cls-6, .cls-7, .cls-8, .cls-9 {
+        fill: none;
+      }
+
+      .cls-4, .cls-6, .cls-7, .cls-8 {
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-10, .cls-11, .cls-12, .cls-2, .cls-13, .cls-14, .cls-3, .cls-15 {
+        isolation: isolate;
+      }
+
+      .cls-10, .cls-12, .cls-16, .cls-13, .cls-14 {
+        font-family: ArialMT, Arial;
+      }
+
+      .cls-10, .cls-13, .cls-14 {
+        font-size: 14px;
+      }
+
+      .cls-11, .cls-2, .cls-3, .cls-15 {
+        font-size: 16px;
+      }
+
+      .cls-12 {
+        fill: #252525;
+        font-size: 12px;
+      }
+
+      .cls-17 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-2, .cls-14, .cls-15, .cls-18 {
+        fill: #1565c0;
+      }
+
+      .cls-13 {
+        letter-spacing: -.06em;
+      }
+
+      .cls-6 {
+        stroke: #000;
+      }
+
+      .cls-7 {
+        stroke: rgba(0, 0, 0, .7);
+        stroke-width: 2.5px;
+      }
+
+      .cls-8 {
+        stroke: silver;
+      }
+
+      .cls-9 {
+        stroke: #252525;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-19 {
+        clip-path: url(#clippath);
+      }
+    </style>
+    <clipPath id="clippath">
+      <rect class="cls-5" x="5.5" y=".25" width="927" height="528"/>
+    </clipPath>
+  </defs>
+  <g class="cls-19">
+    <g>
+      <path class="cls-8" d="M31.5.5v528M84.5.5v528M136.5.5v528M189.5.5v528M242.5.5v528M294.5.5v528M347.5.5v528M399.5.5v528M452.5.5v528M504.5.5v528M557.5.5v528M610.5.5v528M662.5.5v528M715.5.5v528M767.5.5v528M820.5.5v528M872.5.5v528M925.5.5v528"/>
+      <path class="cls-4" d="M.5.5v528M10.5.5v528M21.5.5v528M42.5.5v528M52.5.5v528M63.5.5v528M73.5.5v528M94.5.5v528M105.5.5v528M115.5.5v528M126.5.5v528M147.5.5v528M157.5.5v528M168.5.5v528M179.5.5v528M200.5.5v528M210.5.5v528M221.5.5v528M231.5.5v528M252.5.5v528M263.5.5v528M273.5.5v528M284.5.5v528M305.5.5v528M315.5.5v528M326.5.5v528M336.5.5v528M357.5.5v528M368.5.5v528M378.5.5v528M389.5.5v528M410.5.5v528M420.5.5v528M431.5.5v528M441.5.5v528M462.5.5v528M473.5.5v528M483.5.5v528M494.5.5v528M515.5.5v528M525.5.5v528M536.5.5v528M546.5.5v528M567.5.5v528M578.5.5v528M589.5.5v528M599.5.5v528M620.5.5v528M631.5.5v528M641.5.5v528M652.5.5v528M673.5.5v528M683.5.5v528M694.5.5v528M704.5.5v528M725.5.5v528M736.5.5v528M746.5.5v528M757.5.5v528M778.5.5v528M788.5.5v528M799.5.5v528M809.5.5v528M830.5.5v528M841.5.5v528M851.5.5v528M862.5.5v528M883.5.5v528M893.5.5v528M904.5.5v528M914.5.5v528M935.5.5v528"/>
+      <path class="cls-8" d="M10.5,51.5h927M10.5,51.5h927M10.5,103.5h927M10.5,156.5h927M10.5,208.5h927M10.5,261.5h927M10.5,313.5h927M10.5,366.5h927M10.5,418.5h927M10.5,471.5h927"/>
+      <path class="cls-4" d="M10.5,9.5h927M10.5,19.5h927M10.5,30.5h927M10.5,40.5h927M10.5,61.5h927M10.5,72.5h927M10.5,82.5h927M10.5,93.5h927M10.5,114.5h927M10.5,124.5h927M10.5,135.5h927M10.5,145.5h927M10.5,166.5h927M10.5,177.5h927M10.5,187.5h927M10.5,198.5h927M10.5,219.5h927M10.5,229.5h927M10.5,240.5h927M10.5,250.5h927M10.5,271.5h927M10.5,282.5h927M10.5,292.5h927M10.5,303.5h927M10.5,324.5h927M10.5,334.5h927M10.5,345.5h927M10.5,355.5h927M10.5,376.5h927M10.5,387.5h927M10.5,397.5h927M10.5,408.5h927M10.5,429.5h927M10.5,440.5h927M10.5,450.5h927M10.5,461.5h927M10.5,482.5h927M10.5,492.5h927M10.5,503.5h927M10.5,513.5h927"/>
+      <path class="cls-9" d="M10.5,524.5h925"/>
+      <path class="cls-9" d="M936.5,524.5l-4-4"/>
+      <path class="cls-9" d="M936.5,524.5l-4,4"/>
+      <text class="cls-12" transform="translate(29 522)"><tspan x="0" y="0">1</tspan></text>
+      <text class="cls-12" transform="translate(82 522)"><tspan x="0" y="0">2</tspan></text>
+      <text class="cls-12" transform="translate(134 522)"><tspan x="0" y="0">3</tspan></text>
+      <text class="cls-12" transform="translate(187 522)"><tspan x="0" y="0">4</tspan></text>
+      <text class="cls-12" transform="translate(240 522)"><tspan x="0" y="0">5</tspan></text>
+      <text class="cls-12" transform="translate(292 522)"><tspan x="0" y="0">6</tspan></text>
+      <text class="cls-12" transform="translate(345 522)"><tspan x="0" y="0">7</tspan></text>
+      <text class="cls-12" transform="translate(397 522)"><tspan x="0" y="0">8</tspan></text>
+      <text class="cls-12" transform="translate(450 522)"><tspan x="0" y="0">9</tspan></text>
+      <text class="cls-12" transform="translate(499 522)"><tspan x="0" y="0">10</tspan></text>
+      <text class="cls-12" transform="translate(552 522)"><tspan class="cls-17" x="0" y="0">1</tspan><tspan x="5.78" y="0">1</tspan></text>
+      <text class="cls-12" transform="translate(605 522)"><tspan x="0" y="0">12</tspan></text>
+      <text class="cls-12" transform="translate(657 522)"><tspan x="0" y="0">13</tspan></text>
+      <text class="cls-12" transform="translate(710 522)"><tspan x="0" y="0">14</tspan></text>
+      <text class="cls-12" transform="translate(762 522)"><tspan x="0" y="0">15</tspan></text>
+      <text class="cls-12" transform="translate(815 522)"><tspan x="0" y="0">16</tspan></text>
+      <text class="cls-12" transform="translate(867 522)"><tspan x="0" y="0">17</tspan></text>
+      <text class="cls-12" transform="translate(920 522)"><tspan x="0" y="0">18</tspan></text>
+      <text class="cls-12" transform="translate(13 476)"><tspan x="0" y="0">1</tspan></text>
+      <text class="cls-12" transform="translate(13 423)"><tspan x="0" y="0">2</tspan></text>
+      <text class="cls-12" transform="translate(13 371)"><tspan x="0" y="0">3</tspan></text>
+      <text class="cls-12" transform="translate(13 318)"><tspan x="0" y="0">4</tspan></text>
+      <text class="cls-12" transform="translate(13 266)"><tspan x="0" y="0">5</tspan></text>
+      <text class="cls-12" transform="translate(13 213)"><tspan x="0" y="0">6</tspan></text>
+      <text class="cls-12" transform="translate(13 161)"><tspan x="0" y="0">7</tspan></text>
+      <text class="cls-12" transform="translate(13 108)"><tspan x="0" y="0">8</tspan></text>
+      <text class="cls-12" transform="translate(13 56)"><tspan x="0" y="0">9</tspan></text>
+      <path class="cls-7" d="M452.34,261.31c0,116.12-94.13,210.25-210.25,210.25S31.85,377.42,31.85,261.31,125.98,51.06,242.1,51.06s210.25,94.13,210.25,210.25Z"/>
+      <text class="cls-11" transform="translate(136 102)"><tspan class="cls-16" x="0" y="0">BFS</tspan><tspan class="cls-1" x="31.12" y="0">搜索区域</tspan></text>
+      <path class="cls-7" d="M715.15,261.31c0,58.06-47.07,105.12-105.12,105.12s-105.12-47.07-105.12-105.12,47.07-105.12,105.12-105.12,105.12,47.07,105.12,105.12Z"/>
+      <path class="cls-7" d="M715.15,261.31c0,58.06-47.07,105.12-105.12,105.12s-105.12-47.07-105.12-105.12,47.07-105.12,105.12-105.12,105.12,47.07,105.12,105.12Z"/>
+      <text class="cls-11" transform="translate(553.58 191)"><tspan class="cls-1" x="0" y="0">双向</tspan><tspan class="cls-16" x="32" y="0">BFS</tspan></text>
+      <text class="cls-13" transform="translate(617 198)"><tspan x="0" y="0">A</tspan></text>
+      <text class="cls-3" transform="translate(626 191)"><tspan x="0" y="0">搜索范围</tspan></text>
+      <path class="cls-7" d="M925.4,261.31c0,58.06-47.07,105.12-105.12,105.12s-105.12-47.07-105.12-105.12,47.07-105.12,105.12-105.12,105.12,47.07,105.12,105.12Z"/>
+      <text class="cls-11" transform="translate(767 191)"><tspan class="cls-1" x="0" y="0">双向</tspan><tspan class="cls-16" x="32" y="0">BFS</tspan></text>
+      <text class="cls-10" transform="translate(827 198)"><tspan x="0" y="0">B</tspan></text>
+      <text class="cls-3" transform="translate(836 191)"><tspan x="0" y="0">搜索范围</tspan></text>
+      <path class="cls-18" d="M247.1,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-6" d="M247.1,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <text class="cls-15" transform="translate(246 251)"><tspan class="cls-1" x="0" y="0">从</tspan><tspan class="cls-16" x="16" y="0">A</tspan><tspan class="cls-1" x="26.67" y="0">出发</tspan></text>
+      <text class="cls-14" transform="translate(304 258)"><tspan x="0" y="0">1</tspan></text>
+      <path class="cls-18" d="M457.34,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-6" d="M457.34,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <text class="cls-15" transform="translate(456 251)"><tspan class="cls-1" x="0" y="0">到达</tspan><tspan class="cls-16" x="32" y="0">B</tspan></text>
+      <path class="cls-18" d="M615.03,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-6" d="M615.03,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <text class="cls-15" transform="translate(614 251)"><tspan class="cls-1" x="0" y="0">从</tspan><tspan class="cls-16" x="16" y="0">A</tspan><tspan class="cls-1" x="26.67" y="0">出发</tspan></text>
+      <path class="cls-18" d="M720.15,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-6" d="M720.15,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-18" d="M825.27,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-6" d="M825.27,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <text class="cls-15" transform="translate(824 251)"><tspan class="cls-1" x="0" y="0">从</tspan><tspan class="cls-16" x="16" y="0">B</tspan><tspan class="cls-1" x="26.67" y="0">出发</tspan></text>
+      <path class="cls-18" d="M720.15,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <path class="cls-6" d="M720.15,261.31c0,2.76-2.24,5-5,5s-5-2.24-5-5,2.24-5,5-5,5,2.24,5,5Z"/>
+      <text class="cls-2" transform="translate(722.67 251)"><tspan x="0" y="0">相遇位置</tspan></text>
+    </g>
+  </g>
+</svg>
