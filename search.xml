@@ -10441,6 +10441,18 @@ class="math inline">\(-2\)</span></li>
 <li>特别适合磁盘等外存储器的存储方式</li>
 <li>广泛应用于数据库索引和文件系统中</li>
 </ol>
+<h3 id="用stl解决简单平衡树问题">用STL解决简单平衡树问题</h3>
+<p>一些只需要利用平衡树性质，但没有细化考查的问题，可以用STL的<code>map</code>或<code>set</code>完成。</p>
+<p><code>std::map</code>
+由红黑树实现的数据有序，所有的“键”插入后都是有序的，比如可以用
+<code>lower_bound</code> 找特定键的前驱</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::map&lt;<span class="type">int</span>, <span class="type">int</span>&gt; myMap;</span><br><span class="line"><span class="comment">// 假设 myMap 已经填充了一些数据</span></span><br><span class="line"><span class="keyword">auto</span> predecessorIt = myMap.<span class="built_in">lower_bound</span>(targetKey);</span><br><span class="line"><span class="keyword">if</span> (predecessorIt != myMap.<span class="built_in">begin</span>()) &#123;</span><br><span class="line">    <span class="comment">// 回退一步得到前驱</span></span><br><span class="line">    --predecessorIt;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 没有前驱</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>std::set</code>
+是集合的概念，相对<code>map</code>来说它只有“键”没有“值”，在不需要数据映射的时候用
+<code>set</code> 更简洁，比如找一个键的前驱</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::set&lt;<span class="type">int</span>&gt; mySet = &#123;<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">9</span>&#125;;</span><br><span class="line">    <span class="type">int</span> target = <span class="number">5</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">auto</span> successorIt = mySet.<span class="built_in">upper_bound</span>(target);</span><br><span class="line">    <span class="keyword">if</span> (successorIt != mySet.<span class="built_in">end</span>()) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Successor: &quot;</span> &lt;&lt; *successorIt &lt;&lt; std::endl;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;No successor found.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>map</code>和<code>set</code>
+都是平衡树实现，在<strong>简单场景</strong>中可以不用繁琐地自己去实现平衡树，在比赛中节约大量时间。</p>
 <h2 id="伸展树splay">伸展树（Splay）</h2>
 <p>伸展树通过"伸展"操作<strong>将最近访问的节点移动到根节点</strong>，从而保证树的高度在均摊意义下为<span
 class="math inline">\(O(log n)\)</span>。</p>
