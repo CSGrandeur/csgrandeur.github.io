@@ -161,7 +161,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -296,8 +296,8 @@ class="math inline">\(k\sim n\)</span> 的任何子集都不用尝试了。</p>
 之间的这部分代码，就是在枚举子集的基础上增加的分支限界规则。</p>
 <h3 id="例用回溯解旅行商问题">例：用回溯解旅行商问题</h3>
 <p>若干城市两两之间有路，从一个城市出发，每个城市恰好经过一次并回到原点，总路程最小的方案。</p>
-<style>.zriwqsndcuns{}</style>
-<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/tsp.svg" class="zriwqsndcuns">
+<style>.ntpcouadsknl{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/tsp.svg" class="ntpcouadsknl">
 <p>枚举排列——行走城市的顺序</p>
 <p>子树最优可能性估算策略，即搜索到 <span
 class="math inline">\(k\)</span>
@@ -312,11 +312,11 @@ class="math inline">\(k\)</span>
 <p>“好”的策略：估值比所有可能性更优的前提下，越贴近实际可能性越好。因为估值瞎猜一个很极端的值，也能做到是“对”的，但“对”不表明有用，它越贴近真实可能值，就越有可能比已经得到的解差，才越可能实现剪枝。不能剪枝的估值没什么用。</p>
 <h3 id="例回溯解圆排列">例：回溯解圆排列</h3>
 <p>给定若干圆的半径，各圆与底相切，求横向宽度最小的摆放顺序</p>
-<style>.hzbufhggkqpn{}</style>
-<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E7%A4%BA%E6%84%8F.svg" class="hzbufhggkqpn">
+<style>.gcegxrhmnlrp{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E7%A4%BA%E6%84%8F.svg" class="gcegxrhmnlrp">
 <p>先解决个小问题：两圆横向距离计算</p>
-<style>.mjaiwatpmtnw{}</style>
-<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97.svg" class="mjaiwatpmtnw">
+<style>.hkxplyjuiedn{}</style>
+<img src="/2025-04-23-27-%E5%88%86%E6%94%AF%E9%99%90%E7%95%8C%E4%B8%8E%E5%89%AA%E6%9E%9D/%E5%9C%86%E6%8E%92%E5%88%97_%E8%B7%9D%E7%A6%BB%E8%AE%A1%E7%AE%97.svg" class="hkxplyjuiedn">
 <p>枚举排列，找宽度最小的排列。</p>
 <p>子树估算方案：假设剩下的圆全用剩下的最小的那个</p>
 <blockquote>

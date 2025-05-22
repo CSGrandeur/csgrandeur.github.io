@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="平衡树 本章介绍平衡树的概念，详细讲解 AVL 树的平衡因子、四种平衡旋转操作及代码实现，并简介红黑树、Treap、SBT、B 树和 B + 树等其他平衡树。特别介绍了一种特殊的平衡树——伸展树的基本结构、核心操作、基本操作、序列操作、时间复杂度等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="32.平衡树">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="平衡树 本章介绍平衡树的概念，详细讲解 AVL 树的平衡因子、四种平衡旋转操作及代码实现，并简介红黑树、Treap、SBT、B 树和 B + 树等其他平衡树。特别介绍了一种特殊的平衡树——伸展树的基本结构、核心操作、基本操作、序列操作、时间复杂度等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91_%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91_%E5%88%A0%E9%99%A4.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91_%E9%80%80%E5%8C%96.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6AVL.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_LL.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_RR.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_LR.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_RL.gif">
+<meta property="article:published_time" content="2025-05-21T02:55:45.000Z">
+<meta property="article:modified_time" content="2025-05-22T10:13:54.812Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/","path":"2025-05-21-32-平衡树/","title":"32.平衡树"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>32.平衡树 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B3%E8%A1%A1%E6%A0%91"><span class="nav-number">1.</span> <span class="nav-text">平衡树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E8%A1%A1%E6%A0%91%E6%A6%82%E5%BF%B5%E4%B8%8Eavl"><span class="nav-number">1.1.</span> <span class="nav-text">平衡树概念与AVL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%A1%BE%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%9F%A5%E6%89%BE%E6%A0%91"><span class="nav-number">1.1.1.</span> <span class="nav-text">回顾二叉排序（查找）树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B3%E8%A1%A1%E6%A0%91-1"><span class="nav-number">1.1.2.</span> <span class="nav-text">平衡树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#avl"><span class="nav-number">1.1.3.</span> <span class="nav-text">AVL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E5%AE%83%E5%90%84%E7%A7%8D%E5%B9%B3%E8%A1%A1%E6%A0%91%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.</span> <span class="nav-text">其它各种平衡树简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%A2%E9%BB%91%E6%A0%91"><span class="nav-number">1.2.1.</span> <span class="nav-text">红黑树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#treap"><span class="nav-number">1.2.2.</span> <span class="nav-text">Treap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sbt-size-balanced-tree"><span class="nav-number">1.2.3.</span> <span class="nav-text">SBT (Size Balanced Tree)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b%E6%A0%91%E5%92%8Cb%E6%A0%91"><span class="nav-number">1.2.4.</span> <span class="nav-text">B树和B+树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%B8%E5%B1%95%E6%A0%91splay"><span class="nav-number">1.3.</span> <span class="nav-text">伸展树（Splay）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.1.</span> <span class="nav-text">基本结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.2.</span> <span class="nav-text">核心操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%8B%E8%BD%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">1. 旋转操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%B8%E5%B1%95%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">2. 伸展操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.3.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">插入操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">删除操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E9%A9%B1%E5%90%8E%E7%BB%A7%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">前驱后继查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.4.</span> <span class="nav-text">序列操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">区间操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%87%92%E6%A0%87%E8%AE%B0%E7%AE%A1%E7%90%86"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">懒标记管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">应用示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-number">1.3.5.</span> <span class="nav-text">时间复杂度</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="32.平衡树 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          32.平衡树
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-05-21 10:55:45" itemprop="dateCreated datePublished" datetime="2025-05-21T10:55:45+08:00">2025-05-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-22 18:13:54" itemprop="dateModified" datetime="2025-05-22T18:13:54+08:00">2025-05-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="平衡树">平衡树</h1>
+<p>本章介绍平衡树的概念，详细讲解 AVL
+树的平衡因子、四种平衡旋转操作及代码实现，并简介红黑树、Treap、SBT、B
+树和 B +
+树等其他平衡树。特别介绍了一种特殊的平衡树——伸展树的基本结构、核心操作、基本操作、序列操作、时间复杂度等内容。</p>
+<span id="more"></span>
+<h2 id="平衡树概念与avl">平衡树概念与AVL</h2>
+<h3 id="回顾二叉排序查找树">回顾二叉排序（查找）树</h3>
+<ul>
+<li>若其左子树非空，则左子树上所有结点的值均小于根结点的值</li>
+<li>若其右子树非空，则右子树上所有结点的值均大于等于根结点的值</li>
+<li>其左右子树本身又各是一棵二叉排序树</li>
+</ul>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91.svg" class="" title="二叉排序树">
+<p>中序遍历二叉排序树后的结果有什么规律？</p>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91_%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86.svg" class="" title="二叉排序树">
+<p>AVL树是最先发明的自平衡二叉查找树</p>
+<p>二叉排序树的操作－删除</p>
+<ul>
+<li>如果所删结点 <span class="math inline">\(now\)</span>
+左右子树有空树：用非空子树树根 <span class="math inline">\(nex\)</span>
+顶替被删结点</li>
+<li>否则用左子树中序最末结点 <span class="math inline">\(nex\)</span>
+顶替被删节点 <span class="math inline">\(now\)</span>，并对 <span
+class="math inline">\(nex\)</span> 再次执行删除操作</li>
+</ul>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91_%E5%88%A0%E9%99%A4.svg" class="" title="二叉排序树">
+<h3 id="平衡树-1">平衡树</h3>
+<p>二叉排序树在退化情况下查找与插入性能降低，接近线性而不再是 <span
+class="math inline">\(logn\)</span></p>
+<p><span class="math inline">\(ASL\)</span>(Average Search
+Length)：平均搜索长度</p>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E4%BA%8C%E5%8F%89%E6%8E%92%E5%BA%8F%E6%A0%91_%E9%80%80%E5%8C%96.svg" class="" title="二叉排序树">
+<p>在插入删除的过程中动态调整二叉树的姿态，尽可能保持<strong>任意子树</strong>的左右子树高度一致，即平衡树。</p>
+<h3 id="avl">AVL</h3>
+<p>AVL树是最先发明的自平衡二叉查找树，基于<strong>平衡因子</strong>实现</p>
+<ul>
+<li>平衡因子：该结点左子树与右子树的高度差</li>
+<li>AVL树任一结点的平衡因子只能取：-1、0 或 1</li>
+<li>对于一棵有n个结点的AVL树，其高度和ASL都保持在<span
+class="math inline">\(O(log2n)\)</span></li>
+</ul>
+<p>判断下面两个树是否是 AVL</p>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6AVL.svg" class="" title="二叉排序树">
+<p>重要操作</p>
+<p>平衡旋转：</p>
+<p>在插入新节点时，需要调整树的结构以保持平衡。主要有以下四种情况：</p>
+<ol type="1">
+<li><code>LL</code>：在左子树的左子树插入节点
+<ul>
+<li>平衡因子由 <span class="math inline">\(1\)</span> 变为 <span
+class="math inline">\(2\)</span></li>
+<li>需要进行顺时针旋转</li>
+</ul></li>
+</ol>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_LL.gif" class="" title="二叉排序树">
+<ol start="2" type="1">
+<li><code>RR</code>：在右子树的右子树插入节点
+<ul>
+<li>平衡因子由 <span class="math inline">\(-1\)</span> 变为 <span
+class="math inline">\(-2\)</span></li>
+<li>需要进行逆时针旋转</li>
+</ul></li>
+</ol>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_RR.gif" class="" title="二叉排序树">
+<ol start="3" type="1">
+<li><code>LR</code>：在左子树的右子树插入节点
+<ul>
+<li>平衡因子由 <span class="math inline">\(1\)</span> 变为 <span
+class="math inline">\(2\)</span></li>
+<li>需要先对左子树逆时针旋转，再对根顺时针旋转</li>
+</ul></li>
+</ol>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_LR.gif" class="" title="二叉排序树">
+<ol type="1">
+<li><code>RL</code>：在右子树的左子树插入节点
+<ul>
+<li>平衡因子由 <span class="math inline">\(-1\)</span> 变为 <span
+class="math inline">\(-2\)</span></li>
+<li>需要先对右子树顺时针旋转，再对根逆时针旋转</li>
+</ul></li>
+</ol>
+<img src="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/%E5%B9%B3%E8%A1%A1%E6%A0%91_RL.gif" class="" title="二叉排序树">
+<p>参考模板</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">注释内容由AI生成，仅供参考</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span> + <span class="number">10</span>;                    <span class="comment">// 定义最大节点数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Node</span> &#123;                                  <span class="comment">// 定义AVL树节点结构</span></span><br><span class="line">    <span class="type">int</span> key;                                   <span class="comment">// 键，用于二叉树排序</span></span><br><span class="line">    <span class="type">int</span> data;                                  <span class="comment">// 数据域，不参与排序的数据</span></span><br><span class="line">    <span class="type">int</span> left;                                  <span class="comment">// 左子树指针</span></span><br><span class="line">    <span class="type">int</span> right;                                 <span class="comment">// 右子树指针</span></span><br><span class="line">    <span class="type">int</span> height;                                <span class="comment">// 节点高度</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span></span>&#123;data = key = left = right = height = <span class="number">-1</span>;&#125;           <span class="comment">// 初始化节点</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">(<span class="type">int</span> k_, <span class="type">int</span> d_=<span class="number">0</span>)</span></span>&#123;<span class="built_in">Init</span>(); key = k_; data = d_;&#125;       <span class="comment">// 带参数初始化</span></span><br><span class="line">    <span class="built_in">Node</span>()&#123;<span class="built_in">Init</span>();&#125;                            <span class="comment">// 默认构造函数</span></span><br><span class="line">    <span class="built_in">Node</span>(<span class="type">int</span> k_, <span class="type">int</span> d_=<span class="number">0</span>)&#123;<span class="built_in">Init</span>(k_, d_);&#125;      <span class="comment">// 带参数构造函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Node tr[maxn];                                <span class="comment">// 节点数组</span></span><br><span class="line"><span class="type">int</span> root, tp;                                 <span class="comment">// root为根节点，tp为内存分配指针</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">UpdateHeight</span><span class="params">(<span class="type">int</span> now)</span> </span>&#123;            <span class="comment">// 更新节点高度</span></span><br><span class="line">    <span class="type">int</span> lh = tr[now].left == <span class="number">-1</span> ? <span class="number">0</span> : tr[tr[now].left].height;     <span class="comment">// 获取左子树高度</span></span><br><span class="line">    <span class="type">int</span> rh = tr[now].right == <span class="number">-1</span> ? <span class="number">0</span> : tr[tr[now].right].height;   <span class="comment">// 获取右子树高度</span></span><br><span class="line">    <span class="keyword">return</span> tr[now].height = (lh &gt; rh ? lh : rh) + <span class="number">1</span>;               <span class="comment">// 更新当前节点高度</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">HeightDiff</span><span class="params">(<span class="type">int</span> now)</span> </span>&#123;              <span class="comment">// 计算平衡因子</span></span><br><span class="line">    <span class="type">int</span> lh = tr[now].left == <span class="number">-1</span> ? <span class="number">0</span> : tr[tr[now].left].height;     <span class="comment">// 获取左子树高度</span></span><br><span class="line">    <span class="type">int</span> rh = tr[now].right == <span class="number">-1</span> ? <span class="number">0</span> : tr[tr[now].right].height;   <span class="comment">// 获取右子树高度</span></span><br><span class="line">    <span class="keyword">return</span> lh - rh;                           <span class="comment">// 返回平衡因子（左子树高度 - 右子树高度）</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">LL</span><span class="params">(<span class="type">int</span> an)</span> </span>&#123;                              <span class="comment">// LL型旋转（顺时针旋转）</span></span><br><span class="line">    <span class="type">int</span> bn = tr[an].left;                     <span class="comment">// 保存左子节点</span></span><br><span class="line">    <span class="type">int</span> dn = tr[bn].right;                    <span class="comment">// 保存左子节点的右子树</span></span><br><span class="line">    tr[bn].right = an;                        <span class="comment">// 调整指针关系</span></span><br><span class="line">    tr[an].left = dn;</span><br><span class="line">    <span class="built_in">UpdateHeight</span>(an);                         <span class="comment">// 更新高度</span></span><br><span class="line">    <span class="built_in">UpdateHeight</span>(bn);</span><br><span class="line">    <span class="keyword">return</span> bn;                                <span class="comment">// 返回新的根节点</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">RR</span><span class="params">(<span class="type">int</span> an)</span> </span>&#123;                              <span class="comment">// RR型旋转（逆时针旋转）</span></span><br><span class="line">    <span class="type">int</span> bn = tr[an].right;                    <span class="comment">// 保存右子节点</span></span><br><span class="line">    <span class="type">int</span> dn = tr[bn].left;                     <span class="comment">// 保存右子节点的左子树</span></span><br><span class="line">    tr[bn].left = an;                         <span class="comment">// 调整指针关系</span></span><br><span class="line">    tr[an].right = dn;</span><br><span class="line">    <span class="built_in">UpdateHeight</span>(an);                         <span class="comment">// 更新高度</span></span><br><span class="line">    <span class="built_in">UpdateHeight</span>(bn);</span><br><span class="line">    <span class="keyword">return</span> bn;                                <span class="comment">// 返回新的根节点</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">LR</span><span class="params">(<span class="type">int</span> an)</span> </span>&#123;                              <span class="comment">// LR型旋转（先逆时针后顺时针）</span></span><br><span class="line">    tr[an].left = <span class="built_in">RR</span>(tr[an].left);           <span class="comment">// 先对左子树进行逆时针旋转</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">LL</span>(an);                            <span class="comment">// 再对根节点进行顺时针旋转</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">RL</span><span class="params">(<span class="type">int</span> an)</span> </span>&#123;                              <span class="comment">// RL型旋转（先顺时针后逆时针）</span></span><br><span class="line">    tr[an].right = <span class="built_in">LL</span>(tr[an].right);         <span class="comment">// 先对右子树进行顺时针旋转</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">RR</span>(an);                            <span class="comment">// 再对根节点进行逆时针旋转</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Insert</span><span class="params">(<span class="type">int</span> &amp;now, <span class="type">int</span> key, <span class="type">int</span> data=<span class="number">0</span>)</span> </span>&#123;  <span class="comment">// 插入节点</span></span><br><span class="line">    <span class="keyword">if</span>(now == <span class="number">-1</span>) &#123;                           <span class="comment">// 如果当前节点为空</span></span><br><span class="line">        now = tp ++;                          <span class="comment">// 分配新节点</span></span><br><span class="line">        tr[now].<span class="built_in">Init</span>(key, data);              <span class="comment">// 初始化新节点</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key &lt; tr[now].key) &#123;              <span class="comment">// 如果键值小于当前节点</span></span><br><span class="line">        <span class="built_in">Insert</span>(tr[now].left, key, data);      <span class="comment">// 递归插入左子树</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">HeightDiff</span>(now) == <span class="number">2</span>)              <span class="comment">// 如果平衡因子为2</span></span><br><span class="line">            now = key &lt; tr[tr[now].left].key ? <span class="comment">// 判断是LL还是LR型</span></span><br><span class="line">                <span class="built_in">LL</span>(now) : <span class="built_in">LR</span>(now);            <span class="comment">// 进行相应的旋转</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key &gt; tr[now].key) &#123;              <span class="comment">// 如果键值大于当前节点</span></span><br><span class="line">        <span class="built_in">Insert</span>(tr[now].right, key, data);     <span class="comment">// 递归插入右子树</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">HeightDiff</span>(now) == <span class="number">-2</span>)             <span class="comment">// 如果平衡因子为-2</span></span><br><span class="line">            now = key &gt; tr[tr[now].right].key ? <span class="comment">// 判断是RR还是RL型</span></span><br><span class="line">                <span class="built_in">RR</span>(now) : <span class="built_in">RL</span>(now);            <span class="comment">// 进行相应的旋转</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">UpdateHeight</span>(now);                        <span class="comment">// 更新当前节点高度</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Delete</span><span class="params">(<span class="type">int</span> &amp;now, <span class="type">int</span> key)</span> </span>&#123;              <span class="comment">// 删除节点</span></span><br><span class="line">    <span class="keyword">if</span>(now == <span class="number">-1</span>) <span class="keyword">return</span>;                     <span class="comment">// 如果节点为空，直接返回</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key &lt; tr[now].key) &#123;              <span class="comment">// 如果键值小于当前节点</span></span><br><span class="line">        <span class="built_in">Delete</span>(tr[now].left, key);            <span class="comment">// 递归删除左子树</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(key &gt; tr[now].key) &#123;              <span class="comment">// 如果键值大于当前节点</span></span><br><span class="line">        <span class="built_in">Delete</span>(tr[now].right, key);           <span class="comment">// 递归删除右子树</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;                                    <span class="comment">// 找到要删除的节点</span></span><br><span class="line">        <span class="keyword">if</span>(tr[now].left == <span class="number">-1</span>) &#123;              <span class="comment">// 如果左子树为空</span></span><br><span class="line">            now = tr[now].right;              <span class="comment">// 用右子树替代</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span>(tr[now].right == <span class="number">-1</span>) &#123;        <span class="comment">// 如果右子树为空</span></span><br><span class="line">            now = tr[now].left;               <span class="comment">// 用左子树替代</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;                                <span class="comment">// 如果左右子树都不为空</span></span><br><span class="line">            <span class="type">int</span> nd;                           <span class="comment">// 找到左子树中的最大值</span></span><br><span class="line">            <span class="keyword">for</span>(nd = tr[now].left; ; nd = tr[nd].right)</span><br><span class="line">                <span class="keyword">if</span>(tr[nd].right == <span class="number">-1</span>) <span class="keyword">break</span>;</span><br><span class="line">            tr[now].key = tr[nd].key;         <span class="comment">// 用最大值替代当前节点</span></span><br><span class="line">            tr[now].data = tr[nd].data;</span><br><span class="line">            <span class="built_in">Delete</span>(tr[now].left, tr[nd].key); <span class="comment">// 递归删除最大值节点</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(now == <span class="number">-1</span>) <span class="keyword">return</span>;                     <span class="comment">// 如果节点为空，直接返回</span></span><br><span class="line">    <span class="built_in">UpdateHeight</span>(now);                        <span class="comment">// 更新当前节点高度</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">HeightDiff</span>(now) == <span class="number">2</span>) &#123;                <span class="comment">// 如果平衡因子为2</span></span><br><span class="line">        now = <span class="built_in">HeightDiff</span>(tr[now].left) &gt;= <span class="number">0</span> ? <span class="comment">// 判断是LL还是LR型</span></span><br><span class="line">            <span class="built_in">LL</span>(now) : <span class="built_in">LR</span>(now);                <span class="comment">// 进行相应的旋转</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(<span class="built_in">HeightDiff</span>(now) == <span class="number">-2</span>) &#123;          <span class="comment">// 如果平衡因子为-2</span></span><br><span class="line">        now = <span class="built_in">HeightDiff</span>(tr[now].right) &lt;= <span class="number">0</span> ? <span class="comment">// 判断是RR还是RL型</span></span><br><span class="line">            <span class="built_in">RR</span>(now) : <span class="built_in">RL</span>(now);                <span class="comment">// 进行相应的旋转</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="其它各种平衡树简介">其它各种平衡树简介</h2>
+<h3 id="红黑树">红黑树</h3>
+<p>红黑树是一种广泛使用的平衡树,它通过节点的颜色来维持平衡:</p>
+<ol type="1">
+<li>每个节点要么是红色,要么是黑色</li>
+<li>根节点是黑色</li>
+<li>叶子节点(NIL)是黑色</li>
+<li>如果一个节点是红色,则它的子节点必须是黑色</li>
+<li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点</li>
+</ol>
+<p>相比AVL树,红黑树: - 牺牲了部分平衡性来换取更少的旋转操作 -
+插入删除的维护成本更低 - 被广泛应用于标准库实现中(如C++ STL)</p>
+<h3 id="treap">Treap</h3>
+<p>Treap = Tree + Heap,是一种随机化的平衡二叉树:</p>
+<ol type="1">
+<li>每个节点除了键值外还随机分配一个优先级</li>
+<li>按照键值组成二叉搜索树</li>
+<li>按照优先级组成最大堆</li>
+<li>通过旋转操作来维护堆的性质</li>
+<li>期望的高度是O(log n)</li>
+</ol>
+<h3 id="sbt-size-balanced-tree">SBT (Size Balanced Tree)</h3>
+<p>SBT是由ICPC选手陈启峰发明的一种平衡树:</p>
+<ol type="1">
+<li>通过维护子树大小(size)而不是高度来保持平衡</li>
+<li>平衡条件比较简单:较小子树的大小不小于较大子树的子树大小</li>
+<li>实现相对简单,只需要维护size信息</li>
+<li>各种操作的时间复杂度都是O(log n)</li>
+<li>在某些情况下比红黑树更容易实现和维护</li>
+</ol>
+<h3 id="b树和b树">B树和B+树</h3>
+<p>这两种树主要用于数据库和文件系统:</p>
+<ol type="1">
+<li>允许每个节点包含多个键值</li>
+<li>所有叶子节点都在同一层</li>
+<li>B+树的非叶节点只存储键值,数据都存在叶子节点</li>
+<li>特别适合磁盘等外存储器的存储方式</li>
+<li>广泛应用于数据库索引和文件系统中</li>
+</ol>
+<h2 id="伸展树splay">伸展树（Splay）</h2>
+<p>伸展树通过"伸展"操作<strong>将最近访问的节点移动到根节点</strong>，从而保证树的高度在均摊意义下为<span
+class="math inline">\(O(log n)\)</span>。</p>
+<p>传统平衡树的操作，伸展树基本都可以完成，但可能复杂度高一些，非特异需求不建议用伸展树。</p>
+<p>除传统平衡树支持的操作外，伸展树更擅长执行以下操作:</p>
+<ol type="1">
+<li>区间操作：通过将区间两端点伸展到根节点附近，可以方便地进行区间修改和查询</li>
+<li>最近访问优化：由于最近访问的节点会被移动到根部，对于有局部性的访问模式效率更高</li>
+<li>动态统计：可以方便地维护子树信息，适合需要频繁修改和查询统计信息的场景</li>
+<li>序列操作：通过中序遍历性质，可以方便地进行序列的分割、合并等操作</li>
+</ol>
+<p>所以掌握一种传统平衡树（比如AVL或SBT）外，还应当掌握伸展树的使用。</p>
+<h3 id="基本结构">基本结构</h3>
+<p>伸展树的基本结构包含以下信息：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">SplayNode</span> &#123;</span><br><span class="line">    <span class="type">int</span> ch[<span class="number">2</span>];    <span class="comment">// 左右儿子</span></span><br><span class="line">    <span class="type">int</span> fa;       <span class="comment">// 父亲节点</span></span><br><span class="line">    <span class="type">int</span> val;      <span class="comment">// 节点值</span></span><br><span class="line">    <span class="type">int</span> cnt;      <span class="comment">// 值出现次数</span></span><br><span class="line">    <span class="type">int</span> sz;       <span class="comment">// 子树大小</span></span><br><span class="line">    <span class="type">int</span> lz;       <span class="comment">// 懒标记(用于区间操作)</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ch[<span class="number">0</span>] = ch[<span class="number">1</span>] = fa = val = cnt = sz = lz = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">SplayNode</span>() &#123; <span class="built_in">Init</span>(); &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>每个节点需要维护以下信息： - <code>ch[2]</code>：存储左右子节点的编号
+- <code>fa</code>：存储父节点的编号 - <code>val</code>：节点的值 -
+<code>cnt</code>：该值出现的次数 -
+<code>sz</code>：以该节点为根的子树大小 -
+<code>lz</code>：用于区间操作的懒标记</p>
+<h3 id="核心操作">核心操作</h3>
+<h4 id="旋转操作">1. 旋转操作</h4>
+<p>旋转是Splay树的基础操作，用于将一个节点上移一层。旋转操作需要保证：
+1. 不破坏二叉查找树的性质 2. 正确维护父子关系 3. 更新节点信息</p>
+<p>旋转分为两种情况： - 当节点是其父节点的左儿子时，进行右旋 -
+当节点是其父节点的右儿子时，进行左旋</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Rotate</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> y = sn[x].fa, z = sn[y].fa;</span><br><span class="line">    <span class="type">int</span> chk = <span class="built_in">Ws</span>(x);  <span class="comment">// 判断x是y的左儿子还是右儿子</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 更新y的子节点</span></span><br><span class="line">    sn[y].ch[chk] = sn[x].ch[chk ^ <span class="number">1</span>];</span><br><span class="line">    <span class="keyword">if</span>(sn[y].ch[chk]) </span><br><span class="line">        sn[sn[y].ch[chk]].fa = y;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">// 更新x和y的关系</span></span><br><span class="line">    sn[x].ch[chk ^ <span class="number">1</span>] = y;</span><br><span class="line">    sn[y].fa = x;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 更新x和z的关系</span></span><br><span class="line">    sn[x].fa = z;</span><br><span class="line">    <span class="keyword">if</span>(z) </span><br><span class="line">        sn[z].ch[y == sn[z].ch[<span class="number">1</span>]] = x;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">// 维护节点信息</span></span><br><span class="line">    <span class="built_in">Maintain</span>(y);</span><br><span class="line">    <span class="built_in">Maintain</span>(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="伸展操作">2. 伸展操作</h4>
+<p>伸展操作是Splay树的核心，它将一个节点通过一系列旋转移动到根节点。伸展操作分为三种情况：</p>
+<ol type="1">
+<li>zig：当父节点是根节点时，直接旋转</li>
+<li>zig-zig：当节点和父节点都是左儿子或都是右儿子时，先旋转父节点，再旋转当前节点</li>
+<li>zig-zag：当节点和父节点一个是左儿子一个是右儿子时，连续旋转两次当前节点</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Splay</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> target=<span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> y = sn[x].fa; (y = sn[x].fa) != target; <span class="built_in">Rotate</span>(x))</span><br><span class="line">        <span class="keyword">if</span>(sn[y].fa != target) </span><br><span class="line">            <span class="built_in">Rotate</span>(<span class="built_in">Ws</span>(x) == <span class="built_in">Ws</span>(y) ? y : x);</span><br><span class="line">    <span class="keyword">if</span>(!target) rt = x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基本操作">基本操作</h3>
+<h4 id="插入操作">插入操作</h4>
+<p>插入操作的基本步骤： 1. 如果树为空，直接创建新节点作为根节点 2.
+否则，按照二叉查找树的性质找到插入位置 3. 如果找到相同值的节点，增加计数
+4. 否则创建新节点 5. 最后进行伸展操作，将新节点移到根节点</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Insert</span><span class="params">(<span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!rt) &#123;</span><br><span class="line">        rt = <span class="built_in">Add</span>(k);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> cur = rt, f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(sn[cur].val == k) &#123;</span><br><span class="line">            sn[cur].cnt++;</span><br><span class="line">            <span class="built_in">Maintain</span>(cur);</span><br><span class="line">            <span class="built_in">Maintain</span>(f);</span><br><span class="line">            <span class="built_in">Splay</span>(cur);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        f = cur;</span><br><span class="line">        cur = sn[cur].ch[sn[cur].val &lt; k];</span><br><span class="line">        <span class="keyword">if</span>(!cur) &#123;</span><br><span class="line">            <span class="type">int</span> nn = <span class="built_in">Add</span>(k, f);</span><br><span class="line">            <span class="built_in">Splay</span>(nn);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="删除操作">删除操作</h4>
+<p>删除操作的基本步骤：</p>
+<ol type="1">
+<li>首先找到要删除的节点并伸展到根</li>
+<li>如果节点计数大于1，直接减少计数</li>
+<li>如果节点没有子节点，直接删除</li>
+<li>如果节点只有一个子节点，用子节点替代</li>
+<li>如果节点有两个子节点，找到前驱节点替代，然后删除前驱节点</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Del</span><span class="params">(<span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">Rank</span>(k);</span><br><span class="line">    <span class="keyword">if</span>(sn[rt].cnt &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        sn[rt].cnt--;</span><br><span class="line">        <span class="built_in">Maintain</span>(rt);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!sn[rt].ch[<span class="number">0</span>] &amp;&amp; !sn[rt].ch[<span class="number">1</span>]) &#123;</span><br><span class="line">        <span class="built_in">Clear</span>(rt);</span><br><span class="line">        rt = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 处理只有一个子节点的情况</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">1</span>; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(sn[rt].ch[i]) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="type">int</span> cur = rt;</span><br><span class="line">        rt = sn[rt].ch[i ^ <span class="number">1</span>];</span><br><span class="line">        sn[rt].fa = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">Clear</span>(cur);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 处理有两个子节点的情况</span></span><br><span class="line">    <span class="type">int</span> cur = rt, x = <span class="built_in">RtPre</span>();</span><br><span class="line">    sn[sn[cur].ch[<span class="number">1</span>]].fa = x;</span><br><span class="line">    sn[x].ch[<span class="number">1</span>] = sn[cur].ch[<span class="number">1</span>];</span><br><span class="line">    <span class="built_in">Clear</span>(cur);</span><br><span class="line">    <span class="built_in">Maintain</span>(rt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="前驱后继查询">前驱后继查询</h4>
+<p>前驱后继查询的基本步骤： 1. 前驱：找到左子树中的最大值 2.
+后继：找到右子树中的最小值 3. 查询后将节点伸展到根</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">RtPre</span><span class="params">(<span class="type">int</span> cur=<span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!cur) cur = sn[rt].ch[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">else</span> cur = sn[cur].ch[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(!cur) <span class="keyword">return</span> cur;</span><br><span class="line">    <span class="keyword">while</span>(sn[cur].ch[<span class="number">1</span>]) cur = sn[cur].ch[<span class="number">1</span>];</span><br><span class="line">    <span class="built_in">Splay</span>(cur);</span><br><span class="line">    <span class="keyword">return</span> cur;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">RtNxt</span><span class="params">(<span class="type">int</span> cur=<span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!cur) cur = sn[rt].ch[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">else</span> cur = sn[cur].ch[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">if</span>(!cur) <span class="keyword">return</span> cur;</span><br><span class="line">    <span class="keyword">while</span>(sn[cur].ch[<span class="number">0</span>]) cur = sn[cur].ch[<span class="number">0</span>];</span><br><span class="line">    <span class="built_in">Splay</span>(cur);</span><br><span class="line">    <span class="keyword">return</span> cur;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="序列操作">序列操作</h3>
+<p>Splay树也可以用于维护序列信息。与线段树相比，Splay树虽然常数较大，但支持更复杂的序列操作，如区间翻转等。</p>
+<p>将序列建成的Splay树具有以下性质：</p>
+<ol type="1">
+<li>中序遍历相当于原序列从左到右的遍历</li>
+<li>每个节点代表序列中的一个元素</li>
+<li>一棵子树代表序列中的一段区间</li>
+</ol>
+<h4 id="区间操作">区间操作</h4>
+<p>以区间翻转为例，操作步骤如下：</p>
+<ol type="1">
+<li>将区间左端点前一个节点伸展到根</li>
+<li>将区间右端点后一个节点伸展到根的右儿子</li>
+<li>此时根的右儿子的左子树就是目标区间</li>
+<li>对该子树进行翻转操作并打上懒标记</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">DFS</span><span class="params">(<span class="type">int</span> cur, <span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!cur) <span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">PushDown</span>(cur);</span><br><span class="line">    <span class="built_in">DFS</span>(sn[cur].ch[<span class="number">0</span>], k);</span><br><span class="line">    <span class="built_in">DFS</span>(sn[cur].ch[<span class="number">1</span>], k);</span><br><span class="line">    sn[sn[cur].fa].ch[<span class="built_in">Ws</span>(cur)] = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">Maintain</span>(sn[cur].fa);</span><br><span class="line">    tbi.<span class="built_in">push_back</span>(sn[cur].val);</span><br><span class="line">    cct.<span class="built_in">push_back</span>(sn[cur].cnt);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="懒标记管理">懒标记管理</h4>
+<p>对于区间操作，需要维护懒标记：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">PushDown</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x || !sn[x].lz) <span class="keyword">return</span>;</span><br><span class="line">    <span class="built_in">UpdateLz</span>(sn[x].ch[<span class="number">0</span>], sn[x].lz);</span><br><span class="line">    <span class="built_in">UpdateLz</span>(sn[x].ch[<span class="number">1</span>], sn[x].lz);</span><br><span class="line">    sn[x].lz = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">UpdateLz</span><span class="params">(<span class="type">int</span> x, LL lz)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!x) <span class="keyword">return</span>;</span><br><span class="line">    sn[x].lz += lz;</span><br><span class="line">    sn[x].val -= lz;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在访问节点时需要下传标记：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Splay</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> target=<span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; path;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> f = x; f; f = sn[f].fa) path.<span class="built_in">push_back</span>(f);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = path.<span class="built_in">size</span>() - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) <span class="built_in">PushDown</span>(path[i]);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> y; (y = sn[x].fa) != target; <span class="built_in">Rotate</span>(x))</span><br><span class="line">        <span class="keyword">if</span>(sn[y].fa != target) <span class="built_in">Rotate</span>(<span class="built_in">Ws</span>(x) == <span class="built_in">Ws</span>(y) ? y : x);</span><br><span class="line">    <span class="keyword">if</span>(!target) rt = x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="应用示例">应用示例</h4>
+<p>以K小值查询为例，展示了Splay树处理区间操作的能力：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">UpperBound</span><span class="params">(<span class="type">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> lastLager = <span class="number">0</span>, cur = rt;</span><br><span class="line">    <span class="keyword">while</span>(cur) &#123;</span><br><span class="line">        <span class="built_in">PushDown</span>(cur);</span><br><span class="line">        <span class="keyword">if</span>(k &lt; sn[cur].val) &#123;</span><br><span class="line">            lastLager = cur;</span><br><span class="line">            <span class="keyword">if</span>(!sn[cur].ch[<span class="number">0</span>]) <span class="keyword">break</span>;</span><br><span class="line">            cur = sn[cur].ch[<span class="number">0</span>];</span><br><span class="line">        &#125;                </span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span>(!sn[cur].ch[<span class="number">1</span>]) <span class="keyword">break</span>;</span><br><span class="line">            cur = sn[cur].ch[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(sn[cur].val &lt;= k) cur = lastLager;</span><br><span class="line">    <span class="keyword">if</span>(cur) <span class="built_in">Splay</span>(cur);</span><br><span class="line">    <span class="keyword">return</span> cur;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子展示了如何：</p>
+<ol type="1">
+<li>维护区间信息</li>
+<li>处理懒标记</li>
+<li>进行区间查询和修改</li>
+</ol>
+<p>通过这些操作，Splay树可以高效地处理各种序列操作问题。</p>
+<h3 id="时间复杂度">时间复杂度</h3>
+<ul>
+<li>单次操作均摊复杂度：<span class="math inline">\(O(log
+n)\)</span></li>
+<li>空间复杂度：<span class="math inline">\(O(n)\)</span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/" rel="prev" title="31.图论基础2">
+                  <i class="fa fa-angle-left"></i> 31.图论基础2
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-05-21-hydroP4923/" rel="next" title="">
+                   <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

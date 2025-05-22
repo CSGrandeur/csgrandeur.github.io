@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="图论基础2 从网络与流的基本概念出发，讨论最大流问题及其求解算法，包括Ford-Fulkerson方法、Edmonds-Karp算法和Dinic算法。介绍最大流最小割定理，以及费用流问题和二分图匹配问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="31.图论基础2">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="图论基础2 从网络与流的基本概念出发，讨论最大流问题及其求解算法，包括Ford-Fulkerson方法、Edmonds-Karp算法和Dinic算法。介绍最大流最小割定理，以及费用流问题和二分图匹配问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%B5%81%E7%BD%91%E7%BB%9C%E7%A4%BA%E4%BE%8B.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%B5%81%E7%9A%84%E5%AE%9A%E4%B9%89%E7%A4%BA%E4%BE%8B.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E5%A4%9A%E4%B8%AA%E6%BA%90%E7%82%B9%E6%B1%87%E7%82%B9%E7%9A%84%E8%BD%AC%E6%8D%A2.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%AE%8B%E5%AD%98%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%A2%9E%E5%B9%BF%E8%B7%AF.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/EK%E7%AE%97%E6%B3%95%E7%A4%BA%E6%84%8F.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/ek.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/dinic%E5%88%86%E5%B1%82%E5%9B%BE.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/dinic.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/arc_opt.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E5%89%B2.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%8B%86%E7%82%B9.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E8%B4%9F%E5%9B%9E%E8%B7%AF%E7%AE%97%E6%B3%95.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95-%E5%88%86%E5%B1%82%E5%9B%BE.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95-%E6%8E%A8%E6%B5%81.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95-%E4%B8%BB%E5%BE%AA%E7%8E%AF.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E4%BA%8C%E5%88%86%E5%9B%BE.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E4%BA%8C%E5%88%86%E5%9B%BE-%E4%BA%A4%E9%94%99%E8%B7%AF%E5%BE%84.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E4%BA%8C%E5%88%86%E5%9B%BE-%E5%BC%82%E6%88%96%E5%A2%9E%E5%B9%BF.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/bigraph_flow.gif">
+<meta property="article:published_time" content="2025-05-14T01:27:01.000Z">
+<meta property="article:modified_time" content="2025-05-21T02:10:04.424Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%B5%81%E7%BD%91%E7%BB%9C%E7%A4%BA%E4%BE%8B.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/","path":"2025-05-14-31-图论基础2/","title":"31.图论基础2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>31.图论基础2 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802"><span class="nav-number">1.</span> <span class="nav-text">图论基础2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%B5%81"><span class="nav-number">1.1.</span> <span class="nav-text">网络与流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E6%B5%81"><span class="nav-number">1.2.</span> <span class="nav-text">最大流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ford-fulkerson-%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.1.</span> <span class="nav-text">Ford-Fulkerson 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#edmonds-karp%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">Edmonds-Karp算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dinic%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.3.</span> <span class="nav-text">Dinic算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%A4%A7%E6%B5%81%E6%9C%80%E5%B0%8F%E5%89%B2%E5%AE%9A%E7%90%86"><span class="nav-number">1.2.4.</span> <span class="nav-text">最大流最小割定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E6%9C%80%E5%B0%8F%E5%89%B2%E7%82%B9"><span class="nav-number">1.2.5.</span> <span class="nav-text">例：最小割点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E7%94%A8%E6%B5%81"><span class="nav-number">1.3.</span> <span class="nav-text">费用流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B4%9F%E5%9C%88"><span class="nav-number">1.3.1.</span> <span class="nav-text">负圈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E8%B4%9F%E5%9B%9E%E8%B7%AF%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">最小费用流-负回路算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95"><span class="nav-number">1.3.3.</span> <span class="nav-text">最小费用流-最短路径算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E5%9B%BE%E5%8C%B9%E9%85%8D"><span class="nav-number">1.3.4.</span> <span class="nav-text">二分图匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%88%86%E5%9B%BE%E6%9C%80%E5%A4%A7%E5%8C%B9%E9%85%8D%E4%B8%8E%E6%9C%80%E5%A4%A7%E6%B5%81"><span class="nav-number">1.3.5.</span> <span class="nav-text">二分图最大匹配与最大流</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="31.图论基础2 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          31.图论基础2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-05-14 09:27:01" itemprop="dateCreated datePublished" datetime="2025-05-14T09:27:01+08:00">2025-05-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-21 10:10:04" itemprop="dateModified" datetime="2025-05-21T10:10:04+08:00">2025-05-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="图论基础2">图论基础2</h1>
+<p>从网络与流的基本概念出发，讨论最大流问题及其求解算法，包括Ford-Fulkerson方法、Edmonds-Karp算法和Dinic算法。介绍最大流最小割定理，以及费用流问题和二分图匹配问题。</p>
+<span id="more"></span>
+<h2 id="网络与流">网络与流</h2>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%B5%81%E7%BD%91%E7%BB%9C%E7%A4%BA%E4%BE%8B.svg" class="">
+<p>网络（流网络，Flow Network）定义：</p>
+<ul>
+<li>有向图 <span class="math inline">\(G=(V,E)\)</span></li>
+<li>每条边 <span class="math inline">\((u,v)\in E\)</span> 有权值 <span
+class="math inline">\(c(u,v)\)</span> 表示容量（物料的最大流速）</li>
+<li><span class="math inline">\((u,v)\notin E\)</span> 时 <span
+class="math inline">\(c(u,v)=0\)</span></li>
+<li>有两个特殊的点：源点 <span class="math inline">\(s\in
+V\)</span>，汇点 <span class="math inline">\(t\in V\)</span></li>
+</ul>
+<p>其实就是有向图。</p>
+<p>流：<span class="math inline">\(f(u,v)\)</span> 定义在 <span
+class="math inline">\((u\in V, v\in V)\)</span> 上的实数函数且满足：</p>
+<ul>
+<li>容量限制：<span class="math inline">\(f(u,v)\leq c(u,v)\)</span>
+&gt; 每条边流量不能超过容量</li>
+<li>流量守恒：<span class="math inline">\(\forall u\in
+V-\{s,t\}\)</span> 有 <span class="math inline">\(\sum_{v\in
+V}f(v,u)=\sum_{u\in V}f(u,v)\)</span> &gt; 源点<span
+class="math inline">\(s\)</span>流出多少，最终都一定全部流入汇点<span
+class="math inline">\(t\)</span></li>
+<li>除源点 <span class="math inline">\(s\)</span> 和汇点 <span
+class="math inline">\(t\)</span> 外，流入节点的总量等于节点流出的总量
+&gt; 除源点和汇点外，每个点流入多少就必须流出多少，不会“囤积”</li>
+<li>"流"的流量：<span class="math inline">\(|f|=\sum_{v\in
+V}f(s,v)-\sum_{v\in V}f(v,s)\)</span> &gt; 源点<span
+class="math inline">\(s\)</span>总共流出了多少，或者说汇点<span
+class="math inline">\(t\)</span>总共流入了多少</li>
+</ul>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%B5%81%E7%9A%84%E5%AE%9A%E4%B9%89%E7%A4%BA%E4%BE%8B.svg" class="">
+<p>多个源点汇点的网络，可以添加超级源点与超级汇点，转换为常规的流网络</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E5%A4%9A%E4%B8%AA%E6%BA%90%E7%82%B9%E6%B1%87%E7%82%B9%E7%9A%84%E8%BD%AC%E6%8D%A2.svg" class="">
+<h2 id="最大流">最大流</h2>
+<p>最大流：流网络中符合流的限制条件的 <span
+class="math inline">\(|f|\)</span> 最大的流 <span
+class="math inline">\(f\)</span></p>
+<p>最大流也是一个线性规划问题：</p>
+<p><span class="math inline">\(\max |f| = \sum_{v\in V}f(s,v) -
+\sum_{v\in V}f(v,s)\)</span></p>
+<p>s.t. <span class="math inline">\(f(i,j) \leq c(i,j)\)</span>, <span
+class="math inline">\((i,j)\in E\)</span></p>
+<p><span class="math inline">\(\sum_{j\in V}f(i,j) = \sum_{j\in
+V}f(j,i)\)</span>, <span class="math inline">\(i\in
+V-\{s,t\}\)</span></p>
+<p><span class="math inline">\(f(i,j) \geq 0\)</span>, <span
+class="math inline">\((i,j)\in E\)</span></p>
+<p><span class="math inline">\(|f| \geq 0\)</span></p>
+<p>求解线性规划的算法可以解最大流，不过最大流有更有效的方法</p>
+<h3 id="ford-fulkerson-方法">Ford-Fulkerson 方法</h3>
+<p>"方法"而不是"算法"：Ford-Fulkerson有不同的实现方式</p>
+<p>先做一个预设：让<span
+class="math inline">\(f(u,v)=-f(v,u)\)</span>，<strong>即<span
+class="math inline">\(u\)</span>流向<span
+class="math inline">\(v\)</span>的流量，可以抽象地看作有有个<span
+class="math inline">\(v\)</span>流向<span
+class="math inline">\(u\)</span>的负流量</strong>。</p>
+<ul>
+<li>残存网络：<span
+class="math inline">\(c_f(u,v)=c(u,v)-f(u,v)\)</span> &gt;
+每条边还能增加多少流量</li>
+<li>增广路：残存网络中<span class="math inline">\(s\)</span>到<span
+class="math inline">\(t\)</span>的简单路径 &gt; 沿着能增加流量的边，从
+<span class="math inline">\(s\)</span> 走到 <span
+class="math inline">\(t\)</span>
+的路径，说明这条路径整体可以增加流量</li>
+<li>残存容量：增广路上能加推的最大流量 &gt;
+这条增广路必然有个边能增加的流量最小，是瓶颈，导致整条路径最多只能增加这么多流量</li>
+<li>抵消操作：增广路加推流量时，部分边撤回的原流量 &gt; 把一个边 <span
+class="math inline">\(A\rightarrow B\)</span>
+的流量“撤回去”，相当于反向边 <span class="math inline">\(B \rightarrow
+A\)</span> 的流量增加了</li>
+</ul>
+<p>如果残存网络不包含增广路径，那么就无法增加流了，说明已得到最大流</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%AE%8B%E5%AD%98%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%A2%9E%E5%B9%BF%E8%B7%AF.svg" class="">
+<p>算法设计思路：不断寻找增广路</p>
+<h3 id="edmonds-karp算法">Edmonds-Karp算法</h3>
+<ol type="1">
+<li>从<span class="math inline">\(s\)</span>出发 BFS 找到<span
+class="math inline">\(t\)</span>，得到增广路<span
+class="math inline">\(p\)</span></li>
+<li>计算路径各边在残存网络的最小值<span
+class="math inline">\(\delta\)</span></li>
+<li>给<span class="math inline">\(p\)</span>的每条边加上<span
+class="math inline">\(\delta\)</span>的流量</li>
+<li>重复1~4，直到没有增广路</li>
+</ol>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/EK%E7%AE%97%E6%B3%95%E7%A4%BA%E6%84%8F.svg" class="">
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/ek.gif" class="">
+<h3 id="dinic算法">Dinic算法</h3>
+<p>对残存网络分层：</p>
+<p>用BFS根据各节点到 <span class="math inline">\(s\)</span>
+的距离分层，得到残存网络的分层图</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/dinic%E5%88%86%E5%B1%82%E5%9B%BE.svg" class="">
+<p>分析：</p>
+<ol type="1">
+<li>每次基于BFS的分层网络推流，只会沿着从s到t的最短路径推流。这是因为BFS分层保证了每个节点的层数就是其到源点s的最短距离。</li>
+<li>当一轮推流结束后，原来的最短路径必然会被"堵死"（至少有一条边的残余容量变为0）。否则还可以继续在这条路径上推流，与"一轮结束"矛盾。</li>
+<li>因此下一轮BFS时，s到t的最短路径长度一定会增加。这是因为:
+<ul>
+<li>原来的最短路径已经不存在于残存网络中</li>
+<li>新的最短路径必然要绕过"堵死"的边，所以路径会更长</li>
+</ul></li>
+<li>由于图中s到t的路径长度不可能超过节点数n，且每轮至少增加1，所以:
+<ul>
+<li>最短路径长度从1开始增长</li>
+<li>最多增长到n-1就会终止</li>
+<li>总轮数不超过n-1轮</li>
+</ul></li>
+<li>这保证了算法在有限步内一定会终止，且找到最大流</li>
+</ol>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/dinic.gif" class="">
+<p>参考代码</p>
+<p>前向星建图</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> fst[maxn];  <span class="comment">// 每个顶点发出的边的边链表头节点，可初始化为 -1 表示每个顶点都还没有边</span></span><br><span class="line"><span class="type">int</span> nex[maxm];  <span class="comment">// 同个顶点发出的边的边节点 next 域</span></span><br><span class="line"><span class="type">int</span> v[maxm];    <span class="comment">// 边的收入顶点</span></span><br><span class="line"><span class="type">int</span> cap[maxm];  <span class="comment">// 边的容量，同时用作残存网络计算</span></span><br><span class="line"><span class="type">int</span> tp;         <span class="comment">// 分配“内存”的模拟游标</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AddEdge</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> w)</span> </span>&#123;</span><br><span class="line">    v[tp] = b;          <span class="comment">// 边tp的收入点是b</span></span><br><span class="line">    cap[tp] = w;        <span class="comment">// 容量是w</span></span><br><span class="line">    nex[tp] = fst[a];   <span class="comment">// 头插法为顶点a的边链表插入tp这条边</span></span><br><span class="line">    fst[a] = tp ++;     <span class="comment">// 新增边的游标为tp，之后让tp指向“下一块内存”</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">DbEdge</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> w)</span></span>&#123;</span><br><span class="line">    <span class="built_in">AddEdge</span>(a, b, w);   <span class="comment">// 添加正向边</span></span><br><span class="line">    <span class="built_in">AddEdge</span>(b, a, <span class="number">0</span>);   <span class="comment">// 反向边容量为0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>BFS 建立分层网络</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> ly[maxn], work[maxn], n, m, so, te;</span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">DiBFS</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    queue&lt;<span class="type">int</span>&gt; q; <span class="built_in">memset</span>(ly, <span class="number">-1</span>, <span class="built_in">sizeof</span>(ly));   <span class="comment">// 初始化各节点的层</span></span><br><span class="line">    q.<span class="built_in">push</span>(so); ly[so] = <span class="number">0</span>;                     <span class="comment">// 源点入队，层为0</span></span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()) &#123;                         <span class="comment">// 开始BFS</span></span><br><span class="line">        <span class="type">int</span> now = q.<span class="built_in">front</span>(); q.<span class="built_in">pop</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = fst[now]; i != <span class="number">-1</span>; i = nex[i]) &#123;    <span class="comment">// 枚举当前点发出的边</span></span><br><span class="line">            <span class="keyword">if</span>(ly[v[i]] &gt;= <span class="number">0</span> || !cap[i]) <span class="keyword">continue</span>;      <span class="comment">// 该边收入点已分层或无容量跳过</span></span><br><span class="line">            ly[v[i]] = ly[now] + <span class="number">1</span>;                     <span class="comment">// 该边收入点为下一层</span></span><br><span class="line">            <span class="keyword">if</span>(v[i] == te) <span class="keyword">return</span> <span class="literal">true</span>;                 <span class="comment">// 找到汇点可以结束</span></span><br><span class="line">            q.<span class="built_in">push</span>(v[i]);                               <span class="comment">// 收入点入队继续BFS</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>单次DFS推流</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">DiDFS</span><span class="params">(<span class="type">int</span> cur, <span class="type">int</span> inc)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> tinc;</span><br><span class="line">    <span class="keyword">if</span>(cur == te) <span class="keyword">return</span> inc;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> &amp;i = work[cur]; i != <span class="number">-1</span>; i = nex[i]) &#123;      <span class="comment">// 遍历cur发出的边，游标work不重置</span></span><br><span class="line">        <span class="keyword">if</span>(cap[i] &amp;&amp; ly[v[i]] == ly[cur] + <span class="number">1</span> &amp;&amp;         <span class="comment">// 只沿着层增加方向</span></span><br><span class="line">            (tinc = <span class="built_in">DiDFS</span>(v[i], <span class="built_in">min</span>(inc, cap[i]))))&#123;    <span class="comment">// 取路径上最小容量</span></span><br><span class="line">            cap[i] -= tinc;         <span class="comment">// 正向边残存网络容量减小</span></span><br><span class="line">            cap[i ^ <span class="number">1</span>] += tinc;     <span class="comment">// 反向边残存网络容量增加</span></span><br><span class="line">            <span class="keyword">return</span> tinc;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用DFS推流在分层图上反复推流直到断开</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">Dinic</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>, tinc;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">DiBFS</span>()) &#123;    <span class="comment">// 计算分层图</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt;= n; i ++) work[i] = fst[i];  <span class="comment">// 初始化工作游标</span></span><br><span class="line">        <span class="keyword">while</span>(tinc = <span class="built_in">DiDFS</span>(so, inf)) ret += tinc;       <span class="comment">// DFS推多次流，游标不重置</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Dinic算法中，work数组实现了<strong>弧优化(arc
+optimization)</strong>，这是一个重要的优化技巧。</p>
+<p>work数组记录了每个节点当前遍历到的边的位置。当一条边被证明无法增广时，下次DFS到达这个节点时就不需要从头开始遍历，而是从上次遍历到的位置继续。</p>
+<ol type="1">
+<li>每次BFS建立分层图后，<code>work[i]</code>被初始化为<code>fst[i]</code>，即每个点的第一条边</li>
+<li>在DFS过程中，如果某条边无法增广，<code>work[i]</code>会自动移动到下一条边</li>
+<li>由于分层图中的流量只能沿着层数增加的方向推送，一旦某条边无法增广，在当前分层图中它就永远无法增广了</li>
+<li>因此不需要在下一次DFS时重新检查这条边，直接从<code>work[i]</code>记录的位置继续即可</li>
+</ol>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/arc_opt.gif" class="">
+<h3 id="最大流最小割定理">最大流最小割定理</h3>
+<p><strong>割(Cut)</strong>:</p>
+<p>将所有点划分为 <span class="math inline">\(S\)</span> 和 <span
+class="math inline">\(V-S\)</span> 两个集合，其中源点 <span
+class="math inline">\(s \in S\)</span>，汇点 <span
+class="math inline">\(t \in T\)</span>。</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E5%89%B2.svg" class="">
+<p><strong>割的容量</strong>:</p>
+<ul>
+<li><span class="math inline">\(c(S,T)\)</span> 表示从集合 <span
+class="math inline">\(S\)</span> 到集合 <span
+class="math inline">\(T\)</span> 的所有边的容量之和</li>
+<li>也可以用 <span class="math inline">\(c(s,t)\)</span> 表示 <span
+class="math inline">\(c(S,T)\)</span></li>
+</ul>
+<p><strong>最小割(Minimum Cut)</strong>:</p>
+<p>求一个割 <span class="math inline">\((S,T)\)</span> 使得割的容量
+<span class="math inline">\(c(S,T)\)</span> 最小</p>
+<p>最小割与最大流的关系可以这样理解:</p>
+<p>想象一个水管系统，从源点 <span class="math inline">\(s\)</span>
+向汇点 <span class="math inline">\(t\)</span>
+输送水，如果要切断水流，必须切断所有从 <span
+class="math inline">\(S\)</span> 到 <span
+class="math inline">\(T\)</span>
+的管道，为了代价最小，我们要找到容量和最小的一组管道切断，这组管道就构成了最小割，而这些管道的容量和，恰好等于系统能输送的最大水流量</p>
+<p>最大流最小割定理即： <strong>最大流的值等于最小割的值</strong></p>
+<h3 id="例最小割点">例：最小割点</h3>
+<p>两台电脑通过一系列诸如交换机、路由器等网络设备通信，只要还有网络设备连通它们，就能互相通信，给定它们的相连关系，至少坏掉几个网络设备，会使这两台电脑无法通信？</p>
+<p>拆点为边，求最小割集</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%8B%86%E7%82%B9.svg" class="">
+<p>拆点建图参考</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 设两个设备编号1和2，其余点输入编号 2~n</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">InP</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123; <span class="keyword">return</span> x * <span class="number">2</span>;&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">OutP</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123; <span class="keyword">return</span> x * <span class="number">2</span> + <span class="number">1</span>;&#125;</span><br><span class="line"><span class="keyword">while</span>(m --) &#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;a, &amp;b);  <span class="comment">// a、b之间有条边</span></span><br><span class="line">    <span class="comment">// 重新编号，把节点 x 拆成两个点，“入点”编号为 x*2，“出点”编号为 x*2+1</span></span><br><span class="line">    <span class="comment">// a*2+1 作为出点，连一条发往入点 b*2 的边，反之同理</span></span><br><span class="line">    <span class="built_in">DbEdge</span>(<span class="built_in">OutP</span>(a), <span class="built_in">InP</span>(b), inf);</span><br><span class="line">    <span class="built_in">DbEdge</span>(<span class="built_in">OutP</span>(b), <span class="built_in">InP</span>(a), inf);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">    <span class="built_in">DbEdge</span>(<span class="built_in">InP</span>(i), <span class="built_in">OutP</span>(i), <span class="number">1</span>); <span class="comment">// 原始节点的“入点”向“出点”设置容量为 1 的边</span></span><br><span class="line">&#125;</span><br><span class="line">so = <span class="number">0</span>; te = (n + <span class="number">1</span>) * <span class="number">2</span>;       <span class="comment">// 新建源点为0，汇点为 (n+1) * 2，确保与现有编号不冲突</span></span><br><span class="line">n = (n + <span class="number">1</span>) * <span class="number">2</span> + <span class="number">1</span>;            <span class="comment">// 把节点数 n 改为实际建的点数</span></span><br><span class="line"><span class="built_in">DbEdge</span>(so, <span class="built_in">InP</span>(<span class="number">1</span>), inf); <span class="built_in">DbEdge</span>(so, <span class="built_in">OutP</span>(<span class="number">1</span>), inf);  <span class="comment">// 用新建的源点把不该拆的设备1的点“短路”</span></span><br><span class="line"><span class="built_in">DbEdge</span>(<span class="built_in">InP</span>(<span class="number">2</span>), te, inf); <span class="built_in">DbEdge</span>(<span class="built_in">OutP</span>(<span class="number">2</span>), te, inf);  <span class="comment">// 用新建的汇点把不该拆的设备2的点“短路”</span></span><br></pre></td></tr></table></figure>
+<p>为什么这样建图有效：</p>
+<ul>
+<li>如果要删除一个节点，就必须切断其入点到出点的边</li>
+<li>这条边的容量为<span
+class="math inline">\(1\)</span>，表示删除这个节点的代价为<span
+class="math inline">\(1\)</span></li>
+<li>其他边的容量为<span
+class="math inline">\(inf\)</span>，表示这些边不能被切断</li>
+<li>最小割就会选择切断最少的入点-出点边，即删除最少的节点</li>
+</ul>
+<h2 id="费用流">费用流</h2>
+<p>费用流是在最大流的基础上，给每条边增加一个费用属性，表示单位流量通过这条边需要付出的代价。</p>
+<p>最小费用最大流问题就是在最大流的基础上，要求总费用最小。</p>
+<h3 id="负圈">负圈</h3>
+<p>一个图中有负数边，如何求最短路？</p>
+<p>——可能没有最短路</p>
+<p>如果存在负数圈，路径长度可以无限变小</p>
+<p>Floyd
+可以判负圈：执行算法求两两最短路，如果一个点到自己的距离为负，则说明有负圈。</p>
+<h3 id="最小费用流-负回路算法">最小费用流-负回路算法</h3>
+<p>在最大流算法的基础上：</p>
+<ul>
+<li>在辅助网络上构造新的可行流<span
+class="math inline">\(f\)</span></li>
+<li>在<span
+class="math inline">\(f\)</span>上寻找费用为负数的圈（用Floyd），由流量守恒知，圈的流量为<span
+class="math inline">\(0\)</span></li>
+<li>在原流上不断叠加费用为负的圈，则总流量不变，总费用减少</li>
+<li>重复<span class="math inline">\(1\sim
+3\)</span>直到找不到费用为负的圈为止</li>
+</ul>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E8%B4%9F%E5%9B%9E%E8%B7%AF%E7%AE%97%E6%B3%95.svg" class="">
+<h3 id="最小费用流-最短路径算法">最小费用流-最短路径算法</h3>
+<p>不断通过<strong>费用最小的</strong>增广路增加流</p>
+<p>该算法有多种实现形式，这里掌握一个类Dinic的写法</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95-%E5%88%86%E5%B1%82%E5%9B%BE.svg" class="">
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95-%E6%8E%A8%E6%B5%81.svg" class="">
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E6%9C%80%E5%B0%8F%E8%B4%B9%E7%94%A8%E6%B5%81-%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E7%AE%97%E6%B3%95-%E4%B8%BB%E5%BE%AA%E7%8E%AF.svg" class="">
+<h3 id="二分图匹配">二分图匹配</h3>
+<p>设有4个申请读研的学生(<span
+class="math inline">\(S_i\)</span>)与4位导师(<span
+class="math inline">\(T_i\)</span>)：</p>
+<p>每个导师最多只能招收1名学生，每个学生也只能跟随1名导师，下图的边表示学生想要申请的导师</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E4%BA%8C%E5%88%86%E5%9B%BE.svg" class="">
+<p>如何分配学生与导师的对应关系，能够满足最多学生的志愿</p>
+<p>匈牙利算法</p>
+<p>假设我们已经找到了一些学生和导师的配对关系,我们把这些配对关系称为"匹配"。</p>
+<p>在所有的连线中:</p>
+<ul>
+<li>已经配对的连线称为"匹配边"</li>
+<li>还没有配对的连线称为"非匹配边"</li>
+<li>已经配对的学生和导师称为"饱和点"</li>
+</ul>
+<p>如果我们沿着匹配边和非匹配边交替走,形成的路径就叫"交错路径"。</p>
+<p>特别地,如果一条交错路径的起点和终点都是还没有配对的学生或导师(即非饱和点),我们就把这条路径叫做"增广交错路径"。</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E4%BA%8C%E5%88%86%E5%9B%BE-%E4%BA%A4%E9%94%99%E8%B7%AF%E5%BE%84.svg" class="">
+<p>一个重要的性质:</p>
+<p>如果我们找到了一条增广交错路径P,那么可以通过这条路径来增加匹配数:</p>
+<ul>
+<li>把路径P上的非匹配边变成匹配边</li>
+<li>把路径P上的匹配边变成非匹配边</li>
+</ul>
+<p>这样操作后: 1. 得到的新的边集合仍然是一个合法的匹配 2.
+新的匹配比原来的匹配多了一条边</p>
+<p>这就说明,每找到一条增广交错路径,就能让匹配数增加1。</p>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/%E4%BA%8C%E5%88%86%E5%9B%BE-%E5%BC%82%E6%88%96%E5%A2%9E%E5%B9%BF.svg" class="">
+<p>匈牙利算法的具体步骤如下:</p>
+<ol type="1">
+<li>先随便找一些配对关系作为初始匹配</li>
+<li>重复以下步骤:
+<ul>
+<li>寻找一条增广交错路径</li>
+<li>如果找到了,就沿着这条路径,把匹配边变成非匹配边,非匹配边变成匹配边</li>
+<li>如果找不到增广交错路径了,算法结束</li>
+</ul></li>
+<li>此时得到的就是最大匹配</li>
+</ol>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">SearchPath</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;                <span class="comment">// DFS寻找增广交错路线</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> v = <span class="number">1</span>; v &lt;= yN; ++ v) &#123;</span><br><span class="line">        <span class="keyword">if</span>(g[u][v] &amp;&amp; !chk[v]) &#123;        <span class="comment">// u-&gt;v 有边且 v 尚未搜索</span></span><br><span class="line">            chk[v] = <span class="literal">true</span>;              <span class="comment">// 标记搜索</span></span><br><span class="line">            <span class="keyword">if</span>(yM[v] == <span class="number">-1</span> || <span class="built_in">SearchPath</span>(yM[v]))&#123;</span><br><span class="line">                <span class="comment">// v 尚未匹配，或者 v 已匹配且沿着 v 的匹配对象找到增广交错路线</span></span><br><span class="line">                yM[v] = u, xM[u] = v;   <span class="comment">// 将 v 与 u 匹配，即执行交错路线的“异或”操作</span></span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;            <span class="comment">// 表示找到增广交错路线</span></span><br><span class="line">            &#125;    </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;                       <span class="comment">// 没找到增广交错路线</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Hungarian</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(xM, <span class="number">-1</span>, <span class="built_in">sizeof</span>(xM));         <span class="comment">// 初始化匹配对象为空</span></span><br><span class="line">    <span class="built_in">memset</span>(yM, <span class="number">-1</span>, <span class="built_in">sizeof</span>(yM));         <span class="comment">// 初始化匹配对象为空</span></span><br><span class="line">    <span class="type">int</span> ret = <span class="number">0</span>;                        <span class="comment">// 初始化匹配数</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> u = <span class="number">1</span>; u &lt;= xN; u ++) &#123;     <span class="comment">// 考察 x 这一边的每个点</span></span><br><span class="line">        <span class="keyword">if</span>(xM[u] == <span class="number">-1</span>) &#123;               <span class="comment">// 如果 u 没有匹配对象，尝试从 u 出发搜索</span></span><br><span class="line">            <span class="built_in">memset</span>(chk, <span class="literal">false</span>, <span class="built_in">sizeof</span>(chk));    <span class="comment">// 初始化DFS标记</span></span><br><span class="line">            ret += <span class="built_in">SearchPath</span>(u);       <span class="comment">// 如果找到增广交错路线，则匹配总数 +1</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="二分图最大匹配与最大流">二分图最大匹配与最大流</h3>
+<p>二分图的最大匹配问题可以转化为最大流问题来求解。具体做法是:</p>
+<ol type="1">
+<li>添加一个源点s和汇点t</li>
+<li>从源点s向二分图左边所有点连边,容量为1</li>
+<li>从二分图右边所有点向汇点t连边,容量为1</li>
+<li>原二分图中的边改为从左向右的有向边,容量为1</li>
+</ol>
+<p>这样构造出的网络流模型中,最大流的值就等于原二分图的最大匹配数。因为:</p>
+<ul>
+<li>每条边容量为1,表示每个点最多只能匹配一次</li>
+<li>从s到t的一条流量为1的路径,对应了二分图中的一个匹配</li>
+</ul>
+<img src="/2025-05-14-31-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%802/bigraph_flow.gif" class="">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-05-08-30-%E5%9B%BE%E8%AE%BA%E5%9F%BA%E7%A1%801/" rel="prev" title="30.图论基础1">
+                  <i class="fa fa-angle-left"></i> 30.图论基础1
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/" rel="next" title="32.平衡树">
+                  32.平衡树 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
