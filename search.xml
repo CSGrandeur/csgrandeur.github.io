@@ -10794,6 +10794,40 @@ class="math inline">\(K-Dimensional\)</span>——K-D树</p>
 <p>参考模板：<a
 href="https://github.com/CSGrandeur/icpc_solution/blob/master/templates/DataStructure.md#kd%E6%A0%91">icpc_solution/DataStructure.md
 at master · CSGrandeur/icpc_solution · GitHub</a></p>
+<h3 id="例k远点">例：k远点</h3>
+<p>平面上有 <span class="math inline">\(n\)</span> 个点。现在有 <span
+class="math inline">\(m\)</span> 次询问，每次给定一个点 <span
+class="math inline">\((px,py)\)</span> 和一个整数 <span
+class="math inline">\(k\)</span>，输出 <span
+class="math inline">\(n\)</span> 个点中离 <span
+class="math inline">\((px,py)\)</span> 的距离第 <span
+class="math inline">\(k\)</span> 大的点的标号。如果有两个(或多个)点距离
+<span class="math inline">\((px,py)\)</span>
+相同，那么认为标号较小的点距离较大。</p>
+<p><span class="math inline">\(1 \leq k \leq 20\)</span></p>
+<p>分析：</p>
+<ul>
+<li>第 <span class="math inline">\(k\)</span> 远的点，就是从远到近的第
+<span class="math inline">\(k\)</span> 个，<span
+class="math inline">\(k\)</span>范围不大。</li>
+<li>KD树中每个节点都是一个具体的点，这个点的两个子树对应从它劈开（或横或竖）后的两个矩形区域</li>
+<li>开一个小根堆（优先队列），并开始对树回溯（搜索）</li>
+<li>每访问一个点，将其与堆顶比较，大就进堆，且保持堆里不超过 k
+个元素</li>
+<li>对于左右子树，优先访问子树的矩形距离目标点更远的那个</li>
+<li>如果堆里有k个元素，此时一棵子树的矩形距离比堆顶还近，那这课子树不用搜（分支限界/剪枝）</li>
+</ul>
+<p>发散：k近点问题思路类似</p>
+<h3 id="例平面统计">例：平面统计</h3>
+<p>多次操作，对整数坐标位置加数字或者求某个矩形区域的数字和</p>
+<ul>
+<li>每个节点对应一个矩形区域</li>
+<li>这个矩形区域被它横或竖分成两半</li>
+<li>该节点“掌管”一棵子树</li>
+</ul>
+<p>在节点维护子树元素个数，某个坐标增加数值，就是节点的插入或更新</p>
+<p>统计操作类似线段树——全覆盖（要统计的矩形覆盖了子树的矩形）就子树的统计值返回，部分覆盖就递归进入子树。</p>
+<p>思考：KD树的平衡问题。必要时可以通过平衡因子判断后对整棵子树离线重构。重构而不是像平衡树那样旋转是因为KD树没法那样旋转……</p>
 ]]></content>
       <categories>
         <category>ACM</category>
