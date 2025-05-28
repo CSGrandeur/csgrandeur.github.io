@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="范围统计 树状数组、线段树、KD树。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="33.范围统计">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="范围统计 树状数组、线段树、KD树。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E7%A4%BA%E4%BE%8B.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E5%89%8D%E7%BC%80%E5%92%8C.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E5%8D%95%E7%82%B9%E4%BF%AE%E6%94%B9.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84_%E6%A0%91%E7%9A%84%E9%80%BB%E8%BE%91.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E8%A6%86%E7%9B%96%E5%8C%BA%E9%97%B4%E7%9A%84%E6%83%85%E5%86%B5.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E9%83%A8%E5%88%86%E9%87%8D%E5%8F%A0%E7%9A%84%E6%83%85%E5%86%B5.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E8%A6%86%E7%9B%96%E5%8C%BA%E9%97%B4%E7%9A%84%E6%83%85%E5%86%B5.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E6%9F%A5%E8%AF%A2%E5%8C%BA%E9%97%B4%E5%9C%A8%E8%8A%82%E7%82%B9%E5%8C%BA%E9%97%B4%E5%86%85.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E6%87%92%E6%A0%87%E8%AE%B0.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E6%87%92%E6%A0%87%E8%AE%B0%E4%B8%8B%E4%BC%A0.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/KD%E6%A0%91_%E6%B0%B4%E5%B9%B3%E5%88%92%E5%88%86.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/KD%E6%A0%91_%E6%B0%B4%E5%B9%B3%E7%AB%96%E7%9B%B4%E7%BB%93%E5%90%88.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/KD%E6%A0%91_%E7%94%A8%E6%96%B9%E5%B7%AE%E5%86%B3%E5%AE%9A%E5%88%92%E5%88%86%E6%96%B9%E5%90%91.svg">
+<meta property="article:published_time" content="2025-05-23T08:28:00.000Z">
+<meta property="article:modified_time" content="2025-05-28T08:16:16.963Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E7%A4%BA%E4%BE%8B.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/","path":"2025-05-23-33-范围统计/","title":"33.范围统计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>33.范围统计 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">范围统计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%9A%84%E5%8C%BA%E9%97%B4%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">基本的区间统计问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.1.</span> <span class="nav-text">区间查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%82%B9%E4%BF%AE%E6%94%B9%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.2.</span> <span class="nav-text">单点修改+区间查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84"><span class="nav-number">1.2.</span> <span class="nav-text">树状数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E6%AE%B5%E6%A0%91"><span class="nav-number">1.3.</span> <span class="nav-text">线段树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%95%B0%E7%BB%84%E4%B9%8B%E4%B8%8A%E5%86%8D%E5%BB%BA%E4%B8%80%E6%A3%B5%E6%A0%91"><span class="nav-number">1.3.1.</span> <span class="nav-text">在数组之上再建一棵树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%82%B9%E4%BF%AE%E6%94%B9%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">单点修改+区间查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8C%BA%E9%97%B4%E4%BF%AE%E6%94%B9"><span class="nav-number">1.3.3.</span> <span class="nav-text">区间修改</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k-d%E6%A0%91"><span class="nav-number">1.4.</span> <span class="nav-text">K-D树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E7%BB%B4%E5%B9%B3%E9%9D%A2%E7%82%B9%E4%B8%AA%E6%95%B0%E7%BB%9F%E8%AE%A1"><span class="nav-number">1.4.1.</span> <span class="nav-text">二维平面点个数统计</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="33.范围统计 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          33.范围统计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-05-23 16:28:00" itemprop="dateCreated datePublished" datetime="2025-05-23T16:28:00+08:00">2025-05-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-28 16:16:16" itemprop="dateModified" datetime="2025-05-28T16:16:16+08:00">2025-05-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="范围统计">范围统计</h1>
+<p>树状数组、线段树、KD树。</p>
+<span id="more"></span>
+<h2 id="基本的区间统计问题">基本的区间统计问题</h2>
+<h3 id="区间查询">区间查询</h3>
+<p>给定 <span class="math inline">\(n\)</span> 个数以及 <span
+class="math inline">\(m\)</span> 组 <span class="math inline">\(a,
+b\)</span>（其中 <span class="math inline">\(a&gt;0\)</span> 且 <span
+class="math inline">\(b&gt;0\)</span>），我们需要计算序号在区间 <span
+class="math inline">\([a,b]\)</span> 的数值的和 <span
+class="math inline">\(sum(a,b)\)</span>。例如，<span
+class="math inline">\(sum(1,1)=15\)</span>，<span
+class="math inline">\(sum(5,8)=36\)</span>。</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E7%A4%BA%E4%BE%8B.svg" class="">
+<p>为了解决这个问题，我们可以使用前缀和的方法。定义 <span
+class="math inline">\(pre(a)=sum(1,a)\)</span>，那么 <span
+class="math inline">\(sum(a,b)=pre(b)-pre(a-1)\)</span>。例如，<span
+class="math inline">\(sum(5,8)=pre(8)-pre(4)=95-59=36\)</span>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) pre[i] = pre[i - <span class="number">1</span>] + c[i];</span><br></pre></td></tr></table></figure>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E5%89%8D%E7%BC%80%E5%92%8C.svg" class="">
+<h3 id="单点修改区间查询">单点修改+区间查询</h3>
+<p>给定 <span class="math inline">\(n\)</span> 个数以及 <span
+class="math inline">\(m\)</span> 组操作，每组操作是以下两种之一：</p>
+<ul>
+<li>操作1：<span class="math inline">\(1,x,a\)</span>，将序号为 <span
+class="math inline">\(x\)</span> 位置的数值加 <span
+class="math inline">\(a\)</span></li>
+<li>操作2：<span class="math inline">\(2,a,b\)</span>，求序号在区间
+<span class="math inline">\([a,b]\)</span> 的数值的和 <span
+class="math inline">\(sum(a,b)\)</span></li>
+</ul>
+<p>例如，输入 <span class="math inline">\(1,6,9; 2,5,8\)</span>，输出
+<span class="math inline">\(18+10+8+9=45\)</span>。</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E5%8C%BA%E9%97%B4_%E5%8D%95%E7%82%B9%E4%BF%AE%E6%94%B9.svg" class="">
+<h2 id="树状数组">树状数组</h2>
+<p>前缀和方法存在以下不足：</p>
+<ul>
+<li>每个序号“管理”整个前缀，涉及“下属”过多</li>
+<li>每个序号被后续序号“管理”，更新要“汇报”的“上级”过多</li>
+</ul>
+<p>改进思路是减少每个序号的“下级”与“上级”。我们采用以2的幂为单位的分级“管辖”方案：</p>
+
+<p>“管辖”方案：以2的幂为单位分级：</p>
+<ul>
+<li>“一级”：1,2归2管，3,4归4管，5,6归6管，7,8归8管……</li>
+<li>“二级”：4要额外管理1<sub>2，所以2是4的直接下级，4是1</sub>4的前缀和</li>
+<li>“三级”：8要额外管理1<sub>4、5</sub>6，所以4、6也是8的直接下级</li>
+<li>……</li>
+</ul>
+<p>树状数组实际上是在数组中存储了一棵树的逻辑结构：</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E6%A0%91%E7%8A%B6%E6%95%B0%E7%BB%84_%E6%A0%91%E7%9A%84%E9%80%BB%E8%BE%91.svg" class="">
+<p>快速寻找直接“上级”的方法：</p>
+<ul>
+<li>5(101)的上级是6(110)</li>
+<li>4(100)的上级是8(1000)</li>
+<li>6(110)的上级是8(1000)</li>
+</ul>
+<p>规律是：最低的为“1”的二进制位+1。</p>
+<p>求 <span class="math inline">\(x\)</span> 的最低的为“1”的二进制位
+<span class="math inline">\(lowbit\)</span>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">Lowbit</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;<span class="keyword">return</span> x &amp; -x;&#125;</span><br></pre></td></tr></table></figure>
+<p>求 <span class="math inline">\(x\)</span> 的上级：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x + <span class="built_in">Lowbit</span>(<span class="type">int</span> x) </span><br></pre></td></tr></table></figure>
+<p>求前缀和：找左侧最大组长</p>
+<ul>
+<li>6(110)的左侧是4(100)——4&lt;6且是最大组长</li>
+<li>7(111)的左侧是6(110)——6&lt;7且是最大组长</li>
+</ul>
+<p>这些区间互不相交，且无遗漏，相加可得前缀和。规律是：最低的为“1”的二进制位−1。</p>
+<p>求 <span class="math inline">\(x\)</span> 的左侧最大组长：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x - <span class="built_in">Lowbit</span>(<span class="type">int</span> x) </span><br></pre></td></tr></table></figure>
+<p>单点修改时，需要逐层告知上级“辖区”内数值变化量：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Update</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(; x &lt; maxn; x += <span class="built_in">Lowbit</span>(x))</span><br><span class="line">        a[x] += v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>前缀和查询时，需要逐个向左侧找最大组长，累加：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">Query</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    LL res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(; x; x -= <span class="built_in">Lowbit</span>(x))</span><br><span class="line">        res += a[x];</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完整代码参考</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e6</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> op, n, q;</span><br><span class="line">LL a[maxn];</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Lowbit</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;<span class="keyword">return</span> x &amp; -x;&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Update</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(; x &lt; maxn; x += <span class="built_in">Lowbit</span>(x))</span><br><span class="line">        a[x] += v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">Query</span><span class="params">(<span class="type">int</span> x)</span> </span>&#123;</span><br><span class="line">    LL res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(; x; x -= <span class="built_in">Lowbit</span>(x))</span><br><span class="line">        res += a[x];</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;q) != EOF) &#123;</span><br><span class="line">        <span class="built_in">memset</span>(a, <span class="number">0</span>, <span class="built_in">sizeof</span>(a));</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i ++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;x);</span><br><span class="line">            <span class="built_in">Update</span>(i, x);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(q --) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;op, &amp;x, &amp;y);</span><br><span class="line">            <span class="keyword">if</span>(op == <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="built_in">Update</span>(x, y);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, <span class="built_in">Query</span>(y) - <span class="built_in">Query</span>(x - <span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>扩展：</p>
+<ul>
+<li>区间最值查询：树状数组无法直接维护区间最值，需结合其他数据结构（如线段树）</li>
+<li>区间统计：支持维护区间特定统计信息（如奇偶性、模余等），需预处理辅助数组</li>
+<li>区间合并/分裂：树状数组无法直接处理区间合并、分裂操作</li>
+<li>区间覆盖：树状数组难以高效实现区间赋值或覆盖操作（需结合懒标记等技巧）</li>
+</ul>
+<p>基于差分的扩展应用：</p>
+<ul>
+<li>区间修改+单点查询：使用差分数组可高效支持，单点查询转化为前缀和计算</li>
+<li>区间修改+区间查询：通过二阶差分与扩展BIT结构，可实现区间和查询</li>
+<li>区间最值修改：树状数组不适合直接支持此类操作，需借助其他结构</li>
+</ul>
+<p>高级扩展结构：</p>
+<ul>
+<li>二维树状数组：支持二维平面的单点修改与矩形和查询</li>
+<li>可持久化树状数组：支持历史版本查询，适用于函数式编程或离线算法</li>
+<li>动态开点树状数组：用于高维稀疏数据，节省内存空间</li>
+<li>树状数组套权值树：解决带权第k大等复杂统计问题</li>
+<li>离线处理：结合莫队算法等，优化多次查询的处理效率</li>
+</ul>
+<h2 id="线段树">线段树</h2>
+<h3 id="在数组之上再建一棵树">在数组之上再建一棵树</h3>
+<p>与树状数组不同，在线段树中，上级节点并不存在于数组中，而是另外建立的节点。这种结构使得我们可以更灵活地处理区间操作。</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91.svg" class="">
+<p>为了便于计算，我们使用左闭右开区间，数组序号从0开始。设根节点覆盖区间为
+<span class="math inline">\([0,n)\)</span>，则左子树为 <span
+class="math inline">\([0,\lfloor n/2 \rfloor)\)</span>，右子树为 <span
+class="math inline">\([\lfloor n/2
+\rfloor,n)\)</span>。可以通过递归操作建树：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">BuildSegTree</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// now: 当前节点； [ls, rs) 左闭右开区间端点</span></span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(ls == rs - <span class="number">1</span>) &#123;<span class="keyword">return</span> sum[now] = a[ls];&#125;</span><br><span class="line">    sum[now] = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    sum[now] += <span class="built_in">BuildSegTree</span>(now &lt;&lt; <span class="number">1</span>, ls, mid);</span><br><span class="line">    sum[now] += <span class="built_in">BuildSegTree</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs);</span><br><span class="line">    <span class="keyword">return</span> sum[now];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="单点修改区间查询-1">单点修改+区间查询</h3>
+<p>所有包含序号 <span class="math inline">\(x\)</span>
+的区间（节点）都要修改</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Update</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, <span class="type">int</span> x, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(ls == rs - <span class="number">1</span>) &#123;sum[now] += v; <span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; mid) <span class="built_in">Update</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, x, v);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">Update</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, v);</span><br><span class="line">    sum[now] += v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>情况1：<span class="math inline">\([x,y)\)</span>包含了 <span
+class="math inline">\(now\)</span> 负责的 <span
+class="math inline">\([ls,rs)\)</span> 区间，则 <span
+class="math inline">\(now\)</span> 区间都计入</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E8%A6%86%E7%9B%96%E5%8C%BA%E9%97%B4%E7%9A%84%E6%83%85%E5%86%B5.svg" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(x &lt;= ls &amp;&amp; y &gt;= rs) <span class="keyword">return</span> sum[now];</span><br></pre></td></tr></table></figure>
+<p>情况2：部分重叠，<span class="math inline">\(y\)</span> 在 <span
+class="math inline">\(mid\)</span> 之右，表示 <span
+class="math inline">\(now\)</span> 的右半部分需要考虑 <span
+class="math inline">\(x\)</span> 在 <span
+class="math inline">\(mid\)</span> 之左同理</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E9%83%A8%E5%88%86%E9%87%8D%E5%8F%A0%E7%9A%84%E6%83%85%E5%86%B5.svg" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(y &gt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, y);</span><br></pre></td></tr></table></figure>
+<p>只对与 <span class="math inline">\([x,y)\)</span>
+有交集的区间（子树）进行递归 <span class="math inline">\([x,y)\)</span>
+覆盖整个区间（子树）时，不再递归直接返回</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">Query</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, <span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt;= ls &amp;&amp; y &gt;= rs) <span class="keyword">return</span> sum[now];</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    LL ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, x, y);</span><br><span class="line">    <span class="keyword">if</span>(y &gt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, y);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdlib&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e6</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> a[maxn];</span><br><span class="line">LL sum[maxn * <span class="number">4</span>];</span><br><span class="line"><span class="function">LL <span class="title">BuildSegTree</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// now: 当前节点； [ls, rs) 左闭右开区间端点</span></span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(ls == rs - <span class="number">1</span>) &#123;<span class="keyword">return</span> sum[now] = a[ls];&#125;</span><br><span class="line">    sum[now] = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    sum[now] += <span class="built_in">BuildSegTree</span>(now &lt;&lt; <span class="number">1</span>, ls, mid);</span><br><span class="line">    sum[now] += <span class="built_in">BuildSegTree</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs);</span><br><span class="line">    <span class="keyword">return</span> sum[now];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Update</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, <span class="type">int</span> x, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(ls == rs - <span class="number">1</span>) &#123;sum[now] += v; <span class="keyword">return</span>;&#125;</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; mid) <span class="built_in">Update</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, x, v);</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">Update</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, v);</span><br><span class="line">    sum[now] += v;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">LL <span class="title">Query</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, <span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt;= ls &amp;&amp; y &gt;= rs) <span class="keyword">return</span> sum[now];</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    LL ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, x, y);</span><br><span class="line">    <span class="keyword">if</span>(y &gt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, y);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> op, x, y, n, q;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;q) != EOF) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++)</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;a[i]);</span><br><span class="line">        <span class="built_in">BuildSegTree</span>(<span class="number">1</span>, <span class="number">0</span>, n);</span><br><span class="line">        <span class="keyword">while</span>(q --) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d%d%d&quot;</span>, &amp;op, &amp;x, &amp;y);</span><br><span class="line">            <span class="keyword">if</span>(op == <span class="number">1</span>) <span class="built_in">Update</span>(<span class="number">1</span>, <span class="number">0</span>, n, x - <span class="number">1</span>, y);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, <span class="built_in">Query</span>(<span class="number">1</span>, <span class="number">0</span>, n, x - <span class="number">1</span>, y));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="区间修改">区间修改</h3>
+<p>思考1：当修改区间包含 <span class="math inline">\(now\)</span>
+区间时，<span class="math inline">\(now\)</span> 区间是否还需要递归</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E8%A6%86%E7%9B%96%E5%8C%BA%E9%97%B4%E7%9A%84%E6%83%85%E5%86%B5.svg" class="">
+<p>思考2：如果思考1中答案是"不递归，修改节点的值返回即可"</p>
+<p>那新的查询区间在 <span class="math inline">\(now\)</span>
+内部（子树）怎么办？</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E6%9F%A5%E8%AF%A2%E5%8C%BA%E9%97%B4%E5%9C%A8%E8%8A%82%E7%82%B9%E5%8C%BA%E9%97%B4%E5%86%85.svg" class="">
+<p>懒标记（<span
+class="math inline">\(lazy\)</span>）：修改时打标记，查询时标记只往下传
+1 层 修改时：</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E6%87%92%E6%A0%87%E8%AE%B0.svg" class="">
+<p>修改前与查询时：</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/%E7%BA%BF%E6%AE%B5%E6%A0%91_%E6%87%92%E6%A0%87%E8%AE%B0%E4%B8%8B%E4%BC%A0.svg" class="">
+<p>懒标记下传参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">UpdateNode</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, LL v)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> rangeN = rs - ls;                           <span class="comment">// 求区间长度</span></span><br><span class="line">    sum[now] += rangeN * v;                         <span class="comment">// 用下传的懒标记更新本区间和</span></span><br><span class="line">    lasy[now] += v;                                 <span class="comment">// 更新节点懒标记</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">PushDown</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(lasy[now] == <span class="number">0</span> || ls &gt;= rs) <span class="keyword">return</span>;          <span class="comment">// 没有懒标记，或已到叶子</span></span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">UpdateNode</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, lasy[now]);       <span class="comment">// 下传懒标记到子节点</span></span><br><span class="line">    <span class="built_in">UpdateNode</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, lasy[now]);</span><br><span class="line">    lasy[now] = <span class="number">0</span>;                                  <span class="comment">// 清除本节点懒标记</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>带懒标记的区间更新操作</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">PushUp</span><span class="params">(<span class="type">int</span> now)</span> </span>&#123;</span><br><span class="line">    sum[now] = sum[now &lt;&lt; <span class="number">1</span>] + sum[now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Update</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, <span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt;= ls &amp;&amp; y &gt;= rs) <span class="built_in">UpdateNode</span>(now, ls, rs, v);</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">PushDown</span>(now, ls, rs);</span><br><span class="line">        <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(x &lt; mid) <span class="built_in">Update</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, x, y, v);</span><br><span class="line">        <span class="keyword">if</span>(y &gt; mid) <span class="built_in">Update</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, y, v);</span><br><span class="line">        <span class="built_in">PushUp</span>(now);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>带懒标记的区间查询</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LL <span class="title">Query</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> ls, <span class="type">int</span> rs, <span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(ls &gt;= rs) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt;= ls &amp;&amp; y &gt;= rs) <span class="keyword">return</span> sum[now];</span><br><span class="line">    <span class="built_in">PushDown</span>(now, ls, rs);</span><br><span class="line">    <span class="type">int</span> mid = ls + rs &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    LL ret = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span>, ls, mid, x, y);</span><br><span class="line">    <span class="keyword">if</span>(y &gt; mid) ret += <span class="built_in">Query</span>(now &lt;&lt; <span class="number">1</span> | <span class="number">1</span>, mid, rs, x, y);</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不只是求和：</p>
+<ul>
+<li>区间最值查询：维护区间最大值/最小值，适用于RMQ（Range
+Maximum/Minimum Query）问题。</li>
+<li>区间统计：维护区间内满足特定条件的元素个数，如区间奇偶性、模余性质等。</li>
+<li>区间合并：处理区间合并、分裂等操作（如区间染色问题），常用于线段树合并或Segment
+Tree Beats。</li>
+<li>区间覆盖：处理区间赋值、区间覆盖等操作，需使用懒标记进行高效更新。</li>
+<li>区间翻转：处理区间反转操作，通常结合块状链表或平衡树结构实现。</li>
+</ul>
+<p>区间操作：</p>
+<ul>
+<li>区间修改+单点查询：使用懒标记优化（如区间加后单点查询），适合延迟传播机制。</li>
+<li>区间修改+区间查询：结合懒标记和区间更新（如区间求和与区间加），是线段树基础应用之一。</li>
+<li>区间最值更新：维护区间最值的同时支持取min/max等操作（如区间取max），常见于吉司机线段树（Segment
+Tree Beats）。</li>
+<li>标记永久化：处理不可叠加操作的懒标记技巧（如区间覆盖不下传标记），适用于某些强制覆盖型操作。</li>
+</ul>
+<p>更复杂的情况：</p>
+<ul>
+<li>可持久化线段树：支持历史版本查询（如版本回退），适用于离线处理和函数式编程。</li>
+<li>动态开点线段树：处理稀疏数据（无需预先开辟全部节点），节省空间适用于大范围但修改少的数据。</li>
+<li>李超线段树：处理线段/直线覆盖的最值问题，适用于动态插入线段并查询区间最大/最小值。</li>
+<li>线段树分治：结合时间线处理动态问题的离线方法，常用于解决带删除/回滚的问题。</li>
+<li>权值线段树：维护值域分布的统计信息（如第k大查询），常配合离散化使用。</li>
+<li>树链剖分套线段树：处理树上路径/子树操作，能高效应对树形结构上的区间操作。</li>
+<li>平衡树套线段树：处理动态区间插入删除后的区间查询，如Treap/AVL嵌套线段树。</li>
+<li>线段树套分块：结合两者优势处理大规模混合操作，提升部分操作效率。</li>
+<li>二维线段树：处理矩阵的区间更新与查询，适用于二维平面上的操作。</li>
+<li>线段树套Trie：处理数位相关的区间异或/最值问题，如可持久化01-Trie嵌套在线段树中。</li>
+<li>区间连通性线段树：结合并查集思想处理区间连通性问题，适用于区间图论相关问题。</li>
+</ul>
+<h2 id="k-d树">K-D树</h2>
+<p>思考：如果用线段树的写法统计二维的数据，直观的思路是什么？</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Update</span><span class="params">(<span class="type">int</span> now, <span class="type">int</span> v, <span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> up, <span class="type">int</span> down, <span class="type">int</span> x, <span class="type">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(left == right || up == down)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    val[now] += v;</span><br><span class="line">    <span class="keyword">if</span>(left == right - <span class="number">1</span> &amp;&amp; up == down - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="type">int</span> lrmid = left + right &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> udmid = up + down &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; lrmid &amp;&amp; y &lt; udmid) <span class="built_in">InitNode</span>(<span class="number">0</span>, now), <span class="built_in">Update</span>(dr[<span class="number">0</span>][now], v, left, lrmid, up, udmid, x, y);</span><br><span class="line">    <span class="keyword">if</span>(x &lt; lrmid &amp;&amp; y &gt;= udmid) <span class="built_in">InitNode</span>(<span class="number">1</span>, now), <span class="built_in">Update</span>(dr[<span class="number">1</span>][now], v, left, lrmid, udmid, down, x, y);</span><br><span class="line">    <span class="keyword">if</span>(x &gt;= lrmid &amp;&amp; y &lt; udmid) <span class="built_in">InitNode</span>(<span class="number">2</span>, now), <span class="built_in">Update</span>(dr[<span class="number">2</span>][now], v, lrmid, right, up, udmid, x, y);</span><br><span class="line">    <span class="keyword">if</span>(x &gt;= lrmid &amp;&amp; y &gt;= udmid) <span class="built_in">InitNode</span>(<span class="number">3</span>, now), <span class="built_in">Update</span>(dr[<span class="number">3</span>][now], v, lrmid, right, udmid, down, x, y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那三维、四维...K维的情况呢？</p>
+<p>需要一个数据结构，处理任意维度的统计 <span
+class="math inline">\(K\)</span> 个维度——<span
+class="math inline">\(K-Dimensional\)</span>——K-D树</p>
+<p>以二叉树的形式处理任意维度的数据</p>
+<h3 id="二维平面点个数统计">二维平面点个数统计</h3>
+<p>尝试建树：
+每次用一条线把平面递归地分为两部分，水平划分有用吗？当求一个矩形区域的点个数的时候</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/KD%E6%A0%91_%E6%B0%B4%E5%B9%B3%E5%88%92%E5%88%86.svg" class="">
+<p>水平与竖直结合</p>
+<p>思考：什么时候水平分，什么时候竖直分？</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/KD%E6%A0%91_%E6%B0%B4%E5%B9%B3%E7%AB%96%E7%9B%B4%E7%BB%93%E5%90%88.svg" class="">
+<p>点的离散程度——坐标方差 <span class="math inline">\(x\)</span> 坐标与
+<span class="math inline">\(y\)</span>
+坐标哪个方差大，按哪个维度划分，让划分后的区域内，点尽可能的"聚集"，便于统计</p>
+<img src="/2025-05-23-33-%E8%8C%83%E5%9B%B4%E7%BB%9F%E8%AE%A1/KD%E6%A0%91_%E7%94%A8%E6%96%B9%E5%B7%AE%E5%86%B3%E5%AE%9A%E5%88%92%E5%88%86%E6%96%B9%E5%90%91.svg" class="">
+<p>统计思想：和线段树类似，覆盖区域则直接返回，否则递归</p>
+<p>高维处理：同二维一样，各维度方差选最大的做划分</p>
+<p>更多任务：</p>
+<ul>
+<li>K近点</li>
+<li>最远点</li>
+<li>曼哈顿最近距离</li>
+<li>……</li>
+</ul>
+<p>参考模板：<a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/templates/DataStructure.md#kd%E6%A0%91">icpc_solution/DataStructure.md
+at master · CSGrandeur/icpc_solution · GitHub</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-05-21-32-%E5%B9%B3%E8%A1%A1%E6%A0%91/" rel="prev" title="32.平衡树">
+                  <i class="fa fa-angle-left"></i> 32.平衡树
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
