@@ -465,20 +465,20 @@
 		</g>
 		<g id="shape107-168" v:mID="107" v:groupContext="shape" transform="translate(474.517,-164.618)">
 			<title>矩形.107</title>
-			<desc>struct Edge { nex==11; u==2; v==n; w==1; };// e[7]</desc>
+			<desc>struct Edge { nex==11; u==2; v==n; w==0; };// e[7]</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
 			<v:textRect cx="67.1811" cy="334.412" width="134.37" height="170.079"/>
 			<rect x="0" y="249.373" width="134.362" height="170.079" class="st1"/>
-			<text x="4" y="269.61" class="st5" v:langID="1033"><v:paragraph/><v:tabList/>struct Edge {<v:newlineChar/><tspan x="4"
-						dy="1.2em" class="st6">    </tspan><tspan class="st6">nex</tspan><tspan class="st6" v:langID="2052">==11</tspan><tspan
+			<text x="4" y="269.61" class="st5" v:langID="1033"><v:paragraph/><v:tabList/>struct Edge {<tspan x="4" dy="1.2em"
+						class="st6">    </tspan><tspan class="st6">nex</tspan><tspan class="st6" v:langID="2052">==11</tspan><tspan
 						class="st6">;<v:newlineChar/></tspan><tspan x="4" dy="1.2em" class="st6">    </tspan><tspan class="st6">u</tspan><tspan
 						class="st6" v:langID="2052">==</tspan><tspan class="st7" v:langID="2052">2</tspan><tspan class="st6">;<v:newlineChar/></tspan><tspan
 						x="4" dy="1.2em" class="st6">    </tspan><tspan class="st6">v</tspan><tspan class="st6" v:langID="2052">==</tspan><tspan
 						class="st7" v:langID="2052">n</tspan><tspan class="st6">;<v:newlineChar/></tspan><tspan x="4" dy="1.2em"
-						class="st6">    </tspan><tspan class="st6">w</tspan><tspan class="st6" v:langID="2052">==1</tspan><tspan
+						class="st6">    </tspan><tspan class="st6">w</tspan><tspan class="st6" v:langID="2052">==0</tspan><tspan
 						class="st6">;<v:newlineChar/></tspan><tspan x="4" dy="1.2em" class="st8">};</tspan><tspan class="st8"
 						v:langID="2052">// e[7]</tspan></text>		</g>
 		<g id="shape108-191" v:mID="108" v:groupContext="shape" transform="translate(247.994,605.024) rotate(-147.313)">
