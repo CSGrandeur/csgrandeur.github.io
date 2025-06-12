@@ -148,7 +148,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-count">66</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -176,6 +176,189 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-04-09-generating-model-and-discriminant-model/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-04-09-generating-model-and-discriminant-model/" class="post-title-link" itemprop="url">生成模型与判别模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-09 16:15:09" itemprop="dateCreated datePublished" datetime="2017-04-09T16:15:09+08:00">2017-04-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>有监督学习</strong>方法可以分为<strong>生成方法</strong>和<strong>判别方法</strong>，学习得到的模型对应称为生成模型与判别模型。</p>
+<p>事物的状态是有概率的，设输入集合是 <code>X</code> , 可以输出的集合是
+<code>Y</code>，那么
+<code>P(Y|X)</code>表示已知<code>X</code>情况下标签是<code>Y</code>的概率模型，即给出任意<code>xi</code>,
+<code>yj</code>，都可求出<code>p(yj|xi)</code>；<code>P(Y,X)</code>表示<code>Y</code>和<code>X</code>一起发生的概率模型，同理就是求出所有的<code>p(yj, xi)</code>。</p>
+<p>对于分类问题，就是输入<code>X</code>，输出标签<code>Y</code>，从概率角度说，就是已知<code>X</code>，找概率最大的<code>Y</code>，即条件概率分布<code>P(Y|X)</code>。</p>
+<ul>
+<li>生成模型：生成数据的分布，也就是求联合分布
+<code>P(Y, X)</code>，再通过贝叶斯理论计算 <code>P(Y|X)</code>。</li>
+<li>判别模型：判别输出结果的模型，直接训练条件分布<code>P(Y|X)</code>。</li>
+</ul>
+<p>生成模型的<code>P(Y,X)</code>可以计算出<code>P(Y|X)</code>，反之则不行。联合分布具有更多的信息，所以会有更广的普适性。可以处理存在隐变量的情况，也是这篇博客接下来要讲的。</p>
+<p>判别模型由于直接学习条件分布<code>P(Y|X)</code>，所以允许对输入进行抽象，比如降维，从而简化学习问题，</p>
+<p>于是就比较容易理解常见的判别方法有SVM、逻辑回归等；
+常见的生成方法有朴素贝叶斯法、隐马尔可夫模型等。</p>
+<h3 id="参考">参考</h3>
+<ol type="1">
+<li><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/question/20446337">机器学习“判定模型”和“生成模型”有什么区别？</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2017-04-06-mm-crf-imageprocessing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2017-04-06-mm-crf-imageprocessing/" class="post-title-link" itemprop="url">马尔可夫模型到条件随机场，再结合深度学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-04-06 11:15:12" itemprop="dateCreated datePublished" datetime="2017-04-06T11:15:12+08:00">2017-04-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>先了解了一下<a
+href="/2017-04-09-generating-model-and-discriminant-model/">生成模型与判别模型</a></p>
+<h3 id="隐马尔可夫模型">隐马尔可夫模型</h3>
+<p>隐马尔可夫模型（HMM）属于生成模型。</p>
+<p>组成：两个集合，两个序列，两个矩阵。</p>
+<p>这些内容构成了隐马尔可夫模型的整体概念，具体问题中，有的是已知的，有的是未知的，这个模型就是通过已知量建模，进而推算未知量。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2017-04-06-mm-crf-imageprocessing/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -861,187 +1044,6 @@ admin，但是退役后就没怎么管OJ了，都是每年的在役队员在加�
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2016-05-10-python-threadpool-processpool/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2015-08-29-2015hncpc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015-08-29-2015hncpc/" class="post-title-link" itemprop="url">2015省赛</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-08-29 16:13:30" itemprop="dateCreated datePublished" datetime="2015-08-29T16:13:30+08:00">2015-08-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>很忙很累的就不多说了。</p>
-<p>比赛顺利开始之后，整个一天就在忙外网rank了。。。</p>
-<p>没有独立IP，没有端口映射，数据库同步这个之前配过一次被吓着了好麻烦不打算用。</p>
-<p>于是考虑把数据从内网往外推。
-总不可能频繁复制数据库，最终决定推rank页的html。</p>
-<p>然后问题来了。</p>
-<h2 id="section">
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015-08-29-2015hncpc/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2015-06-11-windows-sublime-latex-ieee/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="CSGrandeur">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | CSGrandeur's Thinking">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2015-06-11-windows-sublime-latex-ieee/" class="post-title-link" itemprop="url">Windows下sublime+Latex+IEEE模板配置方法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2015-06-11 14:44:00" itemprop="dateCreated datePublished" datetime="2015-06-11T14:44:00+08:00">2015-06-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-06 10:27:46" itemprop="dateModified" datetime="2025-03-06T10:27:46+08:00">2025-03-06</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="装好sublime-text3">装好<a
-target="_blank" rel="noopener" href="http://www.sublimetext.com/">Sublime Text</a>3</h3>
-<p>去<a target="_blank" rel="noopener" href="http://www.sublimetext.com/">官网</a> ### <a
-target="_blank" rel="noopener" href="https://packagecontrol.io/installation">Package Control</a> 下载<a
-target="_blank" rel="noopener" href="https://packagecontrol.io/Package%20Control.sublime-package">Package
-Control.sublime-package</a>，放到sublime的Installed
-Packages文件夹里（在sublime中Preferences-&gt;Browse
-Packages，上层目录就能看到Installed Packages文件夹）。</p>
-<p>重启sublime，如果在Perferences-&gt;package settings中看到package
-control这一项，则安装成功。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2015-06-11-windows-sublime-latex-ieee/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

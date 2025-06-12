@@ -10838,4 +10838,859 @@ class="math inline">\(k\)</span>范围不大。</li>
         <tag>Algorithm</tag>
       </tags>
   </entry>
+  <entry>
+    <title>34.字符串算法</title>
+    <url>/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<h1 id="字符串算法">字符串算法</h1>
+<p>KMP、AC自动机、字符串哈希、最小表示法。</p>
+<span id="more"></span>
+<h2 id="kmp">KMP</h2>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">mStr = <span class="string">&quot;aaaaabbcaaab&quot;</span></span><br><span class="line">tStr = <span class="string">&quot;aaab&quot;</span></span><br></pre></td></tr></table></figure>
+<p>如何找到 <code>tStr</code> 在 <code>mStr</code>
+中出现的位置？如何找出出现的次数？复杂度是多少？</p>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/kmp_%E6%9A%B4%E5%8A%9B.svg" class="">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">Index1</span><span class="params">(<span class="type">char</span> mStr[], <span class="type">char</span> tStr[])</span> </span>&#123;</span><br><span class="line">  <span class="type">int</span> i, j;</span><br><span class="line">  <span class="comment">// 遍历主字符串的每个位置作为可能的起始位置</span></span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; mStr[i]; i ++) &#123;</span><br><span class="line">    <span class="comment">// 从当前位置i开始，逐个字符比较mStr和tStr</span></span><br><span class="line">    <span class="comment">// 当tStr[j]为&#x27;\0&#x27;（字符串结束）或字符不匹配时退出循环</span></span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span>; tStr[j] &amp;&amp; mStr[i + j] == tStr[j]; j ++);    <span class="comment">// 这里有分号</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果tStr[j]为&#x27;\0&#x27;，说明tStr已经完全匹配</span></span><br><span class="line">    <span class="keyword">if</span>(!tStr[j]) &#123;</span><br><span class="line">        <span class="keyword">return</span> i;  <span class="comment">// 返回匹配的起始位置</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>;  <span class="comment">// 未找到匹配，返回-1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/kmp_%E6%80%9D%E8%80%83%E6%9A%B4%E5%8A%9B%E6%94%B9%E8%BF%9B.svg" class="">
+<p>暴力匹配算法的时间复杂度为 <span class="math inline">\(O(m \times
+n)\)</span>，其中 <span class="math inline">\(m\)</span>
+是主串长度，<span class="math inline">\(n\)</span>
+是模式串长度。要改进这个算法，需要思考两个方向：</p>
+<ol type="1">
+<li>比较操作的优化
+<ul>
+<li>字符串比较必须逐个字符进行，这是无法避免的</li>
+<li>因此，优化的重点不在于减少单次比较的复杂度</li>
+</ul></li>
+<li>比较次数的优化
+<ul>
+<li>暴力匹配中，每次失配后都从主串的下一个位置重新开始比较</li>
+<li>这导致了很多不必要的比较操作</li>
+<li>例如：当模式串为"aaab"时，如果前三个'a'都匹配，最后一个'b'失配，下一次比较时，我们其实已经知道前两个'a'是匹配的</li>
+</ul></li>
+</ol>
+<p>利用已知信息</p>
+<p>在暴力匹配中，每次失配后我们都从主串的下一个位置重新开始比较，这导致了很多重复的比较操作。例如，当模式串为"aaab"时，如果前3个'a'都匹配，最后一个'b'失配，右挪
+1 位进行下一次比较时，我们其实已经知道有 2 个'a'是匹配的。</p>
+<p>关键问题在于：如何利用已经比较过的信息？当发生失配时，我们是否可以从之前的匹配结果中获取有用信息？能否避免重复比较已经确定匹配的部分？</p>
+<p>这些思考最终引出了KMP算法的核心思想：通过预处理模式串，构建 <span
+class="math inline">\(next\)</span>
+数组，在失配时利用已知信息快速移动模式串，从而减少比较次数。KMP算法的精髓就在于，它能够从失败的匹配中学习，利用已经匹配的信息来指导下一次匹配的位置。</p>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/kmp_%E5%9F%BA%E6%9C%AC%E6%80%9D%E6%83%B3.svg" class="">
+<p>核心思想：找到已经匹配的前缀串的最长相等前后缀，把它挪到这个后缀开头的位置进行匹配</p>
+<p>如上图，成功匹配的前缀串是 <code>abcab</code>，它的最长相等前后缀是
+<code>ab</code>，那么下一次比较就直接让它开头的 <code>ab</code>
+对齐到后面的 <code>ab</code> 位置去比对。</p>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/kmp_next%E6%95%B0%E7%BB%84.svg" class="">
+<p>next数组含义： <code>next[i] = j</code>，
+表示当从<code>0</code>开始匹配到 <code>i</code> 位置失败时，让
+<code>j</code> 挪到 <code>i</code>
+当前所对齐的主串位置继续尝试匹配。</p>
+<p>计算 next 参考代码， <code>ts</code> 是模式串</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> nex[<span class="number">1000</span>];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BuildNext</span><span class="params">(<span class="type">char</span> ts[])</span> </span>&#123;</span><br><span class="line">    nex[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">-1</span>; ts[i];) &#123;</span><br><span class="line">        <span class="keyword">if</span>(j == <span class="number">-1</span> || ts[i] == ts[j])</span><br><span class="line">            nex[++i] = ++j;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            j = nex[j];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/kmp_next%E8%AE%A1%E7%AE%97%E5%8A%A8%E6%80%81%E6%BC%94%E7%A4%BA.gif" class="">
+<p>基于 next 进行匹配，即在 <code>ms</code> 里找 <code>ts</code>
+出现的位置</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">KmpMatch</span><span class="params">(<span class="type">char</span> ms[], <span class="type">char</span> ts[])</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> tlen = <span class="built_in">strlen</span>(ts);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>; ms[i];) &#123;</span><br><span class="line">        <span class="keyword">if</span>(j == <span class="number">-1</span> || ms[i] == ts[j]) &#123;</span><br><span class="line">            <span class="keyword">if</span>(j == tlen - <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">// 确认一次完整匹配，此处可支持各类操作</span></span><br><span class="line">                <span class="comment">// 记录位置、统计次数 返回第一次匹配位置等。</span></span><br><span class="line">                <span class="keyword">return</span> i - tlen + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> i ++, j ++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> j = nex[j];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/kmp_%E5%8C%B9%E9%85%8D%E6%BC%94%E7%A4%BA.gif" class="">
+<h3 id="例最短循环节">例：最短循环节</h3>
+<p>给出 <span class="math inline">\(s_{1}\)</span>，猜一个最短的 <span
+class="math inline">\(s_{2}\)</span>，使 <span
+class="math inline">\(s_{2}\)</span> 能以至少重复 <span
+class="math inline">\(2\)</span> 次地重复连接得到 <span
+class="math inline">\(s_{1}\)</span>，求 <span
+class="math inline">\(s_{2}\)</span> 最短长度。</p>
+<p>分析：KMP 的 next
+能够标记任意前缀的"最长相等前后缀"，如果字符串是循环构成的，那么这个最长相等前后缀的前缀就会覆盖到最后一次循环前，总长度减去这个前缀长度，就是最短的循环节。<a
+href="/2021-04-27-try-to-prove-loop-by-kmp/">点击查看详细的（尝试）证明</a></p>
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;unordered_map&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxs = <span class="number">1e6</span> + <span class="number">10</span>;</span><br><span class="line"><span class="type">int</span> n;</span><br><span class="line"><span class="type">char</span> ts[maxs];</span><br><span class="line"><span class="type">int</span> nex[maxs];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BuildNex</span><span class="params">(<span class="type">char</span> ts[], <span class="type">int</span> nex[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    nex[<span class="number">0</span>] = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>, j = <span class="number">-1</span>; ts[i]; ) &#123;</span><br><span class="line">        <span class="keyword">if</span>(j == <span class="number">-1</span> || ts[i] == ts[j])</span><br><span class="line">            nex[++i] = ++j;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            j = nex[j];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> len;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d%s&quot;</span>, &amp;len, ts) != EOF) &#123;</span><br><span class="line">        <span class="built_in">BuildNex</span>(ts, nex);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, len - nex[len]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ac自动机">AC自动机</h2>
+<p><a href="/2025-03-12-10-哈希与字典树">回顾
+Trie</a>：构建字符范围（比如26个字母）的多叉树，将字符串像查字典一样插入多叉树，查询也是一样，可以作为字符串的哈希方案。</p>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/ac%E8%87%AA%E5%8A%A8%E6%9C%BA_trie.svg" class="">
+<ol type="1">
+<li>给n个单词，和1个长单词，求有多少个单词是这个长单词的前缀 —— 用 n
+个单词建字典树，节点统计单词个数，长单词去匹配，路径上个数求和</li>
+<li>给n个单词，和1个短单词，求这个短单词是多少个单词的前缀 —— 用 n
+个单词建字典树，节点统计单词个数，短单词匹配成功的节点个数为答案</li>
+<li>给两种语言单词对照表，输入任意单词，输出对照另一个语言的单词</li>
+</ol>
+<p>KMP：找 <span class="math inline">\(1\)</span> 个模式串在 <span
+class="math inline">\(1\)</span> 个文本中出现的位置</p>
+<p>思考： <span class="math inline">\(n\)</span> 个模式串在 <span
+class="math inline">\(1\)</span> 个文本中出现的位置，怎么办？建 <span
+class="math inline">\(n\)</span> 个 next
+数组然后遍历搞？让模式串每个后缀（即从不同位置开始）在字典树上匹配一遍？都太慢了。</p>
+<ol type="1">
+<li>将 <span class="math inline">\(n\)</span> 个模式串放入Trie</li>
+<li>在 Trie
+上构建"next数组"——真谛是失配指针——在Trie上匹配失败时，也可以记录一个"下次从哪里开始匹配"</li>
+</ol>
+<p>这就是AC自动机的基本思想。</p>
+<p>每个节点<span class="math inline">\(A\)</span>的 <code>fail</code>
+指针指向另一个节点<span class="math inline">\(B\)</span>，<span
+class="math inline">\(B\)</span>节点代表的前缀是<span
+class="math inline">\(A\)</span>节点前缀的最长后缀。比如从跟节点来到
+<span class="math inline">\(A\)</span> 节点是
+<code>"abcde"</code>，其中<span class="math inline">\(A\)</span>
+节点存的是 <code>'e'</code>，<span class="math inline">\(A\)</span>
+的适配指针指向另一个保存 <code>'e'</code> 的节点<span
+class="math inline">\(B\)</span>，从根节点到<span
+class="math inline">\(B\)</span>的路径可能就会是 <code>"bcde"</code>
+或者 <code>"cde"</code> ，具体如何要看模式串集合是否包含有
+<code>"bcde"</code> 或 <code>"cde"</code> 这样的前缀的字符串。</p>
+<p>构建过程：</p>
+<ol type="1">
+<li>根节点的子节点的 <code>fail</code> 指向根</li>
+<li>BFS 遍历每个节点，为其所有子节点设置 <code>fail</code> 指针
+<ul>
+<li>若父节点的 <code>fail</code> 有相同字符的子节点，则指向该子节点</li>
+<li>否则递归跳转父节点的 <code>fail</code>，直到找到或回到根</li>
+</ul></li>
+</ol>
+<p>匹配过程：</p>
+<ol type="1">
+<li>从根节点开始，按文本字符转移</li>
+<li>每次转移后，检查当前节点及其 fail 链上的节点是否为模式串结尾</li>
+<li>统计所有匹配的模式串</li>
+</ol>
+<p>复杂度：</p>
+<ul>
+<li>构建：<span class="math inline">\(O (所有模式串长度之和 + 字符集大小
+\times 节点数)\)</span></li>
+<li>匹配：<span class="math inline">\(O (文本长度 +
+匹配数)\)</span></li>
+</ul>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/ac%E8%87%AA%E5%8A%A8%E6%9C%BA.svg" class="">
+<h3 id="例出现最多的模式串">例：出现最多的模式串</h3>
+<p>给一系列模式串，和一个长文本，求长文本中出现最多的模式串。</p>
+<p>方案：构建AC自动机，对每一次匹配到的位置，都沿着失配指针遍历一遍直到根，路径上所有完整单词都计入匹配。最后根据统计结果输出。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> std::pair&lt;<span class="type">int</span>, <span class="type">int</span>&gt; pii;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxn = <span class="number">1e5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> maxm = <span class="number">1e6</span> + <span class="number">10</span>;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Trie</span> &#123;</span><br><span class="line">    <span class="type">int</span> ch[<span class="number">26</span>];</span><br><span class="line">    <span class="type">int</span> fail;</span><br><span class="line">    <span class="type">int</span> end;</span><br><span class="line">&#125;;</span><br><span class="line">Trie tr[maxn];</span><br><span class="line"><span class="type">int</span> n, tp;</span><br><span class="line"><span class="type">char</span> st[<span class="number">211</span>][<span class="number">111</span>];</span><br><span class="line"><span class="type">char</span> buf[maxm];</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> ROOT = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">Insert</span><span class="params">(<span class="type">char</span> s[], <span class="type">int</span> idx)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> p = ROOT;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; s[i]; i ++) &#123;</span><br><span class="line">        <span class="type">int</span> c = s[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">        <span class="keyword">if</span>(tr[p].ch[c] == <span class="number">-1</span>) &#123;</span><br><span class="line">            tr[p].ch[c] = tp ++;</span><br><span class="line">        &#125;</span><br><span class="line">        p = tr[p].ch[c];</span><br><span class="line">    &#125;</span><br><span class="line">    tr[p].end = idx;        <span class="comment">// 记录这是第 idx 个字符串的结束点</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">BuildFail</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line">    <span class="comment">// 根节点的子节点fail指向根</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(tr[ROOT].ch[i] != <span class="number">-1</span>) &#123;</span><br><span class="line">            tr[tr[ROOT].ch[i]].fail = <span class="number">0</span>;</span><br><span class="line">            q.<span class="built_in">push</span>(tr[ROOT].ch[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// BFS遍历每个节点,为其子节点设置fail指针</span></span><br><span class="line">    <span class="keyword">while</span>(!q.<span class="built_in">empty</span>()) &#123;</span><br><span class="line">        <span class="type">int</span> u = q.<span class="built_in">front</span>();</span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 遍历所有可能的子节点</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(tr[u].ch[i] != <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="type">int</span> v = tr[u].ch[i];    <span class="comment">// 当前节点的子节点</span></span><br><span class="line">                <span class="type">int</span> f = tr[u].fail;     <span class="comment">// 当前节点的fail节点</span></span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 沿着fail指针找到对应字符的转移</span></span><br><span class="line">                <span class="keyword">while</span>(f != ROOT &amp;&amp; tr[f].ch[i] == <span class="number">-1</span>) &#123;</span><br><span class="line">                    f = tr[f].fail;</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 找到转移或到达根节点</span></span><br><span class="line">                <span class="keyword">if</span>(tr[f].ch[i] != <span class="number">-1</span>) &#123;</span><br><span class="line">                    tr[v].fail = tr[f].ch[i];</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    tr[v].fail = ROOT;</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">                q.<span class="built_in">push</span>(v);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在文本串中查找所有模式串的出现次数</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">FindMaxPatterns</span><span class="params">(<span class="type">char</span> text[])</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> len = <span class="built_in">strlen</span>(text);</span><br><span class="line">    <span class="function">std::vector&lt;pii&gt; <span class="title">cnt</span><span class="params">(n, &#123;<span class="number">0</span>, <span class="number">0</span>&#125;)</span></span>;  <span class="comment">// 记录每个模式串出现次数</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 从根节点开始匹配</span></span><br><span class="line">    <span class="type">int</span> p = ROOT;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">        <span class="type">int</span> c = text[i] - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 沿着fail指针找到可以转移的位置</span></span><br><span class="line">        <span class="keyword">while</span>(p != ROOT &amp;&amp; tr[p].ch[c] == <span class="number">-1</span>) &#123;</span><br><span class="line">            p = tr[p].fail; </span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 找到转移或到达根节点</span></span><br><span class="line">        <span class="keyword">if</span>(tr[p].ch[c] != <span class="number">-1</span>) &#123;</span><br><span class="line">            p = tr[p].ch[c];</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 统计当前位置及fail链上所有模式串</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> t = p; t != ROOT; t = tr[t].fail) &#123;</span><br><span class="line">            <span class="keyword">if</span>(tr[t].end != <span class="number">-1</span>) &#123;</span><br><span class="line">                cnt[tr[t].end].first ++;    <span class="comment">// 统计匹配成功次数</span></span><br><span class="line">                cnt[tr[t].end].second = tr[t].end;  <span class="comment">// 模式串序号</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 找出最大出现次数</span></span><br><span class="line">    std::<span class="built_in">sort</span>(cnt.<span class="built_in">begin</span>(), cnt.<span class="built_in">end</span>(), [](<span class="type">const</span> pii &amp;a, <span class="type">const</span> pii &amp;b) &#123;</span><br><span class="line">        <span class="keyword">return</span> a.first &gt; b.first || (a.first == b.first &amp;&amp; a.second &lt; b.second);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, cnt[<span class="number">0</span>].first);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; cnt[i].first == cnt[<span class="number">0</span>].first; i ++) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, st[cnt[i].second]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n) != EOF &amp;&amp; n) &#123;</span><br><span class="line">        tp = <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">memset</span>(tr, <span class="number">-1</span>, <span class="built_in">sizeof</span>(tr));</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i ++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>, st[i]);</span><br><span class="line">            <span class="built_in">Insert</span>(st[i], i);    <span class="comment">// 插入字典树</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">BuildFail</span>();        <span class="comment">// 构建失配指针</span></span><br><span class="line">        </span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>, buf);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 查找模式串</span></span><br><span class="line">        <span class="built_in">FindMaxPatterns</span>(buf);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="最小表示法">最小表示法</h2>
+<p>当字符串 <span class="math inline">\(S\)</span> 中可以选定一个位置
+<span class="math inline">\(i\)</span> 满足</p>
+<p><span class="math display">\[S[i\cdots n]+S[1\cdots
+i-1]=T\]</span></p>
+<p>则称 <span class="math inline">\(S\)</span> 与 <span
+class="math inline">\(T\)</span> <strong>循环同构</strong></p>
+<p>例如 <code>abcdefg</code> 与 <code>efgabcd</code>
+是循环同构的，循环左移或循环右移能得到另一个字符串。</p>
+<p><strong>最小表示即字符串 <span class="math inline">\(S\)</span>
+循环同构的所有字符串中字典序最小的字符串</strong>。</p>
+<h3 id="例判断两字符串是否循环同构">例：判断两字符串是否循环同构</h3>
+<p>个两个字符串 <span class="math inline">\(s_{1}\)</span> 和 <span
+class="math inline">\(s_{2}\)</span> 判断是否循环同构，字符串长度为
+<span class="math inline">\(n\)</span></p>
+<p>基本暴力：枚举 <span class="math inline">\(s_{2}\)</span>
+的所有循环起点与 <span class="math inline">\(s_{1}\)</span> 比较，<span
+class="math inline">\(O(n^2)\)</span></p>
+<p>改进思路：两个 <span class="math inline">\(s_{1}\)</span>
+拼接形成一个二倍长度的字符串 <span
+class="math inline">\(u=s_{1}+s_{1}\)</span>，让 <span
+class="math inline">\(s_{2}\)</span> 在 <span
+class="math inline">\(u\)</span> 上做 KMP，<span
+class="math inline">\(O(n)\)</span>，但对于这个题来说， KMP
+有点杀鸡用牛刀。</p>
+<p>最小表示思路：比较两个字符串的最小表示的串是否相等。</p>
+<p>一个字符串的最小表示计算方法：</p>
+<ol type="1">
+<li>初始化 <code>i=0, j=1</code>，考察 <code>i</code> 开始的循环串和
+<code>j</code> 开始的循环串的匹配长度 <code>k</code></li>
+<li>当 <code>s[i + k] &gt; s[j + k]</code>，可将 <code>i</code> 跳到
+<code>i + k + 1</code> 进行下一轮比较</li>
+<li>直到遍历结束，输出 <code>i</code> 与 <code>j</code> 较小的那个</li>
+</ol>
+<p>分析第 2 步可以跳到 <code>i + k + 1</code>
+的原因：最小表示是要找字典序最小的循环串，<code>i</code> 跳到
+<code>i + (p = 1 ~ k)</code> 的位置没有必要，因为至少有
+<code>j + (p = 1 ~ k)</code> 的循环串的字典序比它小，即
+<code>j+p ~ j+k-1</code> 与 <code>i+p ~ i+k-1</code>
+一一对应相等，而<code>s[i + k] &gt; s[j + k]</code>，从而 <code>i</code>
+跳到 <code>i + (p&lt;=k)</code> 的位置一定得不到字典序最小的循环串。</p>
+<img src="/2025-06-04-34-%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%AE%97%E6%B3%95/%E6%9C%80%E5%B0%8F%E8%A1%A8%E7%A4%BA_ijn.svg" class="">
+<p>参考代码</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> k = <span class="number">0</span>, i = <span class="number">0</span>, j = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span> (k &lt; n &amp;&amp; i &lt; n &amp;&amp; j &lt; n) &#123;</span><br><span class="line">    <span class="keyword">if</span> (s[(i + k) % n] == s[(j + k) % n]) &#123;</span><br><span class="line">            k++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(s[(i + k) % n] &gt; s[(j + k) % n]) &#123;</span><br><span class="line">            i = i + k + <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            j = j + k + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i == j) i++;    <span class="comment">// i 和 j 不能重叠</span></span><br><span class="line">        k = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">i = <span class="built_in">min</span>(i, j);              <span class="comment">// 得到最小循环串的起始位置，即最小表示</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>35.数论入门</title>
+    <url>/2025-06-11-35-%E6%95%B0%E8%AE%BA%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<h1 id="数论入门">数论入门</h1>
+<p>入门数论，最大公约数、裴蜀定理、质数筛法、同余运算、欧拉函数、乘法逆元等。</p>
+<span id="more"></span>
+<h2 id="最大公约数">最大公约数</h2>
+<p>最大公约数（Grand Central Dispatch,
+GCD）是能同时整除两个数的最大正整数。</p>
+<p>给定正整数 <span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> ，求两个数的最大公约数。</p>
+<p>辗转相除法（欧几里得算法）</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">GCD</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b ? <span class="built_in">GCD</span>(b, a % b) : a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简要证明：</p>
+<ol type="1">
+<li>基本概念：</li>
+</ol>
+<ul>
+<li>设 <span class="math inline">\(g = \gcd(a,b)\)</span> 表示 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 的最大公约数</li>
+<li>因为 <span class="math inline">\(g\)</span> 是 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 的公约数，所以 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 都可以被 <span
+class="math inline">\(g\)</span> 整除</li>
+<li>因此可以表示为：<span class="math inline">\(a = mg\)</span>，<span
+class="math inline">\(b = ng\)</span>，其中 <span
+class="math inline">\(m\)</span> 和 <span
+class="math inline">\(n\)</span> 是整数</li>
+</ul>
+<ol start="2" type="1">
+<li>关键性质：<span class="math inline">\(m\)</span> 和 <span
+class="math inline">\(n\)</span> 一定互质（即 <span
+class="math inline">\(\gcd(m,n) = 1\)</span>）</li>
+</ol>
+<p>如果 <span class="math inline">\(m\)</span> 和 <span
+class="math inline">\(n\)</span> 不互质，那么 <span
+class="math inline">\(g\)</span> 就不是最大公约数，这说明 <span
+class="math inline">\(g\)</span> 已经包含了 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 的所有共同因子</p>
+<ol start="3" type="1">
+<li>算法正确性：</li>
+</ol>
+<ul>
+<li><p>当 <span class="math inline">\(b = 0\)</span> 时，<span
+class="math inline">\(\gcd(a,0) = a\)</span>，这是基本定义</p></li>
+<li><p>当 <span class="math inline">\(b \neq 0\)</span> 时，<span
+class="math inline">\(\gcd(a,b) = \gcd(b,a \bmod b)\)</span></p>
+<p>证明 <span class="math inline">\(\gcd(a,b) = \gcd(b,a \bmod
+b)\)</span> ：</p>
+<ul>
+<li>设 <span class="math inline">\(d = \gcd(a,b)\)</span>，则 <span
+class="math inline">\(d\)</span> 能整除 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span></li>
+<li>根据带余除法，<span class="math inline">\(a \bmod b = a -
+qb\)</span>，其中 <span class="math inline">\(q\)</span> 是 <span
+class="math inline">\(a \geq qb\)</span> 的最大整数</li>
+<li>充分性：<span class="math inline">\(d\)</span> 能整除 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span>，所以 <span
+class="math inline">\(d\)</span> 也能整除 <span class="math inline">\(a
+- qb\)</span>（即 <span class="math inline">\(a \bmod b\)</span>）</li>
+<li>必要性：如果 <span class="math inline">\(d&#39;\)</span> 能整除
+<span class="math inline">\(b\)</span> 和 <span class="math inline">\(a
+\bmod b\)</span>，那么 <span class="math inline">\(d&#39;\)</span>
+也能整除 <span class="math inline">\(a = qb + (a \bmod b)\)</span></li>
+<li>因此，<span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 的公约数集合与 <span
+class="math inline">\(b\)</span> 和 <span class="math inline">\(a \bmod
+b\)</span> 的公约数集合完全相同</li>
+<li>所以它们的最大公约数也相同，即 <span class="math inline">\(\gcd(a,b)
+= \gcd(b,a \bmod b)\)</span></li>
+</ul></li>
+</ul>
+<ol start="4" type="1">
+<li>算法终止：</li>
+</ol>
+<p>每次递归调用时，第二个参数 <span class="math inline">\(b\)</span>
+都会变小。因为 <span class="math inline">\(a \bmod b &lt;
+b\)</span>，所以算法最终会到达 <span class="math inline">\(b =
+0\)</span> 的情况，因此算法一定会在有限步内终止。</p>
+<h3 id="复杂度分析">复杂度分析</h3>
+<p>暴力枚举约数：</p>
+<p>需要从1到<span
+class="math inline">\(\min(a,b)\)</span>逐个尝试，时间复杂度：<span
+class="math inline">\(O(\min(a,b))\)</span></p>
+<p>欧几里得算法：</p>
+<p>每次递归调用时，<span class="math inline">\(b\)</span>
+至少减半，因此最多需要 <span class="math inline">\(\log
+\min(a,b)\)</span> 次递归，时间复杂度：<span
+class="math inline">\(O(\log \min(a,b))\)</span></p>
+<h2
+id="裵蜀定理或称贝祖定理bézouts-lemma">裵蜀定理（或称贝祖定理，Bézout's
+lemma）</h2>
+<p>对于任意两个不全为零的整数 <span class="math inline">\(a\)</span> 和
+<span class="math inline">\(b\)</span>，存在整数（可以是负数） <span
+class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span>，使得 <span class="math inline">\(ax +
+by = \gcd(a,b)\)</span>。</p>
+<h3 id="证明">证明</h3>
+<p>假设我们要证明：对于整数 <span class="math inline">\(a = 12\)</span>
+和 <span class="math inline">\(b = 8\)</span>，存在整数 <span
+class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span> 使得 <span class="math inline">\(12x +
+8y = \gcd(12,8)\)</span>。</p>
+<ol type="1">
+<li>首先， <span class="math inline">\(\gcd(12,8) = 4\)</span></li>
+<li>使用辗转相除法：
+<ul>
+<li><span class="math inline">\(12 = 8 \times 1 + 4\)</span></li>
+<li><span class="math inline">\(8 = 4 \times 2 + 0\)</span></li>
+</ul></li>
+<li>从第一个等式，我们可以得到：
+<ul>
+<li><span class="math inline">\(4 = 12 - 8 \times 1\)</span></li>
+<li>这里 <span class="math inline">\(x = 1\)</span>, <span
+class="math inline">\(y = -1\)</span> 就是我们要找的解</li>
+</ul></li>
+</ol>
+<p>一般情况的证明思路：</p>
+<ol type="1">
+<li>使用辗转相除法，可以得到一系列等式：
+<ul>
+<li><span class="math inline">\(a = bq_1 + r_1\)</span></li>
+<li><span class="math inline">\(b = r_1q_2 + r_2\)</span></li>
+<li><span class="math inline">\(r_1 = r_2q_3 + r_3\)</span></li>
+<li>...</li>
+<li>直到 <span class="math inline">\(r_{n-1} = r_nq_{n+1} +
+0\)</span></li>
+</ul></li>
+<li>最后一个非零余数 <span class="math inline">\(r_n\)</span> 就是 <span
+class="math inline">\(\gcd(a,b)\)</span></li>
+<li>从最后一个非零等式开始，可以逐步回代，将 <span
+class="math inline">\(\gcd(a,b)\)</span> 表示为 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 的线性组合</li>
+</ol>
+<p>重要推论：</p>
+<ul>
+<li><p>如果 <span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 互质（即 <span
+class="math inline">\(\gcd(a,b) = 1\)</span>），那么存在整数 <span
+class="math inline">\(x\)</span> 和 <span
+class="math inline">\(y\)</span> 使得 <span class="math inline">\(ax +
+by = 1\)</span></p></li>
+<li><p>反过来，如果存在整数 <span class="math inline">\(x\)</span> 和
+<span class="math inline">\(y\)</span> 使得 <span
+class="math inline">\(ax + by = 1\)</span>，那么 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 一定互质</p>
+<p>反证法：假设 <span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 不互质，即 <span
+class="math inline">\(\gcd(a,b) = d &gt; 1\)</span></p>
+<ul>
+<li>那么 <span class="math inline">\(d\)</span> 能整除 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span>，所以 <span
+class="math inline">\(d\)</span> 也能整除 <span class="math inline">\(ax
++ by\)</span></li>
+<li>但 <span class="math inline">\(ax + by = 1\)</span>，而 <span
+class="math inline">\(d &gt; 1\)</span> 不能整除 <span
+class="math inline">\(1\)</span>，矛盾</li>
+<li>因此 <span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 必须互质</li>
+</ul></li>
+</ul>
+<p>扩展：</p>
+<p>推广到多个整数的情况：</p>
+<ul>
+<li>对于 <span class="math inline">\(n\)</span> 个不全为零的整数 <span
+class="math inline">\(a_1, a_2, \dots, a_n\)</span></li>
+<li>存在整数 <span class="math inline">\(x_1, x_2, \dots,
+x_n\)</span>，使得 <span class="math inline">\(a_1x_1 + a_2x_2 + \cdots
++ a_nx_n = \gcd(a_1, a_2, \dots, a_n)\)</span></li>
+</ul>
+<h3 id="例线性和最小值">例：线性和最小值</h3>
+<p>给定一个包含 <span class="math inline">\(n\)</span> 个元素的整数序列
+<span class="math inline">\(A\)</span>，记作 <span
+class="math inline">\(A_1, A_2, A_3, \dots, A_n\)</span>。</p>
+<p>求另一个包含 <span class="math inline">\(n\)</span>
+个元素的待定整数序列 <span class="math inline">\(X\)</span>，记 <span
+class="math inline">\(S = \sum_{i=1}^n A_i \times X_i\)</span>，使得
+<span class="math inline">\(S &gt; 0\)</span> 且 <span
+class="math inline">\(S\)</span> 尽可能的小。</p>
+<p>样例输入</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">2</span><br><span class="line">4059 -1782</span><br></pre></td></tr></table></figure>
+<p>样例输出</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">99</span><br></pre></td></tr></table></figure>
+<p>分析：</p>
+<ol type="1">
+<li>根据裵蜀定理的推广，<span class="math inline">\(S\)</span> 一定是
+<span class="math inline">\(\gcd(A_1, A_2, \dots, A_n)\)</span>
+的倍数，即 <span class="math inline">\(S = k \times \gcd(A_1, A_2,
+\dots, A_n)\)</span></li>
+<li>要使 <span class="math inline">\(S &gt; 0\)</span> 且最小，<span
+class="math inline">\(k\)</span> 必须取最小的正整数，即 <span
+class="math inline">\(k = 1\)</span>，因此 <span class="math inline">\(S
+= \gcd(A_1, A_2, \dots, A_n)\)</span></li>
+<li>对于 <span class="math inline">\(A_{i}\)</span> 是负数的情况：因为
+<span class="math inline">\(\gcd(a,b) =
+\gcd(|a|,|b|)\)</span>，例如：<span class="math inline">\(\gcd(12,-8) =
+\gcd(12,8) =
+4\)</span>，所以可以直接对序列中的每个数取绝对值，再求最大公约数。</li>
+</ol>
+<p>简单的一串<code>GCD</code>搞定：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">GCD</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> b ? <span class="built_in">GCD</span>(b, a % b) : a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n, a = <span class="number">-1</span>, b;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="keyword">while</span>(n --) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;b);</span><br><span class="line">        a = a == <span class="number">-1</span> ? b : <span class="built_in">GCD</span>(a, <span class="built_in">abs</span>(b));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>, a);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="质数与质数筛">质数与质数筛</h2>
+<p>质数（素数）是指大于1的自然数中，除了1和它本身外不再有其他因数的数。</p>
+<p>判断一个数 <span class="math inline">\(n\)</span>
+是否为质数，只需要检查 <span class="math inline">\(2\)</span> 到 <span
+class="math inline">\(\sqrt{n}\)</span> 之间的所有整数是否能整除 <span
+class="math inline">\(n\)</span>。如果都不能整除，则 <span
+class="math inline">\(n\)</span> 是质数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">isPrime</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;  <span class="comment">// 1和负数不是质数</span></span><br><span class="line">    <span class="keyword">if</span> (n == <span class="number">2</span>) <span class="keyword">return</span> <span class="literal">true</span>;   <span class="comment">// 2是质数</span></span><br><span class="line">    <span class="keyword">if</span> (n % <span class="number">2</span> == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;  <span class="comment">// 偶数不是质数（除了2）</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 只需要检查到sqrt(n)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">3</span>; i * i &lt;= n; i += <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (n % i == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>时间复杂度：<span class="math inline">\(O(\sqrt{n})\)</span></p>
+<p>当需要枚举质数，或者有大量数字要快速判断是否是质数时，一个一个<span
+class="math inline">\(O(\sqrt(n))\)</span> 地判断就力不从心了。</p>
+<p>可以通过筛选的方法一次性预处理得到不超过 <span
+class="math inline">\(n\)</span> 的所有质数。</p>
+<h3 id="埃拉托斯特尼筛法sieve-of-eratosthenes">埃拉托斯特尼筛法（sieve
+of Eratosthenes）</h3>
+<p>简称埃氏筛法，筛掉所有有非 <span class="math inline">\(1\)</span>
+约数的数（合数），剩下的就是质数了。</p>
+<p>合数都是由一系列质因数构成的，那么从小到大考虑每个正整数 <span
+class="math inline">\(x\)</span> ，把比它大的倍数 <span
+class="math inline">\(y\)</span>
+都标为合数，最后没标记的就是质数了。</p>
+<p>进一步，因为从小到大考虑的时候，在之前的数考虑过程中，每个待考虑的数
+<span class="math inline">\(x\)</span>
+已经能确定它是否是质数了，那么要考虑的 <span
+class="math inline">\(x\)</span> 就可以跳过所有合数，更加快捷。</p>
+<p>复杂度<span
+class="math inline">\(O(nloglogn)\)</span>，证明略，可搜索网上资料。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">bool</span> isPrime[maxn];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">SetPrime</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">memset</span>(isPrime, <span class="number">1</span>, <span class="built_in">sizeof</span>(isPrime));</span><br><span class="line">    isPrime[<span class="number">0</span>] = isPrime[<span class="number">1</span>] = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i * i &lt; maxn; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(!isPrime[i]) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i * i; j &lt; maxn; j += i) &#123;</span><br><span class="line">            isPrime[j] = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="欧拉线性筛法">欧拉线性筛法</h3>
+<p>如果能让每个合数都只被标记一次，那么时间复杂度就可以降到 <span
+class="math inline">\(O(n)\)</span> 了。</p>
+<p>核心思想：让每个合数只被它的最小质因子筛掉。</p>
+<p>具体实现的关键点：</p>
+<ol type="1">
+<li>使用数组 <code>prime</code> 记录已经找到的质数</li>
+<li>对于每个数 <span class="math inline">\(i\)</span>：
+<ul>
+<li>如果 <span class="math inline">\(i\)</span> 是质数，加入质数表</li>
+<li>用 <span class="math inline">\(i\)</span>
+和质数表中的质数相乘，标记合数</li>
+<li>当 <span class="math inline">\(i\)</span>
+能被当前质数整除时，停止标记</li>
+</ul></li>
+</ol>
+<p>为什么这样能保证每个合数只被标记一次？</p>
+<p>设合数 <span class="math inline">\(n\)</span> 的最小质因子为 <span
+class="math inline">\(p\)</span></p>
+<ul>
+<li>当 <span class="math inline">\(i = \frac{n}{p}\)</span> 时，<span
+class="math inline">\(n\)</span> 会被标记</li>
+<li>因为 <span class="math inline">\(p\)</span> 是 <span
+class="math inline">\(n\)</span> 的最小质因子，所以 <span
+class="math inline">\(\frac{n}{p}\)</span> 的所有质因子都大于等于 <span
+class="math inline">\(p\)</span>
+<ul>
+<li>当 <span class="math inline">\(i &lt; \frac{n}{p}\)</span> 时：
+<ul>
+<li>要么<span class="math inline">\(i\)</span>包含质因数<span
+class="math inline">\(p\)</span>，那么会<code>if(i % prime[j] == 0) break;</code></li>
+<li>要么<span class="math inline">\(i\)</span>要乘以比<span
+class="math inline">\(p\)</span>大的质因数才能接近<span
+class="math inline">\(n\)</span>，但这样它们都不包含<span
+class="math inline">\(p\)</span>必然无法得到<span
+class="math inline">\(n\)</span></li>
+</ul></li>
+<li>当 <span class="math inline">\(i &gt; \frac{n}{p}\)</span> 时，<span
+class="math inline">\(i\)</span> 乘以任何质数都会大于 <span
+class="math inline">\(n\)</span></li>
+</ul></li>
+</ul>
+<p>因此，每个合数 <span class="math inline">\(n\)</span> 只会在 <span
+class="math inline">\(i = \frac{n}{p}\)</span> 时被标记一次，其中 <span
+class="math inline">\(p\)</span> 是 <span
+class="math inline">\(n\)</span> 的最小质因子。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">bool</span> isPrime[maxn];</span><br><span class="line"><span class="type">int</span> prime[maxm], ptp;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">SetPrime</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ptp = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">memset</span>(isPrime, <span class="number">1</span>, <span class="built_in">sizeof</span>(isPrime));</span><br><span class="line">    isPrime[<span class="number">0</span>] = isPrime[<span class="number">1</span>] = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt; maxn; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(isPrime[i]) prime[ptp ++] = i;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; ptp &amp;&amp; i * prime[j] &lt; maxn; j ++) &#123;</span><br><span class="line">            isPrime[i * prime[j]] = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">if</span>(i % prime[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="同余的基本概念">同余的基本概念</h2>
+<p>如果两个整数 <span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 除以正整数 <span
+class="math inline">\(m\)</span> 的余数相同，我们就说 <span
+class="math inline">\(a\)</span> 和 <span
+class="math inline">\(b\)</span> 对模 <span
+class="math inline">\(m\)</span> 同余，记作： <span
+class="math inline">\(a \equiv b \pmod{m}\)</span></p>
+<p>例如：</p>
+<ul>
+<li><span class="math inline">\(7 \equiv 2 \pmod{5}\)</span>，因为 <span
+class="math inline">\(7\)</span> 和 <span
+class="math inline">\(2\)</span> 除以 <span
+class="math inline">\(5\)</span> 的余数都是 <span
+class="math inline">\(2\)</span></li>
+<li><span class="math inline">\(12 \equiv 0 \pmod{3}\)</span>，因为
+<span class="math inline">\(12\)</span> 和 <span
+class="math inline">\(0\)</span> 除以 <span
+class="math inline">\(3\)</span> 的余数都是 <span
+class="math inline">\(0\)</span></li>
+</ul>
+<p>同余的基本性质：</p>
+<ol type="1">
+<li>如果 <span class="math inline">\(a \equiv b \pmod{m}\)</span>，那么
+<span class="math inline">\(a - b\)</span> 能被 <span
+class="math inline">\(m\)</span> 整除</li>
+<li>如果 <span class="math inline">\(a \equiv b \pmod{m}\)</span>，那么
+<span class="math inline">\(a + c \equiv b + c \pmod{m}\)</span></li>
+<li>如果 <span class="math inline">\(a \equiv b \pmod{m}\)</span>，那么
+<span class="math inline">\(ac \equiv bc \pmod{m}\)</span></li>
+</ol>
+<p>基于基本性质可知：</p>
+<ul>
+<li>在<strong>加减乘</strong>运算过程中，可以随时对中间结果取模，最终结果不变</li>
+<li>例如：计算 <span class="math inline">\((a + b) \times c \bmod
+m\)</span> 时，可以：
+<ol type="1">
+<li>先计算 <span class="math inline">\(a + b \bmod m\)</span></li>
+<li>再乘以 <span class="math inline">\(c\)</span> 后取模</li>
+<li>结果与直接计算 <span class="math inline">\((a + b) \times c \bmod
+m\)</span> 相同</li>
+</ol></li>
+</ul>
+<p>这个性质在计算大数时特别有用，可以避免中间结果溢出。</p>
+<p>注意这里"任意中间结果取模"是在<strong>加减乘</strong>运算过程中，不包含<strong>除法</strong>，除法运算的取模要考虑另外一个知识点——乘法逆元，将在后续内容中学习。</p>
+<p>这就是为什么一些数据很大的题，要求结果对 <span
+class="math inline">\(10^{9}+7\)</span>、 <span
+class="math inline">\(998244353\)</span>
+等这种很大的数取模时，可以在中间任意步骤取模以防溢出 <code>int</code> 或
+<code>long long</code>。</p>
+<blockquote>
+<p>扩展了解：线性同余方程、中国剩余定理</p>
+</blockquote>
+<h2 id="欧拉函数">欧拉函数</h2>
+<p>欧拉函数 <span class="math inline">\(\varphi(n)\)</span> 表示小于等于
+<span class="math inline">\(n\)</span> 且与 <span
+class="math inline">\(n\)</span> 互质的数的个数。例如：</p>
+<ul>
+<li><span class="math inline">\(\varphi(1) =
+1\)</span>（1与自身互质）</li>
+<li><span class="math inline">\(\varphi(6) =
+2\)</span>（1和5与6互质）</li>
+<li>当 <span class="math inline">\(n\)</span> 是质数时，<span
+class="math inline">\(\varphi(n) = n -
+1\)</span>（因为质数与所有小于它的数都互质）</li>
+</ul>
+<p>欧拉函数的计算公式：<span class="math inline">\(\varphi(n) = n
+\prod_{p|n} (1-\frac{1}{p})\)</span>，其中 <span
+class="math inline">\(p\)</span> 是 <span
+class="math inline">\(n\)</span> 的所有质因数。</p>
+<ol type="1">
+<li>一个数与 <span class="math inline">\(n\)</span>
+不互质，当且仅当它能被 <span class="math inline">\(n\)</span>
+的某个质因数整除</li>
+<li>对于 <span class="math inline">\(n\)</span> 的每个质因数 <span
+class="math inline">\(p\)</span>：在 <span
+class="math inline">\(1\)</span> 到 <span
+class="math inline">\(n\)</span> 中，有 <span
+class="math inline">\(\frac{n}{p}\)</span> 个数能被 <span
+class="math inline">\(p\)</span> 整除，所以有 <span
+class="math inline">\(n(1-\frac{1}{p})\)</span> 个数不能被 <span
+class="math inline">\(p\)</span> 整除</li>
+<li>对于不同的质因数，它们的影响是独立的：一个数能被某个质因数整除，与它是否能被其他质因数整除无关</li>
+<li>因此，最终与 <span class="math inline">\(n\)</span>
+互质的数的个数就是 <span class="math inline">\(n\)</span>
+连续乘以每个质因数 <span class="math inline">\(p\)</span> 的 <span
+class="math inline">\((1-\frac{1}{p})\)</span></li>
+</ol>
+<p>例如，对于 <span class="math inline">\(n = 12\)</span>：</p>
+<ul>
+<li>质因数为 <span class="math inline">\(2\)</span> 和 <span
+class="math inline">\(3\)</span></li>
+<li><span class="math inline">\(\varphi(12) = 12 \times (1-\frac{1}{2})
+\times (1-\frac{1}{3}) = 12 \times \frac{1}{2} \times \frac{2}{3} =
+4\)</span></li>
+<li>确实，<span class="math inline">\(1, 5, 7, 11\)</span> 这四个数与
+<span class="math inline">\(12\)</span> 互质</li>
+</ul>
+<h3 id="直接计算欧拉函数">直接计算欧拉函数</h3>
+<ol type="1">
+<li>从2开始尝试每个可能的质因数</li>
+<li>找到一个质因数 <span class="math inline">\(i\)</span> 后，将 <span
+class="math inline">\(n\)</span> 除以 <span
+class="math inline">\(i\)</span> 的幂，同时更新结果</li>
+<li>最后如果 <span class="math inline">\(tn &gt; 1\)</span>，说明 <span
+class="math inline">\(tn\)</span> 是一个大于 <span
+class="math inline">\(\sqrt{n}\)</span> 的质因数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">Euler</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> res = n, tn = n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i * i &lt;= tn; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(tn % i) <span class="keyword">continue</span>;</span><br><span class="line">        res = res / i * (i - <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">while</span>(tn % i == <span class="number">0</span>) tn /= i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(tn &gt; <span class="number">1</span>) res = res / tn * (tn - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中的关键步骤解释：</p>
+<p><code>while(tn % i == 0) tn /= i;</code></p>
+<p>这行代码用于去除 <span class="math inline">\(n\)</span> 中质因数
+<span class="math inline">\(i\)</span> 的所有幂，对于 <span
+class="math inline">\(n = 12 = 2 \times 2 \times 3\)</span>，当 <span
+class="math inline">\(i = 2\)</span> 时，循环会执行两次，将 <span
+class="math inline">\(tn\)</span> 从 <span
+class="math inline">\(12\)</span> 变成 <span
+class="math inline">\(3\)</span>，这样确保每个质因数只被处理一次。</p>
+<p><code>if(tn &gt; 1) res = res / tn * (tn - 1);</code></p>
+<p>这个判断处理的是大于 <span class="math inline">\(\sqrt{n}\)</span>
+的质因数，这样的质因数至多只会有 1 个。例如：对于 <span
+class="math inline">\(n = 35 = 5 \times 7\)</span>，当 <span
+class="math inline">\(i = 5\)</span> 时，<span
+class="math inline">\(tn\)</span> 会变成 <span
+class="math inline">\(7\)</span>，因为 <span class="math inline">\(7
+&gt; \sqrt{35}\)</span>，要在循环后单独处理。</p>
+<h3 id="欧拉函数打表">欧拉函数打表</h3>
+<p>需要随机使用很多不同的数的欧拉函数值时，预处理打好表。</p>
+<ol type="1">
+<li>初始化每个数的待计算欧拉函数值为自身</li>
+<li>从小到大遍历每个数，如果这个数等于它的欧拉函数值，说明它是质数</li>
+<li>对于每个质数，更新它的所有倍数的欧拉函数值</li>
+</ol>
+<p>这样每个数都会被它的所有质因数处理一次，最终得到正确的欧拉函数值</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::vector&lt;<span class="type">int</span>&gt; el; <span class="comment">// 累加求和的话注意 long long</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">EulerList</span><span class="params">(<span class="type">int</span> maxn)</span> </span>&#123;</span><br><span class="line">    el.<span class="built_in">resize</span>(maxn + <span class="number">10</span>);</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt;= maxn; i ++) &#123;</span><br><span class="line">        el[i] = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt;= maxn; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(el[i] != i) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = i; j &lt;= maxn; j += i) &#123;</span><br><span class="line">            el[j] = el[j] / i * (i - <span class="number">1</span>);    <span class="comment">// n * (1 - 1/p)</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例求互质个数">例：求互质个数</h3>
+<p>计算在 <span class="math inline">\([1, 2023^{2023}]\)</span> 范围内与
+<span class="math inline">\(2023\)</span> 互质的数的个数。</p>
+<p>分析：</p>
+<p>欧拉函数 <span class="math inline">\(\varphi(n)\)</span> 是 <span
+class="math inline">\(n\)</span> 以内与 <span
+class="math inline">\(n\)</span> 互质的数的个数，但题目区间是 <span
+class="math inline">\([1, n^{n}]\)</span>。</p>
+<p>注意到 如果一个数与 <span class="math inline">\(n\)</span>
+互质，则必然与 <span class="math inline">\(n^{n}\)</span>
+互质，那么这道题等于求 <span
+class="math inline">\(\varphi(n^n)\)</span>，根据欧拉函数的计算方式，从
+<span class="math inline">\(n^n\)</span> 摘出一个 <span
+class="math inline">\(n\)</span>计算 <span
+class="math inline">\(\varphi(n)\)</span> ，再乘上 <span
+class="math inline">\(n^{n-1}\)</span> 与 <span
+class="math inline">\(\varphi(n^n)\)</span>
+也是相等的，结合快速幂取模可解。</p>
+<p>这道题给的数字 <code>2023</code>
+质因数分解比较简单，计算欧拉函数时不涉及<strong>因为有除法而无法完成同余计算</strong>的问题，故可以直接计算。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">PowMod</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(; n; n &gt;&gt;= <span class="number">1</span>, a = <span class="number">1LL</span> * a * a % mod)</span><br><span class="line">        <span class="keyword">if</span>(n &amp; <span class="number">1</span>) ret = <span class="number">1LL</span> * ret * a % mod;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">Euler</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> res = n, tn = n;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i * i &lt;= tn; i ++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(tn % i) <span class="keyword">continue</span>;</span><br><span class="line">        res = <span class="number">1LL</span> * res * (i - <span class="number">1</span>) / i % mod;</span><br><span class="line">        <span class="keyword">while</span>(tn % i == <span class="number">0</span>) tn /= i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(tn &gt; <span class="number">1</span>) res = res / tn * (tn - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> n;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;n);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%lld\n&quot;</span>, <span class="number">1LL</span> * <span class="built_in">Euler</span>(n) * <span class="built_in">PowMod</span>(n, n - <span class="number">1</span>) % mod);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="乘法逆元">乘法逆元</h2>
+<p>数学上的乘法逆元就是指直观的倒数，即 <span
+class="math inline">\(a\)</span> 的逆元是 <span
+class="math inline">\(\frac{1}{a}\)</span>，也即与 <span
+class="math inline">\(a\)</span> 相乘得 <span
+class="math inline">\(1\)</span> 的数。<span class="math inline">\(a
+\cdot x = 1\)</span>，则 <span class="math inline">\(x\)</span> 是 <span
+class="math inline">\(a\)</span> 的乘法逆元。</p>
+<p>而在对特定数取模时，也有一个乘法逆元概念，如果 <span
+class="math inline">\(a \cdot x \bmod b = 1\)</span>，则 <span
+class="math inline">\(x\)</span> 是 <span
+class="math inline">\(a\)</span> 的关于 <span class="math inline">\(mod
+b\)</span> 的乘法逆元。</p>
+<p>设 <span class="math inline">\(m\)</span> 是一个很大的数，<span
+class="math inline">\(a\)</span>、<span class="math inline">\(b\)</span>
+已知，预期要计算（假设答案为 <span
+class="math inline">\(c\)</span>）：</p>
+<p><span class="math display">\[
+\frac{m}{a} \bmod b
+\]</span></p>
+<p>对于 <span class="math inline">\(a\)</span> 的逆元 <span
+class="math inline">\(d\)</span>，能够满足</p>
+<p><span class="math display">\[
+m \cdot d \bmod b = \frac{m}{a} \bmod b = c
+\]</span></p>
+<p>在有些问题中，无法计算最终值很大的 <span
+class="math inline">\(m\)</span>，只能得到基于同余的一个中间值 <span
+class="math inline">\(m \bmod b = e\)</span> 来计算 <span
+class="math inline">\(\frac{e}{a} \bmod b\)</span>，而 <span
+class="math inline">\(e\)</span> 可能无法整除 <span
+class="math inline">\(a\)</span>：</p>
+<p>比如计算 <span class="math inline">\(\frac{18}{3} \bmod 7 =
+6\)</span>，但如果先根据同余计算了 <span class="math inline">\(18 \bmod
+7 = 4\)</span>，后续 <span class="math inline">\(\frac{4}{3}\)</span>
+就无法整除了。</p>
+<p>用 <span class="math inline">\(a\)</span> 的逆元 <span
+class="math inline">\(d\)</span>，来计算 <span class="math inline">\(e
+\cdot d \bmod b\)</span>。</p>
+<p>除数 <span class="math inline">\(3\)</span> 关于模数 <span
+class="math inline">\(7\)</span> 的逆元 <span
+class="math inline">\(5\)</span>（根据逆元定义，<span
+class="math inline">\(5\)</span> 符合 <span class="math inline">\(3
+\cdot 5 \bmod 7 = 1\)</span>），从而，用乘以 <span
+class="math inline">\(5\)</span> 代替除以 <span
+class="math inline">\(3\)</span>。</p>
+<p>上述第二步除法变乘法：<span class="math inline">\(4 / 3 \rightarrow 4
+\cdot 5 = 20\)</span>，<span class="math inline">\(20 \bmod 7 =
+6\)</span>，从而也计算出了正确的结果 <span
+class="math inline">\(6\)</span>。</p>
+<h3 id="求逆元的三种方法">求逆元的三种方法</h3>
+<p>更详细资料见：<a
+href="/2021-06-07-MultiplicativeInverse/?highlight=逆元">乘法逆元</a></p>
+<ol type="1">
+<li><p><strong>扩展欧几里得算法</strong></p>
+<ul>
+<li>适用范围：模数 <span class="math inline">\(m\)</span>
+不要求是质数，只要 <span class="math inline">\(a\)</span> 和 <span
+class="math inline">\(m\)</span> 互质即可</li>
+<li>时间复杂度：<span class="math inline">\(O(\log m)\)</span></li>
+<li><strong>最常用、最安全的求逆元方式</strong></li>
+</ul></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="type">long</span> <span class="type">long</span> LL;</span><br><span class="line"><span class="function">LL <span class="title">ExGCD</span><span class="params">(LL a, LL b, LL &amp;x, LL &amp;y)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// x, y 为引用传参，故最终程序结束后，x,y会被赋值为可行解</span></span><br><span class="line">    <span class="keyword">if</span>(b == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 递归终点，ax+by=GCD(a,b)的b为0，故方程变为</span></span><br><span class="line">        <span class="comment">// ax=a，则可行解可以是 x=1, y=0</span></span><br><span class="line">        x = <span class="number">1</span>, y = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> a;</span><br><span class="line">    &#125;</span><br><span class="line">    LL d = <span class="built_in">ExGCD</span>(b, a % b, x, y), t = x;</span><br><span class="line">    x = y, y = t - a / b * x;</span><br><span class="line">    <span class="keyword">return</span> d;  <span class="comment">// 这里返回值是GCD(a,b)的结果，即最大公约数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">ExGcdInv</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> x, y;</span><br><span class="line">    <span class="built_in">ExGCD</span>(a, b, x, y);</span><br><span class="line">    <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol type="1">
+<li><strong>费马小定理</strong>
+<ul>
+<li>适用范围：模数 <span class="math inline">\(m\)</span>
+必须是质数</li>
+<li>时间复杂度：<span class="math inline">\(O(\log m)\)</span></li>
+<li>原理：若 <span class="math inline">\(m\)</span> 为质数，则 <span
+class="math inline">\(a^{m-1} \equiv 1 \pmod{m}\)</span>，因此 <span
+class="math inline">\(a^{-1} \equiv a^{m-2} \pmod{m}\)</span></li>
+</ul></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">PowMod</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> n, <span class="type">int</span> mod)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> ret = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(n) &#123;</span><br><span class="line">        <span class="keyword">if</span>(n &amp; <span class="number">1</span>) ret = ret * a % mod;</span><br><span class="line">        a = a * a % mod;</span><br><span class="line">        n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">FermatInv</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">PowMod</span>(a, b - <span class="number">2</span>, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2" type="1">
+<li><strong>递推求逆元</strong>
+<ul>
+<li>适用范围：模数 <span class="math inline">\(m\)</span>
+必须是质数</li>
+<li>时间复杂度：<span class="math inline">\(O(\log m)\)</span></li>
+<li>递推公式：<span class="math inline">\(inv(a) \equiv -\lfloor m/a
+\rfloor \cdot inv(m \bmod a) \pmod{m}\)</span></li>
+</ul></li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">LL <span class="title">Inv</span><span class="params">(LL a, LL b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> (b - b / a) * <span class="built_in">Inv</span>(b % a, b) % b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="逆元打表">逆元打表</h3>
+<p>当需要频繁使用不同数的逆元时，可以预处理打表：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> inv[maxn];</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetInv</span><span class="params">(<span class="type">int</span> mod)</span> </span>&#123;</span><br><span class="line">    inv[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt; mod; i ++)</span><br><span class="line">        inv[i] = <span class="number">1LL</span> * (mod - mod / i) * inv[mod % i] % mod;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="数论分块">数论分块</h2>
+<h3 id="例除法向下取整求和">例：除法向下取整求和</h3>
+<p><strong>向下取整（floor 运算）：</strong></p>
+<p><span class="math display">\[
+\left\lfloor \frac{n}{i} \right\rfloor
+\]</span></p>
+<p>例如： <span class="math display">\[
+\left\lfloor \frac{5}{2} \right\rfloor = 2, \quad \left\lfloor
+\frac{10}{3} \right\rfloor = 3
+\]</span></p>
+<p>C 语言中的 <span class="math inline">\(int\)</span>
+运算默认向下取整。</p>
+<p>给定 <span class="math inline">\(n\)</span>（<span
+class="math inline">\(10^{12}\)</span> 级别），求 <span
+class="math inline">\(i\)</span> 从 <span
+class="math inline">\(1\)</span> 到 <span
+class="math inline">\(n\)</span> 的所有 <span
+class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor\)</span>
+的和，即： <span class="math display">\[
+\sum_{i=1}^{n} \left\lfloor \frac{n}{i} \right\rfloor
+\]</span></p>
+<p>以 <span class="math inline">\(n=11\)</span> 为例，</p>
+<p>观察 <span class="math inline">\(x=4\sim5\)</span>、<span
+class="math inline">\(x=6\sim11\)</span> 的分段情况。</p>
+<img src="/2025-06-11-35-%E6%95%B0%E8%AE%BA%E5%85%A5%E9%97%A8/%E6%95%B0%E8%AE%BA%E5%88%86%E5%9D%97_%E5%9F%BA%E6%9C%AC%E4%BE%8B%E5%AD%90.png" class="">
+<p><strong>引理：<span class="math inline">\(n/d\)</span>
+向下取整的不同值个数不超过 <span class="math inline">\(2\)</span> 倍的
+<span class="math inline">\(n\)</span> 的平方根</strong></p>
+<p><span class="math display">\[
+\forall n \in \mathbb{N}_+,\ \left| \left\{ \left\lfloor \frac{n}{d}
+\right\rfloor \mid d \in \mathbb{N}_+,\ d \leq n \right\} \right| \leq
+\left\lfloor 2\sqrt{n} \right\rfloor
+\]</span></p>
+<p>证明：</p>
+<ul>
+<li><span class="math inline">\(d \leq \left\lfloor \sqrt{n}
+\right\rfloor\)</span> 时，<span class="math inline">\(\left\lfloor
+\frac{n}{d} \right\rfloor\)</span> 有 <span
+class="math inline">\(\sqrt{n}\)</span> 种取值。</li>
+<li><span class="math inline">\(d &gt; \left\lfloor \sqrt{n}
+\right\rfloor\)</span> 时，<span class="math inline">\(\left\lfloor
+\frac{n}{d} \right\rfloor \leq \left\lfloor \sqrt{n}
+\right\rfloor\)</span>，故也至多 <span
+class="math inline">\(\left\lfloor \sqrt{n} \right\rfloor\)</span>
+种取值。</li>
+</ul>
+<p>因此总的不同取值个数不超过 <span
+class="math inline">\(2\sqrt{n}\)</span>。</p>
+<p>如何高效枚举 <span class="math inline">\(\left\lfloor \frac{n}{i}
+\right\rfloor\)</span> 的所有不同值？</p>
+<p>对于每个 <span class="math inline">\(i\)</span>，找到 <span
+class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor\)</span>
+的"右端点"，即最大的 <span class="math inline">\(j\)</span>，使得 <span
+class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor =
+\left\lfloor \frac{n}{j} \right\rfloor\)</span>。</p>
+<ul>
+<li><span class="math inline">\(i=4\)</span> 时，<span
+class="math inline">\(j=5\)</span></li>
+<li><span class="math inline">\(i=6\)</span> 时，<span
+class="math inline">\(j=11\)</span></li>
+</ul>
+<p><span class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor =
+\left\lfloor \frac{n}{j} \right\rfloor\)</span> 的最大 <span
+class="math inline">\(j\)</span> 是：</p>
+<p><span class="math display">\[
+j = \left\lfloor \frac{n}{\left\lfloor \frac{n}{i} \right\rfloor}
+\right\rfloor
+\]</span></p>
+<p>简要证明：</p>
+<p>令 <span class="math inline">\(k = \left\lfloor \frac{n}{i}
+\right\rfloor\)</span>，变量 <span class="math inline">\(t\)</span> 满足
+<span class="math inline">\(\left\lfloor \frac{n}{t} \right\rfloor =
+\left\lfloor \frac{n}{i} \right\rfloor\)</span>，<span
+class="math inline">\(j\)</span> 为最大的 <span
+class="math inline">\(t\)</span>。</p>
+<ul>
+<li><span class="math inline">\(k \leq \frac{n}{t}\)</span></li>
+<li><span class="math inline">\(\left\lfloor \frac{n}{k} \right\rfloor
+\geq \left\lfloor \frac{n}{n/t} \right\rfloor = \left\lfloor t
+\right\rfloor = t\)</span></li>
+<li><span class="math inline">\(t\)</span> 可取的最大值为 <span
+class="math inline">\(\left\lfloor \frac{n}{k}
+\right\rfloor\)</span></li>
+<li><span class="math inline">\(j = \max(t) = \left\lfloor \frac{n}{k}
+\right\rfloor = \left\lfloor \frac{n}{\left\lfloor \frac{n}{i}
+\right\rfloor} \right\rfloor\)</span></li>
+</ul>
+<p>高效计算 <span class="math inline">\(\sum\limits_{i=1}^n \left\lfloor
+\frac{n}{i} \right\rfloor\)</span></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>, j; i &lt;= n; i = j + <span class="number">1</span>) &#123;</span><br><span class="line">    j = n / (n / i);</span><br><span class="line">    ret += (n / i) * (j - i + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例两个除法向下取整">例：两个除法向下取整</h3>
+<p><span class="math display">\[
+\sum_{i=1}^n \left\lfloor \frac{n}{i} \right\rfloor \left\lfloor
+\frac{m}{i} \right\rfloor
+\]</span></p>
+<p>相对上一个问题，两个除法只是把相等的块分的更细了而已，用更小步去迭代即可。</p>
+<img src="/2025-06-11-35-%E6%95%B0%E8%AE%BA%E5%85%A5%E9%97%A8/%E6%95%B0%E8%AE%BA%E5%88%86%E5%9D%97_%E4%B8%A4%E9%99%A4%E6%B3%95%E5%B0%8F%E6%AD%A5%E8%BF%AD%E4%BB%A3.svg" class="">
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>, j; i &lt;= n; i = j + <span class="number">1</span>) &#123;</span><br><span class="line">    j = std::<span class="built_in">min</span>(n / (n / i), m / (m / i));</span><br><span class="line">    ret += (n / i) * (m / i) * (j - i + <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例乘个别的">例：乘个别的</h3>
+<p><span class="math display">\[
+\sum_{i=1}^ni\lfloor\frac{n}{i}\rfloor
+\]</span></p>
+<img src="/2025-06-11-35-%E6%95%B0%E8%AE%BA%E5%85%A5%E9%97%A8/%E6%95%B0%E8%AE%BA%E5%88%86%E5%9D%97_%E4%B9%98%E4%B8%AA%E5%88%AB%E7%9A%84.svg" class="">
+<p>观察发现，每段稳定的 <span class="math inline">\(k\)</span>
+对应一段有规律变化值，仍然可以按稳定值分块后，对每一块的规律变化值另外计算。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> ret = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>, j; i &lt;= n; i = j + <span class="number">1</span>) &#123;</span><br><span class="line">    j = n / (n / i);</span><br><span class="line">    ret += (n / i) * (i + j) * (j - i + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例通用化">例：通用化</h3>
+<p><span class="math display">\[
+\sum_{i=1}^{\min{n_t}} f(i)\prod_{各式各样的g_t,n_t} g_{t}(\lfloor
+\frac{n_t}{i} \rfloor)
+\]</span></p>
+<p>例如</p>
+<p><span class="math display">\[
+\sum_{i=1}^{\min(n_t)} fib_{i}\prod_{t=1}^m \lfloor \frac{n_t}{i}
+\rfloor
+\]</span></p>
+<p>其中 <span class="math inline">\(fib\)</span> 表示斐波那契数列</p>
+<p>提示：预处理 <span class="math inline">\(f(i)\)</span> 的前缀和，在
+<span class="math inline">\(\frac{n_{t}}{i}\)</span>
+的分段节点中每次选最小节点</p>
+<p>自行尝试</p>
+<h3 id="例一些变通">例：一些变通</h3>
+<p>计算 <span class="math inline">\(\sum_{i=1}^{n}(k \mod
+i)\)</span></p>
+<p>提示：<span class="math inline">\(k \mod i == k - i*\lfloor
+\frac{k}{i} \rfloor\)</span></p>
+<p>剩下的自行尝试</p>
+<h3 id="注意事项">注意事项</h3>
+<ul>
+<li>注意是否需要 <code>long long</code></li>
+<li>别只盯着结果，看看中间步骤是否超 <code>int</code></li>
+<li>检查求和范围，“右端点”计算、for循环范围也会有陷阱</li>
+</ul>
+]]></content>
+      <categories>
+        <category>ACM</category>
+        <category>ACMCOURSE</category>
+      </categories>
+      <tags>
+        <tag>ACM</tag>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
 </search>
