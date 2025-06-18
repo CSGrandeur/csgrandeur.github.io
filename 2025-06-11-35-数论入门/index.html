@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-11-35-%E6%95%B0%E8%AE%BA%E5%85%A5%E9%97%A8/%E6%95%B0%E8%AE%BA%E5%88%86%E5%9D%97_%E4%B8%A4%E9%99%A4%E6%B3%95%E5%B0%8F%E6%AD%A5%E8%BF%AD%E4%BB%A3.svg">
 <meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-11-35-%E6%95%B0%E8%AE%BA%E5%85%A5%E9%97%A8/%E6%95%B0%E8%AE%BA%E5%88%86%E5%9D%97_%E4%B9%98%E4%B8%AA%E5%88%AB%E7%9A%84.svg">
 <meta property="article:published_time" content="2025-06-11T02:56:31.000Z">
-<meta property="article:modified_time" content="2025-06-11T10:07:07.297Z">
+<meta property="article:modified_time" content="2025-06-18T07:35:13.374Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="ACM">
 <meta property="article:tag" content="Algorithm">
@@ -161,7 +161,7 @@ of Eratosthenes）</span></a></li><li class="nav-item nav-level-3"><a class="nav
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -227,9 +227,15 @@ of Eratosthenes）</span></a></li><li class="nav-item nav-level-3"><a class="nav
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-06-11 10:56:31 / 修改时间：18:07:07" itemprop="dateCreated datePublished" datetime="2025-06-11T10:56:31+08:00">2025-06-11</time>
+      <time title="创建时间：2025-06-11 10:56:31" itemprop="dateCreated datePublished" datetime="2025-06-11T10:56:31+08:00">2025-06-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-18 15:35:13" itemprop="dateModified" datetime="2025-06-18T15:35:13+08:00">2025-06-18</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -448,7 +454,16 @@ class="math inline">\(S\)</span> 尽可能的小。</p>
 <li>根据裵蜀定理的推广，<span class="math inline">\(S\)</span> 一定是
 <span class="math inline">\(\gcd(A_1, A_2, \dots, A_n)\)</span>
 的倍数，即 <span class="math inline">\(S = k \times \gcd(A_1, A_2,
-\dots, A_n)\)</span></li>
+\dots, A_n)\)</span>
+<ul>
+<li><blockquote>
+<p>有同学举例 $8 - 3 = 5 $ 不是 <span class="math inline">\(8\)</span>
+和 <span class="math inline">\(3\)</span> 的公约数，这与论述不矛盾，
+<span class="math inline">\(S\)</span> 一定是 公约数的倍数， <span
+class="math inline">\(5\)</span> 是 <span
+class="math inline">\(1\)</span> 的倍数。</p>
+</blockquote></li>
+</ul></li>
 <li>要使 <span class="math inline">\(S &gt; 0\)</span> 且最小，<span
 class="math inline">\(k\)</span> 必须取最小的正整数，即 <span
 class="math inline">\(k = 1\)</span>，因此 <span class="math inline">\(S
@@ -516,11 +531,16 @@ class="math inline">\(n\)</span> 的最小质因子，所以 <span
 class="math inline">\(\frac{n}{p}\)</span> 的所有质因子都大于等于 <span
 class="math inline">\(p\)</span>
 <ul>
-<li>当 <span class="math inline">\(i &lt; \frac{n}{p}\)</span> 时，<span
-class="math inline">\(i\)</span> 的质因子都小于 <span
-class="math inline">\(p\)</span>，所以 <span
-class="math inline">\(i\)</span> 乘以任何质数都不会得到 <span
+<li>当 <span class="math inline">\(i &lt; \frac{n}{p}\)</span> 时：
+<ul>
+<li>要么<span class="math inline">\(i\)</span>包含质因数<span
+class="math inline">\(p\)</span>，那么会<code>if(i % prime[j] == 0) break;</code></li>
+<li>要么<span class="math inline">\(i\)</span>要乘以比<span
+class="math inline">\(p\)</span>大的质因数才能接近<span
+class="math inline">\(n\)</span>，但这样它们都不包含<span
+class="math inline">\(p\)</span>必然无法得到<span
 class="math inline">\(n\)</span></li>
+</ul></li>
 <li>当 <span class="math inline">\(i &gt; \frac{n}{p}\)</span> 时，<span
 class="math inline">\(i\)</span> 乘以任何质数都会大于 <span
 class="math inline">\(n\)</span></li>
@@ -539,15 +559,19 @@ class="math inline">\(a\)</span> 和 <span
 class="math inline">\(b\)</span> 对模 <span
 class="math inline">\(m\)</span> 同余，记作： <span
 class="math inline">\(a \equiv b \pmod{m}\)</span></p>
-<p>例如： - <span class="math inline">\(7 \equiv 2
-\pmod{5}\)</span>，因为 <span class="math inline">\(7\)</span> 和 <span
+<p>例如：</p>
+<ul>
+<li><span class="math inline">\(7 \equiv 2 \pmod{5}\)</span>，因为 <span
+class="math inline">\(7\)</span> 和 <span
 class="math inline">\(2\)</span> 除以 <span
 class="math inline">\(5\)</span> 的余数都是 <span
-class="math inline">\(2\)</span> - <span class="math inline">\(12 \equiv
-0 \pmod{3}\)</span>，因为 <span class="math inline">\(12\)</span> 和
-<span class="math inline">\(0\)</span> 除以 <span
+class="math inline">\(2\)</span></li>
+<li><span class="math inline">\(12 \equiv 0 \pmod{3}\)</span>，因为
+<span class="math inline">\(12\)</span> 和 <span
+class="math inline">\(0\)</span> 除以 <span
 class="math inline">\(3\)</span> 的余数都是 <span
-class="math inline">\(0\)</span></p>
+class="math inline">\(0\)</span></li>
+</ul>
 <p>同余的基本性质：</p>
 <ol type="1">
 <li>如果 <span class="math inline">\(a \equiv b \pmod{m}\)</span>，那么
@@ -558,7 +582,7 @@ class="math inline">\(m\)</span> 整除</li>
 <li>如果 <span class="math inline">\(a \equiv b \pmod{m}\)</span>，那么
 <span class="math inline">\(ac \equiv bc \pmod{m}\)</span></li>
 </ol>
-<p>运算过程中的取模：</p>
+<p>基于基本性质可知：</p>
 <ul>
 <li>在<strong>加减乘</strong>运算过程中，可以随时对中间结果取模，最终结果不变</li>
 <li>例如：计算 <span class="math inline">\((a + b) \times c \bmod
@@ -571,7 +595,7 @@ m\)</span> 相同</li>
 </ol></li>
 </ul>
 <p>这个性质在计算大数时特别有用，可以避免中间结果溢出。</p>
-<p>注意这里"任意中间结果取模"是在<strong>加减乘</strong>运算过程中，不包含<strong>除法</strong>，除法运算的取模要考虑另外一个知识点——乘法逆元，这个将在未来学习。</p>
+<p>注意这里"任意中间结果取模"是在<strong>加减乘</strong>运算过程中，不包含<strong>除法</strong>，除法运算的取模要考虑另外一个知识点——乘法逆元，将在后续内容中学习。</p>
 <p>这就是为什么一些数据很大的题，要求结果对 <span
 class="math inline">\(10^{9}+7\)</span>、 <span
 class="math inline">\(998244353\)</span>
@@ -583,12 +607,16 @@ class="math inline">\(998244353\)</span>
 <h2 id="欧拉函数">欧拉函数</h2>
 <p>欧拉函数 <span class="math inline">\(\varphi(n)\)</span> 表示小于等于
 <span class="math inline">\(n\)</span> 且与 <span
-class="math inline">\(n\)</span> 互质的数的个数。例如： - <span
-class="math inline">\(\varphi(1) = 1\)</span>（1与自身互质） - <span
-class="math inline">\(\varphi(6) = 2\)</span>（1和5与6互质） - 当 <span
-class="math inline">\(n\)</span> 是质数时，<span
+class="math inline">\(n\)</span> 互质的数的个数。例如：</p>
+<ul>
+<li><span class="math inline">\(\varphi(1) =
+1\)</span>（1与自身互质）</li>
+<li><span class="math inline">\(\varphi(6) =
+2\)</span>（1和5与6互质）</li>
+<li>当 <span class="math inline">\(n\)</span> 是质数时，<span
 class="math inline">\(\varphi(n) = n -
-1\)</span>（因为质数与所有小于它的数都互质）</p>
+1\)</span>（因为质数与所有小于它的数都互质）</li>
+</ul>
 <p>欧拉函数的计算公式：<span class="math inline">\(\varphi(n) = n
 \prod_{p|n} (1-\frac{1}{p})\)</span>，其中 <span
 class="math inline">\(p\)</span> 是 <span
@@ -662,19 +690,19 @@ class="math inline">\(7\)</span>，因为 <span class="math inline">\(7
 <p>计算在 <span class="math inline">\([1, 2023^{2023}]\)</span> 范围内与
 <span class="math inline">\(2023\)</span> 互质的数的个数。</p>
 <p>分析：</p>
-<p>欧拉函数 <span class="math inline">\(\phi(n)\)</span> 是 <span
+<p>欧拉函数 <span class="math inline">\(\varphi(n)\)</span> 是 <span
 class="math inline">\(n\)</span> 以内与 <span
 class="math inline">\(n\)</span> 互质的数的个数，但题目区间是 <span
 class="math inline">\([1, n^{n}]\)</span>。</p>
 <p>注意到 如果一个数与 <span class="math inline">\(n\)</span>
 互质，则必然与 <span class="math inline">\(n^{n}\)</span>
 互质，那么这道题等于求 <span
-class="math inline">\(\phi(n^n)\)</span>，根据欧拉函数的计算方式，从
+class="math inline">\(\varphi(n^n)\)</span>，根据欧拉函数的计算方式，从
 <span class="math inline">\(n^n\)</span> 摘出一个 <span
 class="math inline">\(n\)</span>计算 <span
-class="math inline">\(\phi(n)\)</span> ，再乘上 <span
+class="math inline">\(\varphi(n)\)</span> ，再乘上 <span
 class="math inline">\(n^{n-1}\)</span> 与 <span
-class="math inline">\(\phi(n^n)\)</span>
+class="math inline">\(\varphi(n^n)\)</span>
 也是相等的，结合快速幂取模可解。</p>
 <p>这道题给的数字 <code>2023</code>
 质因数分解比较简单，计算欧拉函数时不涉及<strong>因为有除法而无法完成同余计算</strong>的问题，故可以直接计算。</p>
@@ -823,10 +851,12 @@ class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor\)</span>
 的"右端点"，即最大的 <span class="math inline">\(j\)</span>，使得 <span
 class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor =
 \left\lfloor \frac{n}{j} \right\rfloor\)</span>。</p>
-<p>如图： - <span class="math inline">\(i=4\)</span> 时，<span
-class="math inline">\(j=5\)</span> - <span
-class="math inline">\(i=6\)</span> 时，<span
-class="math inline">\(j=11\)</span></p>
+<ul>
+<li><span class="math inline">\(i=4\)</span> 时，<span
+class="math inline">\(j=5\)</span></li>
+<li><span class="math inline">\(i=6\)</span> 时，<span
+class="math inline">\(j=11\)</span></li>
+</ul>
 <p><span class="math inline">\(\left\lfloor \frac{n}{i} \right\rfloor =
 \left\lfloor \frac{n}{j} \right\rfloor\)</span> 的最大 <span
 class="math inline">\(j\)</span> 是：</p>
@@ -921,6 +951,9 @@ i)\)</span></p>
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025-06-18-36-%E7%BB%84%E5%90%88%E6%95%B0%E5%AD%A6%E5%85%A5%E9%97%A8/" rel="next" title="36.组合数学入门">
+                  36.组合数学入门 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
