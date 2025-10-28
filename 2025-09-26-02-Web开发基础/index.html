@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. Web的发展 1.1 什么是Web？  Web &#x3D; 万维网（World Wide Web） 它不是互联网（Internet），而是互联网上的一种服务，就像微信、QQ一样。   互联网：像高速公路，连接全球计算机 Web：像高速公路上的&quot;信息专列&quot;，专门运送网页内容  生活类比： 你用手机刷抖音 → 抖音App是&quot;客户端&quot; 你用浏览器看网页 → 浏览器是&quot;客户端&quot;，Web是背后的信息系统  1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02.Web开发基础">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-09-26-02-Web%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. Web的发展 1.1 什么是Web？  Web &#x3D; 万维网（World Wide Web） 它不是互联网（Internet），而是互联网上的一种服务，就像微信、QQ一样。   互联网：像高速公路，连接全球计算机 Web：像高速公路上的&quot;信息专列&quot;，专门运送网页内容  生活类比： 你用手机刷抖音 → 抖音App是&quot;客户端&quot; 你用浏览器看网页 → 浏览器是&quot;客户端&quot;，Web是背后的信息系统  1">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-09-26T07:15:26.000Z">
+<meta property="article:modified_time" content="2025-09-26T08:54:00.829Z">
+<meta property="article:author" content="CSGrandeur">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-09-26-02-Web%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-09-26-02-Web%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/","path":"2025-09-26-02-Web开发基础/","title":"02.Web开发基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>02.Web开发基础 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#web%E7%9A%84%E5%8F%91%E5%B1%95"><span class="nav-number">1.</span> <span class="nav-text">1. Web的发展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFweb"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 什么是Web？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web%E7%9A%84%E4%B8%89%E4%B8%AA%E5%8F%91%E5%B1%95%E9%98%B6%E6%AE%B5"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Web的三个发展阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%AE%80%E5%8D%95%E7%89%88"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Web如何工作？（简单版）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%A6web%E5%BC%80%E5%8F%91"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 为什么学Web开发？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF%E5%8F%91%E5%B1%95"><span class="nav-number">2.</span> <span class="nav-text">2. Web开发技术发展</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%88%9D%E6%97%B6%E4%BB%A3%E7%BA%AFhtml1990s"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 最初时代：纯HTML（1990s）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%97%B6%E4%BB%A3mvc%E6%9E%B6%E6%9E%842000s"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 动态时代：MVC架构（2000s）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E6%97%B6%E4%BB%A3mvvm2010s-%E7%8E%B0%E5%9C%A8"><span class="nav-number">2.3.</span> <span class="nav-text">2.3
+前后端分离时代：MVVM（2010s-现在）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88mvvm%E6%98%AF%E7%8E%B0%E5%9C%A8%E7%9A%84%E4%B8%BB%E6%B5%81"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 为什么MVVM是现在的主流？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3web%E6%8A%80%E6%9C%AF%E6%A0%88%E7%BB%84%E6%88%90"><span class="nav-number">3.</span> <span class="nav-text">3. 现代Web技术栈组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#web%E5%BC%80%E5%8F%91%E7%9A%84%E5%9B%9B%E5%A4%A7%E6%A0%B8%E5%BF%83"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Web开发的四大核心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E7%AE%80%E5%8D%95%E7%89%88"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 开发流程（简单版）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E8%AF%BE%E7%A8%8B%E6%8A%80%E6%9C%AF%E6%A0%88%E9%80%89%E6%8B%A9"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 本课程技术栈选择</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E8%BF%99%E4%BA%9B%E6%8A%80%E6%9C%AF"><span class="nav-number">3.3.1.</span> <span class="nav-text">我们为什么选这些技术？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88%E5%85%A8%E6%99%AF%E5%9B%BE"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 技术栈全景图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E6%A0%B7%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 为什么这样设计？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E5%88%9D%E5%AD%A6%E8%80%85%E5%8F%8B%E5%A5%BD"><span class="nav-number">3.5.1.</span> <span class="nav-text">✅ 对初学者友好</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="nav-number">3.5.2.</span> <span class="nav-text">✅ 未来可扩展</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%9E%81%E7%AE%80%E7%89%88"><span class="nav-number">4.</span> <span class="nav-text">4. 开发环境配置（极简版）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85%E4%BB%80%E4%B9%88"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 你需要安装什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%AE%89%E8%A3%85-vs-code"><span class="nav-number">4.1.1.</span> <span class="nav-text">✅ 第一步：安装 VS Code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%AE%89%E8%A3%85-python-%E5%92%8C-node.js%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80"><span class="nav-number">4.1.2.</span> <span class="nav-text">✅ 第二步：安装 Python 和
+Node.js（开发基础）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 安装项目依赖（一行命令）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-vs-code-%E5%BF%85%E5%A4%87%E6%8F%92%E4%BB%B6"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 安装 VS Code 必备插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-fastapi-%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 创建你的第一个 FastAPI
+项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-vue-3-%E9%A1%B9%E7%9B%AE"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 创建你的第一个 Vue 3 项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5-mysql%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE"><span class="nav-number">4.6.</span> <span class="nav-text">4.6 连接 MySQL（简单配置）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%9E%81%E7%AE%80%E7%89%88-1"><span class="nav-number">5.</span> <span class="nav-text">4. 开发环境配置（极简版）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E9%9C%80%E8%A6%81%E5%AE%89%E8%A3%85%E4%BB%80%E4%B9%88-1"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 你需要安装什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%AE%89%E8%A3%85-vs-code-1"><span class="nav-number">5.1.1.</span> <span class="nav-text">✅ 第一步：安装 VS Code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%AE%89%E8%A3%85-python-%E5%92%8C-node.js%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80-1"><span class="nav-number">5.1.2.</span> <span class="nav-text">✅ 第二步：安装 Python
+和 Node.js（开发基础）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%A1%B9%E7%9B%AE%E4%BE%9D%E8%B5%96%E4%B8%80%E8%A1%8C%E5%91%BD%E4%BB%A4-1"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 安装项目依赖（一行命令）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-vs-code-%E5%BF%85%E5%A4%87%E6%8F%92%E4%BB%B6-1"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 安装 VS Code 必备插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-fastapi-%E9%A1%B9%E7%9B%AE-1"><span class="nav-number">5.4.</span> <span class="nav-text">4.4 创建你的第一个 FastAPI
+项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BD%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA-vue-3-%E9%A1%B9%E7%9B%AE-1"><span class="nav-number">5.5.</span> <span class="nav-text">4.5 创建你的第一个 Vue 3 项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5-mysql%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE-1"><span class="nav-number">5.6.</span> <span class="nav-text">4.6 连接 MySQL（简单配置）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%B1%95%E6%96%B0%E6%89%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%B1%82%E5%8A%A9%E6%8C%87%E5%8D%97"><span class="nav-number">5.7.</span> <span class="nav-text">4.7
+扩展：新手常见问题与求助指南</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E9%80%9F%E5%A4%AA%E6%85%A2%E9%85%8D%E7%BD%AE%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F%E6%BA%90%E5%BF%85%E5%81%9A"><span class="nav-number">5.7.1.</span> <span class="nav-text">4.7.1
+网速太慢？配置国内镜像源（必做！）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98%E8%BF%99%E6%A0%B7%E9%97%AE-ai-%E6%9C%80%E6%9C%89%E6%95%88"><span class="nav-number">5.7.2.</span> <span class="nav-text">4.7.2 遇到问题？这样问 AI 最有效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">5.7.3.</span> <span class="nav-text">4.7.3 其他注意事项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%BA%90"><span class="nav-number">5.7.4.</span> <span class="nav-text">4.7.4 推荐学习资源</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#html5%E8%AF%AD%E4%B9%89%E5%8C%96%E6%A0%87%E7%AD%BE"><span class="nav-number">6.</span> <span class="nav-text">5. HTML5语义化标签</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFhtml"><span class="nav-number">6.1.</span> <span class="nav-text">5.1 什么是HTML？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#html5-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">6.2.</span> <span class="nav-text">5.2 HTML5 是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8html5%E8%AF%AD%E4%B9%89%E5%8C%96%E6%A0%87%E7%AD%BE"><span class="nav-number">6.3.</span> <span class="nav-text">5.3 常用HTML5语义化标签</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E8%AF%AD%E4%B9%89%E5%8C%96%E6%A0%87%E7%AD%BE"><span class="nav-number">6.4.</span> <span class="nav-text">5.4 为什么要用语义化标签？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E9%A1%B5%E9%9D%A2%E7%BB%93%E6%9E%84"><span class="nav-number">6.5.</span> <span class="nav-text">5.5 实战：搭建一个简单页面结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%9E%81%E7%AE%80%E7%BD%91%E9%A1%B5"><span class="nav-number">7.</span> <span class="nav-text">6.
+AI实战：使用AI搭建一个极简网页</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E8%8A%82%E7%9B%AE%E6%A0%87"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 本节目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%A9ai%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AA%E5%B8%A6vue%E7%9A%84html%E9%A1%B5%E9%9D%A2"><span class="nav-number">7.2.</span> <span class="nav-text">6.2
+第一步：让AI生成一个带Vue的HTML页面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#prompt-1%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84vue%E9%A1%B5%E9%9D%A2"><span class="nav-number">7.2.1.</span> <span class="nav-text">📌 Prompt
+1：创建一个简单的Vue页面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81%E4%BF%9D%E5%AD%98%E4%B8%BA-mood.html"><span class="nav-number">7.2.2.</span> <span class="nav-text">✅ AI生成代码（保存为
+mood.html）：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E8%AE%A9ai%E7%BB%99%E9%A1%B5%E9%9D%A2%E5%8A%A0%E4%B8%AA%E8%A1%A8%E6%83%85%E7%AC%A6%E5%8F%B7"><span class="nav-number">7.3.</span> <span class="nav-text">6.3
+第二步：让AI给页面加个表情符号</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#prompt-2%E6%B7%BB%E5%8A%A0%E8%A1%A8%E6%83%85%E7%AC%A6%E5%8F%B7"><span class="nav-number">7.3.1.</span> <span class="nav-text">📌 Prompt 2：添加表情符号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ai%E4%BF%AE%E6%94%B9%E5%90%8E%E7%9A%84%E4%BB%A3%E7%A0%81%E6%9B%B4%E6%96%B0-h1-%E8%A1%8C"><span class="nav-number">7.3.2.</span> <span class="nav-text">✅ AI修改后的代码（更新
+&lt;h1&gt; 行）：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E8%AE%A9ai%E5%8A%A0%E4%B8%AA%E8%AE%A1%E6%95%B0%E5%99%A8"><span class="nav-number">7.4.</span> <span class="nav-text">6.4 第三步：让AI加个计数器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#prompt-3%E8%AE%B0%E5%BD%95%E7%82%B9%E5%87%BB%E6%AC%A1%E6%95%B0"><span class="nav-number">7.4.1.</span> <span class="nav-text">📌 Prompt 3：记录点击次数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ai%E8%A1%A5%E5%85%85%E4%BB%A3%E7%A0%81"><span class="nav-number">7.4.2.</span> <span class="nav-text">✅ AI补充代码：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C"><span class="nav-number">7.5.</span> <span class="nav-text">6.5 最终效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E8%8A%82%E6%94%B6%E8%8E%B7"><span class="nav-number">7.6.</span> <span class="nav-text">6.6 本节收获</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7f12%E7%9A%84%E4%B8%89%E5%A4%A7%E6%B3%95%E5%AE%9D"><span class="nav-number">8.</span> <span class="nav-text">7.*浏览器调试技巧（F12的三大法宝）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E6%89%93%E5%BC%80f12"><span class="nav-number">8.1.</span> <span class="nav-text">🔧 怎么打开F12？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E6%A0%87%E7%AD%BE%E9%A1%B5-%E6%9F%A5%E7%9C%8B%E5%92%8C%E4%BF%AE%E6%94%B9%E7%BD%91%E9%A1%B5%E7%BB%93%E6%9E%84"><span class="nav-number">8.2.</span> <span class="nav-text">1. 【元素】标签页 ——
+查看和修改网页结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E6%A0%87%E7%AD%BE%E9%A1%B5-%E5%92%8Cjavascript%E5%AF%B9%E8%AF%9D"><span class="nav-number">8.3.</span> <span class="nav-text">2. 【控制台】标签页 ——
+和JavaScript对话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%A0%87%E7%AD%BE%E9%A1%B5-%E7%9C%8B%E7%BD%91%E9%A1%B5%E4%B8%8B%E8%BD%BD%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">8.4.</span> <span class="nav-text">3. 【网络】标签页 ——
+看网页“下载了什么”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93f12%E4%B8%89%E5%89%91%E5%AE%A2"><span class="nav-number">8.5.</span> <span class="nav-text">🌟 总结：F12三剑客</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-09-26-02-Web%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="02.Web开发基础 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          02.Web开发基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-09-26 15:15:26 / 修改时间：16:54:00" itemprop="dateCreated datePublished" datetime="2025-09-26T15:15:26+08:00">2025-09-26</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="web的发展">1. Web的发展</h2>
+<h3 id="什么是web">1.1 什么是Web？</h3>
+<blockquote>
+<p><strong>Web = 万维网</strong>（World Wide Web）<br />
+它不是互联网（Internet），而是<strong>互联网上的一种服务</strong>，就像微信、QQ一样。</p>
+</blockquote>
+<ul>
+<li><strong>互联网</strong>：像高速公路，连接全球计算机</li>
+<li><strong>Web</strong>：像高速公路上的"信息专列"，专门运送网页内容</li>
+</ul>
+<p><strong>生活类比</strong>：</p>
+<p>你用手机刷抖音 → 抖音App是"客户端"<br />
+你用浏览器看网页 → 浏览器是"客户端"，Web是背后的信息系统</p>
+<hr />
+<h3 id="web的三个发展阶段">1.2 Web的三个发展阶段</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>阶段</th>
+<th>时间</th>
+<th>特点</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Web 1.0</strong></td>
+<td>1990s-2000s</td>
+<td>只读网页<br>用户只能看，不能互动</td>
+<td>早期新浪、搜狐</td>
+</tr>
+<tr class="even">
+<td><strong>Web 2.0</strong></td>
+<td>2000s-现在</td>
+<td>人人可参与<br>用户能发评论、发视频</td>
+<td>微信公众号、抖音、微博</td>
+</tr>
+<tr class="odd">
+<td><strong>Web 3.0</strong></td>
+<td>未来趋势</td>
+<td>智能化<br>AI理解你的需求，主动推荐内容</td>
+<td>智能助手、个性化推荐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>学生视角</strong>：<br />
+- Web 1.0：老师讲课，你只能听<br />
+- Web 2.0：课堂讨论，你可以发言<br />
+- Web 3.0：AI助教，知道你哪里不会，主动帮你</p>
+<hr />
+<h3 id="web如何工作简单版">1.3 Web如何工作？（简单版）</h3>
+<p><strong>当你在浏览器输入 <code>www.baidu.com</code>
+时，发生了什么？</strong></p>
+<ol type="1">
+<li><strong>你</strong>：输入网址 → 回车</li>
+<li><strong>浏览器</strong>：向百度的服务器"喊一嗓子"："把网页给我！"</li>
+<li><strong>服务器</strong>：打包网页文件（HTML+CSS+JS）→ 发送回来</li>
+<li><strong>浏览器</strong>：收到文件 → 拆包 → 显示网页</li>
+</ol>
+<blockquote>
+<p>💡 <strong>关键概念</strong>：<br />
+- <strong>客户端</strong>：你的浏览器（发起请求） -
+<strong>服务器</strong>：百度的电脑（响应请求） -
+<strong>HTTP</strong>：它们之间的"通话协议"</p>
+</blockquote>
+<hr />
+<h3 id="为什么学web开发">1.4 为什么学Web开发？</h3>
+<table>
+<thead>
+<tr class="header">
+<th>理由</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>应用广泛</strong></td>
+<td>所有公司都需要网站/系统</td>
+</tr>
+<tr class="even">
+<td><strong>入门简单</strong></td>
+<td>用浏览器就能看到效果</td>
+</tr>
+<tr class="odd">
+<td><strong>就业机会多</strong></td>
+<td>企业数字化转型需求大</td>
+</tr>
+<tr class="even">
+<td><strong>适合创新</strong></td>
+<td>自己做个小网站，就能上线</td>
+</tr>
+</tbody>
+</table>
+<p><strong>大一学生优势</strong>：<br />
+- 你每天都在用Web（微信、抖音、B站）<br />
+- 你比老师更懂"好用的网站"是什么样<br />
+- 把"用户思维"变成"开发思维"，你就赢了！</p>
+<hr />
+<h2 id="web开发技术发展">2. Web开发技术发展</h2>
+<h3 id="最初时代纯html1990s">2.1 最初时代：纯HTML（1990s）</h3>
+<p><strong>特点</strong>： - 网页 = 静态文件（.html） - 修改内容 →
+直接改代码 - 没有"交互"，只能看</p>
+<p><strong>例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>我的第一个网页<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>欢迎来到我的网站！<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>💡 <strong>问题</strong>：<br />
+想改标题？必须改代码！<br />
+想加新页面？必须新建文件！</p>
+</blockquote>
+<hr />
+<h3 id="动态时代mvc架构2000s">2.2 动态时代：MVC架构（2000s）</h3>
+<p><strong>MVC = 模型(Model)-视图(View)-控制器(Controller)</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>部分</th>
+<th>作用</th>
+<th>类比</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Model</strong></td>
+<td>管理数据（数据库）</td>
+<td>厨房的食材</td>
+</tr>
+<tr class="even">
+<td><strong>View</strong></td>
+<td>显示界面（网页）</td>
+<td>餐厅的菜单</td>
+</tr>
+<tr class="odd">
+<td><strong>Controller</strong></td>
+<td>处理逻辑（接收请求）</td>
+<td>厨师</td>
+</tr>
+</tbody>
+</table>
+<p><strong>经典框架</strong>：<br />
+- ThinkPHP（PHP） - Ruby on Rails（Ruby） - Django（Python） - Spring
+MVC（Java）</p>
+<p><strong>进步</strong>：<br />
+✅ 内容可以动态生成<br />
+✅ 修改数据不用改代码</p>
+<hr />
+<h3 id="前后端分离时代mvvm2010s-现在">2.3
+前后端分离时代：MVVM（2010s-现在）</h3>
+<p><strong>MVVM =
+模型(Model)-视图(View)-视图模型(ViewModel)</strong></p>
+<p><strong>核心思想</strong>： -
+前端（View）和后端（Model）<strong>分开开发</strong> -
+通过<strong>API</strong>（接口）通信 - 前端可以独立更新，不用动后端</p>
+<p><strong>经典框架</strong>： -
+<strong>前端</strong>：Vue.js、React、Angular -
+<strong>后端</strong>：FastAPI、Spring Boot、Express</p>
+<hr />
+<h3 id="为什么mvvm是现在的主流">2.4 为什么MVVM是现在的主流？</h3>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>开发效率高</strong></td>
+<td>前后端可以并行开发</td>
+</tr>
+<tr class="even">
+<td><strong>维护方便</strong></td>
+<td>改前端不影响后端</td>
+</tr>
+<tr class="odd">
+<td><strong>适合团队</strong></td>
+<td>分工明确，各司其职</td>
+</tr>
+<tr class="even">
+<td><strong>跨平台</strong></td>
+<td>一套后端，支持网页、App、小程序</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="现代web技术栈组成">3. 现代Web技术栈组成</h2>
+<h3 id="web开发的四大核心">3.1 Web开发的四大核心</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 27%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>部分</th>
+<th>作用</th>
+<th>常见技术</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>前端</strong></td>
+<td>用户看到的界面<br>（网页的"脸"）</td>
+<td>HTML、CSS、JavaScript、Vue、React</td>
+</tr>
+<tr class="even">
+<td><strong>后端</strong></td>
+<td>处理数据和逻辑<br>（网页的"大脑"）</td>
+<td>Python、Java、Go、Node.js</td>
+</tr>
+<tr class="odd">
+<td><strong>数据库</strong></td>
+<td>存储和管理数据<br>（网页的"记忆"）</td>
+<td>MySQL、PostgreSQL、MongoDB</td>
+</tr>
+<tr class="even">
+<td><strong>部署</strong></td>
+<td>让网站上线运行<br>（网页的"家"）</td>
+<td>Docker、Nginx、云服务器</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>生活类比</strong>：<br />
+开餐馆 = 做网站<br />
+- 前端 = 餐厅装修 + 菜单设计<br />
+- 后端 = 厨房做菜 + 库存管理<br />
+- <strong>数据库</strong> = 冰箱 + 账本（存食材、记账）<br />
+- 部署 = 租店面 + 办营业执照</p>
+</blockquote>
+<hr />
+<h3 id="开发流程简单版">3.2 开发流程（简单版）</h3>
+<p><strong>基本流程</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">写代码 → 测试功能 → 用Docker打包 → 部署上线</span><br></pre></td></tr></table></figure></p>
+<p><strong>CI/CD简介</strong>（了解即可）： -
+<strong>CI/CD</strong>：自动化测试和部署（企业级功能） -
+<strong>对你的意义</strong>：先专注"把功能做出来"，CI/CD后续再学</p>
+<hr />
+<h3 id="本课程技术栈选择">3.3 本课程技术栈选择</h3>
+<h4 id="我们为什么选这些技术">我们为什么选这些技术？</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 40%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>技术</th>
+<th>为什么选它</th>
+<th>对你的好处</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>FastAPI</strong>（后端）</td>
+<td>Python写的，语法简单<br>适合初学者快速上手</td>
+<td>✅ 用Python，你学过<br>✅ 未来可做数据分析、AI</td>
+</tr>
+<tr class="even">
+<td><strong>Vue 3</strong>（前端）</td>
+<td>中文文档全<br>国人尤雨溪开发，社区活跃</td>
+<td>✅ 上手快，教程多<br>✅ 国产技术，有亲切感</td>
+</tr>
+<tr class="odd">
+<td><strong>MySQL</strong>（数据库）</td>
+<td>免费开源、语法简单<br>全球最流行的关系型数据库</td>
+<td>✅ 学会SQL基础<br>✅ 企业广泛使用，求职加分</td>
+</tr>
+<tr class="even">
+<td><strong>Docker</strong>（部署）</td>
+<td>解决"在我电脑能跑"<br>一键部署，避免环境问题</td>
+<td>✅ 学完就能上线项目<br>✅ 企业真实用的技术</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="技术栈全景图">3.4 技术栈全景图</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">用户浏览器 ←→ Vue 3（前端） ←→ FastAPI（后端） ←→ 数据库</span><br><span class="line">                             ↑</span><br><span class="line">                         Docker（打包部署）</span><br></pre></td></tr></table></figure>
+<p><strong>各部分职责</strong>： - <strong>Vue
+3</strong>：显示页面，处理用户点击 -
+<strong>FastAPI</strong>：接收请求，查数据库，返回数据 -
+<strong>MySQL</strong>：存储用户信息、文章、订单等结构化数据 -
+<strong>Docker</strong>：把前后端和数据库打包，一键运行</p>
+<hr />
+<h3 id="为什么这样设计">3.5 为什么这样设计？</h3>
+<h4 id="对初学者友好">✅ 对初学者友好</h4>
+<ul>
+<li><strong>Python + FastAPI</strong>：Python
+能做的事很多，不用每件事学新语言</li>
+<li><strong>Vue 3</strong>：对新手更友好，中文资料多</li>
+<li><strong>MySQL</strong>：语法直观，<code>SELECT * FROM users</code>
+一看就懂</li>
+<li><strong>Docker</strong>：避免"环境配置"的噩梦</li>
+</ul>
+<h4 id="未来可扩展">✅ 未来可扩展</h4>
+<ul>
+<li><strong>后端</strong>：学懂FastAPI，未来可学Go（Gin）、Java（Spring）</li>
+<li><strong>前端</strong>：掌握Vue，再学React很容易</li>
+<li><strong>数据库</strong>：PostgreSQL/MySQL是行业标准，企业都在用</li>
+</ul>
+<blockquote>
+<p>🌟 <strong>记住</strong>：<br />
+99%的Web项目<strong>不会遇到性能瓶颈</strong><br />
+先学会"怎么做"，再考虑"怎么更快"
+技术会变，但<strong>开发逻辑不变</strong>。<br />
+先掌握一套"能跑通"的技术栈，比纠结"哪个最好"更重要！</p>
+</blockquote>
+<hr />
+<h2 id="开发环境配置极简版">4. 开发环境配置（极简版）</h2>
+<h3 id="你需要安装什么">4.1 你需要安装什么？</h3>
+<p><strong>只需三步，全部搞定</strong>：</p>
+<h4 id="第一步安装-vs-code">✅ 第一步：安装 VS Code</h4>
+<ul>
+<li>下载地址：<a
+target="_blank" rel="noopener" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></li>
+<li>安装方式：像安装QQ一样，双击→下一步→完成</li>
+<li><strong>为什么用它</strong>：免费、轻量、适合初学者</li>
+</ul>
+<h4 id="第二步安装-python-和-node.js开发基础">✅ 第二步：安装 Python 和
+Node.js（开发基础）</h4>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 36%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>软件</th>
+<th>下载地址</th>
+<th>安装提示</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Python 3.11</strong></td>
+<td><a
+target="_blank" rel="noopener" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></td>
+<td>勾选 ✅ "Add to PATH"</td>
+</tr>
+<tr class="even">
+<td><strong>Node.js</strong></td>
+<td><a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org/</a></td>
+<td>直接下载 LTS 版本，安装即可</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>验证是否安装成功</strong>： 1. 打开命令行（Windows：Win+R
+→ 输入 <code>cmd</code>） 2. 分别输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">node --version</span><br></pre></td></tr></table></figure> 3.
+如果显示版本号（如 <code>Python 3.11.0</code>），说明成功！</p>
+</blockquote>
+<hr />
+<h3 id="安装项目依赖一行命令">4.2 安装项目依赖（一行命令）</h3>
+<p>打开 VS Code，进入你的项目文件夹，<strong>在终端中运行</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装后端（FastAPI）所需库</span></span><br><span class="line">pip install fastapi <span class="string">&quot;uvicorn[standard]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装前端（Vue 3）所需工具</span></span><br><span class="line">npm install -g @vue/cli</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✅ <strong>说明</strong>： - <code>pip</code> 是 Python 的"应用商店"
+- <code>npm</code> 是 Node.js 的"应用商店" - 这两行命令会自动下载
+FastAPI 和 Vue 3</p>
+</blockquote>
+<hr />
+<h3 id="安装-vs-code-必备插件">4.3 安装 VS Code 必备插件</h3>
+<p>在 VS Code 左侧点击"扩展"（四个方块图标），搜索并安装：</p>
+<table>
+<thead>
+<tr class="header">
+<th>插件</th>
+<th>作用</th>
+<th>搜索关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Python</strong></td>
+<td>运行和调试 Python 代码</td>
+<td><code>python</code></td>
+</tr>
+<tr class="even">
+<td><strong>Volar</strong></td>
+<td>支持 Vue 3 语法高亮</td>
+<td><code>volar</code></td>
+</tr>
+<tr class="odd">
+<td><strong>ESLint</strong></td>
+<td>自动检查 JavaScript 错误</td>
+<td><code>eslint</code></td>
+</tr>
+<tr class="even">
+<td><strong>MySQL</strong></td>
+<td>直接在 VS Code 里操作数据库</td>
+<td><code>mysql</code></td>
+</tr>
+<tr class="odd">
+<td><strong>GitHub Copilot</strong></td>
+<td>AI辅助编程，自动生成代码</td>
+<td><code>github copilot</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>✅ <strong>安装后重启 VS Code</strong></p>
+</blockquote>
+<hr />
+<h3 id="创建你的第一个-fastapi-项目">4.4 创建你的第一个 FastAPI
+项目</h3>
+<p>在 VS Code 中新建文件 <code>main.py</code>，输入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_root</span>():</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;Hello&quot;</span>: <span class="string">&quot;World&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>运行它</strong>： 1. 打开终端（Terminal → New Terminal） 2.
+输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uvicorn main:app --reload</span><br></pre></td></tr></table></figure> 3. 浏览器打开
+<code>http://127.0.0.1:8000</code>，看到 <code>&#123;"Hello":"World"&#125;</code>
+就成功了！</p>
+<hr />
+<h3 id="创建你的第一个-vue-3-项目">4.5 创建你的第一个 Vue 3 项目</h3>
+<p>在终端运行： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建名为 my-vue-app 的项目</span></span><br><span class="line">vue create my-vue-app</span><br></pre></td></tr></table></figure> - 选择：<strong>Vue
+3</strong>（按方向键选择，回车确认） - 等待安装完成</p>
+<p><strong>运行前端</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> my-vue-app</span><br><span class="line">npm run serve</span><br></pre></td></tr></table></figure> 浏览器打开
+<code>http://localhost:8080</code>，看到 Vue 欢迎页面就成功了！</p>
+<hr />
+<h3 id="连接-mysql简单配置">4.6 连接 MySQL（简单配置）</h3>
+<ol type="1">
+<li>下载并安装 <strong>MySQL Community Server</strong>：<a
+target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></li>
+<li>安装时记住你设置的<strong>密码</strong></li>
+<li>在 VS Code 中用 <strong>MySQL 插件</strong>连接：
+<ul>
+<li>主机：<code>localhost</code></li>
+<li>用户名：<code>root</code></li>
+<li>密码：你设置的密码</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>💡
+<strong>提示</strong>：先不用深究数据库细节，后续课程会一步步教你！</p>
+</blockquote>
+<hr />
+<p>您说得对，作为“开发环境配置”这一节下的子部分，“扩展：新手常见问题与求助指南”应该使用
+<code>###</code> 级别标题。以下是修正后的完整第四节内容：</p>
+<h2 id="开发环境配置极简版-1">4. 开发环境配置（极简版）</h2>
+<h3 id="你需要安装什么-1">4.1 你需要安装什么？</h3>
+<p><strong>只需三步，全部搞定</strong>：</p>
+<h4 id="第一步安装-vs-code-1">✅ 第一步：安装 VS Code</h4>
+<ul>
+<li>下载地址：<a
+target="_blank" rel="noopener" href="https://code.visualstudio.com/">https://code.visualstudio.com/</a></li>
+<li>安装方式：像安装QQ一样，双击→下一步→完成</li>
+<li><strong>为什么用它</strong>：免费、轻量、适合初学者</li>
+</ul>
+<h4 id="第二步安装-python-和-node.js开发基础-1">✅ 第二步：安装 Python
+和 Node.js（开发基础）</h4>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 36%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>软件</th>
+<th>下载地址</th>
+<th>安装提示</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Python 3.11</strong></td>
+<td><a
+target="_blank" rel="noopener" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></td>
+<td>勾选 ✅ "Add to PATH"</td>
+</tr>
+<tr class="even">
+<td><strong>Node.js</strong></td>
+<td><a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org/</a></td>
+<td>直接下载 LTS 版本，安装即可</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>验证是否安装成功</strong>： 1. 打开命令行（Windows：Win+R
+→ 输入 <code>cmd</code>） 2. 分别输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">node --version</span><br></pre></td></tr></table></figure> 3.
+如果显示版本号（如 <code>Python 3.11.0</code>），说明成功！</p>
+</blockquote>
+<hr />
+<h3 id="安装项目依赖一行命令-1">4.2 安装项目依赖（一行命令）</h3>
+<p>打开 VS Code，进入你的项目文件夹，<strong>在终端中运行</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装后端（FastAPI）所需库</span></span><br><span class="line">pip install fastapi <span class="string">&quot;uvicorn[standard]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装前端（Vue 3）所需工具</span></span><br><span class="line">npm install -g @vue/cli</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✅ <strong>说明</strong>： - <code>pip</code> 是 Python 的"应用商店"
+- <code>npm</code> 是 Node.js 的"应用商店" - 这两行命令会自动下载
+FastAPI 和 Vue 3</p>
+</blockquote>
+<hr />
+<h3 id="安装-vs-code-必备插件-1">4.3 安装 VS Code 必备插件</h3>
+<p>在 VS Code 左侧点击"扩展"（四个方块图标），搜索并安装：</p>
+<table>
+<thead>
+<tr class="header">
+<th>插件</th>
+<th>作用</th>
+<th>搜索关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Python</strong></td>
+<td>运行和调试 Python 代码</td>
+<td><code>python</code></td>
+</tr>
+<tr class="even">
+<td><strong>Volar</strong></td>
+<td>支持 Vue 3 语法高亮</td>
+<td><code>volar</code></td>
+</tr>
+<tr class="odd">
+<td><strong>ESLint</strong></td>
+<td>自动检查 JavaScript 错误</td>
+<td><code>eslint</code></td>
+</tr>
+<tr class="even">
+<td><strong>MySQL</strong></td>
+<td>直接在 VS Code 里操作数据库</td>
+<td><code>mysql</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>✅ <strong>安装后重启 VS Code</strong></p>
+</blockquote>
+<hr />
+<h3 id="创建你的第一个-fastapi-项目-1">4.4 创建你的第一个 FastAPI
+项目</h3>
+<p>在 VS Code 中新建文件 <code>main.py</code>，输入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_root</span>():</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;Hello&quot;</span>: <span class="string">&quot;World&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>运行它</strong>： 1. 打开终端（Terminal → New Terminal） 2.
+输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uvicorn main:app --reload</span><br></pre></td></tr></table></figure> 3. 浏览器打开
+<code>http://127.0.0.1:8000</code>，看到 <code>&#123;"Hello":"World"&#125;</code>
+就成功了！</p>
+<hr />
+<h3 id="创建你的第一个-vue-3-项目-1">4.5 创建你的第一个 Vue 3 项目</h3>
+<p>在终端运行： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建名为 my-vue-app 的项目</span></span><br><span class="line">vue create my-vue-app</span><br></pre></td></tr></table></figure> - 选择：<strong>Vue
+3</strong>（按方向键选择，回车确认） - 等待安装完成</p>
+<p><strong>运行前端</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> my-vue-app</span><br><span class="line">npm run serve</span><br></pre></td></tr></table></figure> 浏览器打开
+<code>http://localhost:8080</code>，看到 Vue 欢迎页面就成功了！</p>
+<hr />
+<h3 id="连接-mysql简单配置-1">4.6 连接 MySQL（简单配置）</h3>
+<ol type="1">
+<li>下载并安装 <strong>MySQL Community Server</strong>：<a
+target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">https://dev.mysql.com/downloads/mysql/</a></li>
+<li>安装时记住你设置的<strong>密码</strong></li>
+<li>在 VS Code 中用 <strong>MySQL 插件</strong>连接：
+<ul>
+<li>主机：<code>localhost</code></li>
+<li>用户名：<code>root</code></li>
+<li>密码：你设置的密码</li>
+</ul></li>
+</ol>
+<blockquote>
+<p>💡
+<strong>提示</strong>：先不用深究数据库细节，后续课程会一步步教你！</p>
+</blockquote>
+<hr />
+<h3 id="扩展新手常见问题与求助指南">4.7
+扩展：新手常见问题与求助指南</h3>
+<h4 id="网速太慢配置国内镜像源必做">4.7.1
+网速太慢？配置国内镜像源（必做！）</h4>
+<p><strong>Python 包下载慢？</strong> → 配置 pip 国内源<br />
+在命令行运行（只需一次）： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip config <span class="built_in">set</span> global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure></p>
+<p><strong>Node.js 包下载慢？</strong> → 配置 npm 国内源<br />
+在命令行运行： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>✅ <strong>推荐镜像网站</strong>：<br />
+- 清华大学：<a
+target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn">https://pypi.tuna.tsinghua.edu.cn</a>
+- 阿里云：<a target="_blank" rel="noopener" href="https://npm.aliyun.com">https://npm.aliyun.com</a> -
+网易：<a target="_blank" rel="noopener" href="http://mirrors.163.com">http://mirrors.163.com</a></p>
+</blockquote>
+<hr />
+<h4 id="遇到问题这样问-ai-最有效">4.7.2 遇到问题？这样问 AI 最有效</h4>
+<p><strong>错误不会查？复制错误信息 + 问 AI</strong><br />
+✅ 好问题： &gt; "VS Code 运行 <code>uvicorn main:app</code>
+报错：<code>command not found</code>，怎么办？"</p>
+<p>❌ 坏问题： &gt; "我的代码跑不了"</p>
+<p><strong>配置不会？让 AI 一步步教你</strong><br />
+✅ 可以问： &gt; "如何在 Windows 上安装 MySQL 并用 VS Code
+连接？请给详细步骤"</p>
+<p><strong>想学更多？让 AI 推荐资源</strong><br />
+✅ 可以问： &gt; "推荐几个适合大一学生的 Python + FastAPI 学习网站"</p>
+<hr />
+<h4 id="其他注意事项">4.7.3 其他注意事项</h4>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>命令行报错 <code>拒绝访问</code></strong></td>
+<td>Windows：右键 VS Code → "以管理员身份运行"</td>
+</tr>
+<tr class="even">
+<td><strong>端口被占用</strong></td>
+<td>换端口，如 <code>uvicorn main:app --port 8081</code></td>
+</tr>
+<tr class="odd">
+<td><strong>插件装不上</strong></td>
+<td>检查网络，或重启 VS Code</td>
+</tr>
+<tr class="even">
+<td><strong>MySQL 连不上</strong></td>
+<td>确认服务是否启动（Windows：服务管理器 → MySQL → 启动）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>重要提醒</strong>：<br />
+- 不要怕报错，<strong>报错是学习的一部分</strong> -
+每次解决一个问题，你就进步一点 -
+保存好你的配置笔记，以后重装系统不慌</p>
+</blockquote>
+<hr />
+<h4 id="推荐学习资源">4.7.4 推荐学习资源</h4>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Python 入门</strong></td>
+<td><a
+target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1016959603663616">廖雪峰Python教程</a></td>
+</tr>
+<tr class="even">
+<td><strong>Vue 3 官方文档</strong></td>
+<td><a target="_blank" rel="noopener" href="https://cn.vuejs.org">https://cn.vuejs.org</a></td>
+</tr>
+<tr class="odd">
+<td><strong>FastAPI 官方文档</strong></td>
+<td><a
+target="_blank" rel="noopener" href="https://fastapi.tiangolo.com">https://fastapi.tiangolo.com</a></td>
+</tr>
+<tr class="even">
+<td><strong>VS Code 使用</strong></td>
+<td>B站搜索"VS Code 入门"</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🌟 <strong>记住</strong>：<br />
+环境配置不是"考试"，而是"工具准备"。<br />
+花1小时解决问题，换来的是未来100小时的高效开发！</p>
+</blockquote>
+<h2 id="html5语义化标签">5. HTML5语义化标签</h2>
+<h3 id="什么是html">5.1 什么是HTML？</h3>
+<blockquote>
+<p><strong>HTML = 超文本标记语言</strong>（HyperText Markup
+Language）<br />
+它是网页的"骨架"，决定了页面的结构和内容。</p>
+</blockquote>
+<ul>
+<li><strong>类比</strong>：写作文时的"提纲"</li>
+<li><strong>作用</strong>：告诉浏览器"这里是一段文字"、"那里是一个标题"、"这是一个图片"</li>
+</ul>
+<p><strong>最简单的HTML页面</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的第一个网页<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>欢迎来到我的网站！<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是我的第一段文字。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="html5-是什么">5.2 HTML5 是什么？</h3>
+<table>
+<thead>
+<tr class="header">
+<th>版本</th>
+<th>时间</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>HTML 4</strong></td>
+<td>1997</td>
+<td>使用 <code>&lt;div&gt;</code> 万能标签</td>
+</tr>
+<tr class="even">
+<td><strong>HTML5</strong></td>
+<td>2014</td>
+<td>新增<strong>语义化标签</strong>，让结构更清晰</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么升级？</strong><br />
+以前： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;header&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;nav&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;article&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;footer&quot;</span>&gt;</span>...<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure> → 全是<code>&lt;div&gt;</code>，看不出结构</p>
+<p>现在（HTML5）： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>...<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">nav</span>&gt;</span>...<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">article</span>&gt;</span>...<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span>...<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure> → 标签本身就有意义，一目了然！</p>
+<hr />
+<h3 id="常用html5语义化标签">5.3 常用HTML5语义化标签</h3>
+<table>
+<thead>
+<tr class="header">
+<th>标签</th>
+<th>含义</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&lt;header&gt;</code></td>
+<td>页眉</td>
+<td>放网站标题、logo</td>
+</tr>
+<tr class="even">
+<td><code>&lt;nav&gt;</code></td>
+<td>导航栏</td>
+<td>放菜单、链接</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;main&gt;</code></td>
+<td>主要内容</td>
+<td>页面核心内容</td>
+</tr>
+<tr class="even">
+<td><code>&lt;article&gt;</code></td>
+<td>独立文章</td>
+<td>博客、新闻等</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;section&gt;</code></td>
+<td>内容区块</td>
+<td>划分不同区域</td>
+</tr>
+<tr class="even">
+<td><code>&lt;aside&gt;</code></td>
+<td>侧边栏</td>
+<td>放广告、推荐</td>
+</tr>
+<tr class="odd">
+<td><code>&lt;footer&gt;</code></td>
+<td>页脚</td>
+<td>版权信息、联系方式</td>
+</tr>
+</tbody>
+</table>
+<p><strong>生活类比</strong>：<br />
+就像写一篇公众号文章： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>文章标题 + 作者<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">nav</span>&gt;</span>目录导航<span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">article</span>&gt;</span>正文内容<span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aside</span>&gt;</span>相关推荐<span class="tag">&lt;/<span class="name">aside</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span>版权声明<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="为什么要用语义化标签">5.4 为什么要用语义化标签？</h3>
+<table>
+<thead>
+<tr class="header">
+<th>好处</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>✅ <strong>结构清晰</strong></td>
+<td>开发者一看就懂页面布局</td>
+</tr>
+<tr class="even">
+<td>✅ <strong>SEO友好</strong></td>
+<td>搜索引擎更容易理解内容</td>
+</tr>
+<tr class="odd">
+<td>✅ <strong>无障碍访问</strong></td>
+<td>屏幕阅读器能更好识别</td>
+</tr>
+<tr class="even">
+<td>✅ <strong>维护方便</strong></td>
+<td>改样式时定位更快</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>对初学者的意义</strong>：<br />
+用语义化标签，就像<strong>用正确的词语写作文</strong>。<br />
+不仅让别人看懂，也让自己未来更容易修改！</p>
+</blockquote>
+<hr />
+<h3 id="实战搭建一个简单页面结构">5.5 实战：搭建一个简单页面结构</h3>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的博客<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>我的技术博客<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>记录学习点滴<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">nav</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">a</span>&gt;</span> |</span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>文章<span class="tag">&lt;/<span class="name">a</span>&gt;</span> |</span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#&quot;</span>&gt;</span>关于<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">nav</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">main</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">article</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h2</span>&gt;</span>第一篇文章<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是文章内容...<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;<span class="name">aside</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span>推荐阅读<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>Vue入门指南<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aside</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">footer</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>© 2025 我的博客<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>🌟 <strong>记住</strong>：<br />
+语义化不是"炫技"，而是<strong>写给人看的代码</strong>。<br />
+养成好习惯，从第一个页面开始！</p>
+</blockquote>
+<p>好的，以下是调整后的第六节内容，完全聚焦于<strong>纯前端</strong>，不涉及后端、API、跨域等复杂概念，更适合大一新生入门。</p>
+<hr />
+<h2 id="ai实战使用ai搭建一个极简网页">6.
+AI实战：使用AI搭建一个极简网页</h2>
+<h3 id="本节目标">6.1 本节目标</h3>
+<p>我们将通过<strong>向AI提问（Prompt）</strong>，让AI帮我们： - ✅ 用
+HTML + CSS + Vue 3（CDN）做一个“今日心情”小页面 - ✅
+实现“点击按钮切换心情”的交互 - ✅
+不用安装任何构建工具，直接在浏览器打开就能运行</p>
+<blockquote>
+<p>💡 <strong>为什么这样设计？</strong><br />
+避免“环境配置”和“前后端交互”的干扰，让你<strong>专注理解“代码如何变成网页”</strong>。</p>
+</blockquote>
+<hr />
+<h3 id="第一步让ai生成一个带vue的html页面">6.2
+第一步：让AI生成一个带Vue的HTML页面</h3>
+<h4 id="prompt-1创建一个简单的vue页面">📌 Prompt
+1：创建一个简单的Vue页面</h4>
+<blockquote>
+<p>"写一个HTML页面，使用Vue 3
+CDN，显示一句话：'今天的心情：开心'，并有一个按钮，点击后变成'不开心'，再点变回来。"</p>
+</blockquote>
+<h4 id="ai生成代码保存为-mood.html">✅ AI生成代码（保存为
+<code>mood.html</code>）：</h4>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的心情<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 引入 Vue 3 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: <span class="string">&#x27;微软雅黑&#x27;</span>, Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-top</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#f0f8ff</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">h1</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">button</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">10px</span> <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-size</span>: <span class="number">16px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#007bff</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">cursor</span>: pointer;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#0056b3</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 页面内容 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>今天的心情：&#123;&#123; mood &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;toggleMood&quot;</span>&gt;</span>切换心情<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Vue 逻辑 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> &#123; createApp &#125; = <span class="title class_">Vue</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="attr">mood</span>: <span class="string">&#x27;开心&#x27;</span>  <span class="comment">// 初始心情</span></span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="title function_">toggleMood</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="comment">// 如果当前是“开心”，就变成“不开心”，反之亦然</span></span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">this</span>.<span class="property">mood</span> = <span class="variable language_">this</span>.<span class="property">mood</span> === <span class="string">&#x27;开心&#x27;</span> ? <span class="string">&#x27;不开心&#x27;</span> : <span class="string">&#x27;开心&#x27;</span></span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)  <span class="comment">// 把Vue应用挂载到 id=&quot;app&quot; 的元素上</span></span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>🔧 <strong>运行方法</strong>：<br />
+1. 把代码保存为 <code>mood.html</code><br />
+2. 双击文件，用浏览器打开<br />
+3. 点击按钮，看看心情会不会变！</p>
+</blockquote>
+<hr />
+<h3 id="第二步让ai给页面加个表情符号">6.3
+第二步：让AI给页面加个表情符号</h3>
+<h4 id="prompt-2添加表情符号">📌 Prompt 2：添加表情符号</h4>
+<blockquote>
+<p>"在心情文字后面加一个emoji表情，开心时显示 😊，不开心时显示 😞"</p>
+</blockquote>
+<h4 id="ai修改后的代码更新-h1-行">✅ AI修改后的代码（更新
+<code>&lt;h1&gt;</code> 行）：</h4>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>今天的心情：&#123;&#123; mood &#125;&#125; &#123;&#123; mood === &#x27;开心&#x27; ? &#x27;😊&#x27; : &#x27;😞&#x27; &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>✅ <strong>效果</strong>：<br />
+- 开心 → 😊<br />
+- 不开心 → 😞</p>
+</blockquote>
+<hr />
+<h3 id="第三步让ai加个计数器">6.4 第三步：让AI加个计数器</h3>
+<h4 id="prompt-3记录点击次数">📌 Prompt 3：记录点击次数</h4>
+<blockquote>
+<p>"加一个功能：显示一共切换了多少次心情"</p>
+</blockquote>
+<h4 id="ai补充代码">✅ AI补充代码：</h4>
+<ol type="1">
+<li><p>在 <code>data()</code> 里加一个计数器： <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">mood</span>: <span class="string">&#x27;开心&#x27;</span>,</span><br><span class="line">        <span class="attr">clickCount</span>: <span class="number">0</span>  <span class="comment">// 点击次数</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>在 <code>toggleMood</code> 方法里增加计数：
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">toggleMood</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">mood</span> = <span class="variable language_">this</span>.<span class="property">mood</span> === <span class="string">&#x27;开心&#x27;</span> ? <span class="string">&#x27;不开心&#x27;</span> : <span class="string">&#x27;开心&#x27;</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">clickCount</span>++  <span class="comment">// 每次点击 +1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p></li>
+<li><p>在页面上显示计数： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>你已经切换了 &#123;&#123; clickCount &#125;&#125; 次心情<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<hr />
+<h3 id="最终效果">6.5 最终效果</h3>
+<p>你的页面现在有： - ✅ 显示当前心情（开心/不开心） - ✅
+点击按钮切换心情 - ✅ 显示对应表情 😊 / 😞 - ✅ 记录并显示点击次数</p>
+<hr />
+<h3 id="本节收获">6.6 本节收获</h3>
+<p>你已经学会了： - ✅ 如何用 <strong>Prompt</strong> 让AI帮你写代码 -
+✅ 如何用 <strong>CDN</strong> 引入 Vue，不用安装复杂工具 - ✅ 如何通过
+<strong>data 和 methods</strong> 实现页面交互 - ✅
+如何一步步<strong>迭代功能</strong>，像搭积木一样开发</p>
+<blockquote>
+<p>🌟 <strong>记住</strong>：<br />
+编程不是“一次性写出完美代码”，而是：<br />
+<strong>想法 → 写Prompt → AI生成 → 测试 → 调整 → 再提问</strong><br />
+这就是现代开发者的“超能力”！</p>
+</blockquote>
+<h2
+id="浏览器调试技巧f12的三大法宝">7.*浏览器调试技巧（F12的三大法宝）</h2>
+<h3 id="怎么打开f12">🔧 怎么打开F12？</h3>
+<ul>
+<li><strong>快捷键</strong>：在网页上按 <code>F12</code> 或
+<code>Ctrl + Shift + I</code></li>
+<li><strong>右键菜单</strong>：在网页空白处 → 右键 →
+“检查”或“审查元素”</li>
+</ul>
+<blockquote>
+<p>🌟 打开后你会看到一个新面板，这就是“开发者工具”。</p>
+</blockquote>
+<hr />
+<h3 id="元素标签页-查看和修改网页结构">1. 【元素】标签页 ——
+查看和修改网页结构</h3>
+<p><strong>作用</strong>：<br />
+👉 看到网页的HTML代码是怎样的<br />
+👉 实时修改文字、颜色、样式，马上看到效果</p>
+<p><strong>小实验</strong>： 1. 打开前面做的 <code>mood.html</code> 2.
+按 <code>F12</code> → 点击【元素】（Elements） 3. 在代码中找到
+<code>&lt;h1&gt;今天的心情：...&lt;/h1&gt;</code> 4.
+双击文字，改成“今天超开心！” 5. 看看页面是不是立刻变了？</p>
+<blockquote>
+<p>✅ <strong>用途</strong>：<br />
+- 调试页面布局<br />
+- 学习别人网页是怎么做的<br />
+- 临时改内容“假装”成功（别干坏事哦 😄）</p>
+</blockquote>
+<hr />
+<h3 id="控制台标签页-和javascript对话">2. 【控制台】标签页 ——
+和JavaScript对话</h3>
+<p><strong>作用</strong>：<br />
+👉 显示代码错误（红色提示）<br />
+👉 直接运行JavaScript代码<br />
+👉 输出调试信息（比如 <code>console.log()</code>）</p>
+<p><strong>小实验</strong>： 1. 在 <code>mood.html</code> 的 Vue
+代码里加一句： <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;页面加载了！当前心情：&quot;</span> + <span class="variable language_">this</span>.<span class="property">mood</span>)</span><br></pre></td></tr></table></figure> 2. 刷新页面 3. 打开F12 →
+点【控制台】（Console） 4.
+你会看到输出：<code>页面加载了！当前心情：开心</code></p>
+<blockquote>
+<p>✅ <strong>用途</strong>：<br />
+- 查看哪里出错了（红字警告）<br />
+- 测试JS代码（比如在控制台输入 <code>2+3</code> 回车试试）<br />
+- 调试变量值</p>
+</blockquote>
+<hr />
+<h3 id="网络标签页-看网页下载了什么">3. 【网络】标签页 ——
+看网页“下载了什么”</h3>
+<p><strong>作用</strong>：<br />
+👉 显示网页加载时请求了哪些文件（HTML、CSS、JS、图片等）<br />
+👉 查看加载速度<br />
+👉 发现“加载失败”的资源（比如404）</p>
+<p><strong>小实验</strong>： 1. 打开 <code>mood.html</code> 2. 按
+<code>F12</code> → 点【网络】（Network） 3. 刷新页面 4.
+你会看到一堆文件被加载，比如： - <code>mood.html</code>（你的页面） -
+<code>vue.global.js</code>（Vue库） 5.
+点某个文件，能看到它的大小、加载时间</p>
+<blockquote>
+<p>✅ <strong>用途</strong>：<br />
+- 网页打不开？看是不是某个文件“红色”了（失败）<br />
+- 页面慢？看哪个文件加载最久<br />
+- 验证CDN是否生效</p>
+</blockquote>
+<hr />
+<h3 id="总结f12三剑客">🌟 总结：F12三剑客</h3>
+<table>
+<thead>
+<tr class="header">
+<th>标签页</th>
+<th>一句话用途</th>
+<th>新手怎么用</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>元素</strong></td>
+<td>看和改HTML</td>
+<td>改文字、学结构</td>
+</tr>
+<tr class="even">
+<td><strong>控制台</strong></td>
+<td>看错误、运行JS</td>
+<td>查错、打印信息</td>
+</tr>
+<tr class="odd">
+<td><strong>网络</strong></td>
+<td>看加载了啥</td>
+<td>查404、看速度</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>记住</strong>：<br />
+F12不是“高级功能”，而是<strong>每个前端开发者的日常工具</strong>。<br />
+遇到问题，先按F12，90%的bug都能找到线索！</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-09-26-01-AI%E5%BC%80%E5%8F%91%E5%8A%A9%E6%89%8B/" rel="prev" title="01. AI开发助手">
+                  <i class="fa fa-angle-left"></i> 01. AI开发助手
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

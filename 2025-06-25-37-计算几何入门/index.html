@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="计算几何入门 初高中解析几何关注理论求解，通过代数方法研究几何性质。算法竞赛中的计算几何则面临实际计算问题：  数值精度：浮点数运算存在误差，简单几何判断可能因精度问题失败 算法实现：将几何概念转化为可编程的算法步骤 避免除法：解析几何大量使用除法，而在计算机的浮点运算中，除法损失精度严重，计算几何的精髓在于尽可能用乘法代替除法，避免精度损失。  点积与叉积、点线关系、多边形与简单多边形、简单多边">
+<meta property="og:type" content="article">
+<meta property="og:title" content="37.计算几何入门">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="计算几何入门 初高中解析几何关注理论求解，通过代数方法研究几何性质。算法竞赛中的计算几何则面临实际计算问题：  数值精度：浮点数运算存在误差，简单几何判断可能因精度问题失败 算法实现：将几何概念转化为可编程的算法步骤 避免除法：解析几何大量使用除法，而在计算机的浮点运算中，除法损失精度严重，计算几何的精髓在于尽可能用乘法代替除法，避免精度损失。  点积与叉积、点线关系、多边形与简单多边形、简单多边">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/dot.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/cross.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_collinear.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_dist2line.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_rotate.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_parallel.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_cross.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_segcross.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_dist2seg.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/polygon_point.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/polygon_circle.svg">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/polygon_area_animation.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/convex_hull_animation.gif">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/half_plane_intersection.svg">
+<meta property="article:published_time" content="2025-06-25T02:44:10.000Z">
+<meta property="article:modified_time" content="2025-06-26T11:06:02.066Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="ACM">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/dot.svg">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/","path":"2025-06-25-37-计算几何入门/","title":"37.计算几何入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>37.计算几何入门 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">计算几何入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E7%A7%AF%E4%B8%8E%E5%8F%89%E7%A7%AF"><span class="nav-number">1.1.</span> <span class="nav-text">点积与叉积</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AD%A6%E7%82%B9%E7%A7%AF%E4%B8%8E%E5%8F%89%E7%A7%AF"><span class="nav-number">1.1.1.</span> <span class="nav-text">为什么学点积与叉积？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E7%A7%AFdot-product"><span class="nav-number">1.1.2.</span> <span class="nav-text">点积（Dot Product）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%89%E7%A7%AFcross-product"><span class="nav-number">1.1.3.</span> <span class="nav-text">叉积（Cross Product）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%B9%E7%BA%BF%E5%85%B3%E7%B3%BB"><span class="nav-number">1.2.</span> <span class="nav-text">点线关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%AE%E7%82%B9%E7%B2%BE%E5%BA%A6%E4%B8%8E-dcmp"><span class="nav-number">1.2.1.</span> <span class="nav-text">浮点精度与 dcmp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E5%BA%A6%E4%B8%8E%E5%BC%A7%E5%BA%A6"><span class="nav-number">1.2.2.</span> <span class="nav-text">角度与弧度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%82%B9%E5%85%B1%E7%BA%BF"><span class="nav-number">1.2.3.</span> <span class="nav-text">三点共线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%88%B0%E7%9B%B4%E7%BA%BF%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.2.4.</span> <span class="nav-text">点到直线距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E7%BB%95%E7%82%B9%E9%80%86%E6%97%B6%E9%92%88%E6%97%8B%E8%BD%AC"><span class="nav-number">1.2.5.</span> <span class="nav-text">点绕点逆时针旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%9B%B4%E7%BA%BF%E5%B9%B3%E8%A1%8C"><span class="nav-number">1.2.6.</span> <span class="nav-text">两直线平行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%9B%B4%E7%BA%BF%E4%BA%A4%E7%82%B9"><span class="nav-number">1.2.7.</span> <span class="nav-text">两直线交点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E6%AE%B5%E7%9B%B8%E4%BA%A4"><span class="nav-number">1.2.8.</span> <span class="nav-text">线段相交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%82%B9%E5%88%B0%E7%BA%BF%E6%AE%B5%E8%B7%9D%E7%A6%BB"><span class="nav-number">1.2.9.</span> <span class="nav-text">点到线段距离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%BE%B9%E5%BD%A2%E4%B8%8E%E7%AE%80%E5%8D%95%E5%A4%9A%E8%BE%B9%E5%BD%A2"><span class="nav-number">1.2.10.</span> <span class="nav-text">多边形与简单多边形</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E7%82%B9%E5%9C%A8%E5%A4%9A%E8%BE%B9%E5%BD%A2%E5%86%85"><span class="nav-number">1.2.10.1.</span> <span class="nav-text">判断点在多边形内</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E8%BE%B9%E5%BD%A2%E4%B8%8E%E5%9C%86%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.2.10.2.</span> <span class="nav-text">多边形与圆的关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%A4%9A%E8%BE%B9%E5%BD%A2%E9%9D%A2%E7%A7%AF"><span class="nav-number">1.2.11.</span> <span class="nav-text">简单多边形面积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%B8%E5%8C%85convex-hull"><span class="nav-number">1.2.12.</span> <span class="nav-text">凸包（Convex Hull）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%B8%E5%8C%85%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">1.2.12.1.</span> <span class="nav-text">凸包的应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%8A%E5%B9%B3%E9%9D%A2%E4%BA%A4half-plane-intersection"><span class="nav-number">1.2.13.</span> <span class="nav-text">半平面交（Half Plane
+Intersection）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8A%E5%B9%B3%E9%9D%A2%E8%A1%A8%E7%A4%BA"><span class="nav-number">1.2.13.1.</span> <span class="nav-text">半平面表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.13.2.</span> <span class="nav-text">算法步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E8%BE%B9%E5%BD%A2%E8%BE%B9%E5%B9%B3%E7%A7%BB%E6%B1%82%E6%96%B0%E6%A0%B8"><span class="nav-number">1.2.13.3.</span> <span class="nav-text">多边形边平移求新核</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%8A%E5%B9%B3%E9%9D%A2%E4%BA%A4%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">1.2.13.4.</span> <span class="nav-text">半平面交的应用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%8F%82%E8%80%83"><span class="nav-number">1.2.14.</span> <span class="nav-text">模板参考</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="37.计算几何入门 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          37.计算几何入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-06-25 10:44:10" itemprop="dateCreated datePublished" datetime="2025-06-25T10:44:10+08:00">2025-06-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-26 19:06:02" itemprop="dateModified" datetime="2025-06-26T19:06:02+08:00">2025-06-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/" itemprop="url" rel="index"><span itemprop="name">ACM</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/ACM/ACMCOURSE/" itemprop="url" rel="index"><span itemprop="name">ACMCOURSE</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="计算几何入门">计算几何入门</h1>
+<p>初高中解析几何关注<strong>理论求解</strong>，通过代数方法研究几何性质。算法竞赛中的计算几何则面临<strong>实际计算</strong>问题：</p>
+<ol type="1">
+<li><strong>数值精度</strong>：浮点数运算存在误差，简单几何判断可能因精度问题失败</li>
+<li><strong>算法实现</strong>：将几何概念转化为可编程的算法步骤</li>
+<li><strong>避免除法</strong>：解析几何大量使用除法，而在计算机的浮点运算中，除法损失精度严重，计算几何的精髓在于尽可能<strong>用乘法代替除法</strong>，避免精度损失。</li>
+</ol>
+<p>点积与叉积、点线关系、多边形与简单多边形、简单多边形面积、凸包、半平面交。</p>
+<span id="more"></span>
+<h2 id="点积与叉积">点积与叉积</h2>
+<h3 id="为什么学点积与叉积">为什么学点积与叉积？</h3>
+<p>点积和叉积是计算几何的<strong>基础工具</strong>，几乎所有几何问题都离不开它们：</p>
+<ul>
+<li><strong>点积</strong>：判断向量夹角、投影长度、距离计算</li>
+<li><strong>叉积</strong>：判断方向、计算面积、判断点线关系</li>
+</ul>
+<p>解析几何中判断点线关系需要除法（如斜率比较），而计算几何用叉积的符号判断，完全避免除法运算。</p>
+<h3 id="点积dot-product">点积（Dot Product）</h3>
+<p><strong>定义</strong>：<span class="math inline">\(\vec{a} \cdot
+\vec{b} = |a||b|\cos\theta = a_x b_x + a_y b_y\)</span></p>
+<p><strong>公式推导</strong>：</p>
+<p>设 <span class="math inline">\(\vec{a} = (a_x, a_y)\)</span>，<span
+class="math inline">\(\vec{b} = (b_x, b_y)\)</span>，夹角为 <span
+class="math inline">\(\theta\)</span>。</p>
+<p>为什么 <span class="math inline">\(a_x b_x + a_y b_y =
+|a||b|\cos\theta\)</span>？</p>
+<p><span class="math inline">\(\vec{a} \cdot \vec{b}
+=|a||b|\cos\theta\)</span> 的推导：</p>
+<ul>
+<li>直接计算：<span class="math inline">\(\vec{a} \cdot \vec{b} = a_x
+b_x + a_y b_y\)</span></li>
+<li>利用余弦定理：<span class="math inline">\(|\vec{a} - \vec{b}|^2 =
+|\vec{a}|^2 + |\vec{b}|^2 - 2|\vec{a}||\vec{b}|\cos\theta\)</span></li>
+<li>展开左边：<span class="math inline">\(|\vec{a} - \vec{b}|^2 = (a_x -
+b_x)^2 + (a_y - b_y)^2 = a_x^2 + a_y^2 + b_x^2 + b_y^2 - 2(a_x b_x + a_y
+b_y)\)</span></li>
+<li>对比得到：<span class="math inline">\(a_x b_x + a_y b_y =
+|a||b|\cos\theta\)</span></li>
+</ul>
+<p><span class="math inline">\(\vec{a} \cdot \vec{b}=a_x b_x + a_y
+b_y\)</span> 的推导：</p>
+<ul>
+<li>在直角坐标系中，<span class="math inline">\(x\)</span> 轴和 <span
+class="math inline">\(y\)</span> 轴是垂直的，所以 <span
+class="math inline">\(\vec{i} \cdot \vec{i} = 1\)</span>，<span
+class="math inline">\(\vec{j} \cdot \vec{j} = 1\)</span>，<span
+class="math inline">\(\vec{i} \cdot \vec{j} = 0\)</span></li>
+<li>向量 <span class="math inline">\(\vec{a} = a_x \vec{i} + a_y
+\vec{j}\)</span>，<span class="math inline">\(\vec{b} = b_x \vec{i} +
+b_y \vec{j}\)</span></li>
+<li>利用点积的分配律：<span class="math inline">\(\vec{a} \cdot \vec{b}
+= (a_x \vec{i} + a_y \vec{j}) \cdot (b_x \vec{i} + b_y \vec{j}) = a_x
+b_x + a_y b_y\)</span></li>
+</ul>
+<p><strong>直观理解</strong>：点积就是两个向量对应坐标相乘再相加，结果等于长度乘以夹角的余弦。</p>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/dot.svg" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="type">double</span> x, y;</span><br><span class="line">    <span class="built_in">Point</span>(<span class="type">double</span> a, <span class="type">double</span> b) &#123;x = a, y = b;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 点积：a·b = ax*bx + ay*by</span></span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">dot</span><span class="params">(<span class="type">const</span> Point &amp;b)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> x * b.x + y * b.y;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 距离：|a-b| = sqrt((a-b)·(a-b))</span></span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">Dis</span><span class="params">(<span class="type">const</span> Point &amp;b)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">sqrt</span>((*<span class="keyword">this</span> - b).<span class="built_in">dot</span>(*<span class="keyword">this</span> - b));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="叉积cross-product">叉积（Cross Product）</h3>
+<p><strong>定义</strong>：<span class="math inline">\(\vec{a} \times
+\vec{b}\)</span> 是一个向量，方向垂直于 <span
+class="math inline">\(\vec{a}\)</span> 和 <span
+class="math inline">\(\vec{b}\)</span>
+所在平面，大小等于以这两个向量为邻边的平行四边形的面积。在二维平面中，叉积方向垂直于平面，用正负号表示方向：当
+<span class="math inline">\(\vec{b}\)</span> 在 <span
+class="math inline">\(\vec{a}\)</span> 的逆时针方向时，叉积为正；当
+<span class="math inline">\(\vec{b}\)</span> 在 <span
+class="math inline">\(\vec{a}\)</span> 的顺时针方向时，叉积为负。</p>
+<p><strong>正负判断（右手定则）</strong>：右手四指从 <span
+class="math inline">\(\vec{a}\)</span> 的方向弯向 <span
+class="math inline">\(\vec{b}\)</span>
+的方向，大拇指指向的方向就是叉积的方向。如果大拇指指向屏幕外（靠近观察者），则叉积为正；如果指向屏幕内（远离观察者），则叉积为负。</p>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/cross.svg" class="">
+<p><span class="math inline">\(\vec{a} \times \vec{b} = |a||b|\sin\theta
+= a_x b_y - a_y b_x\)</span></p>
+<p><span class="math inline">\(\vec{a} \times \vec{b} =
+|a||b|\sin\theta\)</span> 的推导：</p>
+<ul>
+<li>平行四边形面积 = 底 × 高 = <span class="math inline">\(|a| \times
+(|b|\sin\theta) = |a||b|\sin\theta\)</span></li>
+</ul>
+<p><span class="math inline">\(\vec{a} \times \vec{b} = a_x b_y - a_y
+b_x\)</span> 的推导：</p>
+<ul>
+<li>在直角坐标系中，<span class="math inline">\(\vec{i} \times \vec{i} =
+0\)</span>，<span class="math inline">\(\vec{j} \times \vec{j} =
+0\)</span>，<span class="math inline">\(\vec{i} \times \vec{j} =
+1\)</span>，<span class="math inline">\(\vec{j} \times \vec{i} =
+-1\)</span></li>
+<li>向量 <span class="math inline">\(\vec{a} = a_x \vec{i} + a_y
+\vec{j}\)</span>，<span class="math inline">\(\vec{b} = b_x \vec{i} +
+b_y \vec{j}\)</span></li>
+<li>利用叉积的分配律：<span class="math inline">\(\vec{a} \times \vec{b}
+= (a_x \vec{i} + a_y \vec{j}) \times (b_x \vec{i} + b_y \vec{j}) = a_x
+b_y - a_y b_x\)</span></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="comment">// 叉积：a×b = ax*by - ay*bx</span></span><br><span class="line">    <span class="function"><span class="keyword">inline</span> <span class="type">double</span> <span class="title">cross</span><span class="params">(<span class="type">const</span> Point &amp;b, <span class="type">const</span> Point &amp;c)</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (b.x - x) * (c.y - y) - (c.x - x) * (b.y - y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="点线关系">点线关系</h2>
+<h3 id="浮点精度与-dcmp">浮点精度与 dcmp</h3>
+<p>计算几何中大量使用浮点数，直接比较浮点数是否相等容易出错。常用技巧是设定一个极小的正数
+<span class="math inline">\(\varepsilon\)</span>（eps），用
+<code>dcmp</code> 函数判断浮点数的正负和是否接近零：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">double</span> eps = <span class="number">1e-8</span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">dcmp</span><span class="params">(<span class="type">double</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">fabs</span>(x) &lt; eps) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> x &lt; <span class="number">0</span> ? <span class="number">-1</span> : <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><span class="math inline">\(|x| &lt; \varepsilon\)</span> 视为
+<span class="math inline">\(x=0\)</span></p></li>
+<li><p><span class="math inline">\(x &gt; \varepsilon\)</span>
+视为正，<span class="math inline">\(x &lt; -\varepsilon\)</span>
+视为负</p></li>
+<li><p>这样可以有效避免浮点误差带来的判断错误</p></li>
+</ul>
+<h3 id="角度与弧度">角度与弧度</h3>
+<ul>
+<li><p><strong>角度</strong>：常用单位，360°为一圈</p></li>
+<li><p><strong>弧度</strong>：数学和计算几何中常用，<span
+class="math inline">\(2\pi\)</span>（大约6.28）为一圈</p></li>
+<li><p><strong>换算</strong>：<span class="math inline">\(1\text{弧度} =
+180/\pi\text{度}\)</span>，<span class="math inline">\(1\text{度} =
+\pi/180\text{弧度}\)</span></p></li>
+<li><p><strong>注意</strong>：计算几何中所有三角函数、旋转等都用弧度</p></li>
+</ul>
+<h3 id="三点共线">三点共线</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_collinear.svg" class="">
+<p>三点<span class="math inline">\(A,B,C\)</span>共线，当且仅当<span
+class="math inline">\(\overrightarrow{AB}\)</span>和<span
+class="math inline">\(\overrightarrow{AC}\)</span>平行。用<strong>叉积</strong>判断：</p>
+<ul>
+<li><p><span class="math inline">\(\overrightarrow{AB} \times
+\overrightarrow{AC} = 0\)</span> 时三点共线。</p></li>
+<li><p>叉积为零说明两个向量方向一致或相反。</p></li>
+<li><p><strong>直观理解</strong>：<span
+class="math inline">\(|\overrightarrow{AB} \times \overrightarrow{AC}| =
+|AB| \cdot |AC| \cdot \sin\theta\)</span>，三点共线时<span
+class="math inline">\(\theta=0\)</span>或<span
+class="math inline">\(\pi\)</span>，所以结果为0。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">bool</span> <span class="title">InLine</span><span class="params">(<span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b, <span class="type">const</span> Point &amp;c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">dcmp</span>((b - a).<span class="built_in">cross</span>(c - a));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="点到直线距离">点到直线距离</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_dist2line.svg" class="">
+<p>点<span class="math inline">\(P\)</span>到直线<span
+class="math inline">\(AB\)</span>的距离，其实就是<span
+class="math inline">\(|\overrightarrow{AP}|\)</span>在垂直于<span
+class="math inline">\(AB\)</span>方向上的投影长度。</p>
+<ul>
+<li><p>公式：<span class="math inline">\(\text{距离} =
+|\overrightarrow{AP}| \cdot \sin\theta\)</span>，其中<span
+class="math inline">\(\theta\)</span>是<span
+class="math inline">\(AP\)</span>与<span
+class="math inline">\(AB\)</span>的夹角。</p></li>
+<li><p>叉积的几何意义：<span class="math inline">\(|\overrightarrow{AB}
+\times \overrightarrow{AP}| = |AB| \cdot |AP| \cdot
+\sin\theta\)</span>，所以距离等于<span
+class="math inline">\(\frac{|\overrightarrow{AB} \times
+\overrightarrow{AP}|}{|AB|}\)</span>。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">PointToLine</span><span class="params">(<span class="type">const</span> Point &amp;p, <span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fabs</span>((b - a).<span class="built_in">cross</span>(p - a)) / (b - a).<span class="built_in">len</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="点绕点逆时针旋转">点绕点逆时针旋转</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_rotate.svg" class="">
+<p>点<span class="math inline">\(P\)</span>绕<span
+class="math inline">\(O\)</span>逆时针旋转<span
+class="math inline">\(\theta\)</span>弧度，利用<strong>旋转矩阵</strong>：</p>
+<ul>
+<li><span class="math inline">\(x&#39; = \cos\theta(x - x_0) -
+\sin\theta(y - y_0) + x_0\)</span><br />
+</li>
+<li><span class="math inline">\(y&#39; = \sin\theta(x - x_0) +
+\cos\theta(y - y_0) + y_0\)</span></li>
+</ul>
+<p><strong>旋转矩阵本质</strong>：</p>
+<p>旋转矩阵是一种将点绕原点（或某个点）旋转一定角度后，得到新坐标的线性变换工具。它保证旋转后点到中心的距离不变，只改变与<span
+class="math inline">\(x\)</span>轴的夹角。<br />
+（本节不展开推导，了解其作用即可。）</p>
+<p><strong>二维旋转矩阵的形式：</strong></p>
+<p><span class="math display">\[
+\begin{bmatrix}
+x&#39; \\
+y&#39;
+\end{bmatrix}
+=
+\begin{bmatrix}
+\cos\theta &amp; -\sin\theta \\
+\sin\theta &amp; \cos\theta
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}
+\]</span></p>
+<p>也就是说，旋转后的新坐标 <span class="math inline">\([x&#39;,
+y&#39;]\)</span>，等于"旋转矩阵"与原坐标 <span class="math inline">\([x,
+y]\)</span> 的矩阵乘法结果。</p>
+<p><strong>直观理解</strong>：<br />
+- 旋转矩阵是一个 <span class="math inline">\(2 \times 2\)</span>
+的方阵。 - 只要用矩阵乘法，就能把任意点绕原点旋转任意角度。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point <span class="title">Rotate</span><span class="params">(<span class="type">const</span> Point &amp;p, <span class="type">const</span> Point &amp;o, <span class="type">double</span> theta)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> x = <span class="built_in">cos</span>(theta) * (p.x - o.x) - <span class="built_in">sin</span>(theta) * (p.y - o.y) + o.x;</span><br><span class="line">    <span class="type">double</span> y = <span class="built_in">sin</span>(theta) * (p.x - o.x) + <span class="built_in">cos</span>(theta) * (p.y - o.y) + o.y;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Point</span>(x, y);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="两直线平行">两直线平行</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_parallel.svg" class="">
+<p>两直线<span class="math inline">\(AB\)</span>与<span
+class="math inline">\(CD\)</span>平行，当且仅当方向向量<span
+class="math inline">\(\overrightarrow{AB}\)</span>与<span
+class="math inline">\(\overrightarrow{CD}\)</span>平行。</p>
+<ul>
+<li><p>用叉积判断：<span class="math inline">\(\overrightarrow{AB}
+\times \overrightarrow{CD} = 0\)</span></p></li>
+<li><p><strong>直观理解</strong>：<span
+class="math inline">\(|\overrightarrow{AB} \times \overrightarrow{CD}| =
+|AB| \cdot |CD| \cdot \sin\theta\)</span>，平行时<span
+class="math inline">\(\theta=0\)</span>或<span
+class="math inline">\(\pi\)</span>，所以结果为0。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">Parallel</span><span class="params">(<span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b, <span class="type">const</span> Point &amp;c, <span class="type">const</span> Point &amp;d)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> !<span class="built_in">dcmp</span>((b - a).<span class="built_in">cross</span>(d - c));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="两直线交点">两直线交点</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_cross.svg" class="">
+<p>设直线<span class="math inline">\(AB\)</span>和<span
+class="math inline">\(CD\)</span>不平行，求交点：</p>
+<ul>
+<li><p>利用参数方程和叉积，推导出交点公式</p></li>
+<li><p><strong>原理解释</strong>：</p></li>
+</ul>
+<p><span class="math inline">\(t\)</span> 表示 <span
+class="math inline">\(P\)</span> 在 <span
+class="math inline">\(AB\)</span>
+上的位置比例，利用"面积比"来定位交点。</p>
+<ul>
+<li><p><strong>公式推导</strong>：<br />
+<span class="math display">\[
+t = \frac{(\vec{A} - \vec{C}) \times (\vec{D} - \vec{C})}{(\vec{B} -
+\vec{A}) \times (\vec{D} - \vec{C})}
+\]</span></p>
+<p>回想叉积公式，分子分母都对应的 底×高</p>
+<p><span class="math display">\[
+P = \vec{A} + t(\vec{B} - \vec{A})
+\]</span></p></li>
+<li><p><strong>注意</strong>：分母为零时，说明两直线平行或重合。</p></li>
+<li><p><strong>直观理解</strong>：交点是两条直线"方向量"线性组合的结果。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point <span class="title">LineCross</span><span class="params">(<span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b, <span class="type">const</span> Point &amp;c, <span class="type">const</span> Point &amp;d)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> u = (a - c).<span class="built_in">cross</span>(d - c);</span><br><span class="line">    <span class="type">double</span> v = (b - a).<span class="built_in">cross</span>(d - c);</span><br><span class="line">    <span class="keyword">return</span> a + (b - a) * (u / v);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="线段相交">线段相交</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_segcross.svg" class="">
+<p>判断线段<span class="math inline">\(AB\)</span>与<span
+class="math inline">\(CD\)</span>是否相交：</p>
+<ul>
+<li><p>判断两端点分别在对方线段的两侧（叉积符号不同或为零）</p></li>
+<li><p><strong>直观理解</strong>：如果<span
+class="math inline">\(C\)</span>、<span
+class="math inline">\(D\)</span>在<span
+class="math inline">\(AB\)</span>两侧，<span
+class="math inline">\(A\)</span>、<span
+class="math inline">\(B\)</span>在<span
+class="math inline">\(CD\)</span>两侧，则必有交点。</p></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">SegCross</span><span class="params">(<span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b, <span class="type">const</span> Point &amp;c, <span class="type">const</span> Point &amp;d)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">dcmp</span>((b - a).<span class="built_in">cross</span>(c - a)) * <span class="built_in">dcmp</span>((b - a).<span class="built_in">cross</span>(d - a)) &lt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">           <span class="built_in">dcmp</span>((d - c).<span class="built_in">cross</span>(a - c)) * <span class="built_in">dcmp</span>((d - c).<span class="built_in">cross</span>(b - c)) &lt;= <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="点到线段距离">点到线段距离</h3>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/line_point_dist2seg.svg" class="">
+<p>点<span class="math inline">\(P\)</span>到线段<span
+class="math inline">\(AB\)</span>的距离：</p>
+<ul>
+<li>若投影在线段外，取到端点距离</li>
+<li>若投影在线段内，取到直线距离</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">PointToSeg</span><span class="params">(<span class="type">const</span> Point &amp;p, <span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">dcmp</span>((b - a).<span class="built_in">dot</span>(p - a)) &lt; <span class="number">0</span>) <span class="keyword">return</span> (p - a).<span class="built_in">len</span>();</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">dcmp</span>((a - b).<span class="built_in">dot</span>(p - b)) &lt; <span class="number">0</span>) <span class="keyword">return</span> (p - b).<span class="built_in">len</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fabs</span>((b - a).<span class="built_in">cross</span>(p - a)) / (b - a).<span class="built_in">len</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="多边形与简单多边形">多边形与简单多边形</h3>
+<p><strong>多边形</strong>：由有限个点按顺序连接而成的封闭图形。</p>
+<p><strong>凸多边形</strong>：任意两点连线都在多边形内部的多边形。</p>
+<p><strong>简单多边形</strong>：边与边只在顶点相交，不自交的多边形，可以是"凹"的。</p>
+<blockquote>
+<p>凸多边形是简单多边形，简单多边形不一定是凸多边形</p>
+</blockquote>
+<h4 id="判断点在多边形内">判断点在多边形内</h4>
+<p><strong>射线法</strong>：从点向右发射水平射线，统计与多边形边界的交点数。</p>
+<ul>
+<li>交点数为奇数：点在多边形内</li>
+<li>交点数为偶数：点在多边形外</li>
+</ul>
+<p><strong>改进的射线法</strong>：处理边界情况，避免浮点误差。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">InPolygon</span><span class="params">(<span class="type">const</span> Point &amp;p, Point poly[], <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> flag = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        Point p1 = poly[i];</span><br><span class="line">        Point p2 = poly[(i + <span class="number">1</span>) % n];</span><br><span class="line">        <span class="keyword">if</span>(p.<span class="built_in">OnSeg</span>(p1, p2)) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 在边界上</span></span><br><span class="line">        </span><br><span class="line">        <span class="type">int</span> k = <span class="built_in">dcmp</span>(p<span class="number">1.</span><span class="built_in">cross</span>(p2, p));</span><br><span class="line">        <span class="type">int</span> d1 = <span class="built_in">dcmp</span>(p<span class="number">1.</span>y - p.y);</span><br><span class="line">        <span class="type">int</span> d2 = <span class="built_in">dcmp</span>(p<span class="number">2.</span>y - p.y);</span><br><span class="line">        <span class="keyword">if</span>(k &gt; <span class="number">0</span> &amp;&amp; d1 &lt;= <span class="number">0</span> &amp;&amp; d2 &gt; <span class="number">0</span>) flag++;</span><br><span class="line">        <span class="keyword">if</span>(k &lt; <span class="number">0</span> &amp;&amp; d2 &lt;= <span class="number">0</span> &amp;&amp; d1 &gt; <span class="number">0</span>) flag--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> flag != <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>算法原理详解</strong>：</p>
+<ol type="1">
+<li><strong>射线方向</strong>：从测试点P向右（x轴正方向）发射水平射线</li>
+<li><strong>叉积判断方向</strong>：<code>p1.cross(p2, p)</code>
+判断点p相对于边p1→p2的位置
+<ul>
+<li><code>k &gt; 0</code>：p在边的左侧</li>
+<li><code>k &lt; 0</code>：p在边的右侧</li>
+<li><code>k = 0</code>：p在边上</li>
+</ul></li>
+<li><strong>y坐标比较</strong>：<code>d1 = dcmp(p1.y - p.y)</code>,
+<code>d2 = dcmp(p2.y - p.y)</code>
+<ul>
+<li><code>d1 &lt;= 0 &amp;&amp; d2 &gt; 0</code>：边的起点在射线下方或同高，终点在射线上方</li>
+<li><code>d2 &lt;= 0 &amp;&amp; d1 &gt; 0</code>：边的终点在射线下方或同高，起点在射线上方</li>
+</ul></li>
+<li><strong>flag计数规则</strong>：
+<ul>
+<li><code>flag++</code>：射线从下向上穿过边，且p在边的左侧</li>
+<li><code>flag--</code>：射线从下向上穿过边，且p在边的右侧</li>
+<li>最终 <code>flag != 0</code> 表示点在多边形内</li>
+</ul></li>
+</ol>
+<p><strong>为什么这样设计</strong>： - 避免了射线与顶点重合的边界情况 -
+通过叉积方向判断，确保计数准确性 - 处理了凹多边形的复杂情况</p>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/polygon_point.svg" class="">
+<h4 id="多边形与圆的关系">多边形与圆的关系</h4>
+<p><strong>点在圆内</strong>：点到圆心距离小于半径。</p>
+<p><strong>线段与圆相交</strong>：线段到圆心距离小于半径，且线段两端点不全在圆内。</p>
+<p><strong>多边形与圆相交</strong>：多边形有边与圆相交，或有顶点在圆内。</p>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/polygon_circle.svg" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">CircleIntersectPolygon</span><span class="params">(Point poly[], <span class="type">int</span> n, Point center, <span class="type">double</span> r)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        Point a = poly[i], b = poly[(i + <span class="number">1</span>) % n];</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 检查顶点是否在圆内</span></span><br><span class="line">        <span class="keyword">if</span>(center.<span class="built_in">Dis</span>(a) &lt;= r) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 检查边是否与圆相交</span></span><br><span class="line">        <span class="type">double</span> dist = <span class="built_in">PointToSeg</span>(center, a, b);</span><br><span class="line">        <span class="keyword">if</span>(dist &lt;= r) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="简单多边形面积">简单多边形面积</h3>
+<p><strong>有向面积</strong>：多边形面积有正负，逆时针为正，顺时针为负。</p>
+<p><strong>叉积法</strong>：利用叉积计算多边形面积，公式为：</p>
+<p><span class="math display">\[
+S = \frac{1}{2} \sum_{i=0}^{n-1} \vec{P_i} \times \vec{P_{i+1}}
+\]</span></p>
+<p>其中 <span class="math inline">\(P_n = P_0\)</span>（首尾相连）。</p>
+<p><strong>直观理解</strong>：将多边形分解为多个三角形，每个三角形的面积用叉积计算。</p>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/polygon_area_animation.gif" class="">
+<p>简单多边形面积的三角形分解过程中，某些三角形（如右图
+P0-P3-P4）会出现"负面积"。这是因为这些三角形的顶点顺序为顺时针，面积公式自动赋予其负号。几何上，有"容斥"的味道：重叠部分被减去，最终得到正确的多边形面积。</p>
+<p>多边形面积公式的优美之处就在于，无论凸多边形还是"凹"多边形，所有三角形的正负自动抵消，保证结果正确。</p>
+<p><strong>格林公式的离散形式</strong>：标准叉积公式 <span
+class="math inline">\(S = \frac{1}{2} \sum_{i=0}^{n-1} (x_i y_{i+1} -
+x_{i+1} y_i)\)</span> 可以通过格林公式变形为更高效的形式。</p>
+<p><strong>变形过程</strong>： 1. <strong>原始叉积</strong>：对于每条边
+<span class="math inline">\(P_i \rightarrow P_{i+1}\)</span>，计算 <span
+class="math inline">\(x_i \cdot y_{i+1} - x_{i+1} \cdot y_i\)</span> 2.
+<strong>重新组织</strong>：将每个顶点的贡献分离，对于顶点 <span
+class="math inline">\(P_i(x_i, y_i)\)</span>，它参与的项有： -
+作为起点：<span class="math inline">\(x_i \cdot
+y_{i+1}\)</span>（贡献为正） - 作为终点：<span
+class="math inline">\(-x_{i+1} \cdot y_i\)</span>（贡献为负） 3.
+<strong>合并同类项</strong>：顶点 <span
+class="math inline">\(P_i\)</span> 的总贡献 = <span
+class="math inline">\(x_i \cdot y_{i+1} - x_{i+1} \cdot y_i = y_i \cdot
+(x_{i-1} - x_{i+1})\)</span></p>
+<p><strong>优化效果</strong>：这样变形后，每个顶点只需要计算一次 <span
+class="math inline">\(y_i \cdot (x_{i-1} -
+x_{i+1})\)</span>，避免了重复的模运算（如
+<code>(i+1) % n</code>），提高了计算效率。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">PolygonArea</span><span class="params">(Point p[], <span class="type">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">3</span>) <span class="keyword">return</span> <span class="number">0.0</span>;</span><br><span class="line">    <span class="type">double</span> s = p[<span class="number">0</span>].y * (p[n - <span class="number">1</span>].x - p[<span class="number">1</span>].x);</span><br><span class="line">    p[n] = p[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        s += p[i].y * (p[i - <span class="number">1</span>].x - p[i + <span class="number">1</span>].x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">fabs</span>(s * <span class="number">0.5</span>); <span class="comment">// 顺时针方向s为负</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="凸包convex-hull">凸包（Convex Hull）</h3>
+<p><strong>定义</strong>：包含所有点的最小凸多边形。</p>
+<p><strong>Graham扫描法</strong>：</p>
+<ol type="1">
+<li>找到最左下角的点作为起始点</li>
+<li>按极角排序其他点（以起始点为原点，按逆时针方向排序）</li>
+<li>用栈维护凸包，每次加入新点时检查是否破坏凸性</li>
+</ol>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/convex_hull_animation.gif" class="">
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">Graham</span><span class="params">(Point p[], <span class="type">int</span> n, Point res[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">3</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) res[i] = p[i];</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 找到最左下角的点</span></span><br><span class="line">    <span class="type">int</span> k = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(p[i].y &lt; p[k].y || (p[i].y == p[k].y &amp;&amp; p[i].x &lt; p[k].x)) &#123;</span><br><span class="line">            k = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">swap</span>(p[<span class="number">0</span>], p[k]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 按极角排序</span></span><br><span class="line">    <span class="built_in">sort</span>(p + <span class="number">1</span>, p + n, [&amp;](<span class="type">const</span> Point &amp;a, <span class="type">const</span> Point &amp;b) &#123;</span><br><span class="line">        <span class="type">double</span> cross = p[<span class="number">0</span>].<span class="built_in">cross</span>(a, b);</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">dcmp</span>(cross) != <span class="number">0</span>) <span class="keyword">return</span> cross &gt; <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> p[<span class="number">0</span>].<span class="built_in">Dis</span>(a) &lt; p[<span class="number">0</span>].<span class="built_in">Dis</span>(b);</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Graham扫描</span></span><br><span class="line">    <span class="type">int</span> top = <span class="number">0</span>;</span><br><span class="line">    res[top++] = p[<span class="number">0</span>];</span><br><span class="line">    res[top++] = p[<span class="number">1</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">while</span>(top &gt; <span class="number">1</span> &amp;&amp; <span class="built_in">dcmp</span>(res[top<span class="number">-2</span>].<span class="built_in">cross</span>(res[top<span class="number">-1</span>], p[i])) &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            top--;</span><br><span class="line">        &#125;</span><br><span class="line">        res[top++] = p[i];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> top;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="凸包的应用">凸包的应用</h4>
+<ol type="1">
+<li><strong>最远点对</strong>：凸包上的点对可能是最远点对</li>
+<li><strong>最小包围圆</strong>：凸包的最小包围圆就是点集的最小包围圆</li>
+<li><strong>碰撞检测</strong>：两个凸多边形的碰撞检测比一般多边形简单</li>
+</ol>
+<h3 id="半平面交half-plane-intersection">半平面交（Half Plane
+Intersection）</h3>
+<p><strong>定义</strong>：多个半平面的交集，结果是一个凸多边形（可能为空）。</p>
+<p><strong>半平面</strong>：由一条直线分割平面得到的两个区域之一。</p>
+<img src="/2025-06-25-37-%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%E5%85%A5%E9%97%A8/half_plane_intersection.svg" class="">
+<h4 id="半平面表示">半平面表示</h4>
+<p>半平面由一条有向直线表示，即一个向量。<strong>向量的一侧为标记的半平面</strong>，通常约定为向量的左侧。</p>
+<p><strong>极角排序</strong>：对直线的方向向量进行极角排序。每条直线
+<span class="math inline">\(s \rightarrow e\)</span> 的方向向量 <span
+class="math inline">\(\vec{v} = (e_x - s_x, e_y - s_y)\)</span> 与 <span
+class="math inline">\(x\)</span>
+轴正方向的夹角就是极角。极角小的排在前面，相同时距离原点近的排在前面。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Line</span> &#123;</span><br><span class="line">    Point s, e;  <span class="comment">// 起点和终点，s-&gt;e向量表示有向直线</span></span><br><span class="line">    <span class="type">double</span> ang, d;  <span class="comment">// 极角和距离参数</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">Line</span>() &#123;&#125;</span><br><span class="line">    <span class="built_in">Line</span>(Point s_, Point e_) &#123;</span><br><span class="line">        s = s_, e = e_;</span><br><span class="line">        ang = <span class="built_in">atan2</span>(e.y - s.y, e.x - s.x);  <span class="comment">// 计算极角</span></span><br><span class="line">        <span class="comment">// 计算距离参数，用于排序</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">dcmp</span>(s.x - e.x)) </span><br><span class="line">            d = (s.x * e.y - e.x * s.y) / <span class="built_in">fabs</span>(s.x - e.x);</span><br><span class="line">        <span class="keyword">else</span> </span><br><span class="line">            d = (s.x * e.y - e.x * s.y) / <span class="built_in">fabs</span>(s.y - e.y);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 判断两直线是否平行</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">Parallel</span><span class="params">(<span class="type">const</span> Line &amp;l)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> !<span class="built_in">dcmp</span>((e.x - s.x) * (l.e.y - l.s.y) - (e.y - s.y) * (l.e.x - l.s.x));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 求两直线交点</span></span><br><span class="line">    Point <span class="keyword">operator</span>*(<span class="type">const</span> Line &amp;l) <span class="type">const</span> &#123;</span><br><span class="line">        <span class="type">double</span> u = s.<span class="built_in">cross</span>(e, l.s), v = e.<span class="built_in">cross</span>(s, l.e);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Point</span>((l.s.x * v + l.e.x * u) / (u + v),</span><br><span class="line">                    (l.s.y * v + l.e.y * u) / (u + v));</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 排序函数，优先极角，&quot;左&quot;边直线靠前</span></span><br><span class="line">    <span class="type">bool</span> <span class="keyword">operator</span>&lt;(<span class="type">const</span> Line &amp;l) <span class="type">const</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">dcmp</span>(ang - l.ang) ? ang &lt; l.ang : d &lt; l.d;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="算法步骤">算法步骤</h4>
+<ol type="1">
+<li><strong>排序</strong>：将所有半平面按极角排序</li>
+<li><strong>去重</strong>：去除极角相同的半平面</li>
+<li><strong>双端队列维护</strong>：用双端队列维护半平面交的边界</li>
+<li><strong>更新队列</strong>：每次加入新的半平面时，更新队列</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">HalfPlaneIntersection</span><span class="params">(Line l[], <span class="type">int</span> n, Point cp[], <span class="type">int</span> &amp;m)</span> </span>&#123;</span><br><span class="line">    m = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">sort</span>(l, l + n);  <span class="comment">// 按极角排序</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 去重（相同极角的直线）</span></span><br><span class="line">    <span class="type">int</span> tn = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">dcmp</span>(l[i].ang - l[i<span class="number">-1</span>].ang)) &#123;</span><br><span class="line">            l[tn++] = l[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    n = tn;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(n &lt; <span class="number">2</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 双端队列</span></span><br><span class="line">    <span class="type">int</span> front = <span class="number">0</span>, rear = <span class="number">1</span>;</span><br><span class="line">    Line deq[maxn];</span><br><span class="line">    deq[<span class="number">0</span>] = l[<span class="number">0</span>];</span><br><span class="line">    deq[<span class="number">1</span>] = l[<span class="number">1</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 处理每条新的半平面</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">2</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="comment">// 检查队列尾部是否需要弹出</span></span><br><span class="line">        <span class="keyword">while</span>(front &lt; rear &amp;&amp; <span class="built_in">dcmp</span>(l[i].s.<span class="built_in">cross</span>(l[i].e, </span><br><span class="line">            deq[rear] * deq[rear<span class="number">-1</span>])) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            rear--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 检查队列头部是否需要弹出</span></span><br><span class="line">        <span class="keyword">while</span>(front &lt; rear &amp;&amp; <span class="built_in">dcmp</span>(l[i].s.<span class="built_in">cross</span>(l[i].e, </span><br><span class="line">            deq[front] * deq[front<span class="number">+1</span>])) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            front++;</span><br><span class="line">        &#125;</span><br><span class="line">        deq[++rear] = l[i];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 处理首尾相连的情况</span></span><br><span class="line">    <span class="keyword">while</span>(front &lt; rear &amp;&amp; <span class="built_in">dcmp</span>(deq[front].s.<span class="built_in">cross</span>(deq[front].e, </span><br><span class="line">        deq[rear] * deq[rear<span class="number">-1</span>])) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        rear--;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(front &lt; rear &amp;&amp; <span class="built_in">dcmp</span>(deq[rear].s.<span class="built_in">cross</span>(deq[rear].e, </span><br><span class="line">        deq[front] * deq[front<span class="number">+1</span>])) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        front++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(rear &lt;= front + <span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;  <span class="comment">// 两条以下直线，没有围住</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 保存结果（交点）</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = front; i &lt; rear; i++) &#123;</span><br><span class="line">        cp[m++] = deq[i] * deq[i<span class="number">+1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(front &lt; rear + <span class="number">1</span>) &#123;</span><br><span class="line">        cp[m++] = deq[front] * deq[rear];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 去重和精度修复</span></span><br><span class="line">    m = <span class="built_in">unique</span>(cp, cp + m) - cp;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        cp[i].x = <span class="built_in">dcmp</span>(cp[i].x) ? cp[i].x : <span class="number">0</span>;  <span class="comment">// 负0误差修复</span></span><br><span class="line">        cp[i].y = <span class="built_in">dcmp</span>(cp[i].y) ? cp[i].y : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="多边形边平移求新核">多边形边平移求新核</h4>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将点沿a-&gt;b方向左侧垂直平移L</span></span><br><span class="line"><span class="function">Point <span class="title">ParallelMove</span><span class="params">(Point a, Point b, Point ret, <span class="type">double</span> L)</span> </span>&#123;</span><br><span class="line">    <span class="type">double</span> len = a.<span class="built_in">Dis</span>(b);</span><br><span class="line">    <span class="keyword">return</span> ret + <span class="built_in">Point</span>((a.y - b.y) / len * L, (b.x - a.x) / len * L);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成多边形的边向内平移L后的半平面集</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MakeNewPanels</span><span class="params">(Point p[], <span class="type">int</span> n, Line l[], <span class="type">double</span> L)</span> </span>&#123;</span><br><span class="line">    p[n] = p[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        l[i] = <span class="built_in">Line</span>(<span class="built_in">ParallelMove</span>(p[i], p[i<span class="number">+1</span>], p[i], L),</span><br><span class="line">                   <span class="built_in">ParallelMove</span>(p[i], p[i<span class="number">+1</span>], p[i<span class="number">+1</span>], L));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="半平面交的应用">半平面交的应用</h4>
+<ol type="1">
+<li><strong>多边形求交</strong>：两个凸多边形的交集</li>
+<li><strong>碰撞检测</strong>：多个障碍物的安全区域</li>
+<li><strong>多边形收缩</strong>：将多边形边向内平移，求新的边界</li>
+</ol>
+<h3 id="模板参考">模板参考</h3>
+<p><a
+target="_blank" rel="noopener" href="https://github.com/CSGrandeur/icpc_solution/blob/master/templates/ComputationalGeometry.md">https://github.com/CSGrandeur/icpc_solution/blob/master/templates/ComputationalGeometry.md</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ACM/" rel="tag"># ACM</a>
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-06-18-36-%E7%BB%84%E5%90%88%E6%95%B0%E5%AD%A6%E5%85%A5%E9%97%A8/" rel="prev" title="36.组合数学入门">
+                  <i class="fa fa-angle-left"></i> 36.组合数学入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-09-26-01-AI%E5%BC%80%E5%8F%91%E5%8A%A9%E6%89%8B/" rel="next" title="01. AI开发助手">
+                  01. AI开发助手 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
