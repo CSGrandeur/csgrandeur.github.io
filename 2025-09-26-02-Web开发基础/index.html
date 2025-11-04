@@ -27,7 +27,7 @@
 <meta property="og:description" content="1. Web的发展 1.1 什么是Web？  Web &#x3D; 万维网（World Wide Web） 它不是互联网（Internet），而是互联网上的一种服务，就像微信、QQ一样。   互联网：像高速公路，连接全球计算机 Web：像高速公路上的&quot;信息专列&quot;，专门运送网页内容  生活类比： 你用手机刷抖音 → 抖音App是&quot;客户端&quot; 你用浏览器看网页 → 浏览器是&quot;客户端&quot;，Web是背后的信息系统">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-26T07:15:26.000Z">
-<meta property="article:modified_time" content="2025-11-04T10:58:22.446Z">
+<meta property="article:modified_time" content="2025-11-04T10:59:17.153Z">
 <meta property="article:author" content="CSGrandeur">
 <meta name="twitter:card" content="summary">
 
@@ -243,7 +243,7 @@ mood.html）：</span></a></li></ol></li><li class="nav-item nav-level-3"><a cla
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-04 18:58:22" itemprop="dateModified" datetime="2025-11-04T18:58:22+08:00">2025-11-04</time>
+      <time title="修改时间：2025-11-04 18:59:17" itemprop="dateModified" datetime="2025-11-04T18:59:17+08:00">2025-11-04</time>
     </span>
 
   
@@ -326,10 +326,14 @@ mood.html）：</span></a></li></ol></li><li class="nav-item nav-level-3"><a cla
 <li><strong>浏览器</strong>：收到文件 → 拆包 → 显示网页</li>
 </ol>
 <blockquote>
-<p>💡 <strong>关键概念</strong>：<br />
-- <strong>客户端</strong>：你的浏览器（发起请求） -
-<strong>服务器</strong>：百度的电脑（响应请求） -
-<strong>HTTP</strong>：它们之间的"通话协议"</p>
+<p>💡 <strong>关键概念</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><strong>客户端</strong>：你的浏览器（发起请求）</li>
+<li><strong>服务器</strong>：百度的电脑（响应请求）</li>
+<li><strong>HTTP</strong>：它们之间的"通话协议"</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="为什么学web开发">1.4 为什么学Web开发？</h3>
@@ -506,11 +510,18 @@ mood.html）：</span></a></li></ol></li><li class="nav-item nav-level-3"><a cla
 </table>
 <blockquote>
 <p>💡 <strong>生活类比</strong>：<br />
-开餐馆 = 做网站<br />
-- 前端 = 餐厅装修 + 菜单设计<br />
-- 后端 = 厨房做菜 + 库存管理<br />
-- <strong>数据库</strong> = 冰箱 + 账本（存食材、记账）<br />
-- 部署 = 租店面 + 办营业执照</p>
+开餐馆 = 做网站</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>前端 = 餐厅装修 + 菜单设计<br />
+</li>
+<li>后端 = 厨房做菜 + 库存管理<br />
+</li>
+<li><strong>数据库</strong> = 冰箱 + 账本（存食材、记账）<br />
+</li>
+<li>部署 = 租店面 + 办营业执照</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="开发流程简单版">3.2 开发流程（简单版）</h3>
@@ -634,18 +645,32 @@ target="_blank" rel="noopener" href="https://www.python.org/downloads/">https://
 </tbody>
 </table>
 <blockquote>
-<p>💡 <strong>验证是否安装成功</strong>： 1. 打开命令行（Windows：Win+R
-→ 输入 <code>cmd</code>） 2. 分别输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">node --version</span><br></pre></td></tr></table></figure> 3.
-如果显示版本号（如 <code>Python 3.11.0</code>），说明成功！</p>
+<p>💡 <strong>验证是否安装成功</strong>：</p>
+</blockquote>
+<blockquote>
+<ol type="1">
+<li>打开命令行（Windows：Win+R → 输入 <code>cmd</code>）</li>
+<li>分别输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">node --version</span><br></pre></td></tr></table></figure></li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3" type="1">
+<li>如果显示版本号（如 <code>Python 3.11.0</code>），说明成功！</li>
+</ol>
 </blockquote>
 <hr />
 <h3 id="安装项目依赖一行命令">4.2 安装项目依赖（一行命令）</h3>
 <p>打开 VS Code，进入你的项目文件夹，<strong>在终端中运行</strong>：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装后端（FastAPI）所需库</span></span><br><span class="line">pip install fastapi <span class="string">&quot;uvicorn[standard]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装前端（Vue 3）所需工具</span></span><br><span class="line">npm install -g @vue/cli</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>✅ <strong>说明</strong>： - <code>pip</code> 是 Python 的"应用商店"
-- <code>npm</code> 是 Node.js 的"应用商店" - 这两行命令会自动下载
-FastAPI 和 Vue 3</p>
+<p>✅ <strong>说明</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><code>pip</code> 是 Python 的"应用商店"</li>
+<li><code>npm</code> 是 Node.js 的"应用商店"</li>
+<li>这两行命令会自动下载 FastAPI 和 Vue 3</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="安装-vs-code-必备插件">4.3 安装 VS Code 必备插件</h3>
@@ -770,18 +795,32 @@ target="_blank" rel="noopener" href="https://www.python.org/downloads/">https://
 </tbody>
 </table>
 <blockquote>
-<p>💡 <strong>验证是否安装成功</strong>： 1. 打开命令行（Windows：Win+R
-→ 输入 <code>cmd</code>） 2. 分别输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">node --version</span><br></pre></td></tr></table></figure> 3.
-如果显示版本号（如 <code>Python 3.11.0</code>），说明成功！</p>
+<p>💡 <strong>验证是否安装成功</strong>：</p>
+</blockquote>
+<blockquote>
+<ol type="1">
+<li>打开命令行（Windows：Win+R → 输入 <code>cmd</code>）</li>
+<li>分别输入： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br><span class="line">node --version</span><br></pre></td></tr></table></figure></li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3" type="1">
+<li>如果显示版本号（如 <code>Python 3.11.0</code>），说明成功！</li>
+</ol>
 </blockquote>
 <hr />
 <h3 id="安装项目依赖一行命令-1">4.2 安装项目依赖（一行命令）</h3>
 <p>打开 VS Code，进入你的项目文件夹，<strong>在终端中运行</strong>：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装后端（FastAPI）所需库</span></span><br><span class="line">pip install fastapi <span class="string">&quot;uvicorn[standard]&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装前端（Vue 3）所需工具</span></span><br><span class="line">npm install -g @vue/cli</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>✅ <strong>说明</strong>： - <code>pip</code> 是 Python 的"应用商店"
-- <code>npm</code> 是 Node.js 的"应用商店" - 这两行命令会自动下载
-FastAPI 和 Vue 3</p>
+<p>✅ <strong>说明</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li><code>pip</code> 是 Python 的"应用商店"</li>
+<li><code>npm</code> 是 Node.js 的"应用商店"</li>
+<li>这两行命令会自动下载 FastAPI 和 Vue 3</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="安装-vs-code-必备插件-1">4.3 安装 VS Code 必备插件</h3>
@@ -868,11 +907,17 @@ target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">htt
 <p><strong>Node.js 包下载慢？</strong> → 配置 npm 国内源<br />
 在命令行运行： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>✅ <strong>推荐镜像网站</strong>：<br />
-- 清华大学：<a
-target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn">https://pypi.tuna.tsinghua.edu.cn</a>
-- 阿里云：<a target="_blank" rel="noopener" href="https://npm.aliyun.com">https://npm.aliyun.com</a> -
-网易：<a target="_blank" rel="noopener" href="http://mirrors.163.com">http://mirrors.163.com</a></p>
+<p>✅ <strong>推荐镜像网站</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>清华大学：<a
+target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn">https://pypi.tuna.tsinghua.edu.cn</a></li>
+<li>阿里云：<a
+target="_blank" rel="noopener" href="https://npm.aliyun.com">https://npm.aliyun.com</a></li>
+<li>网易：<a
+target="_blank" rel="noopener" href="http://mirrors.163.com">http://mirrors.163.com</a></li>
+</ul>
 </blockquote>
 <hr />
 <h4 id="遇到问题这样问-ai-最有效">4.7.2 遇到问题？这样问 AI 最有效</h4>
@@ -918,10 +963,14 @@ target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn">https://
 </tbody>
 </table>
 <blockquote>
-<p>💡 <strong>重要提醒</strong>：<br />
-- 不要怕报错，<strong>报错是学习的一部分</strong> -
-每次解决一个问题，你就进步一点 -
-保存好你的配置笔记，以后重装系统不慌</p>
+<p>💡 <strong>重要提醒</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>不要怕报错，<strong>报错是学习的一部分</strong></li>
+<li>每次解决一个问题，你就进步一点</li>
+<li>保存好你的配置笔记，以后重装系统不慌</li>
+</ul>
 </blockquote>
 <hr />
 <h4 id="推荐学习资源">4.7.4 推荐学习资源</h4>
@@ -1119,10 +1168,16 @@ CDN，显示一句话：'今天的心情：开心'，并有一个按钮，点击
 <code>mood.html</code>）：</h4>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>我的心情<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 引入 Vue 3 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-family</span>: <span class="string">&#x27;微软雅黑&#x27;</span>, Arial, sans-serif;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">margin-top</span>: <span class="number">100px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#f0f8ff</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">h1</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">button</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">padding</span>: <span class="number">10px</span> <span class="number">20px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">font-size</span>: <span class="number">16px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#007bff</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">cursor</span>: pointer;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">        <span class="selector-tag">button</span><span class="selector-pseudo">:hover</span> &#123;</span></span><br><span class="line"><span class="language-css">            <span class="attribute">background-color</span>: <span class="number">#0056b3</span>;</span></span><br><span class="line"><span class="language-css">        &#125;</span></span><br><span class="line"><span class="language-css">    </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 页面内容 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>今天的心情：&#123;&#123; mood &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;toggleMood&quot;</span>&gt;</span>切换心情<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- Vue 逻辑 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> &#123; createApp &#125; = <span class="title class_">Vue</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="attr">mood</span>: <span class="string">&#x27;开心&#x27;</span>  <span class="comment">// 初始心情</span></span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="title function_">toggleMood</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="comment">// 如果当前是“开心”，就变成“不开心”，反之亦然</span></span></span><br><span class="line"><span class="language-javascript">                    <span class="variable language_">this</span>.<span class="property">mood</span> = <span class="variable language_">this</span>.<span class="property">mood</span> === <span class="string">&#x27;开心&#x27;</span> ? <span class="string">&#x27;不开心&#x27;</span> : <span class="string">&#x27;开心&#x27;</span></span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;).<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>)  <span class="comment">// 把Vue应用挂载到 id=&quot;app&quot; 的元素上</span></span></span><br><span class="line"><span class="language-javascript">    </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>🔧 <strong>运行方法</strong>：<br />
-1. 把代码保存为 <code>mood.html</code><br />
-2. 双击文件，用浏览器打开<br />
-3. 点击按钮，看看心情会不会变！</p>
+<p>🔧 <strong>运行方法</strong>：</p>
+</blockquote>
+<blockquote>
+<ol type="1">
+<li>把代码保存为 <code>mood.html</code><br />
+</li>
+<li>双击文件，用浏览器打开<br />
+</li>
+<li>点击按钮，看看心情会不会变！</li>
+</ol>
 </blockquote>
 <hr />
 <h3 id="第二步让ai给页面加个表情符号">6.3
@@ -1135,9 +1190,14 @@ CDN，显示一句话：'今天的心情：开心'，并有一个按钮，点击
 <code>&lt;h1&gt;</code> 行）：</h4>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>今天的心情：&#123;&#123; mood &#125;&#125; &#123;&#123; mood === &#x27;开心&#x27; ? &#x27;😊&#x27; : &#x27;😞&#x27; &#125;&#125;<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>✅ <strong>效果</strong>：<br />
-- 开心 → 😊<br />
-- 不开心 → 😞</p>
+<p>✅ <strong>效果</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>开心 → 😊<br />
+</li>
+<li>不开心 → 😞</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="第三步让ai加个计数器">6.4 第三步：让AI加个计数器</h3>
@@ -1203,10 +1263,16 @@ id="浏览器调试技巧f12的三大法宝">7.*浏览器调试技巧（F12的�
 <li>看看页面是不是立刻变了？</li>
 </ol>
 <blockquote>
-<p>✅ <strong>用途</strong>：<br />
-- 调试页面布局<br />
-- 学习别人网页是怎么做的<br />
-- 临时改内容“假装”成功（别干坏事哦 😄）</p>
+<p>✅ <strong>用途</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>调试页面布局<br />
+</li>
+<li>学习别人网页是怎么做的<br />
+</li>
+<li>临时改内容“假装”成功（别干坏事哦 😄）</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="控制台标签页-和javascript对话">2. 【控制台】标签页 ——
@@ -1224,10 +1290,16 @@ id="浏览器调试技巧f12的三大法宝">7.*浏览器调试技巧（F12的�
 <li><p>你会看到输出：<code>页面加载了！当前心情：开心</code></p></li>
 </ol>
 <blockquote>
-<p>✅ <strong>用途</strong>：<br />
-- 查看哪里出错了（红字警告）<br />
-- 测试JS代码（比如在控制台输入 <code>2+3</code> 回车试试）<br />
-- 调试变量值</p>
+<p>✅ <strong>用途</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>查看哪里出错了（红字警告）<br />
+</li>
+<li>测试JS代码（比如在控制台输入 <code>2+3</code> 回车试试）<br />
+</li>
+<li>调试变量值</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="网络标签页-看网页下载了什么">3. 【网络】标签页 ——
@@ -1249,10 +1321,16 @@ id="浏览器调试技巧f12的三大法宝">7.*浏览器调试技巧（F12的�
 <li>点某个文件，能看到它的大小、加载时间</li>
 </ol>
 <blockquote>
-<p>✅ <strong>用途</strong>：<br />
-- 网页打不开？看是不是某个文件“红色”了（失败）<br />
-- 页面慢？看哪个文件加载最久<br />
-- 验证CDN是否生效</p>
+<p>✅ <strong>用途</strong>：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>网页打不开？看是不是某个文件“红色”了（失败）<br />
+</li>
+<li>页面慢？看哪个文件加载最久<br />
+</li>
+<li>验证CDN是否生效</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="总结f12三剑客">🌟 总结：F12三剑客</h3>
