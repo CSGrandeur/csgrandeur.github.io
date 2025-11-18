@@ -27,7 +27,7 @@
 <meta property="og:description" content="1. CSS是什么？为什么需要它？ 1.1 从&quot;白纸&quot;到&quot;彩色画&quot;：HTML与CSS的关系 还记得我们在第二章学的HTML吗？HTML就像是一张白纸上的文字，告诉你&quot;这里有个标题&quot;、&quot;那里有段文字&quot;，但所有的文字都是黑色、同样大小、没有颜色。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-11T10:07:07.000Z">
-<meta property="article:modified_time" content="2025-11-18T07:56:25.778Z">
+<meta property="article:modified_time" content="2025-11-18T08:01:51.207Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="AI驱动Web开发技术">
 <meta name="twitter:card" content="summary">
@@ -248,7 +248,7 @@ JavaScript代码（实现主题切换）</span></a></li><li class="nav-item nav-
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-18 15:56:25" itemprop="dateModified" datetime="2025-11-18T15:56:25+08:00">2025-11-18</time>
+      <time title="修改时间：2025-11-18 16:01:51" itemprop="dateModified" datetime="2025-11-18T16:01:51+08:00">2025-11-18</time>
     </span>
 
   
@@ -445,15 +445,16 @@ CSS的诞生让网页设计从"手工作坊"变成了"现代化工厂"，是Web�
 <p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">id</span>=<span class="string">&quot;header&quot;</span>&gt;</span>网站头部<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span>&gt;</span>主要内容<span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span> <span class="attr">id</span>=<span class="string">&quot;footer&quot;</span>&gt;</span>网站底部<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p><strong>效果</strong>：只有<code>id="header"</code>的元素有深色背景，只有<code>id="footer"</code>的元素有浅色背景</p>
 <blockquote>
-<p>⚠️ <strong>重要提醒</strong>：<br />
--
-<strong>ID是唯一的</strong>：一个页面中，同一个id只能出现一次（就像身份证号，每个人只有一个）<br />
--
-<strong>类可以重复</strong>：一个页面中，同一个class可以出现多次（就像"学生"这个身份，很多人都有）<br />
--
-<strong>什么时候用ID？</strong>：页面中<strong>唯一</strong>的元素（如header、footer、导航栏）<br />
--
-<strong>什么时候用类？</strong>：页面中<strong>可能重复</strong>的元素（如按钮、卡片、列表项）</p>
+<p>⚠️ <strong>重要提醒</strong>：</p>
+<ul>
+<li><strong>ID是唯一的</strong>：一个页面中，同一个id只能出现一次（就像身份证号，每个人只有一个）<br />
+</li>
+<li><strong>类可以重复</strong>：一个页面中，同一个class可以出现多次（就像"学生"这个身份，很多人都有）<br />
+</li>
+<li><strong>什么时候用ID？</strong>：页面中<strong>唯一</strong>的元素（如header、footer、导航栏）<br />
+</li>
+<li><strong>什么时候用类？</strong>：页面中<strong>可能重复</strong>的元素（如按钮、卡片、列表项）</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="属性选择器">2.2.4 属性选择器</h3>
@@ -562,11 +563,16 @@ CSS的诞生让网页设计从"手工作坊"变成了"现代化工厂"，是Web�
 <p><strong>最终效果</strong>：文字是<strong>绿色</strong>（因为内联样式优先级最高）</p>
 <blockquote>
 <p>💡 <strong>记忆技巧</strong>：<br />
-优先级就像"权力等级"：<br />
-- 内联样式 = 皇帝（最高权力）<br />
-- ID选择器 = 大臣（高权力）<br />
-- 类选择器 = 官员（中等权力）<br />
-- 标签选择器 = 平民（基础权力）</p>
+优先级就像"权力等级"：</p>
+<ul>
+<li>内联样式 = 皇帝（最高权力）<br />
+</li>
+<li>ID选择器 = 大臣（高权力）<br />
+</li>
+<li>类选择器 = 官员（中等权力）<br />
+</li>
+<li>标签选择器 = 平民（基础权力）</li>
+</ul>
 </blockquote>
 <hr />
 <h2 id="实战练习用选择器美化页面">2.6 实战练习：用选择器美化页面</h2>
@@ -593,14 +599,22 @@ Flex布局实战：让元素"听话"的魔法</h1>
 <p><strong>传统方法</strong>（很麻烦）： <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 方法1：使用float（浮动） */</span></span><br><span class="line"><span class="selector-class">.nav-item</span> &#123;</span><br><span class="line">    <span class="attribute">float</span>: left;  <span class="comment">/* 让元素&quot;浮起来&quot;，横向排列 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 问题：需要清除浮动，容易出bug */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 方法2：使用inline-block */</span></span><br><span class="line"><span class="selector-class">.nav-item</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: inline-block;  <span class="comment">/* 让块级元素变成行内块 */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 问题：元素之间会有空隙，难以控制 */</span></span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>💡 <strong>生活类比</strong>：<br />
-传统布局就像"手动摆积木"：<br />
-- 想横向排列？得用各种"技巧"（float、inline-block）<br />
-- 想居中？得算数学（margin: 0 auto）<br />
-- 想对齐？得写很多代码</p>
-<p><strong>Flex布局</strong>就像"智能积木盒"：<br />
-- 说一句"横向排列"，所有积木自动排好<br />
-- 说一句"居中"，自动居中<br />
-- 简单、直观、强大！</p>
+传统布局就像"手动摆积木"：</p>
+<ul>
+<li>想横向排列？得用各种"技巧"（float、inline-block）<br />
+</li>
+<li>想居中？得算数学（margin: 0 auto）<br />
+</li>
+<li>想对齐？得写很多代码</li>
+</ul>
+<p><strong>Flex布局</strong>就像"智能积木盒"：</p>
+<ul>
+<li>说一句"横向排列"，所有积木自动排好<br />
+</li>
+<li>说一句"居中"，自动居中<br />
+</li>
+<li>简单、直观、强大！</li>
+</ul>
 </blockquote>
 <hr />
 <h3 id="flex布局的诞生2012年">3.1.2 Flex布局的诞生（2012年）</h3>
@@ -695,11 +709,14 @@ Flex布局是CSS布局史上的<strong>革命性突破</strong>，让"居中"、
 </table>
 <p><strong>示意图</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">主轴（Main Axis）→→→→→→→→→→→→→</span><br><span class="line">                    ↑</span><br><span class="line">                    ↑</span><br><span class="line">                交叉轴</span><br><span class="line">                 (Cross Axis)</span><br><span class="line">                    ↑</span><br><span class="line">                    ↑</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>💡 <strong>记忆技巧</strong>：<br />
-- <strong>主轴</strong> = 主要排列方向（横向或纵向）<br />
-- <strong>交叉轴</strong> = 垂直于主轴的方向<br />
--
-默认情况下，主轴是<strong>横向</strong>，交叉轴是<strong>纵向</strong></p>
+<p>💡 <strong>记忆技巧</strong>：</p>
+<ul>
+<li><strong>主轴</strong> = 主要排列方向（横向或纵向）<br />
+</li>
+<li><strong>交叉轴</strong> = 垂直于主轴的方向<br />
+</li>
+<li>默认情况下，主轴是<strong>横向</strong>，交叉轴是<strong>纵向</strong></li>
+</ul>
 </blockquote>
 <hr />
 <h2 id="flex布局的常用属性必须掌握">3.3
@@ -752,9 +769,11 @@ Flex布局的常用属性（必须掌握）</h2>
 <p><strong>实际例子</strong>： <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">    <span class="attribute">flex-direction</span>: row;  <span class="comment">/* 横向排列（默认值） */</span></span><br><span class="line">    <span class="comment">/* 项目1 | 项目2 | 项目3 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.container</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: flex;</span><br><span class="line">    <span class="attribute">flex-direction</span>: column;  <span class="comment">/* 纵向排列 */</span></span><br><span class="line">    <span class="comment">/* 项目1</span></span><br><span class="line"><span class="comment">       项目2</span></span><br><span class="line"><span class="comment">       项目3 */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>💡 <strong>生活类比</strong>：<br />
-<code>flex-direction</code>就像决定"书架是横着放还是竖着放"： -
-<code>row</code> = 横着放（书从左到右排列） - <code>column</code> =
-竖着放（书从上到下排列）</p>
+<code>flex-direction</code>就像决定"书架是横着放还是竖着放"：</p>
+<ul>
+<li><code>row</code> = 横着放（书从左到右排列）</li>
+<li><code>column</code> = 竖着放（书从上到下排列）</li>
+</ul>
 </blockquote>
 <hr />
 <h4 id="justify-content---主轴对齐方式">3. <code>justify-content</code>
@@ -885,9 +904,12 @@ Flex布局的常用属性（必须掌握）</h2>
 <p><strong>效果</strong>：<code>item2</code>的宽度是<code>item1</code>和<code>item3</code>的2倍。</p>
 <blockquote>
 <p>💡 <strong>生活类比</strong>：<br />
-<code>flex</code>就像"分蛋糕"： - <code>flex: 1</code> = 分1份 -
-<code>flex: 2</code> = 分2份（是1份的2倍） - <code>flex: 3</code> =
-分3份（是1份的3倍）</p>
+<code>flex</code>就像"分蛋糕"：</p>
+<ul>
+<li><code>flex: 1</code> = 分1份</li>
+<li><code>flex: 2</code> = 分2份（是1份的2倍）</li>
+<li><code>flex: 3</code> = 分3份（是1份的3倍）</li>
+</ul>
 </blockquote>
 <hr />
 <h2 id="实战案例实现导航栏布局">3.4 实战案例：实现导航栏布局</h2>
@@ -1198,11 +1220,14 @@ Queries）</strong>，让一个网页可以"智能适配"不同设备：</p>
 </table>
 <p><strong>实际例子</strong>： <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 当屏幕宽度小于等于768px时 */</span></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">max-width</span>: <span class="number">768px</span>) &#123;</span><br><span class="line">    <span class="selector-tag">body</span> &#123;</span><br><span class="line">        <span class="attribute">font-size</span>: <span class="number">14px</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 当屏幕宽度大于等于1024px时 */</span></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">min-width</span>: <span class="number">1024px</span>) &#123;</span><br><span class="line">    <span class="selector-tag">body</span> &#123;</span><br><span class="line">        <span class="attribute">font-size</span>: <span class="number">18px</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 当设备是竖屏时 */</span></span><br><span class="line"><span class="keyword">@media</span> (<span class="attribute">orientation</span>: portrait) &#123;</span><br><span class="line">    <span class="selector-class">.sidebar</span> &#123;</span><br><span class="line">        <span class="attribute">display</span>: none;  <span class="comment">/* 隐藏侧边栏 */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
-<p>💡 <strong>记忆技巧</strong>：<br />
-- <code>max-width: 768px</code> =
+<p>💡 <strong>记忆技巧</strong>：</p>
+<ul>
+<li><code>max-width: 768px</code> =
 "宽度<strong>最多</strong>768px"（≤768px）<br />
-- <code>min-width: 768px</code> =
-"宽度<strong>至少</strong>768px"（≥768px）</p>
+</li>
+<li><code>min-width: 768px</code> =
+"宽度<strong>至少</strong>768px"（≥768px）</li>
+</ul>
 </blockquote>
 <hr />
 <h2 id="响应式设计的断点breakpoint">4.4
@@ -1861,8 +1886,12 @@ id="问题2如何在不支持css变量的浏览器中使用">问题2：如何在
 <blockquote>
 <p>🌟 <strong>记住</strong>：<br />
 CSS变量是现代Web开发的<strong>重要工具</strong>！<br />
-掌握了CSS变量，你就能： - 让代码更简洁、易维护 - 实现动态主题切换 -
-提升开发效率</p>
+掌握了CSS变量，你就能：</p>
+<ul>
+<li>让代码更简洁、易维护</li>
+<li>实现动态主题切换</li>
+<li>提升开发效率</li>
+</ul>
 <p><strong>CSS变量 + JavaScript = 强大的主题定制能力！</strong></p>
 </blockquote>
 <hr />
@@ -1902,8 +1931,12 @@ CSS变量是现代Web开发的<strong>重要工具</strong>！<br />
 <blockquote>
 <p>🌟 <strong>恭喜你！</strong><br />
 你已经掌握了现代Web开发中CSS的核心技能！<br />
-这些知识将帮助你： - 制作美观的网页界面 - 实现响应式布局 -
-提升开发效率</p>
+这些知识将帮助你：</p>
+<ul>
+<li>制作美观的网页界面</li>
+<li>实现响应式布局</li>
+<li>提升开发效率</li>
+</ul>
 <p><strong>继续练习，继续探索，Web开发的世界等着你！</strong> 🚀</p>
 </blockquote>
 
