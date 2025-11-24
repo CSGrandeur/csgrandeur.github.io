@@ -215,7 +215,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-11-24 20:25:51 / 修改时间：21:07:05" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:51+08:00">2025-11-24</time>
+      <time title="创建时间：2025-11-24 20:25:51 / 修改时间：21:38:33" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:51+08:00">2025-11-24</time>
     </span>
 
   
@@ -230,18 +230,14 @@
     <div class="post-body" itemprop="articleBody">
           <h1 id="为什么需要前端框架">1. 为什么需要前端框架？</h1>
 <h2 id="传统开发的痛点">1.1 传统开发的痛点</h2>
-<p>还记得我们之前用原生JavaScript做的待办事项应用吗？代码是这样的：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取元素</span></span><br><span class="line"><span class="keyword">const</span> input = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;todoInput&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> list = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;todoList&#x27;</span>);</span><br><span class="line"><span class="keyword">let</span> todos = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加待办事项</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">addTodo</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> text = input.<span class="property">value</span>;</span><br><span class="line">    todos.<span class="title function_">push</span>(text);</span><br><span class="line">    input.<span class="property">value</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="title function_">renderTodos</span>();  <span class="comment">// 手动更新界面</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 渲染列表（需要手动操作DOM）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">renderTodos</span>(<span class="params"></span>) &#123;</span><br><span class="line">    list.<span class="property">innerHTML</span> = <span class="string">&#x27;&#x27;</span>;  <span class="comment">// 清空列表</span></span><br><span class="line">    todos.<span class="title function_">forEach</span>(<span class="function"><span class="params">todo</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> li = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;li&#x27;</span>);</span><br><span class="line">        li.<span class="property">textContent</span> = todo;</span><br><span class="line">        list.<span class="title function_">appendChild</span>(li);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在之前的章节中，我们使用原生JavaScript实现了待办事项应用。</p>
 <p><strong>问题</strong>：</p>
 <ul>
 <li>需要<strong>手动操作DOM</strong>（创建元素、更新元素）</li>
 <li>数据和界面<strong>不同步</strong>（数据变了，界面不会自动更新）</li>
 <li>代码<strong>重复</strong>（每次都要写<code>createElement</code>、<code>appendChild</code>）</li>
 </ul>
-<blockquote>
-<p>💡 <strong>核心问题</strong>：<br />
-原生JavaScript需要<strong>手动管理</strong>数据和界面的同步，代码复杂、容易出错。</p>
-</blockquote>
+<p>原生JavaScript需要开发者手动管理数据与DOM的同步，当应用复杂度增加时，这种手动管理方式会导致代码冗余、难以维护，且容易出现状态不一致的问题。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025-11-24-07-%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6%E5%85%A5%E9%97%A8/#more" rel="contents">
@@ -305,7 +301,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-11-24 20:25:43 / 修改时间：21:06:56" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:43+08:00">2025-11-24</time>
+      <time title="创建时间：2025-11-24 20:25:43 / 修改时间：21:38:49" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:43+08:00">2025-11-24</time>
     </span>
 
   
@@ -320,24 +316,9 @@
     <div class="post-body" itemprop="articleBody">
           <h1 id="为什么需要浏览器存储">1. 为什么需要浏览器存储？</h1>
 <h2 id="问题的出现数据丢失">1.1 问题的出现：数据丢失</h2>
-<p>还记得我们之前做的待办事项应用吗？每次刷新页面，数据就<strong>消失了</strong>！</p>
-<p><strong>生活类比</strong>：<br />
-想象你在纸上写待办事项：</p>
-<ul>
-<li>写完后，纸放在桌子上</li>
-<li>一阵风吹来，纸被吹走了</li>
-<li><strong>问题</strong>：数据丢失了！</li>
-</ul>
-<p><strong>网页的困境</strong>：</p>
-<ul>
-<li>用户在网页上输入数据</li>
-<li>刷新页面 → 数据消失</li>
-<li><strong>问题</strong>：用户体验很差！</li>
-</ul>
-<blockquote>
-<p>💡 <strong>核心问题</strong>：<br />
-网页需要<strong>保存数据</strong>，让用户下次打开时还能看到。</p>
-</blockquote>
+<p>在之前的待办事项应用中，每次刷新页面后，用户输入的数据都会丢失。这是因为原生JavaScript操作的数据仅存在于内存中，页面刷新会导致内存清空。</p>
+<p><strong>核心问题</strong>：<br />
+Web应用需要将数据持久化存储，以便在页面刷新或重新访问时能够恢复用户数据，提升用户体验。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025-11-24-06-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AD%98%E5%82%A8%E4%B8%8E%E8%B7%A8%E5%9F%9F/#more" rel="contents">
@@ -401,7 +382,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-11-24 20:25:36 / 修改时间：21:06:29" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:36+08:00">2025-11-24</time>
+      <time title="创建时间：2025-11-24 20:25:36 / 修改时间：21:45:33" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:36+08:00">2025-11-24</time>
     </span>
 
   
@@ -416,20 +397,7 @@
     <div class="post-body" itemprop="articleBody">
           <h1 id="为什么需要现代javascript">1. 为什么需要现代JavaScript？</h1>
 <h2 id="从回调地狱到优雅异步">1.1 从"回调地狱"到"优雅异步"</h2>
-<p>还记得我们在第四章学的JavaScript基础吗？我们已经学会了DOM操作、事件监听、表单验证。但是，当我们需要处理<strong>异步操作</strong>（如获取数据、读取文件）时，传统JavaScript会遇到大麻烦。</p>
-<p><strong>生活类比</strong>：<br />
-想象你要做三件事：</p>
-<ol type="1">
-<li>煮饭（需要20分钟）</li>
-<li>炒菜（需要10分钟）</li>
-<li>洗碗（需要5分钟）</li>
-</ol>
-<p><strong>传统方式</strong>（回调地狱）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 煮饭</span></span><br><span class="line"><span class="title function_">cookRice</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 炒菜</span></span><br><span class="line">    <span class="title function_">cookDish</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="comment">// 洗碗</span></span><br><span class="line">        <span class="title function_">washDishes</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;全部完成！&#x27;</span>);</span><br><span class="line">            <span class="comment">// 如果还有更多步骤，代码会越来越深，像&quot;地狱&quot;一样</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
-<p><strong>现代方式</strong>（async/await）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">makeDinner</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">cookRice</span>();      <span class="comment">// 等待煮饭完成</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">cookDish</span>();      <span class="comment">// 等待炒菜完成</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">washDishes</span>();    <span class="comment">// 等待洗碗完成</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;全部完成！&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>💡 <strong>关键理解</strong>：<br />
-现代JavaScript让异步代码看起来像同步代码，<strong>更易读、更易维护</strong>。</p>
-</blockquote>
+<p>在第四章中，我们学习了JavaScript的基础语法、DOM操作、事件监听和表单验证。然而，当需要处理异步操作（如网络请求、文件读取）时，传统的回调函数方式会导致代码结构复杂、难以维护。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025-11-24-05-%E7%8E%B0%E4%BB%A3JavaScript/#more" rel="contents">
@@ -499,7 +467,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-24 21:02:01" itemprop="dateModified" datetime="2025-11-24T21:02:01+08:00">2025-11-24</time>
+      <time title="修改时间：2025-11-24 21:09:17" itemprop="dateModified" datetime="2025-11-24T21:09:17+08:00">2025-11-24</time>
     </span>
 
   
@@ -522,15 +490,6 @@ JavaScript是什么？为什么需要它？</h1>
 <li><strong>CSS</strong> = 网页的"皮肤"（样式）</li>
 <li><strong>JavaScript</strong> = 网页的"大脑"（行为）</li>
 </ul>
-<p><strong>实际例子</strong>：</p>
-<p><strong>只有HTML+CSS的网页</strong>（静态，不能交互）：
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>点击我<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 点击按钮，什么都不会发生 --&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p><strong>加上JavaScript后的网页</strong>（动态，可以交互）：
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;myButton&quot;</span>&gt;</span>点击我<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;myButton&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">alert</span>(<span class="string">&#x27;按钮被点击了！&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">    &#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>💡 <strong>关键理解</strong>：<br />
-HTML负责"内容是什么"，CSS负责"内容长什么样"，JavaScript负责"内容能做什么"。</p>
-</blockquote>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2025-11-18-04-JavaScript%E5%9F%BA%E7%A1%80/#more" rel="contents">
