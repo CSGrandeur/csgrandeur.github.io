@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 为什么需要现代JavaScript？ 1.1 从&quot;回调地狱&quot;到&quot;优雅异步&quot; 在第四章中，我们学习了JavaScript的基础语法、DOM操作、事件监听和表单验证。然而，当需要处理异步操作（如网络请求、文件读取）时，传统的回调函数方式会导致代码结构复杂、难以维护。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="05.现代JavaScript">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-11-24-05-%E7%8E%B0%E4%BB%A3JavaScript/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. 为什么需要现代JavaScript？ 1.1 从&quot;回调地狱&quot;到&quot;优雅异步&quot; 在第四章中，我们学习了JavaScript的基础语法、DOM操作、事件监听和表单验证。然而，当需要处理异步操作（如网络请求、文件读取）时，传统的回调函数方式会导致代码结构复杂、难以维护。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-11-24T12:25:36.000Z">
+<meta property="article:modified_time" content="2025-11-25T02:21:51.635Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="AI驱动Web开发技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-11-24-05-%E7%8E%B0%E4%BB%A3JavaScript/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-11-24-05-%E7%8E%B0%E4%BB%A3JavaScript/","path":"2025-11-24-05-现代JavaScript/","title":"05.现代JavaScript"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>05.现代JavaScript | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%8E%B0%E4%BB%A3javascript"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要现代JavaScript？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E5%9B%9E%E8%B0%83%E5%9C%B0%E7%8B%B1%E5%88%B0%E4%BC%98%E9%9B%85%E5%BC%82%E6%AD%A5"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 从&quot;回调地狱&quot;到&quot;优雅异步&quot;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#javascript%E7%9A%84%E5%BC%82%E6%AD%A5%E7%89%B9%E6%80%A7%E4%B8%8Ecc%E7%9A%84%E4%B8%8D%E5%90%8C"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1.1
+JavaScript的异步特性：与C&#x2F;C++的不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E7%9A%84%E9%97%AE%E9%A2%98%E5%9B%9E%E8%B0%83%E5%9C%B0%E7%8B%B1"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.1.2 传统方式的问题：回调地狱</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E4%BB%A3javascript%E7%9A%84%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 现代JavaScript的核心特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#promise%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">2. Promise：异步编程的基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFpromise"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是Promise？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#promise%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.1.</span> <span class="nav-text">2.1.1 Promise的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#promise%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.1.2 Promise的定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8promise"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 如何使用Promise？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#then%E6%96%B9%E6%B3%95---%E5%A4%84%E7%90%86%E6%88%90%E5%8A%9F%E6%83%85%E5%86%B5"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 then()方法 - 处理成功情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#catch%E6%96%B9%E6%B3%95---%E5%A4%84%E7%90%86%E5%A4%B1%E8%B4%A5%E6%83%85%E5%86%B5"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 catch()方法 - 处理失败情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 完整示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#promise%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Promise链式调用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#asyncawait%E8%AE%A9%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81%E6%9B%B4%E4%BC%98%E9%9B%85"><span class="nav-number">3.</span> <span class="nav-text">3.
+async&#x2F;await：让异步代码更优雅</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFasyncawait"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 什么是async&#x2F;await？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#asyncawait%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">3.1.1.</span> <span class="nav-text">3.1.1 async&#x2F;await的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#asyncawait%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">3.1.2.</span> <span class="nav-text">3.1.2 async&#x2F;await的定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#asyncawait%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 async&#x2F;await的优势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86trycatch"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 错误处理：try&#x2F;catch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%E4%BD%BF%E7%94%A8asyncawait%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="nav-number">3.4.</span> <span class="nav-text">3.4
+实战案例：使用async&#x2F;await获取数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95%E8%AE%A9%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%9B%B4%E7%AE%80%E5%8D%95"><span class="nav-number">4.</span> <span class="nav-text">4. 数组方法：让数据处理更简单</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 为什么需要数组方法？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E7%9A%84%E7%97%9B%E7%82%B9"><span class="nav-number">4.1.1.</span> <span class="nav-text">4.1.1 传统方式的痛点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 常用数组方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map---%E8%BD%AC%E6%8D%A2%E6%95%B0%E7%BB%84"><span class="nav-number">4.2.1.</span> <span class="nav-text">4.2.1 map() - 转换数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter---%E8%BF%87%E6%BB%A4%E6%95%B0%E7%BB%84"><span class="nav-number">4.2.2.</span> <span class="nav-text">4.2.2 filter() - 过滤数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reduce---%E7%B4%AF%E7%A7%AF%E8%AE%A1%E7%AE%97"><span class="nav-number">4.2.3.</span> <span class="nav-text">4.2.3 reduce() - 累积计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find---%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0"><span class="nav-number">4.2.4.</span> <span class="nav-text">4.2.4 find() - 查找元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#foreach---%E9%81%8D%E5%8E%86%E6%95%B0%E7%BB%84"><span class="nav-number">4.2.5.</span> <span class="nav-text">4.2.5 forEach() - 遍历数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 数组方法组合使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%E8%AE%A9%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E6%9B%B4%E7%AE%80%E6%B4%81"><span class="nav-number">5.</span> <span class="nav-text">5. 解构赋值：让数据提取更简洁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 什么是解构赋值？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">5.1.1.</span> <span class="nav-text">5.1.1 解构赋值的概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E8%A7%A3%E6%9E%84"><span class="nav-number">5.1.2.</span> <span class="nav-text">5.1.2 数组解构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%A7%A3%E6%9E%84"><span class="nav-number">5.1.3.</span> <span class="nav-text">5.1.3 对象解构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 解构赋值的实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E8%A7%A3%E6%9E%84"><span class="nav-number">5.2.1.</span> <span class="nav-text">5.2.1 函数参数解构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E5%8F%98%E9%87%8F"><span class="nav-number">5.2.2.</span> <span class="nav-text">5.2.2 交换变量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E7%BB%84%E7%BB%87%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF"><span class="nav-number">6.</span> <span class="nav-text">6. 模块化：组织代码的艺术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%A8%A1%E5%9D%97%E5%8C%96"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 为什么需要模块化？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E7%9A%84%E7%97%9B%E7%82%B9-1"><span class="nav-number">6.1.1.</span> <span class="nav-text">6.1.1 传统方式的痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">6.1.2.</span> <span class="nav-text">6.1.2 模块化的优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#es6%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AF%AD%E6%B3%95"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 ES6模块化语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#export---%E5%AF%BC%E5%87%BA"><span class="nav-number">6.2.1.</span> <span class="nav-text">6.2.1 export - 导出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#import---%E5%AF%BC%E5%85%A5"><span class="nav-number">6.2.2.</span> <span class="nav-text">6.2.2 import - 导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BB%98%E8%AE%A4%E5%AF%BC%E5%87%BA"><span class="nav-number">6.2.3.</span> <span class="nav-text">6.2.3 默认导出</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E7%94%9F%E6%88%90%E7%8E%B0%E4%BB%A3javascript%E4%BB%A3%E7%A0%81"><span class="nav-number">7.</span> <span class="nav-text">7.
+AI实战：使用AI生成现代JavaScript代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 任务描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%BE%E8%AE%A1prompt"><span class="nav-number">7.2.</span> <span class="nav-text">7.2 第一步：设计Prompt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">7.3.</span> <span class="nav-text">7.3 AI生成的代码（示例）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">7.4.</span> <span class="nav-text">7.4 代码解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E8%8A%82%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">8. 本节总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">75</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-11-24-05-%E7%8E%B0%E4%BB%A3JavaScript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="05.现代JavaScript | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          05.现代JavaScript
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-11-24 20:25:36" itemprop="dateCreated datePublished" datetime="2025-11-24T20:25:36+08:00">2025-11-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-11-25 10:21:51" itemprop="dateModified" datetime="2025-11-25T10:21:51+08:00">2025-11-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="为什么需要现代javascript">1. 为什么需要现代JavaScript？</h1>
+<h2 id="从回调地狱到优雅异步">1.1 从"回调地狱"到"优雅异步"</h2>
+<p>在第四章中，我们学习了JavaScript的基础语法、DOM操作、事件监听和表单验证。然而，当需要处理异步操作（如网络请求、文件读取）时，传统的回调函数方式会导致代码结构复杂、难以维护。</p>
+<span id="more"></span>
+<h3 id="javascript的异步特性与cc的不同">1.1.1
+JavaScript的异步特性：与C/C++的不同</h3>
+<p>如果你有C/C++的编程经验，可能会习惯这样的代码执行顺序：</p>
+<p><strong>C/C++中的执行顺序</strong>： <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;第一步\n&quot;</span>);</span><br><span class="line">sleep(<span class="number">1</span>);  <span class="comment">// 等待1秒</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;第二步\n&quot;</span>);</span><br><span class="line">sleep(<span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;第三步\n&quot;</span>);</span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line"><span class="comment">// 第一步</span></span><br><span class="line"><span class="comment">// （等待1秒）</span></span><br><span class="line"><span class="comment">// 第二步</span></span><br><span class="line"><span class="comment">// （等待1秒）</span></span><br><span class="line"><span class="comment">// 第三步</span></span><br></pre></td></tr></table></figure></p>
+<p>在C/C++中，代码按顺序执行，每一步都会等待上一步完成。</p>
+<p><strong>JavaScript中的"意外"行为</strong>：</p>
+<p>假设我们要从服务器获取用户信息，然后显示用户名。如果你按照C/C++的思维写代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;开始获取用户信息&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从服务器获取用户数据（看起来像普通函数调用）</span></span><br><span class="line"><span class="keyword">const</span> response = <span class="title function_">fetch</span>(<span class="string">&#x27;https://api.example.com/user/1&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> user = response.<span class="title function_">json</span>();  <span class="comment">// 解析JSON数据</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户名：&#x27;</span>, user.<span class="property">name</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;继续执行其他代码&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><strong>你期望的输出</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">开始获取用户信息</span><br><span class="line">（等待网络请求完成）</span><br><span class="line">用户名：张三</span><br><span class="line">继续执行其他代码</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际输出</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">开始获取用户信息</span><br><span class="line">继续执行其他代码</span><br><span class="line">（然后报错：Cannot read property &#x27;name&#x27; of undefined）</span><br></pre></td></tr></table></figure></p>
+<p><strong>为什么会这样？</strong></p>
+<p><code>fetch()</code>函数看起来像普通的函数调用，但它实际上是<strong>异步操作</strong>。当JavaScript执行到<code>fetch()</code>时，它不会等待网络请求完成，而是立即返回一个Promise对象，然后继续执行后面的代码。此时<code>response</code>还不是实际的响应数据，所以<code>response.json()</code>会失败。</p>
+<p><strong>正确的理解</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;开始获取用户信息&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// fetch返回Promise，不会阻塞后续代码</span></span><br><span class="line"><span class="keyword">const</span> responsePromise = <span class="title function_">fetch</span>(<span class="string">&#x27;https://api.example.com/user/1&#x27;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;responsePromise的类型：&#x27;</span>, <span class="keyword">typeof</span> responsePromise);  <span class="comment">// object (Promise)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 此时responsePromise还不是实际数据，需要等待</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;继续执行其他代码&#x27;</span>);  <span class="comment">// 这行会立即执行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际输出：</span></span><br><span class="line"><span class="comment">// 开始获取用户信息</span></span><br><span class="line"><span class="comment">// responsePromise的类型：object</span></span><br><span class="line"><span class="comment">// 继续执行其他代码</span></span><br></pre></td></tr></table></figure>
+<p><strong>为什么会出现这种情况？</strong></p>
+<p>JavaScript是<strong>单线程</strong>的，但它使用<strong>事件循环</strong>机制处理异步操作。当遇到<code>fetch()</code>、<code>setTimeout()</code>等异步函数时，JavaScript不会等待它们完成，而是继续执行后面的代码。异步操作完成后，会通过回调函数或Promise处理结果。</p>
+<p><strong>问题</strong>：如果我们想在获取数据后再执行某些操作，该怎么办？</p>
+<p>这就是为什么需要Promise和async/await的原因——它们帮助我们以更清晰的方式处理异步操作。</p>
+<hr />
+<h3 id="传统方式的问题回调地狱">1.1.2 传统方式的问题：回调地狱</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 煮饭</span></span><br><span class="line"><span class="title function_">cookRice</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 炒菜</span></span><br><span class="line">    <span class="title function_">cookDish</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="comment">// 洗碗</span></span><br><span class="line">        <span class="title function_">washDishes</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;全部完成！&#x27;</span>);</span><br><span class="line">            <span class="comment">// 如果还有更多步骤，代码会越来越深，像&quot;地狱&quot;一样</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>现代方式</strong>（async/await）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">makeDinner</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">cookRice</span>();      <span class="comment">// 等待煮饭完成</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">cookDish</span>();      <span class="comment">// 等待炒菜完成</span></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">washDishes</span>();    <span class="comment">// 等待洗碗完成</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;全部完成！&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现代JavaScript通过Promise和async/await语法，使异步代码的编写方式更接近同步代码，提高了代码的可读性和可维护性。</p>
+<hr />
+<h2 id="现代javascript的核心特性">1.2 现代JavaScript的核心特性</h2>
+<table>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>作用</th>
+<th>为什么重要</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Promise</strong></td>
+<td>处理异步操作</td>
+<td>解决回调地狱问题</td>
+</tr>
+<tr class="even">
+<td><strong>async/await</strong></td>
+<td>让异步代码更简洁</td>
+<td>代码更易读、易维护</td>
+</tr>
+<tr class="odd">
+<td><strong>数组方法</strong></td>
+<td>处理数组数据</td>
+<td>代码更简洁、功能更强大</td>
+</tr>
+<tr class="even">
+<td><strong>解构赋值</strong></td>
+<td>提取数据</td>
+<td>代码更简洁</td>
+</tr>
+<tr class="odd">
+<td><strong>模块化</strong></td>
+<td>组织代码</td>
+<td>代码更易管理</td>
+</tr>
+</tbody>
+</table>
+<p>ES6（2015年）及后续版本的发布标志着JavaScript从简单的脚本语言演进为功能完整的现代编程语言，引入了类、模块、Promise等企业级开发所需的核心特性。</p>
+<hr />
+<h1 id="promise异步编程的基础">2. Promise：异步编程的基础</h1>
+<h2 id="什么是promise">2.1 什么是Promise？</h2>
+<h3 id="promise的概念">2.1.1 Promise的概念</h3>
+<p>Promise是JavaScript中用于处理异步操作的对象，它表示一个异步操作的最终完成（或失败）及其结果值。</p>
+<p>Promise有三种状态：</p>
+<ul>
+<li><strong>pending</strong>（待定）：初始状态，既不是成功也不是失败</li>
+<li><strong>fulfilled</strong>（已兑现）：操作成功完成</li>
+<li><strong>rejected</strong>（已拒绝）：操作失败</li>
+</ul>
+<p>Promise的状态只能从pending转换为fulfilled或rejected，且状态一旦改变就不会再变。</p>
+<hr />
+<h3 id="promise的定义">2.1.2 Promise的定义</h3>
+<p><strong>Promise</strong> =
+表示一个异步操作的最终结果（成功或失败）</p>
+<p><strong>基本语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span>(<span class="params">resolve, reject</span>) &#123;</span><br><span class="line">    <span class="comment">// 异步操作</span></span><br><span class="line">    <span class="keyword">if</span> (成功) &#123;</span><br><span class="line">        <span class="title function_">resolve</span>(结果);  <span class="comment">// 成功时调用</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">reject</span>(错误);   <span class="comment">// 失败时调用</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟获取数据（异步操作）</span></span><br><span class="line"><span class="keyword">const</span> fetchData = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span>(<span class="params">resolve, reject</span>) &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> success = <span class="literal">true</span>;  <span class="comment">// 模拟成功/失败</span></span><br><span class="line">        <span class="keyword">if</span> (success) &#123;</span><br><span class="line">            <span class="title function_">resolve</span>(<span class="string">&#x27;数据获取成功！&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="title function_">reject</span>(<span class="string">&#x27;数据获取失败！&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="number">1000</span>);  <span class="comment">// 1秒后执行</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="如何使用promise">2.2 如何使用Promise？</h2>
+<h3 id="then方法---处理成功情况">2.2.1 then()方法 - 处理成功情况</h3>
+<p><strong>语法</strong>：<code>promise.then(成功回调函数)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fetchData.<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">result</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(result);  <span class="comment">// 输出：数据获取成功！</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="catch方法---处理失败情况">2.2.2 catch()方法 - 处理失败情况</h3>
+<p><strong>语法</strong>：<code>promise.catch(失败回调函数)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fetchData</span><br><span class="line">    .<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">result</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(result);  <span class="comment">// 成功时执行</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="keyword">function</span>(<span class="params">error</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(error);   <span class="comment">// 失败时执行</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="完整示例">2.2.3 完整示例</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟获取用户信息</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getUserInfo</span>(<span class="params">userId</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span>(<span class="params">resolve, reject</span>) &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (userId === <span class="number">1</span>) &#123;</span><br><span class="line">                <span class="title function_">resolve</span>(&#123;</span><br><span class="line">                    <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">                    <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">                    <span class="attr">email</span>: <span class="string">&#x27;zhangsan@example.com&#x27;</span></span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="title function_">reject</span>(<span class="string">&#x27;用户不存在&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用Promise</span></span><br><span class="line"><span class="title function_">getUserInfo</span>(<span class="number">1</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">user</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户信息：&#x27;</span>, user);</span><br><span class="line">        <span class="comment">// 输出：用户信息：&#123;id: 1, name: &#x27;张三&#x27;, email: &#x27;zhangsan@example.com&#x27;&#125;</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="keyword">function</span>(<span class="params">error</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;错误：&#x27;</span>, error);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="promise链式调用">2.3 Promise链式调用</h2>
+<p><strong>Promise的优势</strong>：可以链式调用，避免回调地狱</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统方式（回调地狱）</span></span><br><span class="line"><span class="title function_">getUserInfo</span>(<span class="number">1</span>, <span class="keyword">function</span>(<span class="params">user</span>) &#123;</span><br><span class="line">    <span class="title function_">getUserPosts</span>(user.<span class="property">id</span>, <span class="keyword">function</span>(<span class="params">posts</span>) &#123;</span><br><span class="line">        <span class="title function_">getPostComments</span>(posts[<span class="number">0</span>].<span class="property">id</span>, <span class="keyword">function</span>(<span class="params">comments</span>) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(comments);  <span class="comment">// 代码越来越深，难以阅读</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Promise方式（链式调用）</span></span><br><span class="line"><span class="title function_">getUserInfo</span>(<span class="number">1</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">user</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">getUserPosts</span>(user.<span class="property">id</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">posts</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">getPostComments</span>(posts[<span class="number">0</span>].<span class="property">id</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">comments</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(comments);  <span class="comment">// 代码扁平，易于阅读</span></span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="keyword">function</span>(<span class="params">error</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;错误：&#x27;</span>, error);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<p>Promise的链式调用特性使异步代码从嵌套结构转变为扁平结构，显著提升了代码的可读性和可维护性。</p>
+<hr />
+<h1 id="asyncawait让异步代码更优雅">3.
+async/await：让异步代码更优雅</h1>
+<h2 id="什么是asyncawait">3.1 什么是async/await？</h2>
+<h3 id="asyncawait的概念">3.1.1 async/await的概念</h3>
+<p>async/await是ES2017引入的语法糖，基于Promise实现，使异步代码的编写和阅读更接近同步代码。</p>
+<ul>
+<li><code>async</code>：用于声明一个异步函数，该函数返回一个Promise对象</li>
+<li><code>await</code>：只能在async函数中使用，用于等待Promise完成并获取其结果</li>
+</ul>
+<hr />
+<h3 id="asyncawait的定义">3.1.2 async/await的定义</h3>
+<p><strong>async/await</strong> = 让异步代码看起来像同步代码的语法糖</p>
+<p><strong>基本语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> 函数名() &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title class_">Promise</span>对象;</span><br><span class="line">    <span class="comment">// 使用result</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用Promise</span></span><br><span class="line"><span class="title function_">getUserInfo</span>(<span class="number">1</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="keyword">function</span>(<span class="params">user</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(user);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用async/await（更简洁）</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">displayUser</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="title function_">getUserInfo</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(user);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">displayUser</span>();</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="asyncawait的优势">3.2 async/await的优势</h2>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+<th>实际效果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>代码更简洁</strong></td>
+<td>不需要写<code>.then()</code>和<code>.catch()</code></td>
+<td>代码行数减少50%</td>
+</tr>
+<tr class="even">
+<td><strong>更易读</strong></td>
+<td>看起来像同步代码</td>
+<td>更容易理解</td>
+</tr>
+<tr class="odd">
+<td><strong>错误处理</strong></td>
+<td>使用<code>try/catch</code>处理错误</td>
+<td>错误处理更统一</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="错误处理trycatch">3.3 错误处理：try/catch</h2>
+<p><strong>语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> 函数名() &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title class_">Promise</span>对象;</span><br><span class="line">        <span class="comment">// 成功时执行</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="comment">// 失败时执行</span></span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;错误：&#x27;</span>, error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">displayUser</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="title function_">getUserInfo</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户信息：&#x27;</span>, user);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;获取用户信息失败：&#x27;</span>, error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="实战案例使用asyncawait获取数据">3.4
+实战案例：使用async/await获取数据</h2>
+<p><strong>需求</strong>：从API获取用户信息，然后获取该用户的文章列表</p>
+<p><strong>代码</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟API函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getUserInfo</span>(<span class="params">userId</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span>(<span class="params">resolve</span>) &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="title function_">resolve</span>(&#123; <span class="attr">id</span>: userId, <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span> &#125;);</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getUserPosts</span>(<span class="params">userId</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="keyword">function</span>(<span class="params">resolve</span>) &#123;</span><br><span class="line">        <span class="built_in">setTimeout</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">            <span class="title function_">resolve</span>([</span><br><span class="line">                &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">title</span>: <span class="string">&#x27;文章1&#x27;</span> &#125;,</span><br><span class="line">                &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">title</span>: <span class="string">&#x27;文章2&#x27;</span> &#125;</span><br><span class="line">            ]);</span><br><span class="line">        &#125;, <span class="number">1000</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用async/await</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadUserData</span>(<span class="params">userId</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;正在获取用户信息...&#x27;</span>);</span><br><span class="line">        <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="title function_">getUserInfo</span>(userId);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户信息：&#x27;</span>, user);</span><br><span class="line">        </span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;正在获取文章列表...&#x27;</span>);</span><br><span class="line">        <span class="keyword">const</span> posts = <span class="keyword">await</span> <span class="title function_">getUserPosts</span>(user.<span class="property">id</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;文章列表：&#x27;</span>, posts);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123; user, posts &#125;;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;错误：&#x27;</span>, error);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用函数</span></span><br><span class="line"><span class="title function_">loadUserData</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure></p>
+<p><strong>输出</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">正在获取用户信息...</span><br><span class="line">用户信息：&#123;id: 1, name: &#x27;张三&#x27;&#125;</span><br><span class="line">正在获取文章列表...</span><br><span class="line">文章列表：[&#123;id: 1, title: &#x27;文章1&#x27;&#125;, &#123;id: 2, title: &#x27;文章2&#x27;&#125;]</span><br></pre></td></tr></table></figure></p>
+<p>async/await使异步代码的编写方式更接近同步代码，但不会阻塞JavaScript事件循环，其他代码仍可正常执行。</p>
+<hr />
+<h1 id="数组方法让数据处理更简单">4. 数组方法：让数据处理更简单</h1>
+<h2 id="为什么需要数组方法">4.1 为什么需要数组方法？</h2>
+<h3 id="传统方式的痛点">4.1.1 传统方式的痛点</h3>
+<p><strong>传统方式</strong>（使用for循环）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> doubled = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numbers.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    doubled.<span class="title function_">push</span>(numbers[i] * <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(doubled);  <span class="comment">// [2, 4, 6, 8, 10]</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>现代方式</strong>（使用数组方法）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> doubled = numbers.<span class="title function_">map</span>(<span class="function"><span class="params">num</span> =&gt;</span> num * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(doubled);  <span class="comment">// [2, 4, 6, 8, 10]</span></span><br></pre></td></tr></table></figure></p>
+<p>数组方法提供了声明式的数据处理方式，相比命令式的for循环，代码更简洁、语义更清晰，且更容易进行函数式编程的组合。</p>
+<hr />
+<h2 id="常用数组方法">4.2 常用数组方法</h2>
+<h3 id="map---转换数组">4.2.1 map() - 转换数组</h3>
+<p><strong>作用</strong>：对数组中的每个元素执行函数，返回新数组</p>
+<p><strong>语法</strong>：<code>数组.map(函数)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将每个数字乘以2</span></span><br><span class="line"><span class="keyword">const</span> doubled = numbers.<span class="title function_">map</span>(<span class="keyword">function</span>(<span class="params">num</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> num * <span class="number">2</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 或使用箭头函数</span></span><br><span class="line"><span class="keyword">const</span> doubled = numbers.<span class="title function_">map</span>(<span class="function"><span class="params">num</span> =&gt;</span> num * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(doubled);  <span class="comment">// [2, 4, 6, 8, 10]</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>更多例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 提取用户名</span></span><br><span class="line"><span class="keyword">const</span> names = users.<span class="title function_">map</span>(<span class="function"><span class="params">user</span> =&gt;</span> user.<span class="property">name</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(names);  <span class="comment">// [&#x27;张三&#x27;, &#x27;李四&#x27;]</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="filter---过滤数组">4.2.2 filter() - 过滤数组</h3>
+<p><strong>作用</strong>：根据条件过滤数组，返回新数组</p>
+<p><strong>语法</strong>：<code>数组.filter(函数)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 筛选出偶数</span></span><br><span class="line"><span class="keyword">const</span> evenNumbers = numbers.<span class="title function_">filter</span>(<span class="function"><span class="params">num</span> =&gt;</span> num % <span class="number">2</span> === <span class="number">0</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(evenNumbers);  <span class="comment">// [2, 4, 6, 8, 10]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 筛选出大于5的数</span></span><br><span class="line"><span class="keyword">const</span> largeNumbers = numbers.<span class="title function_">filter</span>(<span class="function"><span class="params">num</span> =&gt;</span> num &gt; <span class="number">5</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(largeNumbers);  <span class="comment">// [6, 7, 8, 9, 10]</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>更多例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;王五&#x27;</span>, <span class="attr">age</span>: <span class="number">18</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 筛选出年龄大于等于20的用户</span></span><br><span class="line"><span class="keyword">const</span> adults = users.<span class="title function_">filter</span>(<span class="function"><span class="params">user</span> =&gt;</span> user.<span class="property">age</span> &gt;= <span class="number">20</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(adults);  <span class="comment">// [&#123;name: &#x27;张三&#x27;, age: 20&#125;, &#123;name: &#x27;李四&#x27;, age: 25&#125;]</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="reduce---累积计算">4.2.3 reduce() - 累积计算</h3>
+<p><strong>作用</strong>：对数组中的每个元素执行函数，累积成一个值</p>
+<p><strong>语法</strong>：<code>数组.reduce(函数, 初始值)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算总和</span></span><br><span class="line"><span class="keyword">const</span> sum = numbers.<span class="title function_">reduce</span>(<span class="keyword">function</span>(<span class="params">acc, num</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> acc + num;</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"><span class="comment">// 或使用箭头函数</span></span><br><span class="line"><span class="keyword">const</span> sum = numbers.<span class="title function_">reduce</span>(<span class="function">(<span class="params">acc, num</span>) =&gt;</span> acc + num, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(sum);  <span class="comment">// 15</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>更多例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> items = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;苹果&#x27;</span>, <span class="attr">price</span>: <span class="number">10</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;香蕉&#x27;</span>, <span class="attr">price</span>: <span class="number">5</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;橙子&#x27;</span>, <span class="attr">price</span>: <span class="number">8</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算总价</span></span><br><span class="line"><span class="keyword">const</span> total = items.<span class="title function_">reduce</span>(<span class="function">(<span class="params">acc, item</span>) =&gt;</span> acc + item.<span class="property">price</span>, <span class="number">0</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(total);  <span class="comment">// 23</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="find---查找元素">4.2.4 find() - 查找元素</h3>
+<p><strong>作用</strong>：查找数组中第一个满足条件的元素</p>
+<p><strong>语法</strong>：<code>数组.find(函数)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">3</span>, <span class="attr">name</span>: <span class="string">&#x27;王五&#x27;</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 查找id为2的用户</span></span><br><span class="line"><span class="keyword">const</span> user = users.<span class="title function_">find</span>(<span class="function"><span class="params">u</span> =&gt;</span> u.<span class="property">id</span> === <span class="number">2</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(user);  <span class="comment">// &#123;id: 2, name: &#x27;李四&#x27;&#125;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="foreach---遍历数组">4.2.5 forEach() - 遍历数组</h3>
+<p><strong>作用</strong>：遍历数组，对每个元素执行函数（不返回新数组）</p>
+<p><strong>语法</strong>：<code>数组.forEach(函数)</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印每个数字</span></span><br><span class="line">numbers.<span class="title function_">forEach</span>(<span class="function"><span class="params">num</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(num);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 2</span></span><br><span class="line"><span class="comment">// 3</span></span><br><span class="line"><span class="comment">// 4</span></span><br><span class="line"><span class="comment">// 5</span></span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是，<code>forEach</code>方法不返回新数组，仅用于遍历执行副作用操作。如果需要基于原数组生成新数组，应使用<code>map</code>方法。</p>
+<hr />
+<h2 id="数组方法组合使用">4.3 数组方法组合使用</h2>
+<p><strong>实际例子</strong>：处理用户数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> users = [</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span>, <span class="attr">score</span>: <span class="number">85</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span>, <span class="attr">score</span>: <span class="number">92</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;王五&#x27;</span>, <span class="attr">age</span>: <span class="number">18</span>, <span class="attr">score</span>: <span class="number">78</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">name</span>: <span class="string">&#x27;赵六&#x27;</span>, <span class="attr">age</span>: <span class="number">22</span>, <span class="attr">score</span>: <span class="number">95</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 筛选出年龄大于等于20的用户</span></span><br><span class="line"><span class="comment">// 2. 提取他们的名字</span></span><br><span class="line"><span class="comment">// 3. 转换为大写</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> result = users</span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function"><span class="params">user</span> =&gt;</span> user.<span class="property">age</span> &gt;= <span class="number">20</span>)      <span class="comment">// 筛选</span></span><br><span class="line">    .<span class="title function_">map</span>(<span class="function"><span class="params">user</span> =&gt;</span> user.<span class="property">name</span>)                <span class="comment">// 提取名字</span></span><br><span class="line">    .<span class="title function_">map</span>(<span class="function"><span class="params">name</span> =&gt;</span> name.<span class="title function_">toUpperCase</span>());      <span class="comment">// 转大写</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result);  <span class="comment">// [&#x27;张三&#x27;, &#x27;李四&#x27;, &#x27;赵六&#x27;]</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="解构赋值让数据提取更简洁">5. 解构赋值：让数据提取更简洁</h1>
+<h2 id="什么是解构赋值">5.1 什么是解构赋值？</h2>
+<h3 id="解构赋值的概念">5.1.1 解构赋值的概念</h3>
+<p>解构赋值是ES6引入的语法特性，允许从数组或对象中提取值，并将它们赋值给不同的变量。这种语法使代码更简洁，减少了重复的赋值操作。</p>
+<hr />
+<h3 id="数组解构">5.1.2 数组解构</h3>
+<p><strong>语法</strong>：<code>const [变量1, 变量2, ...] = 数组</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统方式</span></span><br><span class="line"><span class="keyword">const</span> first = numbers[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">const</span> second = numbers[<span class="number">1</span>];</span><br><span class="line"><span class="keyword">const</span> third = numbers[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解构赋值（更简洁）</span></span><br><span class="line"><span class="keyword">const</span> [first, second, third] = numbers;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(first);   <span class="comment">// 1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(second); <span class="comment">// 2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(third);  <span class="comment">// 3</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="对象解构">5.1.3 对象解构</h3>
+<p><strong>语法</strong>：<code>const &#123;属性1, 属性2, ...&#125; = 对象</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> user = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="number">20</span>,</span><br><span class="line">    <span class="attr">email</span>: <span class="string">&#x27;zhangsan@example.com&#x27;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统方式</span></span><br><span class="line"><span class="keyword">const</span> name = user.<span class="property">name</span>;</span><br><span class="line"><span class="keyword">const</span> age = user.<span class="property">age</span>;</span><br><span class="line"><span class="keyword">const</span> email = user.<span class="property">email</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解构赋值（更简洁）</span></span><br><span class="line"><span class="keyword">const</span> &#123; name, age, email &#125; = user;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(name);   <span class="comment">// 张三</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(age);    <span class="comment">// 20</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(email);  <span class="comment">// zhangsan@example.com</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="解构赋值的实际应用">5.2 解构赋值的实际应用</h2>
+<h3 id="函数参数解构">5.2.1 函数参数解构</h3>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 传统方式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">displayUser</span>(<span class="params">user</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(user.<span class="property">name</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(user.<span class="property">age</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解构赋值（更简洁）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">displayUser</span>(<span class="params">&#123; name, age &#125;</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(name);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(age);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">displayUser</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="交换变量">5.2.2 交换变量</h3>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">let</span> b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 传统方式（需要临时变量）</span></span><br><span class="line"><span class="keyword">let</span> temp = a;</span><br><span class="line">a = b;</span><br><span class="line">b = temp;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解构赋值（一行搞定）</span></span><br><span class="line">[a, b] = [b, a];</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a);  <span class="comment">// 2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(b);  <span class="comment">// 1</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="模块化组织代码的艺术">6. 模块化：组织代码的艺术</h1>
+<h2 id="为什么需要模块化">6.1 为什么需要模块化？</h2>
+<h3 id="传统方式的痛点-1">6.1.1 传统方式的痛点</h3>
+<p><strong>传统方式</strong>（所有代码写在一个文件）：
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 1000行代码都在这里</span></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">function1</span>(<span class="params"></span>) &#123; ... &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">function2</span>(<span class="params"></span>) &#123; ... &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">function3</span>(<span class="params"></span>) &#123; ... &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// ... 代码越来越长，难以维护</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>代码太长，难以维护</li>
+<li>变量名可能冲突</li>
+<li>无法复用代码</li>
+</ul>
+<hr />
+<h3 id="模块化的优势">6.1.2 模块化的优势</h3>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+<th>实际效果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>代码组织</strong></td>
+<td>按功能分成多个文件</td>
+<td>代码更清晰、易维护</td>
+</tr>
+<tr class="even">
+<td><strong>避免冲突</strong></td>
+<td>每个模块有独立作用域</td>
+<td>变量名不会冲突</td>
+</tr>
+<tr class="odd">
+<td><strong>代码复用</strong></td>
+<td>可以在多个地方使用</td>
+<td>提高开发效率</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="es6模块化语法">6.2 ES6模块化语法</h2>
+<h3 id="export---导出">6.2.1 export - 导出</h3>
+<p><strong>语法</strong>：<code>export 变量/函数/类</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">add</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">subtract</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> a - b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="variable constant_">PI</span> = <span class="number">3.14</span>;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="import---导入">6.2.2 import - 导入</h3>
+<p><strong>语法</strong>：<code>import &#123; 变量/函数/类 &#125; from '文件路径'</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; add, subtract, <span class="variable constant_">PI</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./utils.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">add</span>(<span class="number">1</span>, <span class="number">2</span>));        <span class="comment">// 3</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">subtract</span>(<span class="number">5</span>, <span class="number">3</span>));  <span class="comment">// 2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable constant_">PI</span>);              <span class="comment">// 3.14</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="默认导出">6.2.3 默认导出</h3>
+<p><strong>语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 导出</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> 变量/函数/类;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 导入</span></span><br><span class="line"><span class="keyword">import</span> 名称 <span class="keyword">from</span> <span class="string">&#x27;文件路径&#x27;</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// user.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="number">20</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> user <span class="keyword">from</span> <span class="string">&#x27;./user.js&#x27;</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(user.<span class="property">name</span>);  <span class="comment">// 张三</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="ai实战使用ai生成现代javascript代码">7.
+AI实战：使用AI生成现代JavaScript代码</h1>
+<h2 id="任务描述">7.1 任务描述</h2>
+<p><strong>目标</strong>：使用AI工具生成一个使用现代JavaScript特性的待办事项应用</p>
+<p><strong>功能要求</strong>：</p>
+<ul>
+<li>使用async/await获取数据</li>
+<li>使用数组方法处理数据</li>
+<li>使用解构赋值提取数据</li>
+<li>使用模块化组织代码</li>
+</ul>
+<hr />
+<h2 id="第一步设计prompt">7.2 第一步：设计Prompt</h2>
+<p><strong>Prompt示例</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">用现代JavaScript创建一个待办事项应用，要求：</span><br><span class="line">1. 使用async/await处理异步操作</span><br><span class="line">2. 使用数组方法（map、filter、reduce）处理数据</span><br><span class="line">3. 使用解构赋值提取数据</span><br><span class="line">4. 使用ES6模块化组织代码</span><br><span class="line">5. 包含添加、删除、完成待办事项功能</span><br><span class="line">6. 代码注释清晰，使用现代JavaScript语法</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="ai生成的代码示例">7.3 AI生成的代码（示例）</h2>
+<p><strong>utils.js</strong>（工具函数模块）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟API延迟</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">delay</span>(<span class="params">ms</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">setTimeout</span>(resolve, ms));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取待办事项列表</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchTodos</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">1000</span>);  <span class="comment">// 模拟网络延迟</span></span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">text</span>: <span class="string">&#x27;学习JavaScript&#x27;</span>, <span class="attr">completed</span>: <span class="literal">false</span> &#125;,</span><br><span class="line">        &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">text</span>: <span class="string">&#x27;完成作业&#x27;</span>, <span class="attr">completed</span>: <span class="literal">true</span> &#125;</span><br><span class="line">    ];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>todoService.js</strong>（待办事项服务）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fetchTodos &#125; <span class="keyword">from</span> <span class="string">&#x27;./utils.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> todos = [];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载待办事项</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">loadTodos</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        todos = <span class="keyword">await</span> <span class="title function_">fetchTodos</span>();</span><br><span class="line">        <span class="keyword">return</span> todos;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;加载失败：&#x27;</span>, error);</span><br><span class="line">        <span class="keyword">return</span> [];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加待办事项</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">addTodo</span>(<span class="params">text</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> newTodo = &#123;</span><br><span class="line">        <span class="attr">id</span>: <span class="title class_">Date</span>.<span class="title function_">now</span>(),</span><br><span class="line">        text,</span><br><span class="line">        <span class="attr">completed</span>: <span class="literal">false</span></span><br><span class="line">    &#125;;</span><br><span class="line">    todos.<span class="title function_">push</span>(newTodo);</span><br><span class="line">    <span class="keyword">return</span> newTodo;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除待办事项</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">deleteTodo</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    todos = todos.<span class="title function_">filter</span>(<span class="function"><span class="params">todo</span> =&gt;</span> todo.<span class="property">id</span> !== id);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 切换完成状态</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">toggleTodo</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    todos = todos.<span class="title function_">map</span>(<span class="function"><span class="params">todo</span> =&gt;</span> </span><br><span class="line">        todo.<span class="property">id</span> === id ? &#123; ...todo, <span class="attr">completed</span>: !todo.<span class="property">completed</span> &#125; : todo</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取统计信息</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getStats</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> total = todos.<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">const</span> completed = todos.<span class="title function_">filter</span>(<span class="function"><span class="params">todo</span> =&gt;</span> todo.<span class="property">completed</span>).<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">const</span> pending = total - completed;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123; total, completed, pending &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>main.js</strong>（主文件）： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; loadTodos, addTodo, deleteTodo, toggleTodo, getStats &#125; <span class="keyword">from</span> <span class="string">&#x27;./todoService.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">init</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> todos = <span class="keyword">await</span> <span class="title function_">loadTodos</span>();</span><br><span class="line">    <span class="title function_">renderTodos</span>(todos);</span><br><span class="line">    <span class="title function_">updateStats</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 渲染待办事项</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">renderTodos</span>(<span class="params">todos</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> list = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;todoList&#x27;</span>);</span><br><span class="line">    list.<span class="property">innerHTML</span> = todos.<span class="title function_">map</span>(<span class="function"><span class="params">todo</span> =&gt;</span> <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;li class=&quot;<span class="subst">$&#123;todo.completed ? <span class="string">&#x27;completed&#x27;</span> : <span class="string">&#x27;&#x27;</span>&#125;</span>&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;input type=&quot;checkbox&quot; <span class="subst">$&#123;todo.completed ? <span class="string">&#x27;checked&#x27;</span> : <span class="string">&#x27;&#x27;</span>&#125;</span> </span></span><br><span class="line"><span class="string">                   onchange=&quot;toggleTodo(<span class="subst">$&#123;todo.id&#125;</span>)&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;span&gt;<span class="subst">$&#123;todo.text&#125;</span>&lt;/span&gt;</span></span><br><span class="line"><span class="string">            &lt;button onclick=&quot;deleteTodo(<span class="subst">$&#123;todo.id&#125;</span>)&quot;&gt;删除&lt;/button&gt;</span></span><br><span class="line"><span class="string">        &lt;/li&gt;</span></span><br><span class="line"><span class="string">    `</span>).<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新统计信息</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">updateStats</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; total, completed, pending &#125; = <span class="title function_">getStats</span>();</span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;stats&#x27;</span>).<span class="property">textContent</span> = </span><br><span class="line">        <span class="string">`总计：<span class="subst">$&#123;total&#125;</span>，已完成：<span class="subst">$&#123;completed&#125;</span>，待完成：<span class="subst">$&#123;pending&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加待办事项</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;addBtn&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> input = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;todoInput&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> text = input.<span class="property">value</span>.<span class="title function_">trim</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (text) &#123;</span><br><span class="line">        <span class="title function_">addTodo</span>(text);</span><br><span class="line">        input.<span class="property">value</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">        <span class="title function_">renderTodos</span>(todos);</span><br><span class="line">        <span class="title function_">updateStats</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化</span></span><br><span class="line"><span class="title function_">init</span>();</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="代码解析">7.4 代码解析</h2>
+<p><strong>核心思路</strong>：</p>
+<ol type="1">
+<li>使用<code>async/await</code>处理异步操作（<code>loadTodos</code>）</li>
+<li>使用数组方法处理数据（<code>filter</code>、<code>map</code>）</li>
+<li>使用解构赋值提取数据（<code>getStats</code>）</li>
+<li>使用ES6模块化组织代码（<code>import</code>/<code>export</code>）</li>
+</ol>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>所有异步操作使用<code>async/await</code></li>
+<li>所有数组操作使用数组方法</li>
+<li>代码按功能分成多个模块</li>
+</ul>
+<hr />
+<h1 id="本节总结">8. 本节总结</h1>
+<p>你已经学会了：</p>
+<p>✅ <strong>Promise和async/await</strong>：</p>
+<ul>
+<li>Promise的基本用法</li>
+<li>async/await的语法和优势</li>
+<li>错误处理（try/catch）</li>
+</ul>
+<p>✅ <strong>数组方法</strong>：</p>
+<ul>
+<li><code>map()</code> - 转换数组</li>
+<li><code>filter()</code> - 过滤数组</li>
+<li><code>reduce()</code> - 累积计算</li>
+<li><code>find()</code> - 查找元素</li>
+<li><code>forEach()</code> - 遍历数组</li>
+</ul>
+<p>✅ <strong>解构赋值</strong>：</p>
+<ul>
+<li>数组解构</li>
+<li>对象解构</li>
+<li>函数参数解构</li>
+</ul>
+<p>✅ <strong>模块化</strong>：</p>
+<ul>
+<li><code>export</code> - 导出</li>
+<li><code>import</code> - 导入</li>
+<li>默认导出</li>
+</ul>
+<p>✅ <strong>实战技能</strong>：</p>
+<ul>
+<li>使用AI生成现代JavaScript代码</li>
+<li>组织模块化代码</li>
+</ul>
+<p>现代JavaScript的这些特性显著提升了代码质量和开发效率。掌握Promise、async/await、数组方法、解构赋值和模块化等核心概念，是进行现代Web开发的基础。建议通过实际项目练习，逐步熟悉这些特性的应用场景和最佳实践。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E9%A9%B1%E5%8A%A8Web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/" rel="tag"># AI驱动Web开发技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-11-18-04-JavaScript%E5%9F%BA%E7%A1%80/" rel="prev" title="04.JavaScript基础">
+                  <i class="fa fa-angle-left"></i> 04.JavaScript基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-11-24-06-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AD%98%E5%82%A8%E4%B8%8E%E8%B7%A8%E5%9F%9F/" rel="next" title="06.浏览器存储与跨域">
+                  06.浏览器存储与跨域 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
