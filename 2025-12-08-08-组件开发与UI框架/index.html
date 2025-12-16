@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 组件通信机制：组件间的数据传递 1.1 为什么需要组件通信？ 在第七章中，我们学习了Vue.js的基础组件概念。然而，在实际开发中，组件往往不是孤立存在的，它们需要相互协作、传递数据。 实际场景：  父组件需要向子组件传递数据（如用户信息） 子组件需要向父组件通知事件（如按钮点击） 兄弟组件之间需要共享数据（如购物车状态）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="08.组件开发与UI框架">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-12-08-08-%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%8EUI%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. 组件通信机制：组件间的数据传递 1.1 为什么需要组件通信？ 在第七章中，我们学习了Vue.js的基础组件概念。然而，在实际开发中，组件往往不是孤立存在的，它们需要相互协作、传递数据。 实际场景：  父组件需要向子组件传递数据（如用户信息） 子组件需要向父组件通知事件（如按钮点击） 兄弟组件之间需要共享数据（如购物车状态）">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-08T12:44:25.000Z">
+<meta property="article:modified_time" content="2025-12-16T06:08:41.278Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="AI驱动Web开发技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-12-08-08-%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%8EUI%E6%A1%86%E6%9E%B6/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-12-08-08-%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%8EUI%E6%A1%86%E6%9E%B6/","path":"2025-12-08-08-组件开发与UI框架/","title":"08.组件开发与UI框架"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>08.组件开发与UI框架 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E6%9C%BA%E5%88%B6%E7%BB%84%E4%BB%B6%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92"><span class="nav-number">1.</span> <span class="nav-text">1.
+组件通信机制：组件间的数据传递</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 为什么需要组件通信？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%88%B6%E5%AD%90%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1props%E5%92%8Cemit"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 父子组件通信：Props和Emit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#props%E7%88%B6%E7%BB%84%E4%BB%B6%E5%90%91%E5%AD%90%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%80%BC"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.2.1 Props：父组件向子组件传值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#emit%E5%AD%90%E7%BB%84%E4%BB%B6%E5%90%91%E7%88%B6%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%80%BC"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2.2 Emit：子组件向父组件传值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9Av-model%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.3.</span> <span class="nav-text">1.2.3 双向绑定：v-model的实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%84%E5%BC%9F%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E9%80%9A%E8%BF%87%E7%88%B6%E7%BB%84%E4%BB%B6%E4%B8%AD%E8%BD%AC"><span class="nav-number">1.3.</span> <span class="nav-text">1.3
+兄弟组件通信：通过父组件中转</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E4%BC%A0%E5%80%BC%E5%AE%9E%E8%B7%B5%E6%9E%84%E5%BB%BA%E5%8F%AF%E5%A4%8D%E7%94%A8%E7%BB%84%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">2. 组件传值实践：构建可复用组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 组件设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99"><span class="nav-number">2.1.1.</span> <span class="nav-text">2.1.1 单一职责原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E5%A4%8D%E7%94%A8%E6%80%A7"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.1.2 可复用性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%E6%9E%84%E5%BB%BA%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 实战案例：构建用户列表组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 需求分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 组件设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#props%E9%AA%8C%E8%AF%81%E5%92%8C%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Props验证和默认值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#props%E7%B1%BB%E5%9E%8B%E9%AA%8C%E8%AF%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 Props类型验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81props%E9%AA%8C%E8%AF%81"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 为什么需要Props验证？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ui%E6%A1%86%E6%9E%B6%E5%BA%94%E7%94%A8%E6%8F%90%E5%8D%87%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87"><span class="nav-number">3.</span> <span class="nav-text">3. UI框架应用：提升开发效率</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81ui%E6%A1%86%E6%9E%B6"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 为什么需要UI框架？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%BC%80%E5%8F%91%E7%9A%84%E7%97%9B%E7%82%B9"><span class="nav-number">3.1.1.</span> <span class="nav-text">3.1.1 传统开发的痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ui%E6%A1%86%E6%9E%B6%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">3.1.2.</span> <span class="nav-text">3.1.2 UI框架的解决方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ant-design-vue%E4%BC%81%E4%B8%9A%E7%BA%A7ui%E6%A1%86%E6%9E%B6"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Ant Design
+Vue：企业级UI框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFant-design-vue"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 什么是Ant Design Vue？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 安装和使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 常用组件示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ui%E6%A1%86%E6%9E%B6%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 UI框架的价值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E5%BC%80%E5%8F%91%E6%95%88%E7%8E%87"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 提升开发效率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81%E8%AE%BE%E8%AE%A1%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2 保证设计一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E5%BC%8F%E6%94%AF%E6%8C%81"><span class="nav-number">3.3.3.</span> <span class="nav-text">3.3.3 响应式支持</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E5%BC%80%E5%8F%91%E7%94%A8%E6%88%B7%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">4. AI实战：使用AI开发用户选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 任务描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%BE%E8%AE%A1prompt"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 第一步：设计Prompt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 AI生成的代码（示例）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 代码解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B%E5%AE%9E%E7%8E%B0crud%E7%95%8C%E9%9D%A2"><span class="nav-number">5.</span> <span class="nav-text">5. 实战案例：实现CRUD界面</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90-1"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 需求分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1-1"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 组件设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6"><span class="nav-number">5.2.1.</span> <span class="nav-text">5.2.1 用户列表组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6"><span class="nav-number">5.2.2.</span> <span class="nav-text">5.2.2 用户表单组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90-1"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 代码解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E8%AE%B2%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6%E4%B8%8E%E6%8F%92%E6%A7%BD"><span class="nav-number">6.</span> <span class="nav-text">6. 选讲：动态组件与插槽</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 动态组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6"><span class="nav-number">6.1.1.</span> <span class="nav-text">6.1.1 什么是动态组件？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E7%BB%84%E4%BB%B6%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">6.1.2.</span> <span class="nav-text">6.1.2 动态组件的应用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E6%A7%BDslot"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 插槽（Slot）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8F%92%E6%A7%BD"><span class="nav-number">6.2.1.</span> <span class="nav-text">6.2.1 为什么需要插槽？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E6%8F%92%E6%A7%BD%E9%BB%98%E8%AE%A4%E6%8F%92%E6%A7%BD"><span class="nav-number">6.2.2.</span> <span class="nav-text">6.2.2 普通插槽（默认插槽）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B7%E5%90%8D%E6%8F%92%E6%A7%BDnamed-slots"><span class="nav-number">6.2.3.</span> <span class="nav-text">6.2.3 具名插槽（Named Slots）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BDscoped-slots"><span class="nav-number">6.2.4.</span> <span class="nav-text">6.2.4 作用域插槽（Scoped Slots）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%92%E6%A7%BD%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 插槽的实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E6%A0%BC%E7%BB%84%E4%BB%B6%E4%B8%AD%E7%9A%84%E6%8F%92%E6%A7%BD"><span class="nav-number">6.3.1.</span> <span class="nav-text">6.3.1 表格组件中的插槽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E6%A7%BD%E6%80%BB%E7%BB%93"><span class="nav-number">6.3.2.</span> <span class="nav-text">6.3.2 插槽总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.</span> <span class="nav-text">7. 组件设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%BB%84%E4%BB%B6%E4%B8%8E%E5%B1%95%E7%A4%BA%E7%BB%84%E4%BB%B6"><span class="nav-number">7.1.</span> <span class="nav-text">7.1 容器组件与展示组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.1.1.</span> <span class="nav-text">7.1.1 设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">7.1.2.</span> <span class="nav-text">7.1.2 这种模式的优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">7.2.</span> <span class="nav-text">7.2 组件组合模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E4%BC%98%E4%BA%8E%E7%BB%A7%E6%89%BF"><span class="nav-number">7.2.1.</span> <span class="nav-text">7.2.1 组合优于继承</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AC%E8%8A%82%E6%80%BB%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">8. 本节总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-12-08-08-%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%8EUI%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="08.组件开发与UI框架 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          08.组件开发与UI框架
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-08 20:44:25" itemprop="dateCreated datePublished" datetime="2025-12-08T20:44:25+08:00">2025-12-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-16 14:08:41" itemprop="dateModified" datetime="2025-12-16T14:08:41+08:00">2025-12-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="组件通信机制组件间的数据传递">1.
+组件通信机制：组件间的数据传递</h1>
+<h2 id="为什么需要组件通信">1.1 为什么需要组件通信？</h2>
+<p>在第七章中，我们学习了Vue.js的基础组件概念。然而，在实际开发中，组件往往不是孤立存在的，它们需要相互协作、传递数据。</p>
+<p><strong>实际场景</strong>：</p>
+<ul>
+<li>父组件需要向子组件传递数据（如用户信息）</li>
+<li>子组件需要向父组件通知事件（如按钮点击）</li>
+<li>兄弟组件之间需要共享数据（如购物车状态）</li>
+</ul>
+<span id="more"></span>
+<p><strong>组件通信的挑战</strong>：</p>
+<ul>
+<li>组件之间不能直接访问对方的数据（数据隔离）</li>
+<li>需要明确的通信机制来传递数据和事件</li>
+<li>不同层级的组件通信方式不同</li>
+</ul>
+<hr />
+<h2 id="父子组件通信props和emit">1.2 父子组件通信：Props和Emit</h2>
+<h3 id="props父组件向子组件传值">1.2.1 Props：父组件向子组件传值</h3>
+<p><strong>Props</strong>是父组件向子组件传递数据的方式。</p>
+<p><strong>基本语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子组件：定义props</span></span><br><span class="line">app.<span class="title function_">component</span>(<span class="string">&#x27;child-component&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">props</span>: [<span class="string">&#x27;message&#x27;</span>],</span><br><span class="line">    <span class="attr">template</span>: <span class="string">&#x27;&lt;div&gt;&#123;&#123; message &#125;&#125;&lt;/div&gt;&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 父组件：传递数据</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">child-component</span> <span class="attr">message</span>=<span class="string">&quot;Hello&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">child-component</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>说明（最小必懂）</strong>：</p>
+<ul>
+<li>子组件用<code>props</code>声明“我需要什么数据”</li>
+<li>父组件用<code>:属性名="数据"</code>传递（带冒号表示绑定变量，而不是纯字符串）</li>
+<li>在子组件模板里直接用<code>&#123;&#123; message &#125;&#125;</code>渲染</li>
+</ul>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">user-card</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">:name</span>=<span class="string">&quot;user.name&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">:age</span>=<span class="string">&quot;user.age&quot;</span></span></span><br><span class="line"><span class="tag">        <span class="attr">:email</span>=<span class="string">&quot;user.email&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">user-card</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-handlebars"><span class="language-xml"></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">const &#123; createApp &#125; = Vue;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars"></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">const app = createApp(&#123;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">    data() &#123;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">        return &#123;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">            user: &#123;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">                name: &#x27;张三&#x27;,</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">                age: 20,</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">                email: &#x27;zhangsan@example.com&#x27;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">            &#125;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">        &#125;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">    &#125;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">&#125;);</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars"></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">app.component(&#x27;user-card&#x27;, &#123;</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">    props: [&#x27;name&#x27;, &#x27;age&#x27;, &#x27;email&#x27;],</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">    template: `</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;user-card&quot;</span>&gt;</span></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">            <span class="tag">&lt;<span class="name">h3</span>&gt;</span></span><span class="template-variable">&#123;&#123; <span class="name">name</span> &#125;&#125;</span><span class="language-xml"><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>年龄：</span><span class="template-variable">&#123;&#123; <span class="name">age</span> &#125;&#125;</span><span class="language-xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">            <span class="tag">&lt;<span class="name">p</span>&gt;</span>邮箱：</span><span class="template-variable">&#123;&#123; <span class="name">email</span> &#125;&#125;</span><span class="language-xml"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">    `</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">&#125;);</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars"></span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars">app.mount(&#x27;#app&#x27;);</span></span></span><br><span class="line"><span class="language-xml"><span class="language-handlebars"></span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Props的特点</strong>：</p>
+<ul>
+<li>单向数据流：数据只能从父组件流向子组件</li>
+<li>子组件不能直接修改props（会报错）</li>
+<li>如果需要修改，应该通知父组件修改</li>
+</ul>
+<hr />
+<h3 id="emit子组件向父组件传值">1.2.2 Emit：子组件向父组件传值</h3>
+<p><strong>Emit</strong>是子组件向父组件传递事件的方式。</p>
+<p><strong>基本语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子组件：触发事件</span></span><br><span class="line"><span class="variable language_">this</span>.$emit(<span class="string">&#x27;事件名&#x27;</span>, 数据);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 父组件：监听事件</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">child-component</span> @<span class="attr">事件名</span>=<span class="string">&quot;处理函数&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">child-component</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>计数：&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">counter-button</span> @<span class="attr">increment</span>=<span class="string">&quot;handleIncrement&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">counter-button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> &#123; createApp &#125; = <span class="title class_">Vue</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">count</span>: <span class="number">0</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">handleIncrement</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">this</span>.<span class="property">count</span>++;</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">component</span>(<span class="string">&#x27;counter-button&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">template</span>: <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">        &lt;button @click=&quot;increment&quot;&gt;点击+1&lt;/button&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">    `</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">increment</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">this</span>.$emit(<span class="string">&#x27;increment&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>Emit的特点</strong>：</p>
+<ul>
+<li>子组件通过事件通知父组件</li>
+<li>父组件决定如何处理事件</li>
+<li>可以实现数据的"向上传递"</li>
+</ul>
+<p><strong>说明（执行流程）</strong>： 1)
+子组件内部点击按钮，调用<code>this.$emit('increment')</code>发事件<br />
+2) 父组件在模板上用<code>@increment="handleIncrement"</code>监听<br />
+3)
+父组件的<code>handleIncrement</code>里修改自己的<code>count</code>，触发视图更新</p>
+<hr />
+<h3 id="双向绑定v-model的实现">1.2.3 双向绑定：v-model的实现</h3>
+<p><strong>v-model</strong>实际上是props和emit的语法糖。</p>
+<p><strong>v-model的原理</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以下两种写法等价：</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法1：使用v-model</span></span><br><span class="line">&lt;custom-input v-model=<span class="string">&quot;value&quot;</span>&gt;&lt;/custom-input&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法2：使用props和emit</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">custom-input</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    <span class="attr">:value</span>=<span class="string">&quot;value&quot;</span> </span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    @<span class="attr">update:value</span>=<span class="string">&quot;value = $event&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">custom-input</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>：自定义输入框组件 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>输入的值：&#123;&#123; inputValue &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">custom-input</span> <span class="attr">v-model</span>=<span class="string">&quot;inputValue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">custom-input</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> &#123; createApp &#125; = <span class="title class_">Vue</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">inputValue</span>: <span class="string">&#x27;&#x27;</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">component</span>(<span class="string">&#x27;custom-input&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">props</span>: [<span class="string">&#x27;modelValue&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">template</span>: <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">        &lt;input </span></span></span><br><span class="line"><span class="string"><span class="language-javascript">            :value=&quot;modelValue&quot;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">            @input=&quot;$emit(&#x27;update:modelValue&#x27;, $event.target.value)&quot;&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">    `</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">emits</span>: [<span class="string">&#x27;update:modelValue&#x27;</span>]</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>说明（工作原理）</strong>：</p>
+<ul>
+<li>父组件用<code>v-model="inputValue"</code>绑定数据</li>
+<li>子组件接收<code>modelValue</code>（固定命名）作为当前值</li>
+<li>子组件输入变更时，发出<code>update:modelValue</code>事件，把新值告诉父组件</li>
+<li>父组件收到事件后更新<code>inputValue</code>，从而完成双向同步</li>
+</ul>
+<hr />
+<h2 id="兄弟组件通信通过父组件中转">1.3
+兄弟组件通信：通过父组件中转</h2>
+<p><strong>问题</strong>：两个兄弟组件如何通信？</p>
+<p><strong>解决方案</strong>：通过父组件作为"中转站"</p>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">component-a</span> @<span class="attr">send-data</span>=<span class="string">&quot;handleData&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">component-a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">component-b</span> <span class="attr">:data</span>=<span class="string">&quot;sharedData&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">component-b</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> &#123; createApp &#125; = <span class="title class_">Vue</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">sharedData</span>: <span class="literal">null</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">handleData</span>(<span class="params">data</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">this</span>.<span class="property">sharedData</span> = data;</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">component</span>(<span class="string">&#x27;component-a&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">template</span>: <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">        &lt;button @click=&quot;send&quot;&gt;发送数据&lt;/button&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">    `</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">send</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">this</span>.$emit(<span class="string">&#x27;send-data&#x27;</span>, <span class="string">&#x27;这是来自A组件的数据&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">component</span>(<span class="string">&#x27;component-b&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">props</span>: [<span class="string">&#x27;data&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">template</span>: <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">        &lt;div&gt;接收到的数据：&#123;&#123; data &#125;&#125;&lt;/div&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">    `</span></span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>流程</strong>：</p>
+<ol type="1">
+<li>组件A通过emit发送数据到父组件</li>
+<li>父组件接收数据并更新状态</li>
+<li>父组件通过props将数据传递给组件B</li>
+</ol>
+<p><strong>核心记忆</strong>：兄弟组件不直接通信，永远“先上再下”——先发给父，再由父传给另一个子。</p>
+<hr />
+<h1 id="组件传值实践构建可复用组件">2. 组件传值实践：构建可复用组件</h1>
+<h2 id="组件设计原则">2.1 组件设计原则</h2>
+<h3 id="单一职责原则">2.1.1 单一职责原则</h3>
+<p>每个组件应该只负责一个功能，职责明确。</p>
+<p><strong>好的设计</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用户头像组件：只负责显示头像</span></span><br><span class="line">app.<span class="title function_">component</span>(<span class="string">&#x27;user-avatar&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">props</span>: [<span class="string">&#x27;src&#x27;</span>, <span class="string">&#x27;alt&#x27;</span>],</span><br><span class="line">    <span class="attr">template</span>: <span class="string">&#x27;&lt;img :src=&quot;src&quot; :alt=&quot;alt&quot;&gt;&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用户信息组件：只负责显示用户信息</span></span><br><span class="line">app.<span class="title function_">component</span>(<span class="string">&#x27;user-info&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">props</span>: [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;email&#x27;</span>],</span><br><span class="line">    <span class="attr">template</span>: <span class="string">&#x27;&lt;div&gt;&#123;&#123; name &#125;&#125; - &#123;&#123; email &#125;&#125;&lt;/div&gt;&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><strong>不好的设计</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个组件做了太多事情</span></span><br><span class="line">app.<span class="title function_">component</span>(<span class="string">&#x27;user-card&#x27;</span>, &#123;</span><br><span class="line">    <span class="comment">// 显示头像、信息、按钮、表单... 职责不清晰</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="可复用性">2.1.2 可复用性</h3>
+<p>组件应该设计得足够通用，可以在不同场景下复用。</p>
+<p><strong>实际例子</strong>：按钮组件 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">app.<span class="title function_">component</span>(<span class="string">&#x27;custom-button&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">props</span>: &#123;</span><br><span class="line">        <span class="attr">type</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">String</span>,</span><br><span class="line">            <span class="attr">default</span>: <span class="string">&#x27;primary&#x27;</span>  <span class="comment">// 默认值</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">disabled</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">Boolean</span>,</span><br><span class="line">            <span class="attr">default</span>: <span class="literal">false</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">loading</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">Boolean</span>,</span><br><span class="line">            <span class="attr">default</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">template</span>: <span class="string">`</span></span><br><span class="line"><span class="string">        &lt;button </span></span><br><span class="line"><span class="string">            :class=&quot;[&#x27;btn&#x27;, &#x27;btn-&#x27; + type]&quot;</span></span><br><span class="line"><span class="string">            :disabled=&quot;disabled || loading&quot;</span></span><br><span class="line"><span class="string">            @click=&quot;$emit(&#x27;click&#x27;)&quot;&gt;</span></span><br><span class="line"><span class="string">            &lt;span v-if=&quot;loading&quot;&gt;加载中...&lt;/span&gt;</span></span><br><span class="line"><span class="string">            &lt;slot v-else&gt;&lt;/slot&gt;</span></span><br><span class="line"><span class="string">        &lt;/button&gt;</span></span><br><span class="line"><span class="string">    `</span>,</span><br><span class="line">    <span class="attr">emits</span>: [<span class="string">&#x27;click&#x27;</span>]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用方式</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">custom-button</span> <span class="attr">type</span>=<span class="string">&quot;primary&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;handleClick&quot;</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">custom-button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">custom-button</span> <span class="attr">type</span>=<span class="string">&quot;danger&quot;</span> <span class="attr">:loading</span>=<span class="string">&quot;isLoading&quot;</span>&gt;</span>删除<span class="tag">&lt;/<span class="name">custom-button</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="实战案例构建用户列表组件">2.2 实战案例：构建用户列表组件</h2>
+<h3 id="需求分析">2.2.1 需求分析</h3>
+<p>我们要构建一个用户列表组件，包含：</p>
+<ul>
+<li>显示用户列表</li>
+<li>支持搜索功能</li>
+<li>支持删除用户</li>
+<li>可复用、可配置</li>
+</ul>
+<hr />
+<h3 id="组件设计">2.2.2 组件设计</h3>
+<p><strong>用户列表组件</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;app&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">user-list</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">:users</span>=<span class="string">&quot;users&quot;</span></span></span><br><span class="line"><span class="tag">        @<span class="attr">delete-user</span>=<span class="string">&quot;handleDelete&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">user-list</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> &#123; createApp &#125; = <span class="title class_">Vue</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">users</span>: [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">email</span>: <span class="string">&#x27;zhangsan@example.com&#x27;</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="attr">email</span>: <span class="string">&#x27;lisi@example.com&#x27;</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">id</span>: <span class="number">3</span>, <span class="attr">name</span>: <span class="string">&#x27;王五&#x27;</span>, <span class="attr">email</span>: <span class="string">&#x27;wangwu@example.com&#x27;</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ]</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">handleDelete</span>(<span class="params">userId</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">this</span>.<span class="property">users</span> = <span class="variable language_">this</span>.<span class="property">users</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">u</span> =&gt;</span> u.<span class="property">id</span> !== userId);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">component</span>(<span class="string">&#x27;user-list&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">props</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">users</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">type</span>: <span class="title class_">Array</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">required</span>: <span class="literal">true</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">searchKeyword</span>: <span class="string">&#x27;&#x27;</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">computed</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">filteredUsers</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">searchKeyword</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">users</span>;</span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">users</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">user</span> =&gt;</span> </span></span><br><span class="line"><span class="language-javascript">                user.<span class="property">name</span>.<span class="title function_">includes</span>(<span class="variable language_">this</span>.<span class="property">searchKeyword</span>) ||</span></span><br><span class="line"><span class="language-javascript">                user.<span class="property">email</span>.<span class="title function_">includes</span>(<span class="variable language_">this</span>.<span class="property">searchKeyword</span>)</span></span><br><span class="line"><span class="language-javascript">            );</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">template</span>: <span class="string">`</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">        &lt;div class=&quot;user-list&quot;&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">            &lt;input </span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                v-model=&quot;searchKeyword&quot;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                placeholder=&quot;搜索用户...&quot;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                class=&quot;search-input&quot;&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">            </span></span></span><br><span class="line"><span class="string"><span class="language-javascript">            &lt;ul class=&quot;user-items&quot;&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                &lt;li v-for=&quot;user in filteredUsers&quot; :key=&quot;user.id&quot; class=&quot;user-item&quot;&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                    &lt;div&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                        &lt;strong&gt;&#123;&#123; user.name &#125;&#125;&lt;/strong&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                        &lt;p&gt;&#123;&#123; user.email &#125;&#125;&lt;/p&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                    &lt;/div&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                    &lt;button </span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                        @click=&quot;$emit(&#x27;delete-user&#x27;, user.id)&quot;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                        class=&quot;delete-btn&quot;&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                        删除</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                    &lt;/button&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">                &lt;/li&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">            &lt;/ul&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">        &lt;/div&gt;</span></span></span><br><span class="line"><span class="string"><span class="language-javascript">    `</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">emits</span>: [<span class="string">&#x27;delete-user&#x27;</span>]</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>代码解读（一步步看）</strong>：</p>
+<ul>
+<li>父组件把<code>users</code>数组传给<code>user-list</code></li>
+<li>组件内部用<code>searchKeyword</code>做本地搜索状态</li>
+<li><code>computed</code>里的<code>filteredUsers</code>负责筛选（名字或邮箱包含关键字）</li>
+<li>模板里<code>v-for</code>渲染列表，点击“删除”按钮用<code>$emit('delete-user', id)</code>通知父组件</li>
+<li>父组件在<code>handleDelete</code>里真正删除数据</li>
+</ul>
+<hr />
+<h2 id="props验证和默认值">2.3 Props验证和默认值</h2>
+<h3 id="props类型验证">2.3.1 Props类型验证</h3>
+<p><strong>语法</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">props</span>: &#123;</span><br><span class="line">    属性名: &#123;</span><br><span class="line">        <span class="attr">type</span>: 类型,</span><br><span class="line">        <span class="attr">required</span>: <span class="literal">true</span>/<span class="literal">false</span>,</span><br><span class="line">        <span class="attr">default</span>: 默认值,</span><br><span class="line">        <span class="attr">validator</span>: 验证函数</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">app.<span class="title function_">component</span>(<span class="string">&#x27;user-card&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">props</span>: &#123;</span><br><span class="line">        <span class="attr">name</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">String</span>,</span><br><span class="line">            <span class="attr">required</span>: <span class="literal">true</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">age</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">Number</span>,</span><br><span class="line">            <span class="attr">default</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="title function_">validator</span>(<span class="params">value</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> value &gt;= <span class="number">0</span> &amp;&amp; value &lt;= <span class="number">150</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">email</span>: &#123;</span><br><span class="line">            <span class="attr">type</span>: <span class="title class_">String</span>,</span><br><span class="line">            <span class="attr">default</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="为什么需要props验证">2.3.2 为什么需要Props验证？</h3>
+<p><strong>好处</strong>：</p>
+<ul>
+<li>提前发现错误（开发时就能发现问题）</li>
+<li>代码更清晰（明确组件需要什么数据）</li>
+<li>更好的开发体验（IDE可以提供类型提示）</li>
+</ul>
+<hr />
+<h1 id="ui框架应用提升开发效率">3. UI框架应用：提升开发效率</h1>
+<h2 id="为什么需要ui框架">3.1 为什么需要UI框架？</h2>
+<h3 id="传统开发的痛点">3.1.1 传统开发的痛点</h3>
+<p>在之前的章节中，我们使用原生CSS和HTML构建界面。这种方式存在以下问题：</p>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>需要从零开始写样式（按钮、表单、表格等）</li>
+<li>样式不统一（每个页面风格可能不同）</li>
+<li>开发效率低（重复造轮子）</li>
+<li>响应式适配复杂（需要写大量媒体查询）</li>
+</ul>
+<hr />
+<h3 id="ui框架的解决方案">3.1.2 UI框架的解决方案</h3>
+<p><strong>UI框架</strong>提供了一套预定义的组件和样式，帮助开发者快速构建界面。</p>
+<table>
+<thead>
+<tr class="header">
+<th>传统方式</th>
+<th>UI框架方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>从零开始写样式</td>
+<td><strong>使用现成组件</strong></td>
+</tr>
+<tr class="even">
+<td>样式不统一</td>
+<td><strong>统一的设计规范</strong></td>
+</tr>
+<tr class="odd">
+<td>开发效率低</td>
+<td><strong>快速开发</strong></td>
+</tr>
+<tr class="even">
+<td>响应式复杂</td>
+<td><strong>内置响应式支持</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="ant-design-vue企业级ui框架">3.2 Ant Design
+Vue：企业级UI框架</h2>
+<h3 id="什么是ant-design-vue">3.2.1 什么是Ant Design Vue？</h3>
+<p><strong>Ant Design
+Vue</strong>是蚂蚁集团开源的企业级UI组件库，基于Vue 3开发。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>组件丰富（60+组件）</li>
+<li>设计规范统一</li>
+<li>中文文档完善</li>
+<li>企业级应用广泛使用</li>
+</ul>
+<p><strong>适合初学者的原因</strong>：有完善示例和文档，几乎所有基础UI（按钮、表格、表单、弹窗、栅格）都能直接用，减少CSS工作量。</p>
+<hr />
+<h3 id="安装和使用">3.2.2 安装和使用</h3>
+<p><strong>安装</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install ant-design-vue</span><br></pre></td></tr></table></figure></p>
+<p><strong>引入</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Antd</span> <span class="keyword">from</span> <span class="string">&#x27;ant-design-vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;ant-design-vue/dist/reset.css&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>);</span><br><span class="line">app.<span class="title function_">use</span>(<span class="title class_">Antd</span>);</span><br><span class="line">app.<span class="title function_">mount</span>(<span class="string">&#x27;#app&#x27;</span>);</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>如果只是课堂练习，也可以用 CDN 方式快速体验（无需安装）：<br />
+<code>&lt;script src="https://unpkg.com/ant-design-vue@next/dist/antd.min.js"&gt;&lt;/script&gt;</code></p>
+</blockquote>
+<hr />
+<h3 id="常用组件示例">3.2.3 常用组件示例</h3>
+<p><strong>按钮组件</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-button</span> <span class="attr">type</span>=<span class="string">&quot;primary&quot;</span>&gt;</span>主要按钮<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-button</span> <span class="attr">type</span>=<span class="string">&quot;default&quot;</span>&gt;</span>默认按钮<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-button</span> <span class="attr">type</span>=<span class="string">&quot;dashed&quot;</span>&gt;</span>虚线按钮<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-button</span> <span class="attr">danger</span>&gt;</span>危险按钮<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>要点</strong>：<code>type</code>控制样式，<code>danger</code>显示警示色；常用事件为<code>@click</code>。</p>
+<p><strong>表格组件</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-table</span> <span class="attr">:columns</span>=<span class="string">&quot;columns&quot;</span> <span class="attr">:data-source</span>=<span class="string">&quot;data&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">template</span> #<span class="attr">bodyCell</span>=<span class="string">&quot;&#123; column, record &#125;&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">span</span> <span class="attr">v-if</span>=<span class="string">&quot;column.key === &#x27;action&#x27;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-button</span> @<span class="attr">click</span>=<span class="string">&quot;edit(record)&quot;</span>&gt;</span>编辑<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-button</span> <span class="attr">danger</span> @<span class="attr">click</span>=<span class="string">&quot;delete(record)&quot;</span>&gt;</span>删除<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a-table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">columns</span>: [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">title</span>: <span class="string">&#x27;姓名&#x27;</span>, <span class="attr">dataIndex</span>: <span class="string">&#x27;name&#x27;</span>, <span class="attr">key</span>: <span class="string">&#x27;name&#x27;</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">title</span>: <span class="string">&#x27;年龄&#x27;</span>, <span class="attr">dataIndex</span>: <span class="string">&#x27;age&#x27;</span>, <span class="attr">key</span>: <span class="string">&#x27;age&#x27;</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">title</span>: <span class="string">&#x27;操作&#x27;</span>, <span class="attr">key</span>: <span class="string">&#x27;action&#x27;</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ],</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">data</span>: [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">key</span>: <span class="string">&#x27;1&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">key</span>: <span class="string">&#x27;2&#x27;</span>, <span class="attr">name</span>: <span class="string">&#x27;李四&#x27;</span>, <span class="attr">age</span>: <span class="number">25</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ]</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">edit</span>(<span class="params">record</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;编辑&#x27;</span>, record);</span></span><br><span class="line"><span class="language-javascript">        &#125;,</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">delete</span>(<span class="params">record</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;删除&#x27;</span>, record);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>阅读提示</strong>：</p>
+<ul>
+<li>表格：<code>columns</code>描述列，<code>data-source</code>提供数据，<code>#bodyCell</code>自定义操作列</li>
+<li>弹窗表单：<code>user-form-modal</code>用<code>v-model:visible</code>控制显示，提交后通过<code>@submit</code>把表单数据传回父组件</li>
+<li>逻辑分离：列表负责展示和触发编辑/删除；表单负责输入和校验；父组件负责数据增删改</li>
+</ul>
+<p><strong>要点</strong>：<code>columns</code>定义列头和字段，<code>data-source</code>提供数据；如果需要自定义单元格，用<code>#bodyCell</code>插槽判断<code>column.key</code>。</p>
+<p><strong>表单组件</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-form</span> <span class="attr">:model</span>=<span class="string">&quot;form&quot;</span> @<span class="attr">finish</span>=<span class="string">&quot;onFinish&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-form-item</span> </span></span><br><span class="line"><span class="tag">            <span class="attr">label</span>=<span class="string">&quot;用户名&quot;</span> </span></span><br><span class="line"><span class="tag">            <span class="attr">name</span>=<span class="string">&quot;username&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">:rules</span>=<span class="string">&quot;[&#123; required: true, message: &#x27;请输入用户名&#x27; &#125;]&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-input</span> <span class="attr">v-model:value</span>=<span class="string">&quot;form.username&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-form-item</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">a-form-item</span> </span></span><br><span class="line"><span class="tag">            <span class="attr">label</span>=<span class="string">&quot;密码&quot;</span> </span></span><br><span class="line"><span class="tag">            <span class="attr">name</span>=<span class="string">&quot;password&quot;</span></span></span><br><span class="line"><span class="tag">            <span class="attr">:rules</span>=<span class="string">&quot;[&#123; required: true, message: &#x27;请输入密码&#x27; &#125;]&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-input-password</span> <span class="attr">v-model:value</span>=<span class="string">&quot;form.password&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-form-item</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="tag">&lt;<span class="name">a-form-item</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-button</span> <span class="attr">type</span>=<span class="string">&quot;primary&quot;</span> <span class="attr">html-type</span>=<span class="string">&quot;submit&quot;</span>&gt;</span>提交<span class="tag">&lt;/<span class="name">a-button</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-form-item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a-form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="attr">form</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">username</span>: <span class="string">&#x27;&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">password</span>: <span class="string">&#x27;&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">methods</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">onFinish</span>(<span class="params">values</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;提交的数据：&#x27;</span>, values);</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>要点</strong>：<code>rules</code>里写校验规则（必填、邮箱格式等），提交时触发<code>@finish</code>，表单数据在<code>values</code>中。</p>
+<hr />
+<h2 id="ui框架的价值">3.3 UI框架的价值</h2>
+<h3 id="提升开发效率">3.3.1 提升开发效率</h3>
+<p><strong>对比</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>功能</th>
+<th>传统方式</th>
+<th>UI框架方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>按钮</strong></td>
+<td>写CSS样式、处理状态</td>
+<td>直接使用<code>&lt;a-button&gt;</code></td>
+</tr>
+<tr class="even">
+<td><strong>表格</strong></td>
+<td>写HTML结构、处理排序分页</td>
+<td>使用<code>&lt;a-table&gt;</code>，配置数据即可</td>
+</tr>
+<tr class="odd">
+<td><strong>表单验证</strong></td>
+<td>写JavaScript验证逻辑</td>
+<td>使用<code>&lt;a-form&gt;</code>，配置规则即可</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际效果</strong>：</p>
+<ul>
+<li>开发时间减少60%以上</li>
+<li>代码量减少50%以上</li>
+<li>维护成本降低</li>
+</ul>
+<hr />
+<h3 id="保证设计一致性">3.3.2 保证设计一致性</h3>
+<p>UI框架提供统一的设计规范：</p>
+<ul>
+<li>颜色系统（主色、辅助色、语义色）</li>
+<li>字体系统（字号、行高、字重）</li>
+<li>间距系统（统一的间距规范）</li>
+<li>组件样式（按钮、输入框、卡片等）</li>
+</ul>
+<p><strong>好处</strong>：</p>
+<ul>
+<li>界面风格统一</li>
+<li>用户体验一致</li>
+<li>减少设计决策</li>
+</ul>
+<hr />
+<h3 id="响应式支持">3.3.3 响应式支持</h3>
+<p>UI框架内置响应式支持，无需手动写媒体查询。</p>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Ant Design Vue的栅格系统 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:xs</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:sm</span>=<span class="string">&quot;12&quot;</span> <span class="attr">:md</span>=<span class="string">&quot;8&quot;</span> <span class="attr">:lg</span>=<span class="string">&quot;6&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;card&quot;</span>&gt;</span>卡片1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:xs</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:sm</span>=<span class="string">&quot;12&quot;</span> <span class="attr">:md</span>=<span class="string">&quot;8&quot;</span> <span class="attr">:lg</span>=<span class="string">&quot;6&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;card&quot;</span>&gt;</span>卡片2<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>手机（xs）：每行1个</li>
+<li>平板（sm）：每行2个</li>
+<li>电脑（md/lg）：每行4个</li>
+</ul>
+<hr />
+<h1 id="ai实战使用ai开发用户选择器">4. AI实战：使用AI开发用户选择器</h1>
+<h2 id="任务描述">4.1 任务描述</h2>
+<p><strong>目标</strong>：使用AI工具生成一个用户选择器组件</p>
+<p><strong>功能要求</strong>：</p>
+<ul>
+<li>显示用户列表</li>
+<li>支持搜索用户</li>
+<li>支持多选</li>
+<li>使用Ant Design Vue组件</li>
+<li>可复用、可配置</li>
+</ul>
+<hr />
+<h2 id="第一步设计prompt">4.2 第一步：设计Prompt</h2>
+<p><strong>Prompt示例</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">用Vue 3和Ant Design Vue创建一个用户选择器组件，要求：</span><br><span class="line">1. 使用Ant Design Vue的Select组件</span><br><span class="line">2. 支持搜索功能</span><br><span class="line">3. 支持多选模式</span><br><span class="line">4. 用户数据通过props传入</span><br><span class="line">5. 选择变化时通过emit通知父组件</span><br><span class="line">6. 包含加载状态</span><br><span class="line">7. 代码注释清晰，使用组合式API</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="ai生成的代码示例">4.3 AI生成的代码（示例）</h2>
+<p><strong>用户选择器组件</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;a-select</span><br><span class="line">        v-model:value=&quot;selectedUsers&quot;</span><br><span class="line">        mode=&quot;multiple&quot;</span><br><span class="line">        :options=&quot;filteredOptions&quot;</span><br><span class="line">        :loading=&quot;loading&quot;</span><br><span class="line">        :placeholder=&quot;placeholder&quot;</span><br><span class="line">        :filter-option=&quot;filterOption&quot;</span><br><span class="line">        @change=&quot;handleChange&quot;</span><br><span class="line">        style=&quot;width: 100%&quot;&gt;</span><br><span class="line">    &lt;/a-select&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; ref, computed &#125; from &#x27;vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    name: &#x27;UserSelector&#x27;,</span><br><span class="line">    props: &#123;</span><br><span class="line">        users: &#123;</span><br><span class="line">            type: Array,</span><br><span class="line">            required: true,</span><br><span class="line">            default: () =&gt; []</span><br><span class="line">        &#125;,</span><br><span class="line">        placeholder: &#123;</span><br><span class="line">            type: String,</span><br><span class="line">            default: &#x27;请选择用户&#x27;</span><br><span class="line">        &#125;,</span><br><span class="line">        loading: &#123;</span><br><span class="line">            type: Boolean,</span><br><span class="line">            default: false</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    emits: [&#x27;change&#x27;],</span><br><span class="line">    setup(props, &#123; emit &#125;) &#123;</span><br><span class="line">        const selectedUsers = ref([]);</span><br><span class="line">        </span><br><span class="line">        // 转换用户数据为Select组件需要的格式</span><br><span class="line">        const options = computed(() =&gt; &#123;</span><br><span class="line">            return props.users.map(user =&gt; (&#123;</span><br><span class="line">                label: `$&#123;user.name&#125; ($&#123;user.email&#125;)`,</span><br><span class="line">                value: user.id</span><br><span class="line">            &#125;));</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        // 过滤选项（搜索功能）</span><br><span class="line">        const filterOption = (input, option) =&gt; &#123;</span><br><span class="line">            return option.label.toLowerCase().includes(input.toLowerCase());</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        // 处理选择变化</span><br><span class="line">        const handleChange = (value) =&gt; &#123;</span><br><span class="line">            selectedUsers.value = value;</span><br><span class="line">            emit(&#x27;change&#x27;, value);</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        return &#123;</span><br><span class="line">            selectedUsers,</span><br><span class="line">            options,</span><br><span class="line">            filterOption,</span><br><span class="line">            handleChange</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用方式</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;user-selector </span><br><span class="line">        :users=&quot;users&quot;</span><br><span class="line">        :loading=&quot;isLoading&quot;</span><br><span class="line">        @change=&quot;handleUserChange&quot;&gt;</span><br><span class="line">    &lt;/user-selector&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import UserSelector from &#x27;./components/UserSelector.vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    components: &#123;</span><br><span class="line">        UserSelector</span><br><span class="line">    &#125;,</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            users: [</span><br><span class="line">                &#123; id: 1, name: &#x27;张三&#x27;, email: &#x27;zhangsan@example.com&#x27; &#125;,</span><br><span class="line">                &#123; id: 2, name: &#x27;李四&#x27;, email: &#x27;lisi@example.com&#x27; &#125;</span><br><span class="line">            ],</span><br><span class="line">            isLoading: false</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        handleUserChange(selectedIds) &#123;</span><br><span class="line">            console.log(&#x27;选中的用户ID：&#x27;, selectedIds);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>代码要点（初学者友好版）</strong>：</p>
+<ul>
+<li><code>props.users</code>
+提供用户数据，组件内部用<code>computed options</code>把它转换成<code>Select</code>需要的<code>label/value</code>结构</li>
+<li><code>mode="multiple"</code>
+开启多选，<code>v-model:value</code>双向绑定选中值</li>
+<li><code>filter-option</code> 实现搜索（忽略大小写）</li>
+<li>选择变化时触发<code>@change</code>，通过<code>emit('change', value)</code>把结果告诉父组件</li>
+</ul>
+<hr />
+<h2 id="代码解析">4.4 代码解析</h2>
+<p><strong>核心思路</strong>：</p>
+<ol type="1">
+<li>使用Ant Design Vue的<code>&lt;a-select&gt;</code>组件</li>
+<li>通过props接收用户数据</li>
+<li>使用computed转换数据格式</li>
+<li>通过emit通知父组件选择变化</li>
+<li>支持搜索和多选功能</li>
+</ol>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>组件设计遵循单一职责原则</li>
+<li>通过props和emit实现组件通信</li>
+<li>使用UI框架提升开发效率</li>
+</ul>
+<hr />
+<h1 id="实战案例实现crud界面">5. 实战案例：实现CRUD界面</h1>
+<h2 id="需求分析-1">5.1 需求分析</h2>
+<p>我们要实现一个用户管理的CRUD界面：</p>
+<ul>
+<li><strong>Create</strong>：创建用户</li>
+<li><strong>Read</strong>：查看用户列表</li>
+<li><strong>Update</strong>：更新用户信息</li>
+<li><strong>Delete</strong>：删除用户</li>
+</ul>
+<hr />
+<h2 id="组件设计-1">5.2 组件设计</h2>
+<h3 id="用户列表组件">5.2.1 用户列表组件</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;user-management&quot;&gt;</span><br><span class="line">        &lt;a-button type=&quot;primary&quot; @click=&quot;showAddModal&quot;&gt;添加用户&lt;/a-button&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;a-table </span><br><span class="line">            :columns=&quot;columns&quot; </span><br><span class="line">            :data-source=&quot;users&quot;</span><br><span class="line">            :pagination=&quot;&#123; pageSize: 10 &#125;&quot;</span><br><span class="line">            style=&quot;margin-top: 20px&quot;&gt;</span><br><span class="line">            &lt;template #bodyCell=&quot;&#123; column, record &#125;&quot;&gt;</span><br><span class="line">                &lt;span v-if=&quot;column.key === &#x27;action&#x27;&quot;&gt;</span><br><span class="line">                    &lt;a-button @click=&quot;editUser(record)&quot;&gt;编辑&lt;/a-button&gt;</span><br><span class="line">                    &lt;a-button danger @click=&quot;deleteUser(record.id)&quot;&gt;删除&lt;/a-button&gt;</span><br><span class="line">                &lt;/span&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">        &lt;/a-table&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;user-form-modal </span><br><span class="line">            v-model:visible=&quot;modalVisible&quot;</span><br><span class="line">            :user=&quot;currentUser&quot;</span><br><span class="line">            @submit=&quot;handleSubmit&quot;&gt;</span><br><span class="line">        &lt;/user-form-modal&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; ref &#125; from &#x27;vue&#x27;;</span><br><span class="line">import UserFormModal from &#x27;./UserFormModal.vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    components: &#123;</span><br><span class="line">        UserFormModal</span><br><span class="line">    &#125;,</span><br><span class="line">    setup() &#123;</span><br><span class="line">        const users = ref([</span><br><span class="line">            &#123; id: 1, name: &#x27;张三&#x27;, email: &#x27;zhangsan@example.com&#x27;, age: 20 &#125;,</span><br><span class="line">            &#123; id: 2, name: &#x27;李四&#x27;, email: &#x27;lisi@example.com&#x27;, age: 25 &#125;</span><br><span class="line">        ]);</span><br><span class="line">        </span><br><span class="line">        const modalVisible = ref(false);</span><br><span class="line">        const currentUser = ref(null);</span><br><span class="line">        const isEdit = ref(false);</span><br><span class="line">        </span><br><span class="line">        const columns = [</span><br><span class="line">            &#123; title: &#x27;ID&#x27;, dataIndex: &#x27;id&#x27;, key: &#x27;id&#x27; &#125;,</span><br><span class="line">            &#123; title: &#x27;姓名&#x27;, dataIndex: &#x27;name&#x27;, key: &#x27;name&#x27; &#125;,</span><br><span class="line">            &#123; title: &#x27;邮箱&#x27;, dataIndex: &#x27;email&#x27;, key: &#x27;email&#x27; &#125;,</span><br><span class="line">            &#123; title: &#x27;年龄&#x27;, dataIndex: &#x27;age&#x27;, key: &#x27;age&#x27; &#125;,</span><br><span class="line">            &#123; title: &#x27;操作&#x27;, key: &#x27;action&#x27; &#125;</span><br><span class="line">        ];</span><br><span class="line">        </span><br><span class="line">        const showAddModal = () =&gt; &#123;</span><br><span class="line">            currentUser.value = null;</span><br><span class="line">            isEdit.value = false;</span><br><span class="line">            modalVisible.value = true;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        const editUser = (user) =&gt; &#123;</span><br><span class="line">            currentUser.value = &#123; ...user &#125;;</span><br><span class="line">            isEdit.value = true;</span><br><span class="line">            modalVisible.value = true;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        const deleteUser = (id) =&gt; &#123;</span><br><span class="line">            users.value = users.value.filter(u =&gt; u.id !== id);</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        const handleSubmit = (userData) =&gt; &#123;</span><br><span class="line">            if (isEdit.value) &#123;</span><br><span class="line">                // 更新用户</span><br><span class="line">                const index = users.value.findIndex(u =&gt; u.id === currentUser.value.id);</span><br><span class="line">                users.value[index] = &#123; ...currentUser.value, ...userData &#125;;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 添加用户</span><br><span class="line">                users.value.push(&#123;</span><br><span class="line">                    id: Date.now(),</span><br><span class="line">                    ...userData</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">            modalVisible.value = false;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        return &#123;</span><br><span class="line">            users,</span><br><span class="line">            columns,</span><br><span class="line">            modalVisible,</span><br><span class="line">            currentUser,</span><br><span class="line">            showAddModal,</span><br><span class="line">            editUser,</span><br><span class="line">            deleteUser,</span><br><span class="line">            handleSubmit</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="用户表单组件">5.2.2 用户表单组件</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;a-modal </span><br><span class="line">        v-model:visible=&quot;visible&quot;</span><br><span class="line">        :title=&quot;isEdit ? &#x27;编辑用户&#x27; : &#x27;添加用户&#x27;&quot;</span><br><span class="line">        @ok=&quot;handleSubmit&quot;</span><br><span class="line">        @cancel=&quot;handleCancel&quot;&gt;</span><br><span class="line">        &lt;a-form :model=&quot;form&quot; :rules=&quot;rules&quot; ref=&quot;formRef&quot;&gt;</span><br><span class="line">            &lt;a-form-item label=&quot;姓名&quot; name=&quot;name&quot;&gt;</span><br><span class="line">                &lt;a-input v-model:value=&quot;form.name&quot; /&gt;</span><br><span class="line">            &lt;/a-form-item&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;a-form-item label=&quot;邮箱&quot; name=&quot;email&quot;&gt;</span><br><span class="line">                &lt;a-input v-model:value=&quot;form.email&quot; /&gt;</span><br><span class="line">            &lt;/a-form-item&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;a-form-item label=&quot;年龄&quot; name=&quot;age&quot;&gt;</span><br><span class="line">                &lt;a-input-number v-model:value=&quot;form.age&quot; :min=&quot;0&quot; :max=&quot;150&quot; /&gt;</span><br><span class="line">            &lt;/a-form-item&gt;</span><br><span class="line">        &lt;/a-form&gt;</span><br><span class="line">    &lt;/a-modal&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; ref, watch &#125; from &#x27;vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    props: &#123;</span><br><span class="line">        visible: &#123;</span><br><span class="line">            type: Boolean,</span><br><span class="line">            default: false</span><br><span class="line">        &#125;,</span><br><span class="line">        user: &#123;</span><br><span class="line">            type: Object,</span><br><span class="line">            default: null</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    emits: [&#x27;update:visible&#x27;, &#x27;submit&#x27;],</span><br><span class="line">    setup(props, &#123; emit &#125;) &#123;</span><br><span class="line">        const formRef = ref(null);</span><br><span class="line">        const form = ref(&#123;</span><br><span class="line">            name: &#x27;&#x27;,</span><br><span class="line">            email: &#x27;&#x27;,</span><br><span class="line">            age: 0</span><br><span class="line">        &#125;);</span><br><span class="line">        </span><br><span class="line">        const rules = &#123;</span><br><span class="line">            name: [&#123; required: true, message: &#x27;请输入姓名&#x27; &#125;],</span><br><span class="line">            email: [</span><br><span class="line">                &#123; required: true, message: &#x27;请输入邮箱&#x27; &#125;,</span><br><span class="line">                &#123; type: &#x27;email&#x27;, message: &#x27;邮箱格式不正确&#x27; &#125;</span><br><span class="line">            ],</span><br><span class="line">            age: [&#123; required: true, message: &#x27;请输入年龄&#x27; &#125;]</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        const isEdit = computed(() =&gt; props.user !== null);</span><br><span class="line">        </span><br><span class="line">        // 监听user变化，填充表单</span><br><span class="line">        watch(() =&gt; props.user, (newUser) =&gt; &#123;</span><br><span class="line">            if (newUser) &#123;</span><br><span class="line">                form.value = &#123; ...newUser &#125;;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                form.value = &#123; name: &#x27;&#x27;, email: &#x27;&#x27;, age: 0 &#125;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, &#123; immediate: true &#125;);</span><br><span class="line">        </span><br><span class="line">        const handleSubmit = async () =&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                await formRef.value.validate();</span><br><span class="line">                emit(&#x27;submit&#x27;, form.value);</span><br><span class="line">                emit(&#x27;update:visible&#x27;, false);</span><br><span class="line">            &#125; catch (error) &#123;</span><br><span class="line">                console.log(&#x27;验证失败&#x27;, error);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        const handleCancel = () =&gt; &#123;</span><br><span class="line">            emit(&#x27;update:visible&#x27;, false);</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        return &#123;</span><br><span class="line">            formRef,</span><br><span class="line">            form,</span><br><span class="line">            rules,</span><br><span class="line">            isEdit,</span><br><span class="line">            handleSubmit,</span><br><span class="line">            handleCancel</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>阅读提示</strong>：</p>
+<ul>
+<li><code>v-model:visible</code> 控制弹窗显示/隐藏</li>
+<li><code>rules</code> 定义表单校验（必填、邮箱格式、年龄范围）</li>
+<li><code>watch</code>
+监听传入的<code>user</code>，决定是“新增”还是“编辑”并填充表单</li>
+<li>提交时先校验（<code>formRef.validate()</code>），通过<code>emit('submit', form)</code>把数据传回父组件</li>
+</ul>
+<hr />
+<h2 id="代码解析-1">5.3 代码解析</h2>
+<p><strong>核心思路</strong>：</p>
+<ol type="1">
+<li>使用Ant Design Vue的表格和表单组件</li>
+<li>通过props和emit实现组件通信</li>
+<li>使用v-model实现双向绑定</li>
+<li>表单验证使用Ant Design Vue的规则系统</li>
+</ol>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>组件职责分离（列表组件、表单组件）</li>
+<li>通过事件实现组件通信</li>
+<li>使用UI框架提升开发效率</li>
+</ul>
+<hr />
+<h1 id="选讲动态组件与插槽">6. 选讲：动态组件与插槽</h1>
+<h2 id="动态组件">6.1 动态组件</h2>
+<h3 id="什么是动态组件">6.1.1 什么是动态组件？</h3>
+<p><strong>动态组件</strong>允许根据条件动态切换不同的组件。</p>
+<p><strong>语法</strong>：<code>&lt;component :is="组件名"&gt;</code></p>
+<p><strong>实际例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;button @click=&quot;currentTab = &#x27;tab1&#x27;&quot;&gt;标签1&lt;/button&gt;</span><br><span class="line">        &lt;button @click=&quot;currentTab = &#x27;tab2&#x27;&quot;&gt;标签2&lt;/button&gt;</span><br><span class="line">        &lt;button @click=&quot;currentTab = &#x27;tab3&#x27;&quot;&gt;标签3&lt;/button&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;component :is=&quot;currentTab&quot;&gt;&lt;/component&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            currentTab: &#x27;tab1&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    components: &#123;</span><br><span class="line">        tab1: &#123; template: &#x27;&lt;div&gt;标签1的内容&lt;/div&gt;&#x27; &#125;,</span><br><span class="line">        tab2: &#123; template: &#x27;&lt;div&gt;标签2的内容&lt;/div&gt;&#x27; &#125;,</span><br><span class="line">        tab3: &#123; template: &#x27;&lt;div&gt;标签3的内容&lt;/div&gt;&#x27; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="动态组件的应用场景">6.1.2 动态组件的应用场景</h3>
+<p><strong>常见场景</strong>：</p>
+<ul>
+<li>标签页切换</li>
+<li>条件渲染不同组件</li>
+<li>路由组件切换</li>
+</ul>
+<hr />
+<h2 id="插槽slot">6.2 插槽（Slot）</h2>
+<h3 id="为什么需要插槽">6.2.1 为什么需要插槽？</h3>
+<p><strong>问题场景</strong>：假设我们要创建一个卡片组件，但不同地方使用的卡片内容完全不同。</p>
+<p><strong>没有插槽的问题</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 方式1：写死内容，无法复用 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">        &lt;h3&gt;用户信息&lt;/h3&gt;</span><br><span class="line">        &lt;p&gt;张三&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;!-- 问题：只能显示&quot;用户信息&quot;，其他地方想显示&quot;商品信息&quot;就不行了 --&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 方式2：用props传递，但很麻烦 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">        &lt;h3&gt;&#123;&#123; title &#125;&#125;&lt;/h3&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; content &#125;&#125;&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;!-- 问题：如果内容很复杂（包含多个元素、按钮、图片等），用props传递会很麻烦 --&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>插槽的解决方案</strong>：
+插槽允许父组件把<strong>任意内容</strong>（HTML、组件等）传递给子组件，子组件在指定位置显示这些内容。</p>
+<p><strong>类比理解</strong>： -
+<strong>Props</strong>：像传参数，只能传数据 -
+<strong>插槽</strong>：像传"模板"，可以传完整的HTML结构</p>
+<hr />
+<h3 id="普通插槽默认插槽">6.2.2 普通插槽（默认插槽）</h3>
+<p><strong>基本概念</strong>：
+普通插槽是最简单的插槽，子组件用<code>&lt;slot&gt;</code>标记一个位置，父组件传入的内容会显示在这个位置。</p>
+<p><strong>完整例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件：Card.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;card&quot; style=&quot;border: 1px solid #ccc; padding: 20px; margin: 10px;&quot;&gt;</span><br><span class="line">        &lt;h3&gt;卡片标题&lt;/h3&gt;</span><br><span class="line">        &lt;!-- slot标记：这里会显示父组件传入的内容 --&gt;</span><br><span class="line">        &lt;slot&gt;&lt;/slot&gt;</span><br><span class="line">        &lt;p style=&quot;color: #999; font-size: 12px;&quot;&gt;卡片底部&lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 父组件：App.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;!-- 使用Card组件，在组件标签内部写的内容会显示在slot位置 --&gt;</span><br><span class="line">        &lt;card&gt;</span><br><span class="line">            &lt;p&gt;这是第一张卡片的内容&lt;/p&gt;</span><br><span class="line">            &lt;button&gt;点击按钮&lt;/button&gt;</span><br><span class="line">        &lt;/card&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;card&gt;</span><br><span class="line">            &lt;img src=&quot;image.jpg&quot; alt=&quot;图片&quot;&gt;</span><br><span class="line">            &lt;p&gt;这是第二张卡片，内容完全不同&lt;/p&gt;</span><br><span class="line">        &lt;/card&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import Card from &#x27;./Card.vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    components: &#123;</span><br><span class="line">        Card</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>运行效果</strong>： -
+第一张卡片：显示"这是第一张卡片的内容"和按钮 -
+第二张卡片：显示图片和文字 -
+两张卡片都有相同的"卡片标题"和"卡片底部"，但中间内容不同</p>
+<p><strong>代码解读</strong>： 1.
+<strong>子组件</strong>：<code>&lt;slot&gt;&lt;/slot&gt;</code>是一个占位符，表示"这里会显示父组件传入的内容"
+2.
+<strong>父组件</strong>：在<code>&lt;card&gt;</code>标签内部写的内容，会自动替换子组件中的<code>&lt;slot&gt;</code>
+3. <strong>灵活性</strong>：同一个Card组件，可以显示完全不同的内容</p>
+<p><strong>默认内容</strong>：
+如果父组件没有传入内容，可以给插槽设置默认内容： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;card&quot;&gt;</span><br><span class="line">        &lt;slot&gt;</span><br><span class="line">            &lt;!-- 默认内容：如果父组件没传内容，就显示这个 --&gt;</span><br><span class="line">            &lt;p&gt;暂无内容&lt;/p&gt;</span><br><span class="line">        &lt;/slot&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="具名插槽named-slots">6.2.3 具名插槽（Named Slots）</h3>
+<p><strong>为什么需要具名插槽？</strong>
+普通插槽只能有一个位置，但如果子组件有多个位置需要插入内容（比如头部、主体、底部），就需要具名插槽。</p>
+<p><strong>基本概念</strong>：
+具名插槽通过<code>name</code>属性区分不同的插槽位置，父组件通过<code>#插槽名</code>或<code>v-slot:插槽名</code>指定内容插入到哪个位置。</p>
+<p><strong>完整例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件：Layout.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;layout&quot;&gt;</span><br><span class="line">        &lt;!-- 头部插槽：name=&quot;header&quot; --&gt;</span><br><span class="line">        &lt;header style=&quot;background: #f0f0f0; padding: 10px;&quot;&gt;</span><br><span class="line">            &lt;slot name=&quot;header&quot;&gt;&lt;/slot&gt;</span><br><span class="line">        &lt;/header&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;!-- 主体插槽：没有name，是默认插槽 --&gt;</span><br><span class="line">        &lt;main style=&quot;padding: 20px; min-height: 200px;&quot;&gt;</span><br><span class="line">            &lt;slot&gt;&lt;/slot&gt;</span><br><span class="line">        &lt;/main&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;!-- 底部插槽：name=&quot;footer&quot; --&gt;</span><br><span class="line">        &lt;footer style=&quot;background: #f0f0f0; padding: 10px; text-align: center;&quot;&gt;</span><br><span class="line">            &lt;slot name=&quot;footer&quot;&gt;&lt;/slot&gt;</span><br><span class="line">        &lt;/footer&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 父组件：App.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;layout&gt;</span><br><span class="line">        &lt;!-- 方式1：使用 #header 语法（推荐，简洁） --&gt;</span><br><span class="line">        &lt;template #header&gt;</span><br><span class="line">            &lt;h1&gt;网站标题&lt;/h1&gt;</span><br><span class="line">            &lt;nav&gt;</span><br><span class="line">                &lt;a href=&quot;#&quot;&gt;首页&lt;/a&gt;</span><br><span class="line">                &lt;a href=&quot;#&quot;&gt;关于&lt;/a&gt;</span><br><span class="line">            &lt;/nav&gt;</span><br><span class="line">        &lt;/template&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;!-- 默认插槽：直接写内容，不需要template包裹 --&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;h2&gt;主要内容区域&lt;/h2&gt;</span><br><span class="line">            &lt;p&gt;这里是页面的主要内容...&lt;/p&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;!-- 方式2：使用 v-slot:footer 语法（完整写法） --&gt;</span><br><span class="line">        &lt;template v-slot:footer&gt;</span><br><span class="line">            &lt;p&gt;© 2025 版权所有&lt;/p&gt;</span><br><span class="line">            &lt;p&gt;联系方式：xxx@example.com&lt;/p&gt;</span><br><span class="line">        &lt;/template&gt;</span><br><span class="line">    &lt;/layout&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import Layout from &#x27;./Layout.vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    components: &#123;</span><br><span class="line">        Layout</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>代码解读</strong>： 1. <strong>子组件</strong>： -
+<code>&lt;slot name="header"&gt;</code>：头部插槽，name是"header" -
+<code>&lt;slot&gt;</code>：默认插槽，没有name（或name="default"） -
+<code>&lt;slot name="footer"&gt;</code>：底部插槽，name是"footer"</p>
+<ol start="2" type="1">
+<li><strong>父组件</strong>：
+<ul>
+<li><code>&lt;template #header&gt;</code>：<code>#</code>是<code>v-slot:</code>的简写，表示内容插入到name="header"的插槽</li>
+<li>直接写的内容（没有template包裹）：插入到默认插槽</li>
+<li><code>&lt;template v-slot:footer&gt;</code>：完整写法，效果和<code>#footer</code>一样</li>
+</ul></li>
+<li><strong>执行流程</strong>：
+<ul>
+<li>Vue找到<code>#header</code>的内容，放到<code>&lt;slot name="header"&gt;</code>位置</li>
+<li>Vue找到默认内容，放到<code>&lt;slot&gt;</code>位置</li>
+<li>Vue找到<code>#footer</code>的内容，放到<code>&lt;slot name="footer"&gt;</code>位置</li>
+</ul></li>
+</ol>
+<p><strong>语法说明</strong>： - <code>#header</code> 是
+<code>v-slot:header</code> 的简写 - <code>#default</code>
+是默认插槽的完整写法（通常省略） -
+多个具名插槽可以按任意顺序写，Vue会根据name自动匹配</p>
+<hr />
+<h3 id="作用域插槽scoped-slots">6.2.4 作用域插槽（Scoped Slots）</h3>
+<p><strong>为什么需要作用域插槽？</strong>
+有时候，子组件需要向插槽传递数据，让父组件可以使用这些数据来渲染内容。</p>
+<p><strong>问题场景</strong>：
+子组件有一个列表，但父组件想自定义每个列表项的显示方式。</p>
+<p><strong>没有作用域插槽的问题</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li v-for=&quot;item in items&quot; :key=&quot;item.id&quot;&gt;</span><br><span class="line">            &lt;!-- 问题：这里写死了显示方式，父组件无法自定义 --&gt;</span><br><span class="line">            &#123;&#123; item.name &#125;&#125;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>作用域插槽的解决方案</strong>：
+子组件通过<code>&lt;slot&gt;</code>的绑定属性传递数据，父组件接收这些数据并自定义显示方式。</p>
+<p><strong>完整例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件：UserList.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &lt;li v-for=&quot;user in users&quot; :key=&quot;user.id&quot; style=&quot;padding: 10px; border-bottom: 1px solid #eee;&quot;&gt;</span><br><span class="line">            &lt;!-- 通过 :user=&quot;user&quot; 把当前循环的user数据传递给插槽 --&gt;</span><br><span class="line">            &lt;slot :user=&quot;user&quot; :index=&quot;index&quot;&gt;&lt;/slot&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    props: &#123;</span><br><span class="line">        users: &#123;</span><br><span class="line">            type: Array,</span><br><span class="line">            required: true</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 父组件：App.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;!-- 方式1：简单显示 --&gt;</span><br><span class="line">        &lt;user-list :users=&quot;users&quot;&gt;</span><br><span class="line">            &lt;!-- &#123; user &#125; 是解构语法，从slot传递的对象中取出user属性 --&gt;</span><br><span class="line">            &lt;template #default=&quot;&#123; user &#125;&quot;&gt;</span><br><span class="line">                &lt;span&gt;&#123;&#123; user.name &#125;&#125; - &#123;&#123; user.email &#125;&#125;&lt;/span&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">        &lt;/user-list&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;!-- 方式2：复杂显示，带按钮 --&gt;</span><br><span class="line">        &lt;user-list :users=&quot;users&quot;&gt;</span><br><span class="line">            &lt;!-- 也可以不解构，直接用 slotProps.user --&gt;</span><br><span class="line">            &lt;template #default=&quot;slotProps&quot;&gt;</span><br><span class="line">                &lt;div style=&quot;display: flex; justify-content: space-between;&quot;&gt;</span><br><span class="line">                    &lt;div&gt;</span><br><span class="line">                        &lt;strong&gt;&#123;&#123; slotProps.user.name &#125;&#125;&lt;/strong&gt;</span><br><span class="line">                        &lt;p style=&quot;color: #999;&quot;&gt;&#123;&#123; slotProps.user.email &#125;&#125;&lt;/p&gt;</span><br><span class="line">                    &lt;/div&gt;</span><br><span class="line">                    &lt;button @click=&quot;editUser(slotProps.user)&quot;&gt;编辑&lt;/button&gt;</span><br><span class="line">                &lt;/div&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">        &lt;/user-list&gt;</span><br><span class="line">        </span><br><span class="line">        &lt;!-- 方式3：根据条件显示不同内容 --&gt;</span><br><span class="line">        &lt;user-list :users=&quot;users&quot;&gt;</span><br><span class="line">            &lt;template #default=&quot;&#123; user &#125;&quot;&gt;</span><br><span class="line">                &lt;span v-if=&quot;user.age &gt;= 18&quot; style=&quot;color: green;&quot;&gt;</span><br><span class="line">                    &#123;&#123; user.name &#125;&#125;（成年人）</span><br><span class="line">                &lt;/span&gt;</span><br><span class="line">                &lt;span v-else style=&quot;color: orange;&quot;&gt;</span><br><span class="line">                    &#123;&#123; user.name &#125;&#125;（未成年人）</span><br><span class="line">                &lt;/span&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">        &lt;/user-list&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import UserList from &#x27;./UserList.vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    components: &#123;</span><br><span class="line">        UserList</span><br><span class="line">    &#125;,</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            users: [</span><br><span class="line">                &#123; id: 1, name: &#x27;张三&#x27;, email: &#x27;zhangsan@example.com&#x27;, age: 20 &#125;,</span><br><span class="line">                &#123; id: 2, name: &#x27;李四&#x27;, email: &#x27;lisi@example.com&#x27;, age: 16 &#125;,</span><br><span class="line">                &#123; id: 3, name: &#x27;王五&#x27;, email: &#x27;wangwu@example.com&#x27;, age: 25 &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        editUser(user) &#123;</span><br><span class="line">            console.log(&#x27;编辑用户：&#x27;, user);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>代码解读</strong>： 1. <strong>子组件</strong>： -
+<code>&lt;slot :user="user"&gt;</code>：通过<code>:user="user"</code>把数据绑定到slot上
+- 这个绑定的数据会传递给父组件</p>
+<ol start="2" type="1">
+<li><strong>父组件</strong>：
+<ul>
+<li><code>#default="&#123; user &#125;"</code>：接收slot传递的数据，解构出<code>user</code>属性</li>
+<li><code>#default="slotProps"</code>：完整写法，<code>slotProps</code>是一个对象，包含所有绑定的数据</li>
+<li>父组件可以用这些数据自定义显示方式</li>
+</ul></li>
+<li><strong>数据流向</strong>：
+<ul>
+<li>子组件 → 插槽绑定 → 父组件接收 → 自定义渲染</li>
+<li>子组件负责提供数据和结构，父组件负责决定如何显示</li>
+</ul></li>
+</ol>
+<p><strong>传递多个数据</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 --&gt;</span><br><span class="line">&lt;slot :user=&quot;user&quot; :index=&quot;index&quot; :isLast=&quot;index === items.length - 1&quot;&gt;&lt;/slot&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 父组件 --&gt;</span><br><span class="line">&lt;template #default=&quot;&#123; user, index, isLast &#125;&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &lt;span&gt;第&#123;&#123; index + 1 &#125;&#125;项：&#123;&#123; user.name &#125;&#125;&lt;/span&gt;</span><br><span class="line">        &lt;span v-if=&quot;isLast&quot;&gt;（最后一项）&lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际应用场景</strong>： -
+表格组件：子组件提供数据，父组件自定义每列的显示方式 -
+列表组件：子组件提供列表项数据，父组件自定义每个项的样式 -
+卡片组件：子组件提供数据，父组件决定如何展示</p>
+<hr />
+<h2 id="插槽的实际应用">6.3 插槽的实际应用</h2>
+<h3 id="表格组件中的插槽">6.3.1 表格组件中的插槽</h3>
+<p><strong>实际场景</strong>：使用Ant Design
+Vue的表格组件时，我们想自定义某些列的显示方式（比如状态显示为标签，操作列显示按钮）。</p>
+<p><strong>完整例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;a-table :columns=&quot;columns&quot; :data-source=&quot;data&quot;&gt;</span><br><span class="line">        &lt;!-- bodyCell是Ant Design Vue提供的插槽，用于自定义单元格内容 --&gt;</span><br><span class="line">        &lt;template #bodyCell=&quot;&#123; column, record &#125;&quot;&gt;</span><br><span class="line">            &lt;!-- column：当前列的配置信息（包含key、title等） --&gt;</span><br><span class="line">            &lt;!-- record：当前行的数据对象 --&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!-- 如果当前列是status列，显示为标签 --&gt;</span><br><span class="line">            &lt;template v-if=&quot;column.key === &#x27;status&#x27;&quot;&gt;</span><br><span class="line">                &lt;a-tag :color=&quot;record.status === &#x27;active&#x27; ? &#x27;green&#x27; : &#x27;red&#x27;&quot;&gt;</span><br><span class="line">                    &#123;&#123; record.status === &#x27;active&#x27; ? &#x27;激活&#x27; : &#x27;禁用&#x27; &#125;&#125;</span><br><span class="line">                &lt;/a-tag&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!-- 如果当前列是action列，显示操作按钮 --&gt;</span><br><span class="line">            &lt;template v-else-if=&quot;column.key === &#x27;action&#x27;&quot;&gt;</span><br><span class="line">                &lt;a-button @click=&quot;edit(record)&quot; style=&quot;margin-right: 8px;&quot;&gt;编辑&lt;/a-button&gt;</span><br><span class="line">                &lt;a-button danger @click=&quot;delete(record)&quot;&gt;删除&lt;/a-button&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!-- 其他列使用默认显示方式 --&gt;</span><br><span class="line">        &lt;/template&gt;</span><br><span class="line">    &lt;/a-table&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            columns: [</span><br><span class="line">                &#123; title: &#x27;ID&#x27;, dataIndex: &#x27;id&#x27;, key: &#x27;id&#x27; &#125;,</span><br><span class="line">                &#123; title: &#x27;姓名&#x27;, dataIndex: &#x27;name&#x27;, key: &#x27;name&#x27; &#125;,</span><br><span class="line">                &#123; title: &#x27;状态&#x27;, dataIndex: &#x27;status&#x27;, key: &#x27;status&#x27; &#125;,</span><br><span class="line">                &#123; title: &#x27;操作&#x27;, key: &#x27;action&#x27; &#125;  // 注意：操作列没有dataIndex</span><br><span class="line">            ],</span><br><span class="line">            data: [</span><br><span class="line">                &#123; id: 1, name: &#x27;张三&#x27;, status: &#x27;active&#x27; &#125;,</span><br><span class="line">                &#123; id: 2, name: &#x27;李四&#x27;, status: &#x27;inactive&#x27; &#125;,</span><br><span class="line">                &#123; id: 3, name: &#x27;王五&#x27;, status: &#x27;active&#x27; &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        edit(record) &#123;</span><br><span class="line">            console.log(&#x27;编辑：&#x27;, record);</span><br><span class="line">        &#125;,</span><br><span class="line">        delete(record) &#123;</span><br><span class="line">            console.log(&#x27;删除：&#x27;, record);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>代码解读</strong>： 1.
+<strong><code>#bodyCell</code>插槽</strong>： - 这是Ant Design
+Vue提供的插槽，用于自定义表格单元格的显示 -
+每个单元格都会调用这个插槽，传入<code>column</code>（列信息）和<code>record</code>（行数据）</p>
+<ol start="2" type="1">
+<li><strong><code>column.key</code>的作用</strong>：
+<ul>
+<li>通过<code>column.key</code>判断当前是哪个列</li>
+<li>在columns配置中，每个列都有一个<code>key</code>属性</li>
+</ul></li>
+<li><strong><code>record</code>的作用</strong>：
+<ul>
+<li><code>record</code>是当前行的完整数据对象</li>
+<li>可以通过<code>record.id</code>、<code>record.name</code>等访问该行的所有数据</li>
+</ul></li>
+<li><strong>执行流程</strong>：
+<ul>
+<li>表格渲染每一行时，对每个单元格调用<code>bodyCell</code>插槽</li>
+<li>根据<code>column.key</code>判断是哪个列，决定显示什么内容</li>
+<li>status列：显示为带颜色的标签</li>
+<li>action列：显示编辑和删除按钮</li>
+<li>其他列：使用默认显示（直接显示<code>dataIndex</code>对应的值）</li>
+</ul></li>
+</ol>
+<p><strong>更复杂的例子</strong>：自定义头像列 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;a-table :columns=&quot;columns&quot; :data-source=&quot;data&quot;&gt;</span><br><span class="line">        &lt;template #bodyCell=&quot;&#123; column, record &#125;&quot;&gt;</span><br><span class="line">            &lt;!-- 头像列：显示图片 --&gt;</span><br><span class="line">            &lt;template v-if=&quot;column.key === &#x27;avatar&#x27;&quot;&gt;</span><br><span class="line">                &lt;img :src=&quot;record.avatar&quot; :alt=&quot;record.name&quot; style=&quot;width: 40px; height: 40px; border-radius: 50%;&quot;&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!-- 状态列：根据状态显示不同颜色 --&gt;</span><br><span class="line">            &lt;template v-else-if=&quot;column.key === &#x27;status&#x27;&quot;&gt;</span><br><span class="line">                &lt;a-tag :color=&quot;getStatusColor(record.status)&quot;&gt;</span><br><span class="line">                    &#123;&#123; getStatusText(record.status) &#125;&#125;</span><br><span class="line">                &lt;/a-tag&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">            </span><br><span class="line">            &lt;!-- 操作列：多个按钮 --&gt;</span><br><span class="line">            &lt;template v-else-if=&quot;column.key === &#x27;action&#x27;&quot;&gt;</span><br><span class="line">                &lt;a-space&gt;</span><br><span class="line">                    &lt;a-button size=&quot;small&quot; @click=&quot;view(record)&quot;&gt;查看&lt;/a-button&gt;</span><br><span class="line">                    &lt;a-button size=&quot;small&quot; type=&quot;primary&quot; @click=&quot;edit(record)&quot;&gt;编辑&lt;/a-button&gt;</span><br><span class="line">                    &lt;a-button size=&quot;small&quot; danger @click=&quot;delete(record)&quot;&gt;删除&lt;/a-button&gt;</span><br><span class="line">                &lt;/a-space&gt;</span><br><span class="line">            &lt;/template&gt;</span><br><span class="line">        &lt;/template&gt;</span><br><span class="line">    &lt;/a-table&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            columns: [</span><br><span class="line">                &#123; title: &#x27;头像&#x27;, key: &#x27;avatar&#x27; &#125;,</span><br><span class="line">                &#123; title: &#x27;姓名&#x27;, dataIndex: &#x27;name&#x27;, key: &#x27;name&#x27; &#125;,</span><br><span class="line">                &#123; title: &#x27;状态&#x27;, key: &#x27;status&#x27; &#125;,</span><br><span class="line">                &#123; title: &#x27;操作&#x27;, key: &#x27;action&#x27; &#125;</span><br><span class="line">            ],</span><br><span class="line">            data: [</span><br><span class="line">                &#123; id: 1, name: &#x27;张三&#x27;, avatar: &#x27;/avatar1.jpg&#x27;, status: &#x27;active&#x27; &#125;,</span><br><span class="line">                &#123; id: 2, name: &#x27;李四&#x27;, avatar: &#x27;/avatar2.jpg&#x27;, status: &#x27;pending&#x27; &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        getStatusColor(status) &#123;</span><br><span class="line">            const colors = &#123;</span><br><span class="line">                active: &#x27;green&#x27;,</span><br><span class="line">                pending: &#x27;orange&#x27;,</span><br><span class="line">                inactive: &#x27;red&#x27;</span><br><span class="line">            &#125;;</span><br><span class="line">            return colors[status] || &#x27;default&#x27;;</span><br><span class="line">        &#125;,</span><br><span class="line">        getStatusText(status) &#123;</span><br><span class="line">            const texts = &#123;</span><br><span class="line">                active: &#x27;激活&#x27;,</span><br><span class="line">                pending: &#x27;待审核&#x27;,</span><br><span class="line">                inactive: &#x27;禁用&#x27;</span><br><span class="line">            &#125;;</span><br><span class="line">            return texts[status] || status;</span><br><span class="line">        &#125;,</span><br><span class="line">        view(record) &#123; /* ... */ &#125;,</span><br><span class="line">        edit(record) &#123; /* ... */ &#125;,</span><br><span class="line">        delete(record) &#123; /* ... */ &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>关键要点</strong>： -
+插槽让表格组件变得非常灵活，可以自定义任何列的显示方式 -
+不需要修改表格组件本身的代码，只需要在使用时通过插槽自定义 -
+这是组件设计"可扩展性"的体现</p>
+<hr />
+<h3 id="插槽总结">6.3.2 插槽总结</h3>
+<p><strong>三种插槽对比</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>插槽类型</th>
+<th>使用场景</th>
+<th>语法特点</th>
+<th>数据流向</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>普通插槽</strong></td>
+<td>只有一个位置需要插入内容</td>
+<td><code>&lt;slot&gt;&lt;/slot&gt;</code></td>
+<td>父组件 → 子组件</td>
+</tr>
+<tr class="even">
+<td><strong>具名插槽</strong></td>
+<td>多个位置需要插入不同内容</td>
+<td><code>&lt;slot name="xxx"&gt;</code> + <code>#xxx</code></td>
+<td>父组件 → 子组件（多个位置）</td>
+</tr>
+<tr class="odd">
+<td><strong>作用域插槽</strong></td>
+<td>子组件需要向父组件传递数据</td>
+<td><code>&lt;slot :data="data"&gt;</code> +
+<code>#default="&#123; data &#125;"</code></td>
+<td>子组件 → 父组件（数据）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>记忆要点</strong>：</p>
+<ol type="1">
+<li><p><strong>普通插槽</strong>：最简单的插槽，父组件传内容，子组件显示
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 --&gt;</span><br><span class="line">&lt;slot&gt;&lt;/slot&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 父组件 --&gt;</span><br><span class="line">&lt;my-component&gt;内容&lt;/my-component&gt;</span><br></pre></td></tr></table></figure></p></li>
+<li><p><strong>具名插槽</strong>：多个位置，用name区分
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 --&gt;</span><br><span class="line">&lt;slot name=&quot;header&quot;&gt;&lt;/slot&gt;</span><br><span class="line">&lt;slot name=&quot;footer&quot;&gt;&lt;/slot&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 父组件 --&gt;</span><br><span class="line">&lt;my-component&gt;</span><br><span class="line">    &lt;template #header&gt;头部&lt;/template&gt;</span><br><span class="line">    &lt;template #footer&gt;底部&lt;/template&gt;</span><br><span class="line">&lt;/my-component&gt;</span><br></pre></td></tr></table></figure></p></li>
+<li><p><strong>作用域插槽</strong>：子组件传数据给父组件
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 子组件 --&gt;</span><br><span class="line">&lt;slot :item=&quot;item&quot;&gt;&lt;/slot&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 父组件 --&gt;</span><br><span class="line">&lt;my-component&gt;</span><br><span class="line">    &lt;template #default=&quot;&#123; item &#125;&quot;&gt;&#123;&#123; item.name &#125;&#125;&lt;/template&gt;</span><br><span class="line">&lt;/my-component&gt;</span><br></pre></td></tr></table></figure></p></li>
+</ol>
+<p><strong>什么时候用插槽？</strong></p>
+<ul>
+<li>✅ 需要让组件内容可自定义时</li>
+<li>✅ 组件结构固定，但内容变化时</li>
+<li>✅ 需要子组件向父组件传递数据来渲染时</li>
+</ul>
+<p><strong>什么时候不用插槽？</strong></p>
+<ul>
+<li>❌ 内容完全固定，不需要自定义 → 直接写在组件里</li>
+<li>❌ 只需要传递简单数据 → 用props</li>
+<li>❌ 只需要通知事件 → 用emit</li>
+</ul>
+<p><strong>实际开发建议</strong>：</p>
+<ol type="1">
+<li><strong>先思考</strong>：这个内容是否需要父组件自定义？
+<ul>
+<li>需要 → 用插槽</li>
+<li>不需要 → 直接写死或 props</li>
+</ul></li>
+<li><strong>再判断</strong>：需要几个位置？
+<ul>
+<li>1个位置 → 普通插槽</li>
+<li>多个位置 → 具名插槽</li>
+</ul></li>
+<li><strong>最后考虑</strong>：子组件是否需要传递数据？
+<ul>
+<li>需要 → 作用域插槽</li>
+<li>不需要 → 普通/具名插槽</li>
+</ul></li>
+</ol>
+<hr />
+<h1 id="组件设计模式">7. 组件设计模式</h1>
+<h2 id="容器组件与展示组件">7.1 容器组件与展示组件</h2>
+<h3 id="设计模式">7.1.1 设计模式</h3>
+<p><strong>容器组件</strong>（Container Component）：</p>
+<ul>
+<li>负责数据获取和状态管理</li>
+<li>处理业务逻辑</li>
+<li>通过props向展示组件传递数据</li>
+</ul>
+<p><strong>展示组件</strong>（Presentational Component）：</p>
+<ul>
+<li>只负责UI渲染</li>
+<li>通过props接收数据</li>
+<li>通过emit发送事件</li>
+</ul>
+<p><strong>实际例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 容器组件：UserListContainer.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;user-list </span><br><span class="line">        :users=&quot;users&quot;</span><br><span class="line">        :loading=&quot;loading&quot;</span><br><span class="line">        @delete=&quot;handleDelete&quot;</span><br><span class="line">        @refresh=&quot;loadUsers&quot;&gt;</span><br><span class="line">    &lt;/user-list&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            users: [],</span><br><span class="line">            loading: false</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    mounted() &#123;</span><br><span class="line">        this.loadUsers();</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        async loadUsers() &#123;</span><br><span class="line">            this.loading = true;</span><br><span class="line">            // 从API获取数据</span><br><span class="line">            this.users = await fetchUsers();</span><br><span class="line">            this.loading = false;</span><br><span class="line">        &#125;,</span><br><span class="line">        handleDelete(id) &#123;</span><br><span class="line">            // 删除用户逻辑</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 展示组件：UserList.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div v-if=&quot;loading&quot;&gt;加载中...&lt;/div&gt;</span><br><span class="line">    &lt;ul v-else&gt;</span><br><span class="line">        &lt;li v-for=&quot;user in users&quot; :key=&quot;user.id&quot;&gt;</span><br><span class="line">            &#123;&#123; user.name &#125;&#125;</span><br><span class="line">            &lt;button @click=&quot;$emit(&#x27;delete&#x27;, user.id)&quot;&gt;删除&lt;/button&gt;</span><br><span class="line">        &lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    props: [&#x27;users&#x27;, &#x27;loading&#x27;],</span><br><span class="line">    emits: [&#x27;delete&#x27;]</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="这种模式的优势">7.1.2 这种模式的优势</h3>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>职责分离</strong></td>
+<td>容器组件处理逻辑，展示组件处理UI</td>
+</tr>
+<tr class="even">
+<td><strong>可复用性</strong></td>
+<td>展示组件可以在不同场景复用</td>
+</tr>
+<tr class="odd">
+<td><strong>易测试</strong></td>
+<td>展示组件易于单元测试</td>
+</tr>
+<tr class="even">
+<td><strong>易维护</strong></td>
+<td>逻辑和UI分离，维护更方便</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="组件组合模式">7.2 组件组合模式</h2>
+<h3 id="组合优于继承">7.2.1 组合优于继承</h3>
+<p>在组件设计中，应该通过组合小组件来构建大组件，而不是通过继承。</p>
+<p><strong>好的设计</strong>（组合）： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;user-profile&quot;&gt;</span><br><span class="line">        &lt;user-avatar :src=&quot;user.avatar&quot; /&gt;</span><br><span class="line">        &lt;user-info :name=&quot;user.name&quot; :email=&quot;user.email&quot; /&gt;</span><br><span class="line">        &lt;user-actions :userId=&quot;user.id&quot; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>不好的设计</strong>（继承）： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 试图通过继承扩展组件，但Vue不支持类继承 --&gt;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="本节总结">8. 本节总结</h1>
+<p>你已经学会了：</p>
+<p>✅ <strong>组件通信机制</strong>：</p>
+<ul>
+<li>Props：父组件向子组件传值</li>
+<li>Emit：子组件向父组件传值</li>
+<li>双向绑定：v-model的实现原理</li>
+</ul>
+<p>✅ <strong>组件传值实践</strong>：</p>
+<ul>
+<li>组件设计原则（单一职责、可复用性）</li>
+<li>Props验证和默认值</li>
+<li>构建可复用组件</li>
+</ul>
+<p>✅ <strong>UI框架应用</strong>：</p>
+<ul>
+<li>Ant Design Vue的使用</li>
+<li>UI框架的价值（提升效率、保证一致性）</li>
+<li>响应式支持</li>
+</ul>
+<p>✅ <strong>实战技能</strong>：</p>
+<ul>
+<li>使用AI生成组件</li>
+<li>实现CRUD界面</li>
+<li>组件设计模式</li>
+</ul>
+<p>✅ <strong>进阶知识</strong>（选讲）：</p>
+<ul>
+<li>动态组件</li>
+<li>插槽（普通插槽、具名插槽、作用域插槽）</li>
+</ul>
+<p>组件化和UI框架是现代前端开发的核心。掌握组件通信机制、设计模式和UI框架的使用，能够显著提升开发效率和代码质量。建议通过实际项目练习，逐步熟悉组件设计和UI框架的应用。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E9%A9%B1%E5%8A%A8Web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/" rel="tag"># AI驱动Web开发技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-11-24-07-%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6%E5%85%A5%E9%97%A8/" rel="prev" title="07.前端框架入门">
+                  <i class="fa fa-angle-left"></i> 07.前端框架入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="next" title="09.前端工程化">
+                  09.前端工程化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
