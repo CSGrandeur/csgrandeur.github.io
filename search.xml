@@ -21856,7 +21856,7 @@ AI实战：使用AI实现Excel导入导出</h1>
 <h3 id="代码解析">4.3.3 代码解析</h3>
 <p><strong>核心功能</strong>：</p>
 <ol type="1">
-<li><strong>导入功能</strong>：
+<li><p><strong>导入功能</strong>：</p>
 <ul>
 <li>接收Excel文件上传</li>
 <li>使用<code>openpyxl</code>读取Excel</li>
@@ -21864,7 +21864,7 @@ AI实战：使用AI实现Excel导入导出</h1>
 <li>逐行解析数据并验证</li>
 <li>保存到数据库</li>
 </ul></li>
-<li><strong>导出功能</strong>：
+<li><p><strong>导出功能</strong>：</p>
 <ul>
 <li>从数据库查询数据</li>
 <li>使用<code>openpyxl</code>创建Excel</li>
@@ -21872,7 +21872,7 @@ AI实战：使用AI实现Excel导入导出</h1>
 <li>填充数据</li>
 <li>返回文件下载</li>
 </ul></li>
-<li><strong>数据验证</strong>：
+<li><p><strong>数据验证</strong>：</p>
 <ul>
 <li>验证文件类型</li>
 <li>验证表头格式</li>

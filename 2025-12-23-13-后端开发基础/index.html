@@ -27,7 +27,7 @@
 <meta property="og:description" content="1. 数据库设计 1.1 为什么需要选择合适的数据类型？ 问题：设计数据库表时，如何选择字段的数据类型？ 生活类比：  用大箱子装小东西：浪费空间，搬运困难 用小箱子装大东西：装不下，需要换箱子 用合适的箱子：既不浪费，又能装下  实际例子： 1234567-- ❌ 不好的选择age TINYINT        -- 年龄用TINYINT（-128到127），足够了status INT">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-23T05:32:38.000Z">
-<meta property="article:modified_time" content="2025-12-23T10:40:01.968Z">
+<meta property="article:modified_time" content="2025-12-23T10:45:35.583Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="AI驱动Web开发技术">
 <meta name="twitter:card" content="summary">
@@ -224,7 +224,7 @@ AI实战：使用AI实现Excel导入导出</span></a><ol class="nav-child"><li c
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-23 13:32:38 / 修改时间：18:40:01" itemprop="dateCreated datePublished" datetime="2025-12-23T13:32:38+08:00">2025-12-23</time>
+      <time title="创建时间：2025-12-23 13:32:38 / 修改时间：18:45:35" itemprop="dateCreated datePublished" datetime="2025-12-23T13:32:38+08:00">2025-12-23</time>
     </span>
 
   
@@ -957,7 +957,7 @@ AI实战：使用AI实现Excel导入导出</h1>
 <h3 id="代码解析">4.3.3 代码解析</h3>
 <p><strong>核心功能</strong>：</p>
 <ol type="1">
-<li><strong>导入功能</strong>：
+<li><p><strong>导入功能</strong>：</p>
 <ul>
 <li>接收Excel文件上传</li>
 <li>使用<code>openpyxl</code>读取Excel</li>
@@ -965,7 +965,7 @@ AI实战：使用AI实现Excel导入导出</h1>
 <li>逐行解析数据并验证</li>
 <li>保存到数据库</li>
 </ul></li>
-<li><strong>导出功能</strong>：
+<li><p><strong>导出功能</strong>：</p>
 <ul>
 <li>从数据库查询数据</li>
 <li>使用<code>openpyxl</code>创建Excel</li>
@@ -973,7 +973,7 @@ AI实战：使用AI实现Excel导入导出</h1>
 <li>填充数据</li>
 <li>返回文件下载</li>
 </ul></li>
-<li><strong>数据验证</strong>：
+<li><p><strong>数据验证</strong>：</p>
 <ul>
 <li>验证文件类型</li>
 <li>验证表头格式</li>
