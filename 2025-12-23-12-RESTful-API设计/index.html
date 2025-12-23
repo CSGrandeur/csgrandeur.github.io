@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 为什么需要RESTful API？ 1.1 开发无非增删查改：CRUD的智慧 CRUD &#x3D; Create（创建）、Read（读取）、Update（更新）、Delete（删除） 生活类比： 想象你在管理一个图书馆：  Create（创建）：新书到了，登记入库 Read（读取）：读者想找书，你去查找 Update（更新）：书的信息有变化，更新记录 Delete（删除）：旧书淘汰了，删除记录  实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="12.RESTful API设计">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-12-23-12-RESTful-API%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. 为什么需要RESTful API？ 1.1 开发无非增删查改：CRUD的智慧 CRUD &#x3D; Create（创建）、Read（读取）、Update（更新）、Delete（删除） 生活类比： 想象你在管理一个图书馆：  Create（创建）：新书到了，登记入库 Read（读取）：读者想找书，你去查找 Update（更新）：书的信息有变化，更新记录 Delete（删除）：旧书淘汰了，删除记录  实">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-23T05:32:23.000Z">
+<meta property="article:modified_time" content="2025-12-23T09:02:38.761Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="AI驱动Web开发技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-12-23-12-RESTful-API%E8%AE%BE%E8%AE%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-12-23-12-RESTful-API%E8%AE%BE%E8%AE%A1/","path":"2025-12-23-12-RESTful-API设计/","title":"12.RESTful API设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>12.RESTful API设计 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81restful-api"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要RESTful API？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E6%97%A0%E9%9D%9E%E5%A2%9E%E5%88%A0%E6%9F%A5%E6%94%B9crud%E7%9A%84%E6%99%BA%E6%85%A7"><span class="nav-number">1.1.</span> <span class="nav-text">1.1
+开发无非增删查改：CRUD的智慧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#restful-apicrud%E7%9A%84%E6%A0%87%E5%87%86%E8%A1%A8%E8%BE%BE"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 RESTful API：CRUD的标准表达</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#restful-api%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 RESTful API的定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restful%E8%A7%84%E8%8C%83"><span class="nav-number">2.</span> <span class="nav-text">2. RESTful规范</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90resource"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 资源（Resource）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 HTTP方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#url%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 URL设计规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E5%B1%82%E7%BA%A7"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 资源层级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 查询参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 HTTP状态码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#api%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">3. API设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%9F%E4%B8%80%E6%80%A7%E5%8E%9F%E5%88%99"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 统一性原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E6%B4%81%E6%80%A7%E5%8E%9F%E5%88%99"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 简洁性原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E5%8E%9F%E5%88%99"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 可扩展性原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7%E5%8E%9F%E5%88%99"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 安全性原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%AE%A4%E8%AF%81%E5%92%8C%E6%8E%88%E6%9D%83"><span class="nav-number">3.4.1.</span> <span class="nav-text">3.4.1 什么是认证和授权？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bearer-token%E8%BA%AB%E4%BB%BD%E5%87%AD%E8%AF%81"><span class="nav-number">3.4.2.</span> <span class="nav-text">3.4.2 Bearer Token：身份凭证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bearer-token%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">3.4.3.</span> <span class="nav-text">3.4.3 Bearer Token的使用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#token%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">3.4.4.</span> <span class="nav-text">3.4.4 Token的优势</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99"><span class="nav-number">4.</span> <span class="nav-text">4. 接口文档编写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 为什么需要接口文档？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 接口文档的基本结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#markdown%E6%96%87%E6%A1%A3"><span class="nav-number">4.2.1.</span> <span class="nav-text">4.3.2 Markdown文档</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E8%AE%BE%E8%AE%A1%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0api"><span class="nav-number">5.</span> <span class="nav-text">5.
+AI实战：使用AI设计文件上传API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 任务描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%BE%E8%AE%A1prompt"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 第一步：设计Prompt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E7%9A%84api%E8%AE%BE%E8%AE%A1%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 AI生成的API设计（示例）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1"><span class="nav-number">5.3.1.</span> <span class="nav-text">5.3.1 接口设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fastapi%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.3.2.</span> <span class="nav-text">5.3.2 FastAPI实现示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 代码解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api%E8%B0%83%E8%AF%95%E8%BD%AF%E4%BB%B6"><span class="nav-number">5.5.</span> <span class="nav-text">5.5 API调试软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81api%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-number">5.5.1.</span> <span class="nav-text">5.5.1 为什么需要API调试工具？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apifox%E7%AE%80%E4%BB%8B"><span class="nav-number">5.5.2.</span> <span class="nav-text">5.5.2 APIFox简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apifox%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">5.5.3.</span> <span class="nav-text">5.5.3 APIFox基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E9%99%85%E4%BE%8B%E5%AD%90%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0api"><span class="nav-number">5.5.4.</span> <span class="nav-text">5.5.4 实际例子：测试文件上传API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apifox%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD"><span class="nav-number">5.5.5.</span> <span class="nav-text">5.5.5 APIFox高级功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96api%E8%B0%83%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="nav-number">5.5.6.</span> <span class="nav-text">5.5.6 其他API调试工具</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E8%AE%B2api%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">6.</span> <span class="nav-text">6. 选讲：API版本控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 为什么需要版本控制？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 版本控制的方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#url%E8%B7%AF%E5%BE%84%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">6.2.1.</span> <span class="nav-text">6.2.1 URL路径版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E5%A4%B4%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">6.2.2.</span> <span class="nav-text">6.2.2 请求头版本控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E5%8F%82%E6%95%B0%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"><span class="nav-number">6.2.3.</span> <span class="nav-text">6.2.3 查询参数版本控制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%AD%96%E7%95%A5"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 版本控制策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%95%E6%97%B6%E5%88%9B%E5%BB%BA%E6%96%B0%E7%89%88%E6%9C%AC"><span class="nav-number">6.3.1.</span> <span class="nav-text">6.3.1 何时创建新版本？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%85%BC%E5%AE%B9%E7%AD%96%E7%95%A5"><span class="nav-number">6.3.2.</span> <span class="nav-text">6.3.2 版本兼容策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rest%E6%9E%B6%E6%9E%84%E9%A3%8E%E6%A0%BC%E7%90%86%E8%A7%A3"><span class="nav-number">6.4.</span> <span class="nav-text">6.4 REST架构风格理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#rest%E7%9A%84%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99"><span class="nav-number">6.4.1.</span> <span class="nav-text">6.4.1 REST的核心原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#restful-vs-%E9%9D%9Erestful"><span class="nav-number">6.4.2.</span> <span class="nav-text">6.4.2 RESTful vs 非RESTful</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%80%BB%E7%BB%93"><span class="nav-number">6.5.</span> <span class="nav-text">本章总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-12-23-12-RESTful-API%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="12.RESTful API设计 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          12.RESTful API设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-23 13:32:23 / 修改时间：17:02:38" itemprop="dateCreated datePublished" datetime="2025-12-23T13:32:23+08:00">2025-12-23</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="为什么需要restful-api">1. 为什么需要RESTful API？</h1>
+<h2 id="开发无非增删查改crud的智慧">1.1
+开发无非增删查改：CRUD的智慧</h2>
+<p><strong>CRUD</strong> =
+Create（创建）、Read（读取）、Update（更新）、Delete（删除）</p>
+<p><strong>生活类比</strong>：</p>
+<p>想象你在管理一个<strong>图书馆</strong>：</p>
+<ul>
+<li><strong>Create（创建）</strong>：新书到了，登记入库</li>
+<li><strong>Read（读取）</strong>：读者想找书，你去查找</li>
+<li><strong>Update（更新）</strong>：书的信息有变化，更新记录</li>
+<li><strong>Delete（删除）</strong>：旧书淘汰了，删除记录</li>
+</ul>
+<p><strong>实际例子</strong>：</p>
+<p>无论是博客系统、电商网站，还是待办事项应用，核心功能都是这4个操作：</p>
+<p>博客系统：</p>
+<ul>
+<li>Create：发布新文章</li>
+<li>Read：查看文章列表、查看文章详情</li>
+<li>Update：编辑文章</li>
+<li>Delete：删除文章</li>
+</ul>
+<p>用户管理：</p>
+<ul>
+<li>Create：注册新用户</li>
+<li>Read：查看用户信息</li>
+<li>Update：修改用户信息</li>
+<li>Delete：删除用户</li>
+</ul>
+<blockquote>
+<p>💡 <strong>关键理解</strong>：<br />
+99%的Web应用，核心功能就是CRUD！<br />
+学会了CRUD，你就掌握了Web开发的核心！</p>
+</blockquote>
+<hr />
+<h2 id="restful-apicrud的标准表达">1.2 RESTful API：CRUD的标准表达</h2>
+<p>既然开发的核心是CRUD，那如何用API来表达这4个操作呢？</p>
+<p><strong>传统方式</strong>（不统一）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Create：/createUser</span><br><span class="line">Read：  /getUser?id=1</span><br><span class="line">Update：/updateUser?id=1</span><br><span class="line">Delete：/deleteUser?id=1</span><br></pre></td></tr></table></figure>
+<p><strong>问题</strong>：每个接口命名都不一样，没有规律，难以记忆</p>
+<p><strong>RESTful方式</strong>（统一规范）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Create：POST   /users</span><br><span class="line">Read：  GET    /users/1</span><br><span class="line">Update：PUT    /users/1</span><br><span class="line">Delete：DELETE /users/1</span><br></pre></td></tr></table></figure>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>✅ 统一：都用同一个资源（<code>/users</code>）</li>
+<li>✅ 清晰：HTTP方法直接表达操作类型</li>
+<li>✅ 规范：所有接口都遵循相同模式</li>
+</ul>
+<hr />
+<h2 id="restful-api的定义">1.3 RESTful API的定义</h2>
+<p><strong>RESTful API</strong> = 遵循REST规范的API设计方式</p>
+<p><strong>REST</strong> = Representational State
+Transfer（表述性状态转移）</p>
+<p><strong>核心思想</strong>：用<strong>资源</strong>和<strong>HTTP方法</strong>来设计API</p>
+<p><strong>CRUD与HTTP方法的对应关系</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>CRUD操作</th>
+<th>HTTP方法</th>
+<th>RESTful API示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Create（创建）</strong></td>
+<td>POST</td>
+<td><code>POST /users</code></td>
+</tr>
+<tr class="even">
+<td><strong>Read（读取）</strong></td>
+<td>GET</td>
+<td><code>GET /users</code> 或 <code>GET /users/1</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Update（更新）</strong></td>
+<td>PUT/PATCH</td>
+<td><code>PUT /users/1</code></td>
+</tr>
+<tr class="even">
+<td><strong>Delete（删除）</strong></td>
+<td>DELETE</td>
+<td><code>DELETE /users/1</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>记忆技巧</strong>：<br />
+RESTful API = 用"资源"和"动作"来设计接口<br />
+CRUD的4个操作，对应HTTP的4个方法，简单明了！</p>
+</blockquote>
+<hr />
+<h1 id="restful规范">2. RESTful规范</h1>
+<h2 id="资源resource">2.1 资源（Resource）</h2>
+<p><strong>资源</strong> = API操作的对象（如用户、文章、订单）</p>
+<p><strong>命名规范</strong>：</p>
+<ul>
+<li>✅ 使用<strong>名词</strong>（复数形式）</li>
+<li>✅ 使用<strong>小写字母</strong></li>
+<li>✅ 多个单词用<strong>连字符</strong>（<code>-</code>）连接</li>
+</ul>
+<p><strong>实际例子</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>✅ 正确</th>
+<th>❌ 错误</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>/users</code></td>
+<td><code>/getUsers</code>、<code>/user</code></td>
+</tr>
+<tr class="even">
+<td><code>/articles</code></td>
+<td><code>/articleList</code>、<code>/article</code></td>
+</tr>
+<tr class="odd">
+<td><code>/todo-items</code></td>
+<td><code>/todoItems</code>、<code>/todos</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="http方法">2.2 HTTP方法</h2>
+<p><strong>HTTP方法</strong> = 对资源执行的操作</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>HTTP方法</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>GET</strong></td>
+<td>获取资源</td>
+<td><code>GET /users</code> - 获取用户列表</td>
+</tr>
+<tr class="even">
+<td><strong>POST</strong></td>
+<td>创建资源</td>
+<td><code>POST /users</code> - 创建新用户</td>
+</tr>
+<tr class="odd">
+<td><strong>PUT</strong></td>
+<td>更新资源（完整更新）</td>
+<td><code>PUT /users/1</code> - 更新用户1的所有信息</td>
+</tr>
+<tr class="even">
+<td><strong>PATCH</strong></td>
+<td>更新资源（部分更新）</td>
+<td><code>PATCH /users/1</code> - 只更新用户1的部分信息</td>
+</tr>
+<tr class="odd">
+<td><strong>DELETE</strong></td>
+<td>删除资源</td>
+<td><code>DELETE /users/1</code> - 删除用户1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取用户列表</span></span><br><span class="line"><span class="variable constant_">GET</span> /users</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取单个用户</span></span><br><span class="line"><span class="variable constant_">GET</span> /users/<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建新用户</span></span><br><span class="line"><span class="variable constant_">POST</span> /users</span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>, <span class="string">&quot;email&quot;</span>: <span class="string">&quot;zhangsan@example.com&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新用户</span></span><br><span class="line"><span class="variable constant_">PUT</span> /users/<span class="number">1</span></span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;name&quot;</span>: <span class="string">&quot;李四&quot;</span>, <span class="string">&quot;email&quot;</span>: <span class="string">&quot;lisi@example.com&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除用户</span></span><br><span class="line"><span class="variable constant_">DELETE</span> /users/<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="url设计规范">2.3 URL设计规范</h2>
+<h3 id="资源层级">2.3.1 资源层级</h3>
+<p><strong>原则</strong>：用URL路径表示资源的层级关系</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">✅ 正确：</span><br><span class="line">GET /users/1/articles        # 获取用户1的所有文章</span><br><span class="line">GET /users/1/articles/5      # 获取用户1的第5篇文章</span><br><span class="line">GET /articles/5/comments     # 获取文章5的所有评论</span><br><span class="line"></span><br><span class="line">❌ 错误：</span><br><span class="line">GET /getUserArticles?userId=1&amp;articleId=5  # 不符合RESTful规范</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="查询参数">2.3.2 查询参数</h3>
+<p><strong>作用</strong>：用于过滤、排序、分页等</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 过滤</span><br><span class="line">GET /users?status=active          # 获取状态为active的用户</span><br><span class="line"></span><br><span class="line"># 排序</span><br><span class="line">GET /articles?sort=createdAt&amp;order=desc  # 按创建时间倒序</span><br><span class="line"></span><br><span class="line"># 分页</span><br><span class="line">GET /articles?page=1&amp;limit=10     # 第1页，每页10条</span><br><span class="line"></span><br><span class="line"># 组合使用</span><br><span class="line">GET /articles?status=published&amp;page=1&amp;limit=10&amp;sort=createdAt</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="http状态码">2.4 HTTP状态码</h2>
+<p><strong>状态码</strong> = 表示请求的结果</p>
+<p><strong>常用状态码</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>状态码</th>
+<th>含义</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>200</strong></td>
+<td>成功</td>
+<td>请求成功</td>
+</tr>
+<tr class="even">
+<td><strong>201</strong></td>
+<td>已创建</td>
+<td>创建资源成功</td>
+</tr>
+<tr class="odd">
+<td><strong>400</strong></td>
+<td>请求错误</td>
+<td>参数错误、格式错误</td>
+</tr>
+<tr class="even">
+<td><strong>401</strong></td>
+<td>未授权</td>
+<td>未登录或token过期</td>
+</tr>
+<tr class="odd">
+<td><strong>403</strong></td>
+<td>禁止访问</td>
+<td>没有权限</td>
+</tr>
+<tr class="even">
+<td><strong>404</strong></td>
+<td>未找到</td>
+<td>资源不存在</td>
+</tr>
+<tr class="odd">
+<td><strong>500</strong></td>
+<td>服务器错误</td>
+<td>服务器内部错误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成功</span></span><br><span class="line"><span class="variable constant_">GET</span> /users/<span class="number">1</span></span><br><span class="line"><span class="title class_">Response</span>: <span class="number">200</span> <span class="variable constant_">OK</span></span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 资源不存在</span></span><br><span class="line"><span class="variable constant_">GET</span> /users/<span class="number">999</span></span><br><span class="line"><span class="title class_">Response</span>: <span class="number">404</span> <span class="title class_">Not</span> <span class="title class_">Found</span></span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;error&quot;</span>: <span class="string">&quot;用户不存在&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数错误</span></span><br><span class="line"><span class="variable constant_">POST</span> /users</span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;name&quot;</span>: <span class="string">&quot;&quot;</span> &#125;  <span class="comment">// 名字为空</span></span><br><span class="line"><span class="title class_">Response</span>: <span class="number">400</span> <span class="title class_">Bad</span> <span class="title class_">Request</span></span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;error&quot;</span>: <span class="string">&quot;用户名不能为空&quot;</span> &#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="api设计原则">3. API设计原则</h1>
+<h2 id="统一性原则">3.1 统一性原则</h2>
+<p><strong>原则</strong>：所有接口遵循相同的设计规范</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">✅ 统一的设计：</span><br><span class="line">GET    /users          # 获取用户列表</span><br><span class="line">GET    /users/:id      # 获取单个用户</span><br><span class="line">POST   /users          # 创建用户</span><br><span class="line">PUT    /users/:id      # 更新用户</span><br><span class="line">DELETE /users/:id      # 删除用户</span><br><span class="line"></span><br><span class="line">GET    /articles       # 获取文章列表</span><br><span class="line">GET    /articles/:id   # 获取单个文章</span><br><span class="line">POST   /articles       # 创建文章</span><br><span class="line">PUT    /articles/:id   # 更新文章</span><br><span class="line">DELETE /articles/:id   # 删除文章</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="简洁性原则">3.2 简洁性原则</h2>
+<p><strong>原则</strong>：URL要简洁明了，避免过长</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">✅ 简洁：</span><br><span class="line">GET /users/1</span><br><span class="line"></span><br><span class="line">❌ 冗长：</span><br><span class="line">GET /api/v1/users/getUserById?id=1&amp;format=json</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="可扩展性原则">3.3 可扩展性原则</h2>
+<p><strong>原则</strong>：设计时要考虑未来可能的功能扩展</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">✅ 可扩展：</span><br><span class="line">GET /users/:id/articles        # 可以扩展为获取用户的其他资源</span><br><span class="line">GET /users/:id/articles/:id   # 可以扩展为获取用户的具体文章</span><br><span class="line"></span><br><span class="line">❌ 不可扩展：</span><br><span class="line">GET /getUserArticles           # 难以扩展其他功能</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="安全性原则">3.4 安全性原则</h2>
+<p><strong>原则</strong>：敏感操作需要认证和授权</p>
+<h3 id="什么是认证和授权">3.4.1 什么是认证和授权？</h3>
+<p><strong>认证（Authentication）</strong>：你是谁？——验证用户身份（登录）</p>
+<p><strong>授权（Authorization）</strong>：你能做什么？——验证用户权限（是否有权限执行操作）</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>认证</strong>：进学校要出示学生证（证明你是学生）</li>
+<li><strong>授权</strong>：只有管理员才能进校长办公室（权限不同）</li>
+</ul>
+<h3 id="bearer-token身份凭证">3.4.2 Bearer Token：身份凭证</h3>
+<p><strong>Bearer Token</strong> = 一种身份认证方式，就像"通行证"</p>
+<p><strong>工作原理</strong>：</p>
+<ol type="1">
+<li><strong>登录获取Token</strong>：用户登录后，服务器返回一个Token</li>
+<li><strong>携带Token请求</strong>：后续请求在Header中携带这个Token</li>
+<li><strong>服务器验证</strong>：服务器验证Token，确认用户身份</li>
+</ol>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一步：用户登录，获取Token</span></span><br><span class="line"><span class="variable constant_">POST</span> /api/login</span><br><span class="line"><span class="title class_">Body</span>: &#123; <span class="string">&quot;username&quot;</span>: <span class="string">&quot;zhangsan&quot;</span>, <span class="string">&quot;password&quot;</span>: <span class="string">&quot;123456&quot;</span> &#125;</span><br><span class="line"><span class="title class_">Response</span>: &#123;</span><br><span class="line">    <span class="string">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;token&quot;</span>: <span class="string">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二步：使用Token访问需要认证的接口</span></span><br><span class="line"><span class="variable constant_">GET</span> /api/users/me</span><br><span class="line"><span class="title class_">Headers</span>: &#123;</span><br><span class="line">    <span class="string">&quot;Authorization&quot;</span>: <span class="string">&quot;Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Response</span>: &#123;</span><br><span class="line">    <span class="string">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>,</span><br><span class="line">        <span class="string">&quot;email&quot;</span>: <span class="string">&quot;zhangsan@example.com&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="bearer-token的使用方式">3.4.3 Bearer Token的使用方式</h3>
+<p><strong>格式</strong>：<code>Authorization: Bearer &lt;token&gt;</code></p>
+<p><strong>前端代码示例</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用axios发送请求</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 登录后保存Token</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">login</span> = <span class="keyword">async</span> (<span class="params">username, password</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> axios.<span class="title function_">post</span>(<span class="string">&#x27;/api/login&#x27;</span>, &#123;</span><br><span class="line">        username,</span><br><span class="line">        password</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 保存Token到本地存储</span></span><br><span class="line">    <span class="variable language_">localStorage</span>.<span class="title function_">setItem</span>(<span class="string">&#x27;token&#x27;</span>, response.<span class="property">data</span>.<span class="property">data</span>.<span class="property">token</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用Token访问需要认证的接口</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getUserInfo</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> token = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&#x27;token&#x27;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> response = <span class="keyword">await</span> axios.<span class="title function_">get</span>(<span class="string">&#x27;/api/users/me&#x27;</span>, &#123;</span><br><span class="line">        <span class="attr">headers</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> response.<span class="property">data</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>后端验证示例</strong>（FastAPI）：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, Header, HTTPException</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span></span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟Token验证（实际应该用JWT库）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">verify_token</span>(<span class="params">token: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    <span class="comment"># 实际项目中，这里应该验证JWT Token</span></span><br><span class="line">    <span class="keyword">return</span> token.startswith(<span class="string">&#x27;eyJ&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/api/users/me&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_current_user</span>(<span class="params"></span></span><br><span class="line"><span class="params">    authorization: <span class="type">Optional</span>[<span class="built_in">str</span>] = Header(<span class="params"><span class="literal">None</span></span>)</span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> authorization:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(status_code=<span class="number">401</span>, detail=<span class="string">&quot;未登录&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 提取Token（去掉&quot;Bearer &quot;前缀）</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> authorization.startswith(<span class="string">&#x27;Bearer &#x27;</span>):</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(status_code=<span class="number">401</span>, detail=<span class="string">&quot;Token格式错误&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    token = authorization.replace(<span class="string">&#x27;Bearer &#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 验证Token</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> verify_token(token):</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(status_code=<span class="number">401</span>, detail=<span class="string">&quot;Token无效或已过期&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 返回用户信息</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">        <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;id&quot;</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>,</span><br><span class="line">            <span class="string">&quot;email&quot;</span>: <span class="string">&quot;zhangsan@example.com&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="token的优势">3.4.4 Token的优势</h3>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>无状态</strong></td>
+<td>服务器不需要存储Session，减轻服务器压力</td>
+</tr>
+<tr class="even">
+<td><strong>跨域友好</strong></td>
+<td>可以轻松实现跨域认证</td>
+</tr>
+<tr class="odd">
+<td><strong>安全性高</strong></td>
+<td>Token可以设置过期时间，防止长期有效</td>
+</tr>
+<tr class="even">
+<td><strong>易于扩展</strong></td>
+<td>可以在Token中携带用户信息（JWT）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 需要登录（认证）</span></span><br><span class="line"><span class="variable constant_">GET</span> /users/me          # 获取当前用户信息</span><br><span class="line"><span class="title class_">Headers</span>: &#123; <span class="string">&quot;Authorization&quot;</span>: <span class="string">&quot;Bearer token123&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 需要权限（授权）</span></span><br><span class="line"><span class="variable constant_">DELETE</span> /users/<span class="number">1</span>        # 删除用户（需要管理员权限）</span><br><span class="line"><span class="title class_">Headers</span>: &#123; <span class="string">&quot;Authorization&quot;</span>: <span class="string">&quot;Bearer admin_token&quot;</span> &#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="接口文档编写">4. 接口文档编写</h1>
+<h2 id="为什么需要接口文档">4.1 为什么需要接口文档？</h2>
+<p><strong>作用</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>统一理解</strong></td>
+<td>前后端对接口理解一致</td>
+</tr>
+<tr class="even">
+<td><strong>提高效率</strong></td>
+<td>前端不需要等后端，可以先看文档开发</td>
+</tr>
+<tr class="odd">
+<td><strong>便于维护</strong></td>
+<td>接口变更时，文档同步更新</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="接口文档的基本结构">4.2 接口文档的基本结构</h2>
+<p><strong>包含内容</strong>：</p>
+<ol type="1">
+<li><strong>接口基本信息</strong>：URL、方法、描述</li>
+<li><strong>请求参数</strong>：参数名、类型、是否必填、说明</li>
+<li><strong>响应数据</strong>：响应格式、字段说明</li>
+<li><strong>错误码</strong>：可能的错误情况</li>
+</ol>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## 获取用户列表</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**接口地址**</span>：<span class="code">`GET /api/users`</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**接口描述**</span>：获取用户列表，支持分页和过滤</span><br><span class="line"></span><br><span class="line"><span class="strong">**请求参数**</span>：</span><br><span class="line"></span><br><span class="line">| 参数名 | 类型 | 必填 | 说明 |</span><br><span class="line">|--------|------|------|------|</span><br><span class="line">| page | number | 否 | 页码，默认1 |</span><br><span class="line">| limit | number | 否 | 每页数量，默认10 |</span><br><span class="line">| status | string | 否 | 用户状态（active/inactive） |</span><br><span class="line"></span><br><span class="line"><span class="strong">**请求示例**</span>：</span><br></pre></td></tr></table></figure>
+<p>GET /api/users?page=1&amp;limit=10&amp;status=active
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">**响应数据**：</span><br><span class="line">```json</span><br><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 200,</span><br><span class="line">    &quot;message&quot;: &quot;成功&quot;,</span><br><span class="line">    &quot;data&quot;: &#123;</span><br><span class="line">        &quot;list&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;id&quot;: 1,</span><br><span class="line">                &quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">                &quot;email&quot;: &quot;zhangsan@example.com&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;total&quot;: 100,</span><br><span class="line">        &quot;page&quot;: 1,</span><br><span class="line">        &quot;limit&quot;: 10</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>错误响应</strong>： <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">400</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;参数错误&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 4.3 使用工具编写接口文档</span><br><span class="line"></span><br><span class="line">### 4.3.1 Swagger/OpenAPI</span><br><span class="line"></span><br><span class="line">**Swagger** = 自动生成接口文档的工具</span><br><span class="line"></span><br><span class="line">**优势**：</span><br><span class="line"></span><br><span class="line">- ✅ 代码即文档（写代码时自动生成文档）</span><br><span class="line">- ✅ 可视化界面（可以直接测试接口）</span><br><span class="line">- ✅ 支持多种语言</span><br><span class="line"></span><br><span class="line">**实际例子**（FastAPI自动生成）：</span><br><span class="line"></span><br><span class="line">```python</span><br><span class="line">from fastapi import FastAPI</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/users/&#123;user_id&#125;&quot;)</span><br><span class="line">async def get_user(user_id: int):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    获取用户信息</span><br><span class="line">    </span><br><span class="line">    - **user_id**: 用户ID</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    return &#123;&quot;id&quot;: user_id, &quot;name&quot;: &quot;张三&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>访问 <code>http://localhost:8000/docs</code>
+即可看到自动生成的文档。</p>
+<hr />
+<h3 id="markdown文档">4.3.2 Markdown文档</h3>
+<p><strong>适用场景</strong>：简单项目、快速文档</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># API文档</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 用户相关接口</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 1. 获取用户列表</span></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**URL**</span>: <span class="code">`GET /api/users`</span></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**参数**</span>: <span class="code">`page`</span>, <span class="code">`limit`</span></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**响应**</span>: 用户列表</span><br><span class="line"></span><br><span class="line"><span class="section">### 2. 获取用户详情</span></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**URL**</span>: <span class="code">`GET /api/users/:id`</span></span><br><span class="line"><span class="bullet">-</span> <span class="strong">**参数**</span>: <span class="code">`id`</span> (路径参数)</span><br><span class="line"><span class="bullet">-</span> <span class="strong">**响应**</span>: 用户信息</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="ai实战使用ai设计文件上传api">5.
+AI实战：使用AI设计文件上传API</h1>
+<h2 id="任务描述">5.1 任务描述</h2>
+<p><strong>目标</strong>：使用AI工具设计一个文件上传的RESTful API</p>
+<p><strong>功能要求</strong>：</p>
+<ul>
+<li>支持上传图片文件</li>
+<li>支持文件大小限制（最大5MB）</li>
+<li>支持文件类型限制（只允许jpg、png、gif）</li>
+<li>返回文件URL</li>
+<li>遵循RESTful规范</li>
+</ul>
+<hr />
+<h2 id="第一步设计prompt">5.2 第一步：设计Prompt</h2>
+<p><strong>Prompt示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">设计一个文件上传的RESTful API，要求：</span><br><span class="line">1. 遵循RESTful规范</span><br><span class="line">2. 使用POST方法</span><br><span class="line">3. 支持图片上传（jpg、png、gif）</span><br><span class="line">4. 文件大小限制5MB</span><br><span class="line">5. 返回上传后的文件URL</span><br><span class="line">6. 包含完整的接口文档：</span><br><span class="line">   - 接口地址、方法、描述</span><br><span class="line">   - 请求参数说明</span><br><span class="line">   - 响应数据格式</span><br><span class="line">   - 错误处理</span><br><span class="line">7. 使用FastAPI实现（可选）</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="ai生成的api设计示例">5.3 AI生成的API设计（示例）</h2>
+<h3 id="接口设计">5.3.1 接口设计</h3>
+<p><strong>接口信息</strong>：</p>
+<ul>
+<li><strong>URL</strong>：<code>POST /api/files/upload</code></li>
+<li><strong>方法</strong>：POST</li>
+<li><strong>描述</strong>：上传文件</li>
+</ul>
+<p><strong>请求参数</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>参数名</th>
+<th>类型</th>
+<th>位置</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>file</td>
+<td>File</td>
+<td>Body</td>
+<td>是</td>
+<td>要上传的文件</td>
+</tr>
+<tr class="even">
+<td>type</td>
+<td>string</td>
+<td>Query</td>
+<td>否</td>
+<td>文件类型（image/document）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>请求示例</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用FormData上传</span></span><br><span class="line"><span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&#x27;file&#x27;</span>, fileInput.<span class="property">files</span>[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;/api/files/upload&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">    <span class="attr">body</span>: formData</span><br><span class="line">&#125;)</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(data));</span><br></pre></td></tr></table></figure>
+<p><strong>成功响应</strong>（200）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;上传成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;fileId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;123456&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fileName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;image.jpg&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fileUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://example.com/uploads/image.jpg&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fileSize&quot;</span><span class="punctuation">:</span> <span class="number">102400</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;uploadedAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2024-01-15T10:30:00Z&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>错误响应</strong>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 文件太大（413）</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">413</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;文件大小超过限制（最大5MB）&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 文件类型不支持（400）</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">400</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;不支持的文件类型，仅支持jpg、png、gif&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="fastapi实现示例">5.3.2 FastAPI实现示例</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, UploadFile, File, HTTPException</span><br><span class="line"><span class="keyword">from</span> fastapi.responses <span class="keyword">import</span> JSONResponse</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/api/files/upload&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">upload_file</span>(<span class="params"></span></span><br><span class="line"><span class="params">    file: UploadFile = File(<span class="params">...</span>),</span></span><br><span class="line"><span class="params">    <span class="built_in">type</span>: <span class="built_in">str</span> = <span class="string">&quot;image&quot;</span></span></span><br><span class="line"><span class="params"></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    上传文件</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    - **file**: 要上传的文件</span></span><br><span class="line"><span class="string">    - **type**: 文件类型（image/document）</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 检查文件大小（5MB限制）</span></span><br><span class="line">    contents = <span class="keyword">await</span> file.read()</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(contents) &gt; <span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span>:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(status_code=<span class="number">413</span>, detail=<span class="string">&quot;文件大小超过限制（最大5MB）&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 检查文件类型</span></span><br><span class="line">    allowed_types = [<span class="string">&#x27;image/jpeg&#x27;</span>, <span class="string">&#x27;image/png&#x27;</span>, <span class="string">&#x27;image/gif&#x27;</span>]</span><br><span class="line">    <span class="keyword">if</span> file.content_type <span class="keyword">not</span> <span class="keyword">in</span> allowed_types:</span><br><span class="line">        <span class="keyword">raise</span> HTTPException(</span><br><span class="line">            status_code=<span class="number">400</span>, </span><br><span class="line">            detail=<span class="string">&quot;不支持的文件类型，仅支持jpg、png、gif&quot;</span></span><br><span class="line">        )</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 保存文件（这里简化处理）</span></span><br><span class="line">    file_url = <span class="string">f&quot;https://example.com/uploads/<span class="subst">&#123;file.filename&#125;</span>&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&quot;code&quot;</span>: <span class="number">200</span>,</span><br><span class="line">        <span class="string">&quot;message&quot;</span>: <span class="string">&quot;上传成功&quot;</span>,</span><br><span class="line">        <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;fileId&quot;</span>: <span class="string">&quot;123456&quot;</span>,</span><br><span class="line">            <span class="string">&quot;fileName&quot;</span>: file.filename,</span><br><span class="line">            <span class="string">&quot;fileUrl&quot;</span>: file_url,</span><br><span class="line">            <span class="string">&quot;fileSize&quot;</span>: <span class="built_in">len</span>(contents),</span><br><span class="line">            <span class="string">&quot;uploadedAt&quot;</span>: <span class="string">&quot;2024-01-15T10:30:00Z&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="代码解析">5.4 代码解析</h2>
+<p><strong>核心思路</strong>：</p>
+<ol type="1">
+<li><strong>使用POST方法</strong>：上传文件属于创建操作</li>
+<li><strong>使用FormData</strong>：文件上传的标准格式</li>
+<li><strong>参数验证</strong>：检查文件大小和类型</li>
+<li><strong>统一响应格式</strong>：成功和错误都返回统一格式</li>
+</ol>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>遵循RESTful规范（POST方法、资源路径）</li>
+<li>完整的错误处理</li>
+<li>清晰的接口文档</li>
+</ul>
+<hr />
+<h2 id="api调试软件">5.5 API调试软件</h2>
+<h3 id="为什么需要api调试工具">5.5.1 为什么需要API调试工具？</h3>
+<p><strong>问题</strong>：写好了API，如何测试？</p>
+<p><strong>传统方式</strong>（不方便）：</p>
+<ul>
+<li>写前端代码调用API（太麻烦）</li>
+<li>用浏览器只能测试GET请求（功能有限）</li>
+<li>用命令行curl（不够直观）</li>
+</ul>
+<p><strong>解决方案</strong>：使用API调试工具（如APIFox）</p>
+<p><strong>优势</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>可视化操作</strong></td>
+<td>图形界面，操作简单</td>
+</tr>
+<tr class="even">
+<td><strong>支持所有HTTP方法</strong></td>
+<td>GET、POST、PUT、DELETE等</td>
+</tr>
+<tr class="odd">
+<td><strong>自动生成文档</strong></td>
+<td>测试的同时生成接口文档</td>
+</tr>
+<tr class="even">
+<td><strong>团队协作</strong></td>
+<td>可以分享接口给团队成员</td>
+</tr>
+</tbody>
+</table>
+<h3 id="apifox简介">5.5.2 APIFox简介</h3>
+<p><strong>APIFox</strong> =
+一款集API设计、开发、测试、文档于一体的工具</p>
+<p><strong>核心功能</strong>：</p>
+<ul>
+<li>✅ <strong>API测试</strong>：发送请求，查看响应</li>
+<li>✅ <strong>接口文档</strong>：自动生成接口文档</li>
+<li>✅ <strong>Mock数据</strong>：模拟后端数据，前端可以先开发</li>
+<li>✅ <strong>团队协作</strong>：多人协作开发</li>
+</ul>
+<h3 id="apifox基本使用">5.5.3 APIFox基本使用</h3>
+<p><strong>第一步：创建请求</strong></p>
+<ol type="1">
+<li>打开APIFox，点击"新建请求"</li>
+<li>选择HTTP方法（GET、POST等）</li>
+<li>输入接口地址（如：<code>http://localhost:8000/api/users</code>）</li>
+</ol>
+<p><strong>第二步：设置请求参数</strong></p>
+<p><strong>GET请求示例</strong>（查询用户列表）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">方法：GET</span><br><span class="line">URL：http://localhost:8000/api/users</span><br><span class="line">查询参数：</span><br><span class="line">  - page: 1</span><br><span class="line">  - limit: 10</span><br><span class="line">  - status: active</span><br></pre></td></tr></table></figure>
+<p><strong>POST请求示例</strong>（创建用户）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">方法：POST</span><br><span class="line">URL：http://localhost:8000/api/users</span><br><span class="line">请求头：</span><br><span class="line">  Content-Type: application/json</span><br><span class="line">请求体（JSON）：</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">  &quot;email&quot;: &quot;zhangsan@example.com&quot;,</span><br><span class="line">  &quot;password&quot;: &quot;123456&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>第三步：设置认证信息</strong></p>
+<p>如果需要Bearer Token认证：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">请求头：</span><br><span class="line">  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span><br></pre></td></tr></table></figure>
+<p><strong>第四步：发送请求并查看响应</strong></p>
+<p>点击"发送"按钮，查看响应结果：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">200</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;list&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;张三&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zhangsan@example.com&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;total&quot;</span><span class="punctuation">:</span> <span class="number">100</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="实际例子测试文件上传api">5.5.4 实际例子：测试文件上传API</h3>
+<p><strong>场景</strong>：测试前面设计的文件上传接口</p>
+<p><strong>步骤</strong>：</p>
+<ol type="1">
+<li><p><strong>创建POST请求</strong> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">方法：POST</span><br><span class="line">URL：http://localhost:8000/api/files/upload</span><br></pre></td></tr></table></figure></p></li>
+<li><p><strong>设置请求体</strong></p>
+<ul>
+<li><p>选择"form-data"格式</p></li>
+<li><p>添加字段：</p>
+<ul>
+<li><code>file</code>: 选择文件（类型：File）</li>
+<li><code>type</code>: <code>image</code>（类型：Text）</li>
+</ul></li>
+</ul></li>
+<li><p><strong>发送请求</strong></p>
+<ul>
+<li>点击"发送"</li>
+<li>查看响应结果</li>
+</ul></li>
+</ol>
+<p><strong>APIFox界面示意</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────┐</span><br><span class="line">│ POST  http://localhost:8000/api/... │</span><br><span class="line">├─────────────────────────────────────┤</span><br><span class="line">│ 请求参数                             │</span><br><span class="line">│ ┌─────────────────────────────────┐ │</span><br><span class="line">│ │ file    [选择文件] [image.jpg]  │ │</span><br><span class="line">│ │ type    [image]                 │ │</span><br><span class="line">│ └─────────────────────────────────┘ │</span><br><span class="line">│                                     │</span><br><span class="line">│ [发送]                              │</span><br><span class="line">│                                     │</span><br><span class="line">│ 响应结果                             │</span><br><span class="line">│ ┌─────────────────────────────────┐ │</span><br><span class="line">│ │ &#123;                                │ │</span><br><span class="line">│ │   &quot;code&quot;: 200,                   │ │</span><br><span class="line">│ │   &quot;message&quot;: &quot;上传成功&quot;,          │ │</span><br><span class="line">│ │   &quot;data&quot;: &#123; ... &#125;                │ │</span><br><span class="line">│ │ &#125;                                │ │</span><br><span class="line">│ └─────────────────────────────────┘ │</span><br><span class="line">└─────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h3 id="apifox高级功能">5.5.5 APIFox高级功能</h3>
+<p><strong>1. 环境变量</strong></p>
+<p>可以设置不同环境（开发、测试、生产）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">开发环境：</span><br><span class="line">  base_url: http://localhost:8000</span><br><span class="line"></span><br><span class="line">生产环境：</span><br><span class="line">  base_url: https://api.example.com</span><br></pre></td></tr></table></figure>
+<p><strong>2. 前置脚本和后置脚本</strong></p>
+<ul>
+<li><strong>前置脚本</strong>：请求前执行（如：自动生成Token）</li>
+<li><strong>后置脚本</strong>：请求后执行（如：提取响应数据）</li>
+</ul>
+<p><strong>3. 接口文档自动生成</strong></p>
+<p>测试接口后，可以一键生成接口文档，分享给前端团队。</p>
+<p><strong>4. Mock数据</strong></p>
+<p>后端还没开发完？可以用APIFox生成Mock数据，前端先开发。</p>
+<h3 id="其他api调试工具">5.5.6 其他API调试工具</h3>
+<table>
+<thead>
+<tr class="header">
+<th>工具</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Postman</strong></td>
+<td>老牌工具，功能强大</td>
+</tr>
+<tr class="even">
+<td><strong>APIFox</strong></td>
+<td>国产工具，界面友好，功能全面</td>
+</tr>
+<tr class="odd">
+<td><strong>Insomnia</strong></td>
+<td>轻量级，界面简洁</td>
+</tr>
+<tr class="even">
+<td><strong>Thunder Client</strong></td>
+<td>VS Code插件，集成在编辑器中</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>推荐</strong>：<br />
+对于初学者，推荐使用APIFox，界面友好，功能全面，而且有中文支持。</p>
+</blockquote>
+<hr />
+<h1 id="选讲api版本控制">6. 选讲：API版本控制</h1>
+<h2 id="为什么需要版本控制">6.1 为什么需要版本控制？</h2>
+<p><strong>问题场景</strong>：</p>
+<ul>
+<li>API需要更新，但旧版本还在使用</li>
+<li>直接修改API会破坏现有功能</li>
+</ul>
+<p><strong>解决方案</strong>：API版本控制</p>
+<hr />
+<h2 id="版本控制的方式">6.2 版本控制的方式</h2>
+<h3 id="url路径版本控制">6.2.1 URL路径版本控制</h3>
+<p><strong>方式</strong>：在URL中包含版本号</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/v1/users          # 版本1</span><br><span class="line">/v2/users          # 版本2</span><br><span class="line">/api/v1/users      # 带api前缀的版本1</span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>直观，一眼看出版本</li>
+<li>易于管理</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>URL变长</li>
+</ul>
+<hr />
+<h3 id="请求头版本控制">6.2.2 请求头版本控制</h3>
+<p><strong>方式</strong>：在HTTP请求头中指定版本</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /users</span><br><span class="line">Headers: &#123;</span><br><span class="line">    &quot;Accept&quot;: &quot;application/vnd.api+json;version=2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>URL不变，更简洁</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>不够直观</li>
+</ul>
+<hr />
+<h3 id="查询参数版本控制">6.2.3 查询参数版本控制</h3>
+<p><strong>方式</strong>：在查询参数中指定版本</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /users?version=2</span><br></pre></td></tr></table></figure>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>简单易用</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>容易忘记加版本参数</li>
+</ul>
+<hr />
+<h2 id="版本控制策略">6.3 版本控制策略</h2>
+<h3 id="何时创建新版本">6.3.1 何时创建新版本？</h3>
+<p><strong>需要创建新版本的情况</strong>：</p>
+<ul>
+<li>✅ 修改了响应格式（字段名、结构变化）</li>
+<li>✅ 删除了接口</li>
+<li>✅ 修改了必填参数</li>
+</ul>
+<p><strong>不需要创建新版本的情况</strong>：</p>
+<ul>
+<li>✅ 添加了新字段（向后兼容）</li>
+<li>✅ 添加了新接口</li>
+<li>✅ 修复了bug</li>
+</ul>
+<hr />
+<h3 id="版本兼容策略">6.3.2 版本兼容策略</h3>
+<p><strong>策略</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>策略</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>同时支持多版本</strong></td>
+<td>旧版本和新版本都可用</td>
+<td>v1和v2同时提供服务</td>
+</tr>
+<tr class="even">
+<td><strong>逐步废弃</strong></td>
+<td>先发布新版本，再废弃旧版本</td>
+<td>v1标记为deprecated，6个月后删除</td>
+</tr>
+<tr class="odd">
+<td><strong>强制升级</strong></td>
+<td>直接废弃旧版本</td>
+<td>直接删除v1，只保留v2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>推荐策略</strong>：同时支持多版本 + 逐步废弃</p>
+<hr />
+<h2 id="rest架构风格理解">6.4 REST架构风格理解</h2>
+<h3 id="rest的核心原则">6.4.1 REST的核心原则</h3>
+<p><strong>REST的6个约束</strong>：</p>
+<ol type="1">
+<li><strong>客户端-服务器</strong>：前后端分离</li>
+<li><strong>无状态</strong>：每次请求都包含完整信息</li>
+<li><strong>可缓存</strong>：响应可以被缓存</li>
+<li><strong>统一接口</strong>：使用标准的HTTP方法</li>
+<li><strong>分层系统</strong>：可以有多层（代理、网关等）</li>
+<li><strong>按需代码</strong>：可以返回可执行代码（可选）</li>
+</ol>
+<hr />
+<h3 id="restful-vs-非restful">6.4.2 RESTful vs 非RESTful</h3>
+<p><strong>对比</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>特性</th>
+<th>RESTful</th>
+<th>非RESTful</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>URL设计</strong></td>
+<td>资源导向</td>
+<td>动作导向</td>
+</tr>
+<tr class="even">
+<td><strong>HTTP方法</strong></td>
+<td>使用标准方法</td>
+<td>只用GET/POST</td>
+</tr>
+<tr class="odd">
+<td><strong>状态码</strong></td>
+<td>使用标准状态码</td>
+<td>都用200</td>
+</tr>
+<tr class="even">
+<td><strong>数据格式</strong></td>
+<td>JSON</td>
+<td>各种格式</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">RESTful：</span><br><span class="line">GET    /users/1</span><br><span class="line">POST   /users</span><br><span class="line">PUT    /users/1</span><br><span class="line">DELETE /users/1</span><br><span class="line"></span><br><span class="line">非RESTful：</span><br><span class="line">GET /getUser?id=1</span><br><span class="line">POST /createUser</span><br><span class="line">POST /updateUser?id=1</span><br><span class="line">POST /deleteUser?id=1</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="本章总结">本章总结</h2>
+<p>通过本章的学习，你已经掌握了：</p>
+<p>✅ <strong>RESTful规范</strong>：</p>
+<ul>
+<li>资源命名规范</li>
+<li>HTTP方法的使用</li>
+<li>URL设计规范</li>
+<li>HTTP状态码</li>
+</ul>
+<p>✅ <strong>API设计原则</strong>：</p>
+<ul>
+<li>统一性原则</li>
+<li>简洁性原则</li>
+<li>可扩展性原则</li>
+<li>安全性原则</li>
+</ul>
+<p>✅ <strong>接口文档编写</strong>：</p>
+<ul>
+<li>接口文档的结构</li>
+<li>使用工具编写文档</li>
+<li>文档的重要性</li>
+</ul>
+<p>✅ <strong>实战技能</strong>：</p>
+<ul>
+<li>设计RESTful接口</li>
+<li>使用AI设计API</li>
+<li>编写接口文档</li>
+</ul>
+<p>✅ <strong>进阶知识</strong>（选讲）：</p>
+<ul>
+<li>API版本控制</li>
+<li>REST架构风格</li>
+</ul>
+<blockquote>
+<p>🌟 <strong>恭喜你！</strong><br />
+你已经掌握了RESTful API设计的核心技能！<br />
+这些知识将帮助你：</p>
+<ul>
+<li><p>设计规范的API接口</p></li>
+<li><p>编写清晰的接口文档</p></li>
+<li><p>提高前后端协作效率</p></li>
+</ul>
+<p><strong>记住</strong>：好的API设计是前后端协作的基础！<br />
+<strong>继续练习，继续探索，API设计的世界等着你！</strong> 🚀</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E9%A9%B1%E5%8A%A8Web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/" rel="tag"># AI驱动Web开发技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-12-16-11-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/" rel="prev" title="11.需求分析与设计">
+                  <i class="fa fa-angle-left"></i> 11.需求分析与设计
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-12-23-13-%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/" rel="next" title="13.后端开发基础">
+                  13.后端开发基础 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

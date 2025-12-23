@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 为什么需要需求分析与设计？ 1.1 开发前的思考 常见问题：  直接写代码：写着写着发现需求不清楚，要重写 没有规划：功能混乱，用户体验差 沟通不畅：开发者和用户理解不一致  生活类比：  没有需求分析：像盖房子不画图纸，盖到一半发现不对 有需求分析：先画图纸，再施工，事半功倍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="11.需求分析与设计">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-12-16-11-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. 为什么需要需求分析与设计？ 1.1 开发前的思考 常见问题：  直接写代码：写着写着发现需求不清楚，要重写 没有规划：功能混乱，用户体验差 沟通不畅：开发者和用户理解不一致  生活类比：  没有需求分析：像盖房子不画图纸，盖到一半发现不对 有需求分析：先画图纸，再施工，事半功倍">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-16T10:05:45.000Z">
+<meta property="article:modified_time" content="2025-12-16T10:40:54.392Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="AI驱动Web开发技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-12-16-11-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-12-16-11-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/","path":"2025-12-16-11-需求分析与设计/","title":"11.需求分析与设计"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>11.需求分析与设计 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要需求分析与设计？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E5%89%8D%E7%9A%84%E6%80%9D%E8%80%83"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 开发前的思考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 需求分析与设计的作用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B%E7%BC%96%E5%86%99"><span class="nav-number">2.</span> <span class="nav-text">2. 用户故事编写</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是用户故事？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B%E7%9A%84%E8%A6%81%E7%B4%A0"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 用户故事的要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%95%85%E4%BA%8B%E7%9A%84%E6%8B%86%E5%88%86"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 用户故事的拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3%E7%BC%96%E5%86%99"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 需求文档编写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">2.4.1.</span> <span class="nav-text">2.4.1 需求文档的结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7"><span class="nav-number">3.</span> <span class="nav-text">3. 原型设计工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8E%9F%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 什么是原型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%8E%9F%E5%9E%8B%E8%AE%BE%E8%AE%A1%E5%B7%A5%E5%85%B7"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 常用原型设计工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 在线工具（推荐）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E7%BB%98%E5%8E%9F%E5%9E%8B%E6%9C%80%E7%AE%80%E5%8D%95"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 手绘原型（最简单）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8figma%E5%BF%AB%E9%80%9F%E5%8E%9F%E5%9E%8B"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 使用Figma快速原型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 原型设计原则</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.</span> <span class="nav-text">4. 数据模型设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 什么是数据模型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BD%93%E5%85%B3%E7%B3%BB%E8%AE%BE%E8%AE%A1"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 实体关系设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E5%AE%9E%E4%BD%93"><span class="nav-number">4.2.1.</span> <span class="nav-text">4.2.1 识别实体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E5%B1%9E%E6%80%A7"><span class="nav-number">4.2.2.</span> <span class="nav-text">4.2.2 识别属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%86%E5%88%AB%E5%85%B3%E7%B3%BB"><span class="nav-number">4.2.3.</span> <span class="nav-text">4.2.3 识别关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E7%A4%BA%E4%BE%8B"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 数据模型示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8%E5%BE%85%E5%8A%9E%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.3.1.</span> <span class="nav-text">4.3.1 简单应用：待办事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%94%E7%94%A8%E5%8D%9A%E5%AE%A2%E7%B3%BB%E7%BB%9F"><span class="nav-number">4.3.2.</span> <span class="nav-text">4.3.2 复杂应用：博客系统</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">5. AI实战：使用AI设计数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 任务描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%BE%E8%AE%A1prompt"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 第一步：设计Prompt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 AI生成的数据模型（示例）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 数据模型验证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E8%AE%B2uml%E4%B8%8E%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">6.</span> <span class="nav-text">6. 选讲：UML与流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#uml%E5%9F%BA%E7%A1%80"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 UML基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFuml"><span class="nav-number">6.1.1.</span> <span class="nav-text">6.1.1 什么是UML？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8uml%E5%9B%BE"><span class="nav-number">6.1.2.</span> <span class="nav-text">6.1.2 常用UML图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9B%BE%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.1.3.</span> <span class="nav-text">6.1.3 类图示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">6.2.1.</span> <span class="nav-text">6.2.1 什么是流程图？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE%E7%AC%A6%E5%8F%B7"><span class="nav-number">6.2.2.</span> <span class="nav-text">6.2.2 流程图符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.2.3.</span> <span class="nav-text">6.2.3 流程图示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B%E5%9B%BE%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="nav-number">6.2.4.</span> <span class="nav-text">6.2.4 绘制流程图的工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E6%80%9D%E7%BB%B4"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 系统设计思维</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B%E8%AE%BE%E8%AE%A1"><span class="nav-number">6.3.1.</span> <span class="nav-text">6.3.1 自顶向下设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8C%96%E8%AE%BE%E8%AE%A1"><span class="nav-number">6.3.2.</span> <span class="nav-text">6.3.2 模块化设计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%80%BB%E7%BB%93"><span class="nav-number">6.4.</span> <span class="nav-text">本章总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">81</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-12-16-11-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="11.需求分析与设计 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          11.需求分析与设计
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-16 18:05:45 / 修改时间：18:40:54" itemprop="dateCreated datePublished" datetime="2025-12-16T18:05:45+08:00">2025-12-16</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="为什么需要需求分析与设计">1. 为什么需要需求分析与设计？</h1>
+<h2 id="开发前的思考">1.1 开发前的思考</h2>
+<p><strong>常见问题</strong>：</p>
+<ul>
+<li><strong>直接写代码</strong>：写着写着发现需求不清楚，要重写</li>
+<li><strong>没有规划</strong>：功能混乱，用户体验差</li>
+<li><strong>沟通不畅</strong>：开发者和用户理解不一致</li>
+</ul>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>没有需求分析</strong>：像盖房子不画图纸，盖到一半发现不对</li>
+<li><strong>有需求分析</strong>：先画图纸，再施工，事半功倍</li>
+</ul>
+<span id="more"></span>
+<hr />
+<h2 id="需求分析与设计的作用">1.2 需求分析与设计的作用</h2>
+<table>
+<thead>
+<tr class="header">
+<th>阶段</th>
+<th>作用</th>
+<th>实际效果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>需求分析</strong></td>
+<td>明确"要做什么"</td>
+<td>避免返工，节省时间</td>
+</tr>
+<tr class="even">
+<td><strong>原型设计</strong></td>
+<td>明确"长什么样"</td>
+<td>提前发现问题，优化体验</td>
+</tr>
+<tr class="odd">
+<td><strong>数据模型设计</strong></td>
+<td>明确"数据怎么存"</td>
+<td>数据结构清晰，易于开发</td>
+</tr>
+<tr class="even">
+<td><strong>系统设计</strong></td>
+<td>明确"怎么实现"</td>
+<td>开发有方向，不混乱</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>记忆技巧</strong>：<br />
+需求分析 = 盖房子前的"图纸设计"，虽然花时间，但能避免很多问题！</p>
+</blockquote>
+<hr />
+<h1 id="用户故事编写">2. 用户故事编写</h1>
+<h2 id="什么是用户故事">2.1 什么是用户故事？</h2>
+<p><strong>用户故事</strong> = 从用户角度描述功能需求</p>
+<p><strong>格式</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">作为 [角色]</span><br><span class="line">我想要 [功能]</span><br><span class="line">以便于 [价值]</span><br></pre></td></tr></table></figure></p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>传统需求</strong>："做一个登录功能"（不清晰）</li>
+<li><strong>用户故事</strong>："作为用户，我想要登录系统，以便于访问我的个人数据"（清晰）</li>
+</ul>
+<hr />
+<h2 id="用户故事的要素">2.2 用户故事的要素</h2>
+<p><strong>三个要素</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>要素</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>角色</strong></td>
+<td>谁要用这个功能</td>
+<td>用户、管理员、游客</td>
+</tr>
+<tr class="even">
+<td><strong>功能</strong></td>
+<td>要做什么</td>
+<td>登录、查看订单、发布文章</td>
+</tr>
+<tr class="odd">
+<td><strong>价值</strong></td>
+<td>为什么要做</td>
+<td>保护隐私、方便管理、分享信息</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">作为 学生</span><br><span class="line">我想要 查看我的成绩</span><br><span class="line">以便于 了解学习情况</span><br><span class="line"></span><br><span class="line">作为 管理员</span><br><span class="line">我想要 管理用户信息</span><br><span class="line">以便于 维护系统正常运行</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="用户故事的拆分">2.3 用户故事的拆分</h2>
+<p><strong>原则</strong>：一个用户故事应该是一个独立、可完成的功能</p>
+<p><strong>好的用户故事</strong>：</p>
+<ul>
+<li>✅ 独立：不依赖其他故事</li>
+<li>✅ 可完成：能在短时间内完成</li>
+<li>✅ 有价值：对用户有意义</li>
+</ul>
+<p><strong>不好的用户故事</strong>：</p>
+<ul>
+<li>❌ 太大："做一个完整的电商系统"</li>
+<li>❌ 太模糊："优化用户体验"</li>
+<li>❌ 没有价值："添加一个按钮"</li>
+</ul>
+<p><strong>拆分示例</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">❌ 不好的故事：</span><br><span class="line">&quot;做一个待办事项应用&quot;</span><br><span class="line"></span><br><span class="line">✅ 拆分后的故事：</span><br><span class="line">1. 作为用户，我想要添加待办事项，以便于记录任务</span><br><span class="line">2. 作为用户，我想要删除待办事项，以便于清理已完成的任务</span><br><span class="line">3. 作为用户，我想要标记任务完成，以便于跟踪进度</span><br><span class="line">4. 作为用户，我想要查看所有待办事项，以便于了解任务列表</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="需求文档编写">2.4 需求文档编写</h2>
+<h3 id="需求文档的结构">2.4.1 需求文档的结构</h3>
+<p><strong>基本结构</strong>：</p>
+<ol type="1">
+<li><strong>项目概述</strong>：项目是什么，解决什么问题</li>
+<li><strong>用户角色</strong>：有哪些用户角色</li>
+<li><strong>功能需求</strong>：用用户故事描述功能</li>
+<li><strong>非功能需求</strong>：性能、安全、兼容性等</li>
+<li><strong>界面要求</strong>：基本的界面要求</li>
+</ol>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 待办事项应用需求文档</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 1. 项目概述</span></span><br><span class="line">开发一个待办事项管理应用，帮助用户记录和管理日常任务。</span><br><span class="line"></span><br><span class="line"><span class="section">## 2. 用户角色</span></span><br><span class="line"><span class="bullet">-</span> 普通用户：使用应用管理自己的待办事项</span><br><span class="line"></span><br><span class="line"><span class="section">## 3. 功能需求</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 3.1 添加待办事项</span></span><br><span class="line">作为用户，我想要添加待办事项，以便于记录任务。</span><br><span class="line"></span><br><span class="line"><span class="strong">**验收标准**</span>：</span><br><span class="line"><span class="bullet">-</span> 可以输入任务内容</span><br><span class="line"><span class="bullet">-</span> 点击添加按钮后，任务出现在列表中</span><br><span class="line"><span class="bullet">-</span> 输入为空时，提示用户输入</span><br><span class="line"></span><br><span class="line"><span class="section">### 3.2 删除待办事项</span></span><br><span class="line">作为用户，我想要删除待办事项，以便于清理已完成的任务。</span><br><span class="line"></span><br><span class="line"><span class="strong">**验收标准**</span>：</span><br><span class="line"><span class="bullet">-</span> 每个任务旁边有删除按钮</span><br><span class="line"><span class="bullet">-</span> 点击删除按钮后，任务从列表中移除</span><br><span class="line"></span><br><span class="line"><span class="section">## 4. 非功能需求</span></span><br><span class="line"><span class="bullet">-</span> 页面加载时间 &lt; 2秒</span><br><span class="line"><span class="bullet">-</span> 支持现代浏览器（Chrome、Firefox、Safari）</span><br><span class="line"><span class="bullet">-</span> 数据保存在浏览器本地存储</span><br></pre></td></tr></table></figure>
+<hr />
+<h1 id="原型设计工具">3. 原型设计工具</h1>
+<h2 id="什么是原型">3.1 什么是原型？</h2>
+<p><strong>原型</strong> = 产品的"草图"，展示界面布局和交互</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>没有原型</strong>：直接盖房子，不知道效果</li>
+<li><strong>有原型</strong>：先画图纸，看看效果，再决定怎么盖</li>
+</ul>
+<p><strong>原型的价值</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>价值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>提前发现问题</strong></td>
+<td>在设计阶段发现用户体验问题</td>
+</tr>
+<tr class="even">
+<td><strong>统一理解</strong></td>
+<td>开发者和用户对界面理解一致</td>
+</tr>
+<tr class="odd">
+<td><strong>节省成本</strong></td>
+<td>修改原型比修改代码便宜得多</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="常用原型设计工具">3.2 常用原型设计工具</h2>
+<h3 id="在线工具推荐">3.2.1 在线工具（推荐）</h3>
+<table>
+<thead>
+<tr class="header">
+<th>工具</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Figma</strong></td>
+<td>功能强大，免费版够用</td>
+<td>专业设计、团队协作</td>
+</tr>
+<tr class="even">
+<td><strong>墨刀</strong></td>
+<td>中文界面，上手快</td>
+<td>快速原型、移动端</td>
+</tr>
+<tr class="odd">
+<td><strong>ProcessOn</strong></td>
+<td>简单易用，免费</td>
+<td>流程图、简单原型</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="手绘原型最简单">3.2.2 手绘原型（最简单）</h3>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>快速：几分钟就能画出来</li>
+<li>灵活：随时修改</li>
+<li>低成本：只需要纸和笔</li>
+</ul>
+<p><strong>适用场景</strong>：</p>
+<ul>
+<li>初期想法验证</li>
+<li>快速沟通</li>
+<li>个人项目</li>
+</ul>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">手绘原型示例：</span><br><span class="line">┌─────────────────────────┐</span><br><span class="line">│   待办事项应用           │</span><br><span class="line">├─────────────────────────┤</span><br><span class="line">│  [输入框]  [添加按钮]    │</span><br><span class="line">├─────────────────────────┤</span><br><span class="line">│  ☐ 学习Vue              │</span><br><span class="line">│     [删除]              │</span><br><span class="line">│  ☐ 完成作业             │</span><br><span class="line">│     [删除]              │</span><br><span class="line">└─────────────────────────┘</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="使用figma快速原型">3.2.3 使用Figma快速原型</h3>
+<p><strong>基本步骤</strong>：</p>
+<ol type="1">
+<li><strong>创建画板</strong>：选择合适的设备尺寸（如网页1920x1080）</li>
+<li><strong>添加元素</strong>：拖拽矩形、文本、按钮等</li>
+<li><strong>设置样式</strong>：调整颜色、字体、大小</li>
+<li><strong>添加交互</strong>：设置点击效果（可选）</li>
+</ol>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Figma原型示例（文字描述）：</span><br><span class="line">- 顶部：标题&quot;待办事项&quot;</span><br><span class="line">- 中间：输入框 + &quot;添加&quot;按钮（横向排列）</span><br><span class="line">- 下方：待办事项列表</span><br><span class="line">  - 每个事项：复选框 + 文字 + &quot;删除&quot;按钮</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>💡 <strong>建议</strong>：<br />
+初学者可以先用手绘原型，快速验证想法。<br />
+需要更专业的原型时，再使用Figma等工具。</p>
+</blockquote>
+<hr />
+<h2 id="原型设计原则">3.3 原型设计原则</h2>
+<p><strong>原则</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>原则</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>简洁明了</strong></td>
+<td>界面不要太复杂</td>
+<td>一个页面一个主要功能</td>
+</tr>
+<tr class="even">
+<td><strong>符合习惯</strong></td>
+<td>遵循用户使用习惯</td>
+<td>登录按钮通常在右上角</td>
+</tr>
+<tr class="odd">
+<td><strong>突出重点</strong></td>
+<td>重要功能要醒目</td>
+<td>主要按钮用大号、醒目颜色</td>
+</tr>
+<tr class="even">
+<td><strong>一致性</strong></td>
+<td>相同功能用相同样式</td>
+<td>所有删除按钮样式统一</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="数据模型设计">4. 数据模型设计</h1>
+<h2 id="什么是数据模型">4.1 什么是数据模型？</h2>
+<p><strong>数据模型</strong> = 描述数据结构和数据之间的关系</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>没有数据模型</strong>：数据乱放，找不到</li>
+<li><strong>有数据模型</strong>：数据分类整理，结构清晰</li>
+</ul>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">待办事项应用的数据模型：</span><br><span class="line"></span><br><span class="line">待办事项（Todo）</span><br><span class="line">- id: 唯一标识</span><br><span class="line">- text: 任务内容</span><br><span class="line">- completed: 是否完成</span><br><span class="line">- createdAt: 创建时间</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="实体关系设计">4.2 实体关系设计</h2>
+<h3 id="识别实体">4.2.1 识别实体</h3>
+<p><strong>实体</strong> = 系统中需要存储的对象</p>
+<p><strong>实际例子</strong>：</p>
+<p><strong>博客系统</strong>：</p>
+<ul>
+<li>用户（User）</li>
+<li>文章（Article）</li>
+<li>评论（Comment）</li>
+</ul>
+<p><strong>待办事项系统</strong>：</p>
+<ul>
+<li>待办事项（Todo）</li>
+<li>用户（User）- 如果需要多用户功能</li>
+</ul>
+<hr />
+<h3 id="识别属性">4.2.2 识别属性</h3>
+<p><strong>属性</strong> = 实体的特征</p>
+<p><strong>实际例子</strong>：</p>
+<p><strong>用户（User）实体</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>id</td>
+<td>数字</td>
+<td>唯一标识</td>
+</tr>
+<tr class="even">
+<td>username</td>
+<td>字符串</td>
+<td>用户名</td>
+</tr>
+<tr class="odd">
+<td>email</td>
+<td>字符串</td>
+<td>邮箱</td>
+</tr>
+<tr class="even">
+<td>password</td>
+<td>字符串</td>
+<td>密码（加密存储）</td>
+</tr>
+<tr class="odd">
+<td>createdAt</td>
+<td>日期</td>
+<td>创建时间</td>
+</tr>
+</tbody>
+</table>
+<p><strong>待办事项（Todo）实体</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>id</td>
+<td>数字</td>
+<td>唯一标识</td>
+</tr>
+<tr class="even">
+<td>text</td>
+<td>字符串</td>
+<td>任务内容</td>
+</tr>
+<tr class="odd">
+<td>completed</td>
+<td>布尔值</td>
+<td>是否完成</td>
+</tr>
+<tr class="even">
+<td>userId</td>
+<td>数字</td>
+<td>所属用户ID（关联用户）</td>
+</tr>
+<tr class="odd">
+<td>createdAt</td>
+<td>日期</td>
+<td>创建时间</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="识别关系">4.2.3 识别关系</h3>
+<p><strong>关系类型</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>关系</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>一对一</strong></td>
+<td>一个实体对应一个实体</td>
+<td>用户 ↔︎ 用户资料</td>
+</tr>
+<tr class="even">
+<td><strong>一对多</strong></td>
+<td>一个实体对应多个实体</td>
+<td>用户 → 多篇文章</td>
+</tr>
+<tr class="odd">
+<td><strong>多对多</strong></td>
+<td>多个实体对应多个实体</td>
+<td>文章 ↔︎ 标签</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">用户和待办事项的关系：</span><br><span class="line">一个用户可以有多个待办事项（一对多）</span><br><span class="line">一个待办事项只属于一个用户（多对一）</span><br><span class="line"></span><br><span class="line">用户和文章的关系：</span><br><span class="line">一个用户可以写多篇文章（一对多）</span><br><span class="line">一篇文章只属于一个用户（多对一）</span><br><span class="line"></span><br><span class="line">文章和标签的关系：</span><br><span class="line">一篇文章可以有多个标签（多对多）</span><br><span class="line">一个标签可以属于多篇文章（多对多）</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="数据模型示例">4.3 数据模型示例</h2>
+<h3 id="简单应用待办事项">4.3.1 简单应用：待办事项</h3>
+<p><strong>数据模型</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 待办事项数据模型（JavaScript对象）</span></span><br><span class="line"><span class="keyword">const</span> todoModel = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="number">1</span>,                    <span class="comment">// 唯一标识</span></span><br><span class="line">    <span class="attr">text</span>: <span class="string">&#x27;学习Vue&#x27;</span>,          <span class="comment">// 任务内容</span></span><br><span class="line">    <span class="attr">completed</span>: <span class="literal">false</span>,         <span class="comment">// 是否完成</span></span><br><span class="line">    <span class="attr">createdAt</span>: <span class="string">&#x27;2024-01-01&#x27;</span>   <span class="comment">// 创建时间</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 待办事项列表</span></span><br><span class="line"><span class="keyword">const</span> todos = [</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">text</span>: <span class="string">&#x27;学习Vue&#x27;</span>, <span class="attr">completed</span>: <span class="literal">false</span>, <span class="attr">createdAt</span>: <span class="string">&#x27;2024-01-01&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">text</span>: <span class="string">&#x27;完成作业&#x27;</span>, <span class="attr">completed</span>: <span class="literal">true</span>, <span class="attr">createdAt</span>: <span class="string">&#x27;2024-01-02&#x27;</span> &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="复杂应用博客系统">4.3.2 复杂应用：博客系统</h3>
+<p><strong>数据模型</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用户模型</span></span><br><span class="line"><span class="keyword">const</span> userModel = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">username</span>: <span class="string">&#x27;zhangsan&#x27;</span>,</span><br><span class="line">    <span class="attr">email</span>: <span class="string">&#x27;zhangsan@example.com&#x27;</span>,</span><br><span class="line">    <span class="attr">createdAt</span>: <span class="string">&#x27;2024-01-01&#x27;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文章模型</span></span><br><span class="line"><span class="keyword">const</span> articleModel = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;Vue入门教程&#x27;</span>,</span><br><span class="line">    <span class="attr">content</span>: <span class="string">&#x27;...&#x27;</span>,</span><br><span class="line">    <span class="attr">authorId</span>: <span class="number">1</span>,  <span class="comment">// 关联用户ID</span></span><br><span class="line">    <span class="attr">createdAt</span>: <span class="string">&#x27;2024-01-15&#x27;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 评论模型</span></span><br><span class="line"><span class="keyword">const</span> commentModel = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">content</span>: <span class="string">&#x27;写得很好！&#x27;</span>,</span><br><span class="line">    <span class="attr">articleId</span>: <span class="number">1</span>,  <span class="comment">// 关联文章ID</span></span><br><span class="line">    <span class="attr">userId</span>: <span class="number">2</span>,     <span class="comment">// 关联用户ID</span></span><br><span class="line">    <span class="attr">createdAt</span>: <span class="string">&#x27;2024-01-16&#x27;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>关系说明</strong>：</p>
+<ul>
+<li>用户 → 文章（一对多）</li>
+<li>文章 → 评论（一对多）</li>
+<li>用户 → 评论（一对多）</li>
+</ul>
+<hr />
+<h1 id="ai实战使用ai设计数据模型">5. AI实战：使用AI设计数据模型</h1>
+<h2 id="任务描述">5.1 任务描述</h2>
+<p><strong>目标</strong>：使用AI工具设计一个博客系统的数据模型</p>
+<p><strong>功能要求</strong>：</p>
+<ul>
+<li>用户可以注册、登录</li>
+<li>用户可以发布文章</li>
+<li>用户可以评论文章</li>
+<li>文章可以分类（标签）</li>
+<li>需要设计用户、文章、评论、标签的数据模型</li>
+</ul>
+<hr />
+<h2 id="第一步设计prompt">5.2 第一步：设计Prompt</h2>
+<p><strong>Prompt示例</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">设计一个博客系统的数据模型，要求：</span><br><span class="line">1. 用户实体：包含id、用户名、邮箱、密码、创建时间</span><br><span class="line">2. 文章实体：包含id、标题、内容、作者ID、创建时间</span><br><span class="line">3. 评论实体：包含id、内容、文章ID、用户ID、创建时间</span><br><span class="line">4. 标签实体：包含id、名称</span><br><span class="line">5. 关系说明：</span><br><span class="line">   - 用户和文章：一对多</span><br><span class="line">   - 文章和评论：一对多</span><br><span class="line">   - 文章和标签：多对多</span><br><span class="line">6. 用JavaScript对象格式展示数据模型</span><br><span class="line">7. 说明每个字段的类型和用途</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="ai生成的数据模型示例">5.3 AI生成的数据模型（示例）</h2>
+<p><strong>数据模型设计</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用户模型</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">User</span> = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="title class_">Number</span>,           <span class="comment">// 用户ID（主键）</span></span><br><span class="line">    <span class="attr">username</span>: <span class="title class_">String</span>,      <span class="comment">// 用户名（唯一）</span></span><br><span class="line">    <span class="attr">email</span>: <span class="title class_">String</span>,         <span class="comment">// 邮箱（唯一）</span></span><br><span class="line">    <span class="attr">password</span>: <span class="title class_">String</span>,      <span class="comment">// 密码（加密存储）</span></span><br><span class="line">    <span class="attr">avatar</span>: <span class="title class_">String</span>,        <span class="comment">// 头像URL（可选）</span></span><br><span class="line">    <span class="attr">createdAt</span>: <span class="title class_">Date</span>,       <span class="comment">// 创建时间</span></span><br><span class="line">    <span class="attr">updatedAt</span>: <span class="title class_">Date</span>        <span class="comment">// 更新时间</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文章模型</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Article</span> = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="title class_">Number</span>,           <span class="comment">// 文章ID（主键）</span></span><br><span class="line">    <span class="attr">title</span>: <span class="title class_">String</span>,        <span class="comment">// 文章标题</span></span><br><span class="line">    <span class="attr">content</span>: <span class="title class_">String</span>,      <span class="comment">// 文章内容</span></span><br><span class="line">    <span class="attr">summary</span>: <span class="title class_">String</span>,      <span class="comment">// 文章摘要（可选）</span></span><br><span class="line">    <span class="attr">authorId</span>: <span class="title class_">Number</span>,     <span class="comment">// 作者ID（外键，关联User）</span></span><br><span class="line">    <span class="attr">viewCount</span>: <span class="title class_">Number</span>,    <span class="comment">// 浏览量</span></span><br><span class="line">    <span class="attr">likeCount</span>: <span class="title class_">Number</span>,    <span class="comment">// 点赞数</span></span><br><span class="line">    <span class="attr">status</span>: <span class="title class_">String</span>,       <span class="comment">// 状态（draft-草稿，published-已发布）</span></span><br><span class="line">    <span class="attr">createdAt</span>: <span class="title class_">Date</span>,      <span class="comment">// 创建时间</span></span><br><span class="line">    <span class="attr">updatedAt</span>: <span class="title class_">Date</span>       <span class="comment">// 更新时间</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 评论模型</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Comment</span> = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="title class_">Number</span>,           <span class="comment">// 评论ID（主键）</span></span><br><span class="line">    <span class="attr">content</span>: <span class="title class_">String</span>,      <span class="comment">// 评论内容</span></span><br><span class="line">    <span class="attr">articleId</span>: <span class="title class_">Number</span>,    <span class="comment">// 文章ID（外键，关联Article）</span></span><br><span class="line">    <span class="attr">userId</span>: <span class="title class_">Number</span>,       <span class="comment">// 用户ID（外键，关联User）</span></span><br><span class="line">    <span class="attr">parentId</span>: <span class="title class_">Number</span>,     <span class="comment">// 父评论ID（支持回复评论）</span></span><br><span class="line">    <span class="attr">createdAt</span>: <span class="title class_">Date</span>      <span class="comment">// 创建时间</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 标签模型</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">Tag</span> = &#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="title class_">Number</span>,           <span class="comment">// 标签ID（主键）</span></span><br><span class="line">    <span class="attr">name</span>: <span class="title class_">String</span>,         <span class="comment">// 标签名称（唯一）</span></span><br><span class="line">    <span class="attr">color</span>: <span class="title class_">String</span>         <span class="comment">// 标签颜色（可选）</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 文章-标签关联表（多对多关系）</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">ArticleTag</span> = &#123;</span><br><span class="line">    <span class="attr">articleId</span>: <span class="title class_">Number</span>,    <span class="comment">// 文章ID（外键）</span></span><br><span class="line">    <span class="attr">tagId</span>: <span class="title class_">Number</span>         <span class="comment">// 标签ID（外键）</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>关系说明</strong>：</p>
+<ul>
+<li><strong>用户 ↔︎ 文章</strong>：一对多（一个用户可以写多篇文章）</li>
+<li><strong>文章 ↔︎ 评论</strong>：一对多（一篇文章可以有多个评论）</li>
+<li><strong>用户 ↔︎ 评论</strong>：一对多（一个用户可以写多个评论）</li>
+<li><strong>文章 ↔︎
+标签</strong>：多对多（一篇文章可以有多个标签，一个标签可以属于多篇文章）</li>
+</ul>
+<hr />
+<h2 id="数据模型验证">5.4 数据模型验证</h2>
+<p><strong>检查清单</strong>：</p>
+<ul>
+<li>✅ 每个实体都有唯一标识（id）</li>
+<li>✅ 关系字段正确（外键）</li>
+<li>✅ 字段类型合理（字符串、数字、日期等）</li>
+<li>✅ 必填字段明确（如用户名、邮箱）</li>
+<li>✅ 关系设计合理（符合业务逻辑）</li>
+</ul>
+<hr />
+<h1 id="选讲uml与流程图">6. 选讲：UML与流程图</h1>
+<h2 id="uml基础">6.1 UML基础</h2>
+<h3 id="什么是uml">6.1.1 什么是UML？</h3>
+<p><strong>UML</strong> = Unified Modeling Language（统一建模语言）</p>
+<p><strong>作用</strong>：用图形化的方式描述系统设计</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>UML</strong> = 建筑图纸（用标准符号画图，大家都看得懂）</li>
+<li><strong>没有UML</strong> = 用文字描述（容易理解偏差）</li>
+</ul>
+<hr />
+<h3 id="常用uml图">6.1.2 常用UML图</h3>
+<table>
+<thead>
+<tr class="header">
+<th>UML图类型</th>
+<th>作用</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>用例图</strong></td>
+<td>描述系统功能</td>
+<td>需求分析阶段</td>
+</tr>
+<tr class="even">
+<td><strong>类图</strong></td>
+<td>描述数据结构</td>
+<td>数据模型设计</td>
+</tr>
+<tr class="odd">
+<td><strong>时序图</strong></td>
+<td>描述交互流程</td>
+<td>功能实现设计</td>
+</tr>
+<tr class="even">
+<td><strong>活动图</strong></td>
+<td>描述业务流程</td>
+<td>业务流程设计</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="类图示例">6.1.3 类图示例</h3>
+<p><strong>作用</strong>：描述数据模型的结构</p>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">类图示例（文字描述）：</span><br><span class="line"></span><br><span class="line">┌─────────────┐</span><br><span class="line">│    User     │</span><br><span class="line">├─────────────┤</span><br><span class="line">│ +id: int    │</span><br><span class="line">│ +username   │</span><br><span class="line">│ +email      │</span><br><span class="line">│ +password   │</span><br><span class="line">└─────────────┘</span><br><span class="line">       │</span><br><span class="line">       │ 1</span><br><span class="line">       │</span><br><span class="line">       │ *</span><br><span class="line">┌─────────────┐</span><br><span class="line">│   Article   │</span><br><span class="line">├─────────────┤</span><br><span class="line">│ +id: int    │</span><br><span class="line">│ +title      │</span><br><span class="line">│ +content    │</span><br><span class="line">│ +authorId   │</span><br><span class="line">└─────────────┘</span><br></pre></td></tr></table></figure>
+<p><strong>说明</strong>：</p>
+<ul>
+<li><code>+</code> 表示公开属性</li>
+<li><code>1</code> 表示一个</li>
+<li><code>*</code> 表示多个</li>
+<li>箭头表示关系方向</li>
+</ul>
+<hr />
+<h2 id="流程图">6.2 流程图</h2>
+<h3 id="什么是流程图">6.2.1 什么是流程图？</h3>
+<p><strong>流程图</strong> = 用图形描述流程的步骤</p>
+<p><strong>作用</strong>：清晰展示业务流程或功能流程</p>
+<hr />
+<h3 id="流程图符号">6.2.2 流程图符号</h3>
+<table>
+<thead>
+<tr class="header">
+<th>符号</th>
+<th>含义</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>圆角矩形</td>
+<td>开始/结束</td>
+<td>流程的起点和终点</td>
+</tr>
+<tr class="even">
+<td>矩形</td>
+<td>处理步骤</td>
+<td>执行的操作</td>
+</tr>
+<tr class="odd">
+<td>菱形</td>
+<td>判断</td>
+<td>条件判断</td>
+</tr>
+<tr class="even">
+<td>箭头</td>
+<td>流程方向</td>
+<td>表示执行顺序</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="流程图示例">6.2.3 流程图示例</h3>
+<p><strong>用户登录流程</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">流程图示例（文字描述）：</span><br><span class="line"></span><br><span class="line">开始</span><br><span class="line">  ↓</span><br><span class="line">显示登录页面</span><br><span class="line">  ↓</span><br><span class="line">用户输入用户名和密码</span><br><span class="line">  ↓</span><br><span class="line">验证输入是否为空？</span><br><span class="line">  ├─ 是 → 提示&quot;请输入用户名和密码&quot; → 返回登录页面</span><br><span class="line">  └─ 否 ↓</span><br><span class="line">发送登录请求</span><br><span class="line">  ↓</span><br><span class="line">验证用户名和密码？</span><br><span class="line">  ├─ 错误 → 提示&quot;用户名或密码错误&quot; → 返回登录页面</span><br><span class="line">  └─ 正确 ↓</span><br><span class="line">保存登录状态</span><br><span class="line">  ↓</span><br><span class="line">跳转到首页</span><br><span class="line">  ↓</span><br><span class="line">结束</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="绘制流程图的工具">6.2.4 绘制流程图的工具</h3>
+<table>
+<thead>
+<tr class="header">
+<th>工具</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>ProcessOn</strong></td>
+<td>在线工具，免费</td>
+<td>快速绘制流程图</td>
+</tr>
+<tr class="even">
+<td><strong>Draw.io</strong></td>
+<td>功能强大，免费</td>
+<td>专业流程图绘制</td>
+</tr>
+<tr class="odd">
+<td><strong>手绘</strong></td>
+<td>快速简单</td>
+<td>初期设计、快速沟通</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="系统设计思维">6.3 系统设计思维</h2>
+<h3 id="自顶向下设计">6.3.1 自顶向下设计</h3>
+<p><strong>思路</strong>：从整体到细节</p>
+<p><strong>步骤</strong>：</p>
+<ol type="1">
+<li><p><strong>整体规划</strong>：系统有哪些模块？</p></li>
+<li><p><strong>模块设计</strong>：每个模块有哪些功能？</p></li>
+<li><p><strong>功能实现</strong>：每个功能怎么实现？</p></li>
+</ol>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">博客系统设计：</span><br><span class="line"></span><br><span class="line">1. 整体规划：</span><br><span class="line">   - 用户模块</span><br><span class="line">   - 文章模块</span><br><span class="line">   - 评论模块</span><br><span class="line"></span><br><span class="line">2. 模块设计：</span><br><span class="line">   - 用户模块：注册、登录、个人中心</span><br><span class="line">   - 文章模块：发布、编辑、删除、查看</span><br><span class="line">   - 评论模块：评论、回复、删除</span><br><span class="line"></span><br><span class="line">3. 功能实现：</span><br><span class="line">   - 注册：表单验证 → 保存数据 → 返回结果</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="模块化设计">6.3.2 模块化设计</h3>
+<p><strong>原则</strong>：把系统拆分成独立的模块</p>
+<p><strong>优势</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>易于开发</strong></td>
+<td>不同人负责不同模块</td>
+</tr>
+<tr class="even">
+<td><strong>易于维护</strong></td>
+<td>修改一个模块不影响其他模块</td>
+</tr>
+<tr class="odd">
+<td><strong>易于测试</strong></td>
+<td>可以单独测试每个模块</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="本章总结">本章总结</h2>
+<p>通过本章的学习，你已经掌握了：</p>
+<p>✅ <strong>用户故事编写</strong>：</p>
+<ul>
+<li>用户故事的格式和要素</li>
+<li>如何拆分用户故事</li>
+<li>如何编写需求文档</li>
+</ul>
+<p>✅ <strong>原型设计</strong>：</p>
+<ul>
+<li>原型的作用和价值</li>
+<li>常用原型设计工具</li>
+<li>原型设计原则</li>
+</ul>
+<p>✅ <strong>数据模型设计</strong>：</p>
+<ul>
+<li>如何识别实体和属性</li>
+<li>如何设计实体关系</li>
+<li>数据模型的设计方法</li>
+</ul>
+<p>✅ <strong>实战技能</strong>：</p>
+<ul>
+<li>使用AI设计数据模型</li>
+<li>输出需求文档</li>
+<li>绘制界面原型</li>
+</ul>
+<p>✅ <strong>进阶知识</strong>（选讲）：</p>
+<ul>
+<li>UML基础（类图、用例图）</li>
+<li>流程图绘制</li>
+<li>系统设计思维</li>
+</ul>
+<blockquote>
+<p>🌟 <strong>恭喜你！</strong><br />
+你已经掌握了需求分析与设计的核心技能！<br />
+这些知识将帮助你：</p>
+<ul>
+<li><p>明确项目需求</p></li>
+<li><p>设计合理的系统结构</p></li>
+<li><p>提高开发效率</p></li>
+</ul>
+<p><strong>记住</strong>：好的设计是成功的一半！<br />
+<strong>继续练习，继续探索，系统设计的世界等着你！</strong> 🚀</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E9%A9%B1%E5%8A%A8Web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/" rel="tag"># AI驱动Web开发技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="prev" title="10.数据可视化">
+                  <i class="fa fa-angle-left"></i> 10.数据可视化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-12-23-12-RESTful-API%E8%AE%BE%E8%AE%A1/" rel="next" title="12.RESTful API设计">
+                  12.RESTful API设计 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

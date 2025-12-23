@@ -19,15 +19,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="1. 为什么需要前端工程化？ 1.1 传统开发的痛点 在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题： 问题：  依赖管理混乱：不知道项目用了哪些库，版本是多少 代码重复：每个页面都要写相同的网络请求代码 配置分散：API地址、环境配置写在代码里，难以管理 难以协作：不同开发者环境不同，代码运行结果不一致  实际例子： 1234567&#x2F;&#x2F; 问题1：每">
+    <meta name="description" content="1. 为什么需要前端工程化？ 1.1 传统开发的痛点 在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题： 问题：  依赖管理混乱：不知道项目用了哪些库，版本是多少 代码重复：每个页面都要写相同的网络请求代码 配置分散：API地址、环境配置写在代码里，难以管理 难以协作：不同开发者环境不同，代码运行结果不一致">
 <meta property="og:type" content="article">
 <meta property="og:title" content="09.前端工程化">
 <meta property="og:url" content="http://blog.csgrandeur.cn/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/index.html">
 <meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
-<meta property="og:description" content="1. 为什么需要前端工程化？ 1.1 传统开发的痛点 在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题： 问题：  依赖管理混乱：不知道项目用了哪些库，版本是多少 代码重复：每个页面都要写相同的网络请求代码 配置分散：API地址、环境配置写在代码里，难以管理 难以协作：不同开发者环境不同，代码运行结果不一致  实际例子： 1234567&#x2F;&#x2F; 问题1：每">
+<meta property="og:description" content="1. 为什么需要前端工程化？ 1.1 传统开发的痛点 在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题： 问题：  依赖管理混乱：不知道项目用了哪些库，版本是多少 代码重复：每个页面都要写相同的网络请求代码 配置分散：API地址、环境配置写在代码里，难以管理 难以协作：不同开发者环境不同，代码运行结果不一致">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-16T06:09:02.000Z">
-<meta property="article:modified_time" content="2025-12-16T06:45:48.523Z">
+<meta property="article:modified_time" content="2025-12-16T09:58:16.479Z">
 <meta property="article:author" content="CSGrandeur">
 <meta property="article:tag" content="AI驱动Web开发技术">
 <meta name="twitter:card" content="summary">
@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-count">81</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -223,7 +223,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-12-16 14:09:02 / 修改时间：14:45:48" itemprop="dateCreated datePublished" datetime="2025-12-16T14:09:02+08:00">2025-12-16</time>
+      <time title="创建时间：2025-12-16 14:09:02 / 修改时间：17:58:16" itemprop="dateCreated datePublished" datetime="2025-12-16T14:09:02+08:00">2025-12-16</time>
     </span>
 
   
@@ -245,9 +245,9 @@
 <li><strong>配置分散</strong>：API地址、环境配置写在代码里，难以管理</li>
 <li><strong>难以协作</strong>：不同开发者环境不同，代码运行结果不一致</li>
 </ul>
+<span id="more"></span>
 <p><strong>实际例子</strong>：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 问题1：每个页面都要写重复的请求代码</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;http://localhost:8000/api/users&#x27;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(data));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 问题2：API地址硬编码在代码里</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">API_URL</span> = <span class="string">&#x27;http://localhost:8000&#x27;</span>;  <span class="comment">// 改环境要改很多地方</span></span><br></pre></td></tr></table></figure>
-<span id="more"></span>
 <hr />
 <h2 id="前端工程化的解决方案">1.2 前端工程化的解决方案</h2>
 <p><strong>前端工程化</strong> = 用工具和规范让开发更高效、更专业</p>
