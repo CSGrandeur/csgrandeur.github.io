@@ -1,0 +1,1 @@
+import{B as e,L as t,y as n}from"./modules/shiki-DeTF74yl.js";import{n as r}from"./slidev/context-CFZR7p0y.js";var i={class:`slidev-layout lesson-content`},a={__name:`lesson-content`,setup(a){let{$slidev:o,$nav:s,$clicksContext:c,$clicks:l,$page:u,$renderContext:d,$frontmatter:f}=r();return(r,a)=>(t(),n(`div`,i,[e(r.$slots,`default`)]))}};export{a as t};
