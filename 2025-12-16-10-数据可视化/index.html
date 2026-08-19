@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 为什么需要数据可视化？ 1.1 数据的价值 数据 &#x3D; 信息，但原始数据很难理解 生活类比：  原始数据：1000个数字（看不懂） 可视化：把这些数字变成图表（一眼看懂）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10.数据可视化">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. 为什么需要数据可视化？ 1.1 数据的价值 数据 &#x3D; 信息，但原始数据很难理解 生活类比：  原始数据：1000个数字（看不懂） 可视化：把这些数字变成图表（一眼看懂）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.csgrandeur.cn/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/%E6%8A%98%E7%BA%BF%E5%9B%BE%E7%A4%BA%E6%84%8F.png">
+<meta property="article:published_time" content="2025-12-16T06:21:02.000Z">
+<meta property="article:modified_time" content="2026-08-19T08:38:59.704Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="AI驱动Web开发技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.csgrandeur.cn/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/%E6%8A%98%E7%BA%BF%E5%9B%BE%E7%A4%BA%E6%84%8F.png">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/","path":"2025-12-16-10-数据可视化/","title":"10.数据可视化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>10.数据可视化 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要数据可视化？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 数据的价值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 数据可视化的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 常见的数据可视化场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#g2plot%E5%9B%BE%E8%A1%A8%E5%BA%93%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B"><span class="nav-number">2.</span> <span class="nav-text">2. G2Plot图表库：快速上手</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFg2plot"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是G2Plot？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85g2plot"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 安装G2Plot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%9B%BE%E8%A1%A8%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 基础图表：折线图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 创建折线图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E6%9D%A1%E6%8A%98%E7%BA%BF%E5%9B%BE"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 多条折线图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 柱状图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="nav-number">2.4.1.</span> <span class="nav-text">2.4.1 基础柱状图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%BB%84%E6%9F%B1%E7%8A%B6%E5%9B%BE"><span class="nav-number">2.4.2.</span> <span class="nav-text">2.4.2 分组柱状图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A5%BC%E5%9B%BE"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 饼图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E9%A5%BC%E5%9B%BE"><span class="nav-number">2.5.1.</span> <span class="nav-text">2.5.1 基础饼图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E8%A1%A8%E9%85%8D%E7%BD%AE%E9%80%89%E9%A1%B9"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 图表配置选项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9C%8B%E6%9D%BF%E5%BC%80%E5%8F%91"><span class="nav-number">3.</span> <span class="nav-text">3. 数据看板开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E7%9C%8B%E6%9D%BF"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 什么是数据看板？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9C%8B%E6%9D%BF%E5%B8%83%E5%B1%80%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 看板布局设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8ant-design-vue%E5%B8%83%E5%B1%80"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 使用Ant Design Vue布局</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9C%8B%E6%9D%BF%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 完整看板示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0"><span class="nav-number">4.</span> <span class="nav-text">4. 动态数据更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E6%97%B6%E6%9B%B4%E6%96%B0%E5%9B%BE%E8%A1%A8%E6%95%B0%E6%8D%AE"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 实时更新图表数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E5%88%B7%E6%96%B0%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 定时刷新数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E5%BC%8F%E6%9B%B4%E6%96%B0"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 响应式更新</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E7%94%9F%E6%88%90%E6%95%B0%E6%8D%AE%E7%9C%8B%E6%9D%BF"><span class="nav-number">5.</span> <span class="nav-text">5. AI实战：使用AI生成数据看板</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 任务描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%BE%E8%AE%A1prompt"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 第一步：设计Prompt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 AI生成的代码（示例）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 代码解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E8%AE%B2%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91"><span class="nav-number">6.</span> <span class="nav-text">6. 选讲：可视化组件开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E5%9B%BE%E8%A1%A8%E7%BB%84%E4%BB%B6"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 封装图表组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%B0%81%E8%A3%85"><span class="nav-number">6.1.1.</span> <span class="nav-text">6.1.1 为什么需要封装？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%9B%BE%E8%A1%A8%E7%BB%84%E4%BB%B6"><span class="nav-number">6.1.2.</span> <span class="nav-text">6.1.2 创建图表组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%A7%86%E5%8C%96%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 可视化设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%90%88%E9%80%82%E7%9A%84%E5%9B%BE%E8%A1%A8%E7%B1%BB%E5%9E%8B"><span class="nav-number">6.2.1.</span> <span class="nav-text">6.2.1 选择合适的图表类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%9C%E8%89%B2%E4%BD%BF%E7%94%A8%E5%8E%9F%E5%88%99"><span class="nav-number">6.2.2.</span> <span class="nav-text">6.2.2 颜色使用原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B1%95%E7%A4%BA%E7%AD%96%E7%95%A5"><span class="nav-number">6.2.3.</span> <span class="nav-text">6.2.3 数据展示策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#g2%E4%B8%8Eg2plot%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">6.3.</span> <span class="nav-text">6.3 G2与G2Plot的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%80%BB%E7%BB%93"><span class="nav-number">6.4.</span> <span class="nav-text">本章总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="10.数据可视化 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          10.数据可视化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-16 14:21:02" itemprop="dateCreated datePublished" datetime="2025-12-16T14:21:02+08:00">2025-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-19 16:38:59" itemprop="dateModified" datetime="2026-08-19T16:38:59+08:00">2026-08-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="为什么需要数据可视化">1. 为什么需要数据可视化？</h1>
+<h2 id="数据的价值">1.1 数据的价值</h2>
+<p><strong>数据</strong> = 信息，但原始数据很难理解</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>原始数据</strong>：1000个数字（看不懂）</li>
+<li><strong>可视化</strong>：把这些数字变成图表（一眼看懂）</li>
+</ul>
+<span id="more"></span>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">原始数据：</span><br><span class="line">2024年1月：1000</span><br><span class="line">2024年2月：1500</span><br><span class="line">2024年3月：1200</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">可视化后：</span><br><span class="line">📊 折线图：一眼看出趋势（2月最高，3月下降）</span><br></pre></td></tr></table></figure>
+<img src="/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/%E6%8A%98%E7%BA%BF%E5%9B%BE%E7%A4%BA%E6%84%8F.png" class="">
+<hr />
+<h2 id="数据可视化的作用">1.2 数据可视化的作用</h2>
+<table>
+<thead>
+<tr class="header">
+<th>作用</th>
+<th>说明</th>
+<th>实际案例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>直观展示</strong></td>
+<td>用图表代替数字</td>
+<td>销售趋势图、用户增长图</td>
+</tr>
+<tr class="even">
+<td><strong>发现规律</strong></td>
+<td>一眼看出数据规律</td>
+<td>哪个时间段访问量最高</td>
+</tr>
+<tr class="odd">
+<td><strong>辅助决策</strong></td>
+<td>帮助做出更好的决策</td>
+<td>根据销售数据调整策略</td>
+</tr>
+<tr class="even">
+<td><strong>提升体验</strong></td>
+<td>让数据更有趣、更易理解</td>
+<td>数据看板、统计报表</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>记忆技巧</strong>：<br />
+数据可视化 = 把"数字"变成"图画"，让人一眼就能看懂！</p>
+</blockquote>
+<hr />
+<h2 id="常见的数据可视化场景">1.3 常见的数据可视化场景</h2>
+<table>
+<thead>
+<tr class="header">
+<th>场景</th>
+<th>图表类型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>趋势分析</strong></td>
+<td>折线图</td>
+<td>销售额随时间的变化</td>
+</tr>
+<tr class="even">
+<td><strong>对比分析</strong></td>
+<td>柱状图</td>
+<td>不同产品的销量对比</td>
+</tr>
+<tr class="odd">
+<td><strong>占比分析</strong></td>
+<td>饼图</td>
+<td>不同类别的占比</td>
+</tr>
+<tr class="even">
+<td><strong>分布分析</strong></td>
+<td>散点图</td>
+<td>用户年龄分布</td>
+</tr>
+<tr class="odd">
+<td><strong>综合展示</strong></td>
+<td>数据看板</td>
+<td>多个图表组合展示</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="g2plot图表库快速上手">2. G2Plot图表库：快速上手</h1>
+<h2 id="什么是g2plot">2.1 什么是G2Plot？</h2>
+<p><strong>G2Plot</strong> =
+基于G2（AntV）的图表库，专为业务场景设计</p>
+<p><strong>G2</strong> = 更底层的图形语法库（更灵活，但更复杂）</p>
+<p><strong>G2Plot</strong> =
+基于G2封装的高级图表库（简单易用，适合业务场景）</p>
+<p><strong>关系</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">G2（底层） → G2Plot（高级封装） → Ant Design Vue（UI组件库集成）</span><br></pre></td></tr></table></figure></p>
+<p><strong>优势</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>简单易用</strong></td>
+<td>API简洁，上手快</td>
+</tr>
+<tr class="even">
+<td><strong>图表丰富</strong></td>
+<td>支持20+种图表类型</td>
+</tr>
+<tr class="odd">
+<td><strong>自动适配</strong></td>
+<td>自动响应式，适配不同屏幕</td>
+</tr>
+<tr class="even">
+<td><strong>与Ant Design Vue集成</strong></td>
+<td>完美配合，风格统一</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="安装g2plot">2.2 安装G2Plot</h2>
+<p><strong>安装命令</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install @antv/g2plot</span><br></pre></td></tr></table></figure></p>
+<p><strong>在Vue中使用</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Line</span>, <span class="title class_">Column</span>, <span class="title class_">Pie</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="基础图表折线图">2.3 基础图表：折线图</h2>
+<h3 id="创建折线图">2.3.1 创建折线图</h3>
+<p><strong>作用</strong>：展示数据随时间的变化趋势</p>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;lineChart&quot;</span> <span class="attr">style</span>=<span class="string">&quot;width: 600px; height: 300px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">Line</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; onMounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 数据</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> data = [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;1月&#x27;</span>, <span class="attr">value</span>: <span class="number">1000</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;2月&#x27;</span>, <span class="attr">value</span>: <span class="number">1500</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;3月&#x27;</span>, <span class="attr">value</span>: <span class="number">1200</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;4月&#x27;</span>, <span class="attr">value</span>: <span class="number">1800</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;5月&#x27;</span>, <span class="attr">value</span>: <span class="number">2000</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ];</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 创建折线图</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> line = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;lineChart&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">                data,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">xField</span>: <span class="string">&#x27;month&#x27;</span>,  <span class="comment">// X轴字段</span></span></span><br><span class="line"><span class="language-javascript">                <span class="attr">yField</span>: <span class="string">&#x27;value&#x27;</span>,  <span class="comment">// Y轴字段</span></span></span><br><span class="line"><span class="language-javascript">                <span class="attr">point</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="attr">size</span>: <span class="number">5</span>,</span></span><br><span class="line"><span class="language-javascript">                    <span class="attr">shape</span>: <span class="string">&#x27;circle&#x27;</span></span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 渲染图表</span></span></span><br><span class="line"><span class="language-javascript">            line.<span class="title function_">render</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125;);</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>效果</strong>：显示一条折线，展示数据的变化趋势</p>
+<hr />
+<h3 id="多条折线图">2.3.2 多条折线图</h3>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = [</span><br><span class="line">    &#123; <span class="attr">month</span>: <span class="string">&#x27;1月&#x27;</span>, 销售额: <span class="number">1000</span>, 利润: <span class="number">200</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">month</span>: <span class="string">&#x27;2月&#x27;</span>, 销售额: <span class="number">1500</span>, 利润: <span class="number">300</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">month</span>: <span class="string">&#x27;3月&#x27;</span>, 销售额: <span class="number">1200</span>, 利润: <span class="number">250</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> line = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;lineChart&#x27;</span>, &#123;</span><br><span class="line">    data,</span><br><span class="line">    <span class="attr">xField</span>: <span class="string">&#x27;month&#x27;</span>,</span><br><span class="line">    <span class="attr">yField</span>: [<span class="string">&#x27;销售额&#x27;</span>, <span class="string">&#x27;利润&#x27;</span>],  <span class="comment">// 多个Y轴字段</span></span><br><span class="line">    <span class="attr">legend</span>: &#123;</span><br><span class="line">        <span class="attr">position</span>: <span class="string">&#x27;top&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">line.<span class="title function_">render</span>();</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="柱状图">2.4 柱状图</h2>
+<h3 id="基础柱状图">2.4.1 基础柱状图</h3>
+<p><strong>作用</strong>：对比不同类别的数据</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Column</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = [</span><br><span class="line">    &#123; 产品: <span class="string">&#x27;产品A&#x27;</span>, 销量: <span class="number">100</span> &#125;,</span><br><span class="line">    &#123; 产品: <span class="string">&#x27;产品B&#x27;</span>, 销量: <span class="number">150</span> &#125;,</span><br><span class="line">    &#123; 产品: <span class="string">&#x27;产品C&#x27;</span>, 销量: <span class="number">120</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> column = <span class="keyword">new</span> <span class="title class_">Column</span>(<span class="string">&#x27;columnChart&#x27;</span>, &#123;</span><br><span class="line">    data,</span><br><span class="line">    <span class="attr">xField</span>: <span class="string">&#x27;产品&#x27;</span>,</span><br><span class="line">    <span class="attr">yField</span>: <span class="string">&#x27;销量&#x27;</span>,</span><br><span class="line">    <span class="attr">color</span>: <span class="string">&#x27;#3498db&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">column.<span class="title function_">render</span>();</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="分组柱状图">2.4.2 分组柱状图</h3>
+<p><strong>作用</strong>：对比多个维度的数据</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = [</span><br><span class="line">    &#123; 月份: <span class="string">&#x27;1月&#x27;</span>, 产品<span class="attr">A</span>: <span class="number">100</span>, 产品<span class="attr">B</span>: <span class="number">80</span> &#125;,</span><br><span class="line">    &#123; 月份: <span class="string">&#x27;2月&#x27;</span>, 产品<span class="attr">A</span>: <span class="number">150</span>, 产品<span class="attr">B</span>: <span class="number">120</span> &#125;,</span><br><span class="line">    &#123; 月份: <span class="string">&#x27;3月&#x27;</span>, 产品<span class="attr">A</span>: <span class="number">120</span>, 产品<span class="attr">B</span>: <span class="number">100</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> column = <span class="keyword">new</span> <span class="title class_">Column</span>(<span class="string">&#x27;columnChart&#x27;</span>, &#123;</span><br><span class="line">    data,</span><br><span class="line">    <span class="attr">xField</span>: <span class="string">&#x27;月份&#x27;</span>,</span><br><span class="line">    <span class="attr">yField</span>: [<span class="string">&#x27;产品A&#x27;</span>, <span class="string">&#x27;产品B&#x27;</span>],</span><br><span class="line">    <span class="attr">isGroup</span>: <span class="literal">true</span>  <span class="comment">// 分组显示</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">column.<span class="title function_">render</span>();</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="饼图">2.5 饼图</h2>
+<h3 id="基础饼图">2.5.1 基础饼图</h3>
+<p><strong>作用</strong>：展示数据的占比关系</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Pie</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = [</span><br><span class="line">    &#123; <span class="attr">type</span>: <span class="string">&#x27;类型A&#x27;</span>, <span class="attr">value</span>: <span class="number">30</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">type</span>: <span class="string">&#x27;类型B&#x27;</span>, <span class="attr">value</span>: <span class="number">25</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">type</span>: <span class="string">&#x27;类型C&#x27;</span>, <span class="attr">value</span>: <span class="number">20</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">type</span>: <span class="string">&#x27;类型D&#x27;</span>, <span class="attr">value</span>: <span class="number">25</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pie = <span class="keyword">new</span> <span class="title class_">Pie</span>(<span class="string">&#x27;pieChart&#x27;</span>, &#123;</span><br><span class="line">    data,</span><br><span class="line">    <span class="attr">angleField</span>: <span class="string">&#x27;value&#x27;</span>,  <span class="comment">// 角度字段</span></span><br><span class="line">    <span class="attr">colorField</span>: <span class="string">&#x27;type&#x27;</span>,   <span class="comment">// 颜色字段</span></span><br><span class="line">    <span class="attr">label</span>: &#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="string">&#x27;outer&#x27;</span>,</span><br><span class="line">        <span class="attr">content</span>: <span class="string">&#x27;&#123;name&#125; &#123;percentage&#125;&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">pie.<span class="title function_">render</span>();</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="图表配置选项">2.6 图表配置选项</h2>
+<p><strong>常用配置</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>配置项</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>title</code></td>
+<td>图表标题</td>
+<td><code>title: &#123; text: '销售趋势' &#125;</code></td>
+</tr>
+<tr class="even">
+<td><code>legend</code></td>
+<td>图例</td>
+<td><code>legend: &#123; position: 'top' &#125;</code></td>
+</tr>
+<tr class="odd">
+<td><code>color</code></td>
+<td>颜色</td>
+<td><code>color: '#3498db'</code></td>
+</tr>
+<tr class="even">
+<td><code>label</code></td>
+<td>标签</td>
+<td><code>label: &#123; position: 'top' &#125;</code></td>
+</tr>
+<tr class="odd">
+<td><code>tooltip</code></td>
+<td>提示框</td>
+<td><code>tooltip: &#123; showMarkers: true &#125;</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> line = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;lineChart&#x27;</span>, &#123;</span><br><span class="line">    data,</span><br><span class="line">    <span class="attr">xField</span>: <span class="string">&#x27;month&#x27;</span>,</span><br><span class="line">    <span class="attr">yField</span>: <span class="string">&#x27;value&#x27;</span>,</span><br><span class="line">    <span class="attr">title</span>: &#123;</span><br><span class="line">        <span class="attr">text</span>: <span class="string">&#x27;销售趋势图&#x27;</span>,</span><br><span class="line">        <span class="attr">style</span>: &#123;</span><br><span class="line">            <span class="attr">fontSize</span>: <span class="number">16</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">legend</span>: &#123;</span><br><span class="line">        <span class="attr">position</span>: <span class="string">&#x27;top-right&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">color</span>: <span class="string">&#x27;#3498db&#x27;</span>,</span><br><span class="line">    <span class="attr">tooltip</span>: &#123;</span><br><span class="line">        <span class="attr">showMarkers</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="数据看板开发">3. 数据看板开发</h1>
+<h2 id="什么是数据看板">3.1 什么是数据看板？</h2>
+<p><strong>数据看板</strong> = 多个图表组合在一起，全面展示数据</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>单个图表</strong> = 一张照片（只能看一个角度）</li>
+<li><strong>数据看板</strong> = 多张照片拼成的全景图（能看到全貌）</li>
+</ul>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">数据看板包含：</span><br><span class="line">- 顶部：关键指标卡片（总销售额、总用户数等）</span><br><span class="line">- 中间：多个图表（销售趋势、产品分布等）</span><br><span class="line">- 底部：数据表格（详细数据）</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="看板布局设计">3.2 看板布局设计</h2>
+<h3 id="使用ant-design-vue布局">3.2.1 使用Ant Design Vue布局</h3>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-layout</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-layout-header</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span>数据看板<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-layout-header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-layout-content</span> <span class="attr">style</span>=<span class="string">&quot;padding: 24px;&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 关键指标 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span> <span class="attr">style</span>=<span class="string">&quot;margin-bottom: 24px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>总销售额<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 24px;&quot;</span>&gt;</span>¥100,000<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>总用户数<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 24px;&quot;</span>&gt;</span>1,234<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>订单数<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 24px;&quot;</span>&gt;</span>567<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>增长率<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;font-size: 24px;&quot;</span>&gt;</span>+12.5%<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">&lt;!-- 图表区域 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;销售趋势&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;lineChart&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;产品分布&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;pieChart&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-layout-content</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a-layout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="完整看板示例">3.3 完整看板示例</h2>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;dashboard&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h1</span>&gt;</span>数据看板<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">&lt;!-- 关键指标卡片 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span> <span class="attr">class</span>=<span class="string">&quot;stats-row&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;6&quot;</span> <span class="attr">v-for</span>=<span class="string">&quot;stat in stats&quot;</span> <span class="attr">:key</span>=<span class="string">&quot;stat.title&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-card</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>&#123;&#123; stat.title &#125;&#125;<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;stat-value&quot;</span>&gt;</span>&#123;&#123; stat.value &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">span</span> <span class="attr">:class</span>=<span class="string">&quot;stat.trend &gt; 0 ? &#x27;trend-up&#x27; : &#x27;trend-down&#x27;&quot;</span>&gt;</span></span><br><span class="line">                        &#123;&#123; stat.trend &gt; 0 ? &#x27;↑&#x27; : &#x27;↓&#x27; &#125;&#125; &#123;&#123; Math.abs(stat.trend) &#125;&#125;%</span><br><span class="line">                    <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 图表区域 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span> <span class="attr">class</span>=<span class="string">&quot;charts-row&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;销售趋势&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;salesChart&quot;</span> <span class="attr">style</span>=<span class="string">&quot;height: 300px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:span</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;产品销量&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;productChart&quot;</span> <span class="attr">style</span>=<span class="string">&quot;height: 300px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">Line</span>, <span class="title class_">Column</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; onMounted, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> stats = <span class="title function_">ref</span>([</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;总销售额&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;¥100,000&#x27;</span>, <span class="attr">trend</span>: <span class="number">12.5</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;总用户数&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;1,234&#x27;</span>, <span class="attr">trend</span>: <span class="number">8.3</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;订单数&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;567&#x27;</span>, <span class="attr">trend</span>: -<span class="number">2.1</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;增长率&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;+12.5%&#x27;</span>, <span class="attr">trend</span>: <span class="number">5.2</span> &#125;</span></span><br><span class="line"><span class="language-javascript">        ]);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 销售趋势图</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> salesData = [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;1月&#x27;</span>, <span class="attr">value</span>: <span class="number">1000</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;2月&#x27;</span>, <span class="attr">value</span>: <span class="number">1500</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;3月&#x27;</span>, <span class="attr">value</span>: <span class="number">1200</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ];</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> salesChart = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;salesChart&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">data</span>: salesData,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">xField</span>: <span class="string">&#x27;month&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">yField</span>: <span class="string">&#x27;value&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript">            salesChart.<span class="title function_">render</span>();</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 产品销量图</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> productData = [</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品A&#x27;</span>, 销量: <span class="number">100</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品B&#x27;</span>, 销量: <span class="number">150</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品C&#x27;</span>, 销量: <span class="number">120</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ];</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> productChart = <span class="keyword">new</span> <span class="title class_">Column</span>(<span class="string">&#x27;productChart&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">data</span>: productData,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">xField</span>: <span class="string">&#x27;产品&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">yField</span>: <span class="string">&#x27;销量&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript">            productChart.<span class="title function_">render</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            stats</span></span><br><span class="line"><span class="language-javascript">        &#125;;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.stat-value</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-size</span>: <span class="number">24px</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">margin</span>: <span class="number">10px</span> <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.trend-up</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: <span class="number">#52c41a</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.trend-down</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: <span class="number">#ff4d4f</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="动态数据更新">4. 动态数据更新</h1>
+<h2 id="实时更新图表数据">4.1 实时更新图表数据</h2>
+<p><strong>场景</strong>：数据从API获取，需要实时更新图表</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Line</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; onMounted, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; getSalesData &#125; <span class="keyword">from</span> <span class="string">&#x27;@/api/sales&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> chartRef = <span class="title function_">ref</span>(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">        <span class="title function_">onMounted</span>(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">            <span class="comment">// 初始化图表</span></span><br><span class="line">            <span class="keyword">const</span> chart = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;chart&#x27;</span>, &#123;</span><br><span class="line">                <span class="attr">data</span>: [],</span><br><span class="line">                <span class="attr">xField</span>: <span class="string">&#x27;month&#x27;</span>,</span><br><span class="line">                <span class="attr">yField</span>: <span class="string">&#x27;value&#x27;</span></span><br><span class="line">            &#125;);</span><br><span class="line">            chart.<span class="title function_">render</span>();</span><br><span class="line">            chartRef.<span class="property">value</span> = chart;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 加载数据</span></span><br><span class="line">            <span class="keyword">await</span> <span class="title function_">loadData</span>();</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加载数据</span></span><br><span class="line">        <span class="keyword">const</span> <span class="title function_">loadData</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">const</span> data = <span class="keyword">await</span> <span class="title function_">getSalesData</span>();</span><br><span class="line">                <span class="comment">// 更新图表数据</span></span><br><span class="line">                chartRef.<span class="property">value</span>.<span class="title function_">update</span>(&#123;</span><br><span class="line">                    <span class="attr">data</span>: data</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;加载数据失败&#x27;</span>, error);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            loadData</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="定时刷新数据">4.2 定时刷新数据</h2>
+<p><strong>作用</strong>：每隔一段时间自动更新数据</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; onMounted, onUnmounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> timer = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 立即加载一次</span></span><br><span class="line">            <span class="title function_">loadData</span>();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 每30秒刷新一次</span></span><br><span class="line">            timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">                <span class="title function_">loadData</span>();</span><br><span class="line">            &#125;, <span class="number">30000</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 组件销毁时清除定时器</span></span><br><span class="line">            <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">                <span class="built_in">clearInterval</span>(timer);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="响应式更新">4.3 响应式更新</h2>
+<p><strong>作用</strong>：窗口大小改变时，图表自动调整</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; onMounted, onUnmounted &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> chartRef = <span class="title function_">ref</span>(<span class="literal">null</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> <span class="title function_">handleResize</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (chartRef.<span class="property">value</span>) &#123;</span><br><span class="line">                chartRef.<span class="property">value</span>.<span class="title function_">changeSize</span>(</span><br><span class="line">                    <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;chart&#x27;</span>).<span class="property">offsetWidth</span>,</span><br><span class="line">                    <span class="number">300</span></span><br><span class="line">                );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, handleResize);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">window</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, handleResize);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="ai实战使用ai生成数据看板">5. AI实战：使用AI生成数据看板</h1>
+<h2 id="任务描述">5.1 任务描述</h2>
+<p><strong>目标</strong>：使用AI工具生成一个完整的数据看板</p>
+<p><strong>功能要求</strong>：</p>
+<ul>
+<li>使用Ant Design Vue布局</li>
+<li>显示关键指标卡片（4个）</li>
+<li>包含折线图（销售趋势）</li>
+<li>包含柱状图（产品销量）</li>
+<li>包含饼图（类别分布）</li>
+<li>数据从API获取（模拟数据也可以）</li>
+<li>样式美观，响应式布局</li>
+</ul>
+<hr />
+<h2 id="第一步设计prompt">5.2 第一步：设计Prompt</h2>
+<p><strong>Prompt示例</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">用Vue 3和Ant Design Vue创建一个数据看板，要求：</span><br><span class="line">1. 使用Ant Design Vue的Layout和Card组件</span><br><span class="line">2. 顶部显示4个关键指标卡片（总销售额、总用户数、订单数、增长率）</span><br><span class="line">3. 中间区域包含3个图表：</span><br><span class="line">   - 折线图：销售趋势（使用G2Plot）</span><br><span class="line">   - 柱状图：产品销量（使用G2Plot）</span><br><span class="line">   - 饼图：类别分布（使用G2Plot）</span><br><span class="line">4. 使用响应式布局，适配不同屏幕</span><br><span class="line">5. 图表数据使用模拟数据</span><br><span class="line">6. 代码注释清晰，样式美观</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="ai生成的代码示例">5.3 AI生成的代码（示例）</h2>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a-layout</span> <span class="attr">class</span>=<span class="string">&quot;dashboard&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-layout-header</span> <span class="attr">class</span>=<span class="string">&quot;header&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span>&gt;</span>数据看板<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-layout-header</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a-layout-content</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 关键指标 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span> <span class="attr">class</span>=<span class="string">&quot;stats-row&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:xs</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:sm</span>=<span class="string">&quot;12&quot;</span> <span class="attr">:md</span>=<span class="string">&quot;6&quot;</span> <span class="attr">v-for</span>=<span class="string">&quot;stat in stats&quot;</span> <span class="attr">:key</span>=<span class="string">&quot;stat.title&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">class</span>=<span class="string">&quot;stat-card&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">h3</span>&gt;</span>&#123;&#123; stat.title &#125;&#125;<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;stat-value&quot;</span>&gt;</span>&#123;&#123; stat.value &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">span</span> <span class="attr">:class</span>=<span class="string">&quot;stat.trend &gt; 0 ? &#x27;trend-up&#x27; : &#x27;trend-down&#x27;&quot;</span>&gt;</span></span><br><span class="line">                            &#123;&#123; stat.trend &gt; 0 ? &#x27;↑&#x27; : &#x27;↓&#x27; &#125;&#125; &#123;&#123; Math.abs(stat.trend) &#125;&#125;%</span><br><span class="line">                        <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="comment">&lt;!-- 图表区域 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span> <span class="attr">class</span>=<span class="string">&quot;charts-row&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:xs</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:sm</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:md</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;销售趋势&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;salesChart&quot;</span> <span class="attr">style</span>=<span class="string">&quot;height: 300px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:xs</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:sm</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:md</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;产品销量&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;productChart&quot;</span> <span class="attr">style</span>=<span class="string">&quot;height: 300px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">a-row</span> <span class="attr">:gutter</span>=<span class="string">&quot;16&quot;</span> <span class="attr">style</span>=<span class="string">&quot;margin-top: 16px;&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a-col</span> <span class="attr">:xs</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:sm</span>=<span class="string">&quot;24&quot;</span> <span class="attr">:md</span>=<span class="string">&quot;12&quot;</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">a-card</span> <span class="attr">title</span>=<span class="string">&quot;类别分布&quot;</span>&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;categoryChart&quot;</span> <span class="attr">style</span>=<span class="string">&quot;height: 300px;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">a-col</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">a-row</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a-layout-content</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a-layout</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">Line</span>, <span class="title class_">Column</span>, <span class="title class_">Pie</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@antv/g2plot&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; onMounted, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> stats = <span class="title function_">ref</span>([</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;总销售额&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;¥100,000&#x27;</span>, <span class="attr">trend</span>: <span class="number">12.5</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;总用户数&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;1,234&#x27;</span>, <span class="attr">trend</span>: <span class="number">8.3</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;订单数&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;567&#x27;</span>, <span class="attr">trend</span>: -<span class="number">2.1</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">            &#123; <span class="attr">title</span>: <span class="string">&#x27;增长率&#x27;</span>, <span class="attr">value</span>: <span class="string">&#x27;+12.5%&#x27;</span>, <span class="attr">trend</span>: <span class="number">5.2</span> &#125;</span></span><br><span class="line"><span class="language-javascript">        ]);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 销售趋势图</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> salesData = [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;1月&#x27;</span>, <span class="attr">value</span>: <span class="number">1000</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;2月&#x27;</span>, <span class="attr">value</span>: <span class="number">1500</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;3月&#x27;</span>, <span class="attr">value</span>: <span class="number">1200</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;4月&#x27;</span>, <span class="attr">value</span>: <span class="number">1800</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">month</span>: <span class="string">&#x27;5月&#x27;</span>, <span class="attr">value</span>: <span class="number">2000</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ];</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> salesChart = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;salesChart&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">data</span>: salesData,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">xField</span>: <span class="string">&#x27;month&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">yField</span>: <span class="string">&#x27;value&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">smooth</span>: <span class="literal">true</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">color</span>: <span class="string">&#x27;#3498db&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript">            salesChart.<span class="title function_">render</span>();</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 产品销量图</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> productData = [</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品A&#x27;</span>, 销量: <span class="number">100</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品B&#x27;</span>, 销量: <span class="number">150</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品C&#x27;</span>, 销量: <span class="number">120</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; 产品: <span class="string">&#x27;产品D&#x27;</span>, 销量: <span class="number">80</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ];</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> productChart = <span class="keyword">new</span> <span class="title class_">Column</span>(<span class="string">&#x27;productChart&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">data</span>: productData,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">xField</span>: <span class="string">&#x27;产品&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">yField</span>: <span class="string">&#x27;销量&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">color</span>: <span class="string">&#x27;#52c41a&#x27;</span></span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript">            productChart.<span class="title function_">render</span>();</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">            <span class="comment">// 类别分布图</span></span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> categoryData = [</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">type</span>: <span class="string">&#x27;类别A&#x27;</span>, <span class="attr">value</span>: <span class="number">30</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">type</span>: <span class="string">&#x27;类别B&#x27;</span>, <span class="attr">value</span>: <span class="number">25</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">type</span>: <span class="string">&#x27;类别C&#x27;</span>, <span class="attr">value</span>: <span class="number">20</span> &#125;,</span></span><br><span class="line"><span class="language-javascript">                &#123; <span class="attr">type</span>: <span class="string">&#x27;类别D&#x27;</span>, <span class="attr">value</span>: <span class="number">25</span> &#125;</span></span><br><span class="line"><span class="language-javascript">            ];</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">const</span> categoryChart = <span class="keyword">new</span> <span class="title class_">Pie</span>(<span class="string">&#x27;categoryChart&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">data</span>: categoryData,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">angleField</span>: <span class="string">&#x27;value&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">colorField</span>: <span class="string">&#x27;type&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                <span class="attr">label</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">                    <span class="attr">type</span>: <span class="string">&#x27;outer&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">                    <span class="attr">content</span>: <span class="string">&#x27;&#123;name&#125; &#123;percentage&#125;&#x27;</span></span></span><br><span class="line"><span class="language-javascript">                &#125;</span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript">            categoryChart.<span class="title function_">render</span>();</span></span><br><span class="line"><span class="language-javascript">        &#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            stats</span></span><br><span class="line"><span class="language-javascript">        &#125;;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.dashboard</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">min-height</span>: <span class="number">100vh</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.header</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">background</span>: <span class="number">#001529</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">padding</span>: <span class="number">0</span> <span class="number">24px</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">align-items</span>: center;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.header</span> <span class="selector-tag">h1</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: white;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.content</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">padding</span>: <span class="number">24px</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">background</span>: <span class="number">#f0f2f5</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.stats-row</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">margin-bottom</span>: <span class="number">24px</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.stat-card</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">text-align</span>: center;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.stat-card</span> <span class="selector-tag">h3</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">10px</span> <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: <span class="number">#666</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-size</span>: <span class="number">14px</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.stat-value</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-size</span>: <span class="number">24px</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-weight</span>: bold;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">margin</span>: <span class="number">10px</span> <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: <span class="number">#333</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.trend-up</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: <span class="number">#52c41a</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-size</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"><span class="selector-class">.trend-down</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">color</span>: <span class="number">#ff4d4f</span>;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">font-size</span>: <span class="number">12px</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="代码解析">5.4 代码解析</h2>
+<p><strong>核心思路</strong>：</p>
+<ol type="1">
+<li><strong>布局设计</strong>：使用Ant Design Vue的Layout和Grid系统</li>
+<li><strong>关键指标</strong>：用Card组件展示统计数据</li>
+<li><strong>图表集成</strong>：使用G2Plot创建各种图表</li>
+<li><strong>响应式</strong>：使用Ant Design Vue的响应式栅格</li>
+</ol>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>使用<code>onMounted</code>生命周期初始化图表</li>
+<li>图表容器需要指定ID和高度</li>
+<li>响应式布局适配不同屏幕</li>
+</ul>
+<hr />
+<h1 id="选讲可视化组件开发">6. 选讲：可视化组件开发</h1>
+<h2 id="封装图表组件">6.1 封装图表组件</h2>
+<h3 id="为什么需要封装">6.1.1 为什么需要封装？</h3>
+<p><strong>问题</strong>：每个页面都要重复写图表初始化代码</p>
+<p><strong>解决方案</strong>：封装成可复用的组件</p>
+<hr />
+<h3 id="创建图表组件">6.1.2 创建图表组件</h3>
+<p><strong>实际例子</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- components/ChartLine.vue --&gt;</span><br><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div :id=&quot;chartId&quot; :style=&quot;&#123; height: height + &#x27;px&#x27; &#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; Line &#125; from &#x27;@antv/g2plot&#x27;;</span><br><span class="line">import &#123; onMounted, watch, onBeforeUnmount &#125; from &#x27;vue&#x27;;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    name: &#x27;ChartLine&#x27;,</span><br><span class="line">    props: &#123;</span><br><span class="line">        data: &#123;</span><br><span class="line">            type: Array,</span><br><span class="line">            required: true</span><br><span class="line">        &#125;,</span><br><span class="line">        xField: &#123;</span><br><span class="line">            type: String,</span><br><span class="line">            default: &#x27;x&#x27;</span><br><span class="line">        &#125;,</span><br><span class="line">        yField: &#123;</span><br><span class="line">            type: String,</span><br><span class="line">            default: &#x27;y&#x27;</span><br><span class="line">        &#125;,</span><br><span class="line">        height: &#123;</span><br><span class="line">            type: Number,</span><br><span class="line">            default: 300</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    setup(props) &#123;</span><br><span class="line">        const chartId = `line-chart-$&#123;Date.now()&#125;`;</span><br><span class="line">        let chartInstance = null;</span><br><span class="line"></span><br><span class="line">        const initChart = () =&gt; &#123;</span><br><span class="line">            if (chartInstance) &#123;</span><br><span class="line">                chartInstance.destroy();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            chartInstance = new Line(chartId, &#123;</span><br><span class="line">                data: props.data,</span><br><span class="line">                xField: props.xField,</span><br><span class="line">                yField: props.yField</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            chartInstance.render();</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        onMounted(() =&gt; &#123;</span><br><span class="line">            initChart();</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        // 监听数据变化，更新图表</span><br><span class="line">        watch(() =&gt; props.data, () =&gt; &#123;</span><br><span class="line">            if (chartInstance) &#123;</span><br><span class="line">                chartInstance.update(&#123;</span><br><span class="line">                    data: props.data</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, &#123; deep: true &#125;);</span><br><span class="line"></span><br><span class="line">        onBeforeUnmount(() =&gt; &#123;</span><br><span class="line">            if (chartInstance) &#123;</span><br><span class="line">                chartInstance.destroy();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        return &#123;</span><br><span class="line">            chartId</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用方式</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;ChartLine </span><br><span class="line">        :data=&quot;salesData&quot; </span><br><span class="line">        x-field=&quot;month&quot; </span><br><span class="line">        y-field=&quot;value&quot;</span><br><span class="line">        :height=&quot;300&quot; /&gt;</span><br><span class="line">&lt;/template&gt;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="可视化设计原则">6.2 可视化设计原则</h2>
+<h3 id="选择合适的图表类型">6.2.1 选择合适的图表类型</h3>
+<table>
+<thead>
+<tr class="header">
+<th>数据类型</th>
+<th>推荐图表</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>趋势数据</strong></td>
+<td>折线图</td>
+<td>展示数据随时间的变化</td>
+</tr>
+<tr class="even">
+<td><strong>对比数据</strong></td>
+<td>柱状图</td>
+<td>对比不同类别的数值</td>
+</tr>
+<tr class="odd">
+<td><strong>占比数据</strong></td>
+<td>饼图</td>
+<td>展示各部分占比</td>
+</tr>
+<tr class="even">
+<td><strong>分布数据</strong></td>
+<td>散点图</td>
+<td>展示数据分布情况</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="颜色使用原则">6.2.2 颜色使用原则</h3>
+<p><strong>原则</strong>：</p>
+<ul>
+<li><strong>主色调统一</strong>：整个看板使用统一的配色方案</li>
+<li><strong>对比明显</strong>：不同数据系列颜色要有区分度</li>
+<li><strong>避免过多颜色</strong>：一般不超过5-7种颜色</li>
+</ul>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 推荐：使用统一的颜色方案</span></span><br><span class="line"><span class="keyword">const</span> colors = [<span class="string">&#x27;#3498db&#x27;</span>, <span class="string">&#x27;#52c41a&#x27;</span>, <span class="string">&#x27;#ff4d4f&#x27;</span>, <span class="string">&#x27;#faad14&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> chart = <span class="keyword">new</span> <span class="title class_">Line</span>(<span class="string">&#x27;chart&#x27;</span>, &#123;</span><br><span class="line">    data,</span><br><span class="line">    <span class="attr">color</span>: colors[<span class="number">0</span>]  <span class="comment">// 使用统一的颜色</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="数据展示策略">6.2.3 数据展示策略</h3>
+<p><strong>原则</strong>：</p>
+<ul>
+<li><strong>突出重点</strong>：重要数据用大字体、醒目颜色</li>
+<li><strong>层次清晰</strong>：标题、数据、说明层次分明</li>
+<li><strong>信息适量</strong>：不要一次展示太多信息</li>
+</ul>
+<p><strong>实际例子</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 好的设计：层次清晰 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a-card</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h3</span>&gt;</span>总销售额<span class="tag">&lt;/<span class="name">h3</span>&gt;</span>  <span class="comment">&lt;!-- 标题 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;stat-value&quot;</span>&gt;</span>¥100,000<span class="tag">&lt;/<span class="name">p</span>&gt;</span>  <span class="comment">&lt;!-- 主要数据 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;trend&quot;</span>&gt;</span>↑ 12.5%<span class="tag">&lt;/<span class="name">span</span>&gt;</span>  <span class="comment">&lt;!-- 辅助信息 --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a-card</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="g2与g2plot的关系">6.3 G2与G2Plot的关系</h2>
+<p><strong>G2</strong> = 底层的图形语法库</p>
+<ul>
+<li><strong>特点</strong>：更灵活，可以自定义任何图表</li>
+<li><strong>适用</strong>：需要高度自定义的场景</li>
+<li><strong>难度</strong>：学习曲线较陡</li>
+</ul>
+<p><strong>G2Plot</strong> = 基于G2的高级封装</p>
+<ul>
+<li><strong>特点</strong>：简单易用，开箱即用</li>
+<li><strong>适用</strong>：常见的业务图表场景</li>
+<li><strong>难度</strong>：学习曲线平缓</li>
+</ul>
+<p><strong>关系</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">G2（底层，灵活但复杂）</span><br><span class="line">    ↓</span><br><span class="line">G2Plot（高级封装，简单易用）</span><br><span class="line">    ↓</span><br><span class="line">Ant Design Vue（UI组件库集成）</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>💡 <strong>建议</strong>：<br />
+对于初学者和大多数业务场景，使用G2Plot就足够了。<br />
+只有在需要高度自定义图表时，才考虑使用G2。</p>
+</blockquote>
+<hr />
+<h2 id="本章总结">本章总结</h2>
+<p>通过本章的学习，你已经掌握了：</p>
+<p>✅ <strong>图表库使用</strong>：</p>
+<ul>
+<li>G2Plot的基础使用</li>
+<li>折线图、柱状图、饼图的创建</li>
+<li>图表配置选项</li>
+</ul>
+<p>✅ <strong>数据看板开发</strong>：</p>
+<ul>
+<li>使用Ant Design Vue布局</li>
+<li>关键指标卡片展示</li>
+<li>多图表组合</li>
+</ul>
+<p>✅ <strong>动态数据更新</strong>：</p>
+<ul>
+<li>实时更新图表数据</li>
+<li>定时刷新机制</li>
+<li>响应式调整</li>
+</ul>
+<p>✅ <strong>实战技能</strong>：</p>
+<ul>
+<li>构建完整的数据看板</li>
+<li>使用AI生成代码</li>
+<li>封装图表组件</li>
+</ul>
+<p>✅ <strong>进阶知识</strong>（选讲）：</p>
+<ul>
+<li>可视化设计原则</li>
+<li>图表组件封装</li>
+<li>G2与G2Plot的关系</li>
+</ul>
+<blockquote>
+<p>🌟 <strong>恭喜你！</strong><br />
+你已经掌握了数据可视化的核心技能！<br />
+这些知识将帮助你：</p>
+<ul>
+<li><p>实现数据统计和展示</p></li>
+<li><p>构建专业的数据看板</p></li>
+<li><p>提升用户体验</p></li>
+</ul>
+<p><strong>继续练习，继续探索，数据可视化的世界等着你！</strong> 🚀</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E9%A9%B1%E5%8A%A8Web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/" rel="tag"># AI驱动Web开发技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="prev" title="09.前端工程化">
+                  <i class="fa fa-angle-left"></i> 09.前端工程化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-12-16-11-%E9%9C%80%E6%B1%82%E5%88%86%E6%9E%90%E4%B8%8E%E8%AE%BE%E8%AE%A1/" rel="next" title="11.需求分析与设计">
+                  11.需求分析与设计 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.csgrandeur.cn","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"default"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1. 为什么需要前端工程化？ 1.1 传统开发的痛点 在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题： 问题：  依赖管理混乱：不知道项目用了哪些库，版本是多少 代码重复：每个页面都要写相同的网络请求代码 配置分散：API地址、环境配置写在代码里，难以管理 难以协作：不同开发者环境不同，代码运行结果不一致">
+<meta property="og:type" content="article">
+<meta property="og:title" content="09.前端工程化">
+<meta property="og:url" content="http://blog.csgrandeur.cn/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/index.html">
+<meta property="og:site_name" content="CSGrandeur&#39;s Thinking">
+<meta property="og:description" content="1. 为什么需要前端工程化？ 1.1 传统开发的痛点 在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题： 问题：  依赖管理混乱：不知道项目用了哪些库，版本是多少 代码重复：每个页面都要写相同的网络请求代码 配置分散：API地址、环境配置写在代码里，难以管理 难以协作：不同开发者环境不同，代码运行结果不一致">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-16T06:09:02.000Z">
+<meta property="article:modified_time" content="2026-08-19T08:38:59.704Z">
+<meta property="article:author" content="CSGrandeur">
+<meta property="article:tag" content="AI驱动Web开发技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.csgrandeur.cn/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.csgrandeur.cn/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/","path":"2025-12-16-09-前端工程化/","title":"09.前端工程化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>09.前端工程化 | CSGrandeur's Thinking</title>
+  
+
+  <script src="/js/third-party/analytics/baidu-analytics.js"></script>
+  <script async src="https://hm.baidu.com/hm.js?7958adf931092425a489778560129144"></script>
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CSGrandeur's Thinking</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Cogito Ergo Sum</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么需要前端工程化？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E5%BC%80%E5%8F%91%E7%9A%84%E7%97%9B%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 传统开发的痛点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 前端工程化的解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8B%E5%8C%96%E7%9A%84%E4%BB%B7%E5%80%BC"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 工程化的价值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7npm%E5%9F%BA%E7%A1%80"><span class="nav-number">2.</span> <span class="nav-text">2. 包管理工具：npm基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFnpm"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是npm？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85node.js%E5%92%8Cnpm"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 安装Node.js和npm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#npm%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 npm基础命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 初始化项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 安装依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%92%8C%E5%88%A0%E9%99%A4%E4%BE%9D%E8%B5%96"><span class="nav-number">2.3.3.</span> <span class="nav-text">2.3.3 查看和删除依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#package.json%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 package.json详解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%B0%81%E8%A3%85axios%E5%9F%BA%E7%A1%80"><span class="nav-number">3.</span> <span class="nav-text">3. 网络请求封装：axios基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%B0%81%E8%A3%85%E8%AF%B7%E6%B1%82"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 为什么需要封装请求？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFaxios"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 什么是axios？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8axios"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 安装和使用axios</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85axios"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 安装axios</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2 基础使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%81%E8%A3%85%E8%AF%B7%E6%B1%82%E6%A8%A1%E5%9D%97"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 封装请求模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%AF%B7%E6%B1%82%E5%AE%9E%E4%BE%8B"><span class="nav-number">3.4.1.</span> <span class="nav-text">3.4.1 创建请求实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">3.4.2.</span> <span class="nav-text">3.4.2 请求拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">3.4.3.</span> <span class="nav-text">3.4.3 响应拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%81%E8%A3%85api%E6%96%B9%E6%B3%95"><span class="nav-number">3.4.4.</span> <span class="nav-text">3.4.4 封装API方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE"><span class="nav-number">4.</span> <span class="nav-text">4. 环境变量配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 为什么需要环境变量？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 环境变量的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%96%87%E4%BB%B6"><span class="nav-number">4.2.1.</span> <span class="nav-text">4.2.1 创建环境变量文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E4%BB%A3%E7%A0%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">4.2.2.</span> <span class="nav-text">4.2.2 在代码中使用环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gitignore%E9%85%8D%E7%BD%AE"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 .gitignore配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ai%E5%AE%9E%E6%88%98%E4%BD%BF%E7%94%A8ai%E5%B0%81%E8%A3%85api%E8%AF%B7%E6%B1%82"><span class="nav-number">5.</span> <span class="nav-text">5. AI实战：使用AI封装API请求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8F%8F%E8%BF%B0"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 任务描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E8%AE%BE%E8%AE%A1prompt"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 第一步：设计Prompt</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ai%E7%94%9F%E6%88%90%E7%9A%84%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 AI生成的代码（示例）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 代码解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%89%E8%AE%B2%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86%E4%B8%8E%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">6. 选讲：路由管理与状态管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E7%AE%A1%E7%90%86vue-router"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 路由管理：Vue Router</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B7%AF%E7%94%B1"><span class="nav-number">6.1.1.</span> <span class="nav-text">6.1.1 什么是路由？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vue-router%E5%9F%BA%E7%A1%80"><span class="nav-number">6.1.2.</span> <span class="nav-text">6.1.2 Vue Router基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86pinia"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 状态管理：Pinia</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="nav-number">6.2.1.</span> <span class="nav-text">6.2.1 什么是状态管理？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pinia%E5%9F%BA%E7%A1%80"><span class="nav-number">6.2.2.</span> <span class="nav-text">6.2.2 Pinia基础</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E8%B7%AF%E7%94%B1%E5%92%8C%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86"><span class="nav-number">6.3.</span> <span class="nav-text">6.3
+什么时候需要路由和状态管理？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E7%AB%A0%E6%80%BB%E7%BB%93"><span class="nav-number">6.4.</span> <span class="nav-text">本章总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">CSGrandeur</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.csgrandeur.cn/2025-12-16-09-%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="CSGrandeur">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="09.前端工程化 | CSGrandeur's Thinking">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          09.前端工程化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-16 14:09:02" itemprop="dateCreated datePublished" datetime="2025-12-16T14:09:02+08:00">2025-12-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-19 16:38:59" itemprop="dateModified" datetime="2026-08-19T16:38:59+08:00">2026-08-19</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="为什么需要前端工程化">1. 为什么需要前端工程化？</h1>
+<h2 id="传统开发的痛点">1.1 传统开发的痛点</h2>
+<p>在之前的章节中，我们使用CDN直接引入Vue.js，这种方式适合学习，但在实际项目中会遇到问题：</p>
+<p><strong>问题</strong>：</p>
+<ul>
+<li><strong>依赖管理混乱</strong>：不知道项目用了哪些库，版本是多少</li>
+<li><strong>代码重复</strong>：每个页面都要写相同的网络请求代码</li>
+<li><strong>配置分散</strong>：API地址、环境配置写在代码里，难以管理</li>
+<li><strong>难以协作</strong>：不同开发者环境不同，代码运行结果不一致</li>
+</ul>
+<span id="more"></span>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 问题1：每个页面都要写重复的请求代码</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;http://localhost:8000/api/users&#x27;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(data));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 问题2：API地址硬编码在代码里</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">API_URL</span> = <span class="string">&#x27;http://localhost:8000&#x27;</span>;  <span class="comment">// 改环境要改很多地方</span></span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="前端工程化的解决方案">1.2 前端工程化的解决方案</h2>
+<p><strong>前端工程化</strong> = 用工具和规范让开发更高效、更专业</p>
+<table>
+<thead>
+<tr class="header">
+<th>传统方式</th>
+<th>工程化方式</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>手动管理依赖</td>
+<td><strong>包管理工具</strong>（npm）自动管理</td>
+</tr>
+<tr class="even">
+<td>重复写请求代码</td>
+<td><strong>封装请求模块</strong>，复用代码</td>
+</tr>
+<tr class="odd">
+<td>配置写在代码里</td>
+<td><strong>环境变量</strong>统一管理</td>
+</tr>
+<tr class="even">
+<td>手动打包部署</td>
+<td><strong>自动化工具</strong>一键完成</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>生活类比</strong>：<br />
+传统开发 = 手工作坊（每个东西都要自己做）<br />
+工程化开发 = 现代化工厂（有工具、有流程、有标准）</p>
+</blockquote>
+<hr />
+<h2 id="工程化的价值">1.3 工程化的价值</h2>
+<table>
+<thead>
+<tr class="header">
+<th>价值</th>
+<th>说明</th>
+<th>实际效果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>提高效率</strong></td>
+<td>工具自动化，减少重复劳动</td>
+<td>开发速度提升3-5倍</td>
+</tr>
+<tr class="even">
+<td><strong>保证质量</strong></td>
+<td>统一规范，减少错误</td>
+<td>Bug减少50%+</td>
+</tr>
+<tr class="odd">
+<td><strong>易于维护</strong></td>
+<td>代码组织清晰，易于修改</td>
+<td>维护成本降低</td>
+</tr>
+<tr class="even">
+<td><strong>团队协作</strong></td>
+<td>统一工具链，环境一致</td>
+<td>协作更顺畅</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="包管理工具npm基础">2. 包管理工具：npm基础</h1>
+<h2 id="什么是npm">2.1 什么是npm？</h2>
+<p><strong>npm</strong> = Node Package Manager（Node包管理器）</p>
+<p><strong>作用</strong>：管理项目依赖的工具（就像"应用商店"）</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>没有npm</strong>：要装软件，得去官网下载、手动安装（麻烦）</li>
+<li><strong>有npm</strong>：说一句"我要装Vue"，自动下载安装（简单）</li>
+</ul>
+<hr />
+<h2 id="安装node.js和npm">2.2 安装Node.js和npm</h2>
+<p><strong>Node.js</strong> = 让JavaScript可以运行在服务器上的环境</p>
+<p><strong>npm</strong> = 随Node.js一起安装的包管理工具</p>
+<p><strong>安装步骤</strong>：</p>
+<ol type="1">
+<li>访问 <a target="_blank" rel="noopener" href="https://nodejs.org/">nodejs.org</a></li>
+<li>下载LTS版本（推荐）</li>
+<li>安装（一路下一步）</li>
+<li>验证安装： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v  <span class="comment"># 查看Node.js版本</span></span><br><span class="line">npm -v   <span class="comment"># 查看npm版本</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr />
+<h2 id="npm基础命令">2.3 npm基础命令</h2>
+<h3 id="初始化项目">2.3.1 初始化项目</h3>
+<p><strong>作用</strong>：创建<code>package.json</code>文件（项目的"说明书"）</p>
+<p><strong>命令</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在项目文件夹中执行</span></span><br><span class="line">npm init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 会提示输入项目信息，可以直接按回车使用默认值</span></span><br><span class="line"><span class="comment"># 或者使用 -y 参数快速创建</span></span><br><span class="line">npm init -y</span><br></pre></td></tr></table></figure></p>
+<p><strong>生成的<code>package.json</code></strong>： <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;my-project&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;main&quot;</span><span class="punctuation">:</span> <span class="string">&quot;index.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;test&quot;</span><span class="punctuation">:</span> <span class="string">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;keywords&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;author&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;license&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ISC&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="安装依赖">2.3.2 安装依赖</h3>
+<p><strong>作用</strong>：安装项目需要的库</p>
+<p><strong>命令</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装单个包</span></span><br><span class="line">npm install 包名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简写</span></span><br><span class="line">npm i 包名</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装到开发依赖（只在开发时用）</span></span><br><span class="line">npm install 包名 --save-dev</span><br><span class="line">npm i 包名 -D</span><br></pre></td></tr></table></figure></p>
+<p><strong>实际例子</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装Vue</span></span><br><span class="line">npm install vue</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装axios（网络请求库）</span></span><br><span class="line">npm install axios</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装开发工具（只在开发时用）</span></span><br><span class="line">npm install vite -D</span><br></pre></td></tr></table></figure></p>
+<p><strong>安装后的变化</strong>：</p>
+<ul>
+<li>创建<code>node_modules</code>文件夹（存放所有依赖）</li>
+<li>创建<code>package-lock.json</code>文件（锁定版本）</li>
+<li>更新<code>package.json</code>（记录依赖）</li>
+</ul>
+<hr />
+<h3 id="查看和删除依赖">2.3.3 查看和删除依赖</h3>
+<p><strong>命令</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看已安装的包</span></span><br><span class="line">npm list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除包</span></span><br><span class="line">npm uninstall 包名</span><br><span class="line">npm un 包名</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="package.json详解">2.4 package.json详解</h2>
+<p><strong>package.json</strong> =
+项目的"说明书"，记录项目信息和依赖</p>
+<p><strong>重要字段</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>字段</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>name</code></td>
+<td>项目名称</td>
+<td><code>"my-project"</code></td>
+</tr>
+<tr class="even">
+<td><code>version</code></td>
+<td>版本号</td>
+<td><code>"1.0.0"</code></td>
+</tr>
+<tr class="odd">
+<td><code>dependencies</code></td>
+<td>生产依赖（项目运行时需要）</td>
+<td><code>&#123;"vue": "^3.0.0"&#125;</code></td>
+</tr>
+<tr class="even">
+<td><code>devDependencies</code></td>
+<td>开发依赖（只在开发时用）</td>
+<td><code>&#123;"vite": "^4.0.0"&#125;</code></td>
+</tr>
+<tr class="odd">
+<td><code>scripts</code></td>
+<td>自定义命令</td>
+<td><code>&#123;"dev": "vite"&#125;</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>实际例子</strong>： <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;todo-app&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;dependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;vue&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^3.3.4&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;axios&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^1.6.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;vite&quot;</span><span class="punctuation">:</span> <span class="string">&quot;^5.0.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;dev&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vite&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vite build&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>💡 <strong>记忆技巧</strong>：<br />
+<code>package.json</code>就像"购物清单"，记录项目需要哪些"工具"（依赖）。</p>
+</blockquote>
+<hr />
+<h1 id="网络请求封装axios基础">3. 网络请求封装：axios基础</h1>
+<h2 id="为什么需要封装请求">3.1 为什么需要封装请求？</h2>
+<p><strong>传统方式的问题</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每个页面都要写重复的代码</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;http://localhost:8000/api/users&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&#x27;GET&#x27;</span>,</span><br><span class="line">    <span class="attr">headers</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">&#x27;Bearer token123&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(data))</span><br><span class="line">.<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">error</span>(err));</span><br></pre></td></tr></table></figure>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>代码重复（每个地方都要写）</li>
+<li>难以统一管理（改API地址要改很多地方）</li>
+<li>错误处理分散（每个地方都要写catch）</li>
+</ul>
+<hr />
+<h2 id="什么是axios">3.2 什么是axios？</h2>
+<p><strong>axios</strong> = 一个强大的HTTP请求库</p>
+<p><strong>优势</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>优势</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>简单易用</strong></td>
+<td>语法简洁，上手快</td>
+</tr>
+<tr class="even">
+<td><strong>功能强大</strong></td>
+<td>支持请求拦截、响应拦截</td>
+</tr>
+<tr class="odd">
+<td><strong>自动转换</strong></td>
+<td>自动转换JSON数据</td>
+</tr>
+<tr class="even">
+<td><strong>错误处理</strong></td>
+<td>统一的错误处理机制</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="安装和使用axios">3.3 安装和使用axios</h2>
+<h3 id="安装axios">3.3.1 安装axios</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install axios</span><br></pre></td></tr></table></figure>
+<h3 id="基础使用">3.3.2 基础使用</h3>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 引入axios</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// GET请求</span></span><br><span class="line">axios.<span class="title function_">get</span>(<span class="string">&#x27;/api/users&#x27;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(response.<span class="property">data</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">    .<span class="title function_">catch</span>(<span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(error);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// POST请求</span></span><br><span class="line">axios.<span class="title function_">post</span>(<span class="string">&#x27;/api/users&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="number">20</span></span><br><span class="line">&#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(response.<span class="property">data</span>);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<hr />
+<h2 id="封装请求模块">3.4 封装请求模块</h2>
+<h3 id="创建请求实例">3.4.1 创建请求实例</h3>
+<p><strong>作用</strong>：统一配置API地址、请求头等</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils/request.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建axios实例</span></span><br><span class="line"><span class="keyword">const</span> request = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">    <span class="attr">baseURL</span>: <span class="string">&#x27;http://localhost:8000/api&#x27;</span>,  <span class="comment">// API基础地址</span></span><br><span class="line">    <span class="attr">timeout</span>: <span class="number">5000</span>,  <span class="comment">// 请求超时时间（5秒）</span></span><br><span class="line">    <span class="attr">headers</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> request;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="请求拦截器">3.4.2 请求拦截器</h3>
+<p><strong>作用</strong>：在发送请求前统一处理（如添加token）</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 请求拦截器</span></span><br><span class="line">request.<span class="property">interceptors</span>.<span class="property">request</span>.<span class="title function_">use</span>(</span><br><span class="line">    <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 从localStorage获取token</span></span><br><span class="line">        <span class="keyword">const</span> token = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&#x27;token&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (token) &#123;</span><br><span class="line">            config.<span class="property">headers</span>.<span class="property">Authorization</span> = <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> config;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="响应拦截器">3.4.3 响应拦截器</h3>
+<p><strong>作用</strong>：统一处理响应数据（如错误处理）</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 响应拦截器</span></span><br><span class="line">request.<span class="property">interceptors</span>.<span class="property">response</span>.<span class="title function_">use</span>(</span><br><span class="line">    <span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 直接返回数据部分</span></span><br><span class="line">        <span class="keyword">return</span> response.<span class="property">data</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 统一错误处理</span></span><br><span class="line">        <span class="keyword">if</span> (error.<span class="property">response</span>) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (error.<span class="property">response</span>.<span class="property">status</span>) &#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">401</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;未登录，请先登录&#x27;</span>);</span><br><span class="line">                    <span class="comment">// 跳转到登录页</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">404</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;请求的资源不存在&#x27;</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">500</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;服务器错误&#x27;</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="attr">default</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;请求失败&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h3 id="封装api方法">3.4.4 封装API方法</h3>
+<p><strong>作用</strong>：把API请求封装成函数，方便调用</p>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// api/user.js</span></span><br><span class="line"><span class="keyword">import</span> request <span class="keyword">from</span> <span class="string">&#x27;@/utils/request&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取用户列表</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getUserList</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">get</span>(<span class="string">&#x27;/users&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取用户详情</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getUserById</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">get</span>(<span class="string">`/users/<span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建用户</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">createUser</span>(<span class="params">userData</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">post</span>(<span class="string">&#x27;/users&#x27;</span>, userData);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新用户</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">updateUser</span>(<span class="params">id, userData</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">put</span>(<span class="string">`/users/<span class="subst">$&#123;id&#125;</span>`</span>, userData);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除用户</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">deleteUser</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">delete</span>(<span class="string">`/users/<span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用方式</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在组件中使用</span></span><br><span class="line"><span class="keyword">import</span> &#123; getUserList, createUser &#125; <span class="keyword">from</span> <span class="string">&#x27;@/api/user&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取用户列表</span></span><br><span class="line"><span class="title function_">getUserList</span>()</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;用户列表：&#x27;</span>, data);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建用户</span></span><br><span class="line"><span class="title function_">createUser</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;创建成功：&#x27;</span>, data);</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="环境变量配置">4. 环境变量配置</h1>
+<h2 id="为什么需要环境变量">4.1 为什么需要环境变量？</h2>
+<p><strong>问题场景</strong>：</p>
+<ul>
+<li><strong>开发环境</strong>：API地址是
+<code>http://localhost:8000</code></li>
+<li><strong>生产环境</strong>：API地址是
+<code>https://api.example.com</code></li>
+</ul>
+<p>如果API地址写在代码里，每次切换环境都要改代码，很麻烦！</p>
+<p><strong>解决方案</strong>：使用环境变量</p>
+<hr />
+<h2 id="环境变量的使用">4.2 环境变量的使用</h2>
+<h3 id="创建环境变量文件">4.2.1 创建环境变量文件</h3>
+<p><strong>在项目根目录创建</strong>：</p>
+<p><code>.env.development</code>（开发环境）： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VITE_API_BASE_URL=http://localhost:8000/api</span><br><span class="line">VITE_APP_TITLE=我的应用（开发版）</span><br></pre></td></tr></table></figure></p>
+<p><code>.env.production</code>（生产环境）： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">VITE_API_BASE_URL=https://api.example.com/api</span><br><span class="line">VITE_APP_TITLE=我的应用</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>⚠️ <strong>注意</strong>：<br />
+使用Vite时，环境变量必须以<code>VITE_</code>开头才能在前端代码中访问。</p>
+</blockquote>
+<hr />
+<h3 id="在代码中使用环境变量">4.2.2 在代码中使用环境变量</h3>
+<p><strong>实际例子</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// utils/request.js</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> request = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">    <span class="comment">// 使用环境变量</span></span><br><span class="line">    <span class="attr">baseURL</span>: <span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">env</span>.<span class="property">VITE_API_BASE_URL</span>,</span><br><span class="line">    <span class="attr">timeout</span>: <span class="number">5000</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> request;</span><br></pre></td></tr></table></figure></p>
+<p><strong>获取环境变量</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vite中使用</span></span><br><span class="line"><span class="keyword">const</span> apiUrl = <span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">env</span>.<span class="property">VITE_API_BASE_URL</span>;</span><br><span class="line"><span class="keyword">const</span> appTitle = <span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">env</span>.<span class="property">VITE_APP_TITLE</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 判断环境</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">env</span>.<span class="property">MODE</span> === <span class="string">&#x27;development&#x27;</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;开发环境&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="gitignore配置">4.3 .gitignore配置</h2>
+<p><strong>作用</strong>：告诉Git哪些文件不需要提交到仓库</p>
+<p><strong>为什么要忽略环境变量文件？</strong></p>
+<ul>
+<li>环境变量可能包含敏感信息（如API密钥）</li>
+<li>不同开发者的环境配置可能不同</li>
+</ul>
+<p><strong>配置<code>.gitignore</code></strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 环境变量文件</span><br><span class="line">.env</span><br><span class="line">.env.local</span><br><span class="line">.env.development</span><br><span class="line">.env.production</span><br><span class="line"></span><br><span class="line"># 依赖文件夹</span><br><span class="line">node_modules/</span><br><span class="line"></span><br><span class="line"># 构建输出</span><br><span class="line">dist/</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h1 id="ai实战使用ai封装api请求">5. AI实战：使用AI封装API请求</h1>
+<h2 id="任务描述">5.1 任务描述</h2>
+<p><strong>目标</strong>：使用AI工具生成一个完整的API请求封装模块</p>
+<p><strong>功能要求</strong>：</p>
+<ul>
+<li>创建axios实例，配置基础URL和超时时间</li>
+<li>实现请求拦截器（自动添加token）</li>
+<li>实现响应拦截器（统一错误处理）</li>
+<li>封装常用的API方法（GET、POST、PUT、DELETE）</li>
+<li>使用环境变量管理API地址</li>
+</ul>
+<hr />
+<h2 id="第一步设计prompt">5.2 第一步：设计Prompt</h2>
+<p><strong>Prompt示例</strong>： <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">用JavaScript创建一个axios请求封装模块，要求：</span><br><span class="line">1. 创建axios实例，使用环境变量VITE_API_BASE_URL作为baseURL</span><br><span class="line">2. 实现请求拦截器，自动从localStorage获取token并添加到请求头</span><br><span class="line">3. 实现响应拦截器，统一处理错误（401跳转登录，404、500显示错误提示）</span><br><span class="line">4. 封装API方法：getUserList、getUserById、createUser、updateUser、deleteUser</span><br><span class="line">5. 代码注释清晰，符合ES6规范</span><br><span class="line">6. 导出request实例和所有API方法</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="ai生成的代码示例">5.3 AI生成的代码（示例）</h2>
+<p><strong>utils/request.js</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">&#x27;axios&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建axios实例</span></span><br><span class="line"><span class="keyword">const</span> request = axios.<span class="title function_">create</span>(&#123;</span><br><span class="line">    <span class="attr">baseURL</span>: <span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">env</span>.<span class="property">VITE_API_BASE_URL</span> || <span class="string">&#x27;http://localhost:8000/api&#x27;</span>,</span><br><span class="line">    <span class="attr">timeout</span>: <span class="number">5000</span>,</span><br><span class="line">    <span class="attr">headers</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求拦截器</span></span><br><span class="line">request.<span class="property">interceptors</span>.<span class="property">request</span>.<span class="title function_">use</span>(</span><br><span class="line">    <span class="function"><span class="params">config</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 从localStorage获取token</span></span><br><span class="line">        <span class="keyword">const</span> token = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(<span class="string">&#x27;token&#x27;</span>);</span><br><span class="line">        <span class="keyword">if</span> (token) &#123;</span><br><span class="line">            config.<span class="property">headers</span>.<span class="property">Authorization</span> = <span class="string">`Bearer <span class="subst">$&#123;token&#125;</span>`</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> config;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 响应拦截器</span></span><br><span class="line">request.<span class="property">interceptors</span>.<span class="property">response</span>.<span class="title function_">use</span>(</span><br><span class="line">    <span class="function"><span class="params">response</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 直接返回数据部分</span></span><br><span class="line">        <span class="keyword">return</span> response.<span class="property">data</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 统一错误处理</span></span><br><span class="line">        <span class="keyword">if</span> (error.<span class="property">response</span>) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (error.<span class="property">response</span>.<span class="property">status</span>) &#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">401</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;未登录，请先登录&#x27;</span>);</span><br><span class="line">                    <span class="comment">// 可以跳转到登录页</span></span><br><span class="line">                    <span class="comment">// window.location.href = &#x27;/login&#x27;;</span></span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">404</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;请求的资源不存在&#x27;</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> <span class="number">500</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;服务器错误，请稍后重试&#x27;</span>);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="attr">default</span>:</span><br><span class="line">                    <span class="title function_">alert</span>(<span class="string">&#x27;请求失败：&#x27;</span> + error.<span class="property">message</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="title function_">alert</span>(<span class="string">&#x27;网络错误，请检查网络连接&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">reject</span>(error);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> request;</span><br></pre></td></tr></table></figure></p>
+<p><strong>api/user.js</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> request <span class="keyword">from</span> <span class="string">&#x27;@/utils/request&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取用户列表</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getUserList</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">get</span>(<span class="string">&#x27;/users&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取用户详情</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">getUserById</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">get</span>(<span class="string">`/users/<span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建用户</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">createUser</span>(<span class="params">userData</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">post</span>(<span class="string">&#x27;/users&#x27;</span>, userData);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更新用户</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">updateUser</span>(<span class="params">id, userData</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">put</span>(<span class="string">`/users/<span class="subst">$&#123;id&#125;</span>`</span>, userData);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除用户</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">deleteUser</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> request.<span class="title function_">delete</span>(<span class="string">`/users/<span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="代码解析">5.4 代码解析</h2>
+<p><strong>核心思路</strong>：</p>
+<ol type="1">
+<li><strong>创建axios实例</strong>：统一配置，避免重复代码</li>
+<li><strong>请求拦截器</strong>：自动添加token，统一处理请求</li>
+<li><strong>响应拦截器</strong>：统一处理响应和错误</li>
+<li><strong>封装API方法</strong>：把API请求封装成函数，方便调用</li>
+</ol>
+<p><strong>关键点</strong>：</p>
+<ul>
+<li>使用环境变量管理API地址</li>
+<li>统一的错误处理机制</li>
+<li>代码复用，易于维护</li>
+</ul>
+<hr />
+<h1 id="选讲路由管理与状态管理">6. 选讲：路由管理与状态管理</h1>
+<h2 id="路由管理vue-router">6.1 路由管理：Vue Router</h2>
+<h3 id="什么是路由">6.1.1 什么是路由？</h3>
+<p><strong>路由</strong> = 根据URL显示不同页面的机制</p>
+<p><strong>生活类比</strong>：</p>
+<ul>
+<li><strong>没有路由</strong>：所有内容在一个页面（像单页书）</li>
+<li><strong>有路由</strong>：不同URL显示不同页面（像多页书，有目录）</li>
+</ul>
+<p><strong>实际例子</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/          → 首页</span><br><span class="line">/about     → 关于页面</span><br><span class="line">/users     → 用户列表</span><br><span class="line">/users/1   → 用户详情（ID为1）</span><br></pre></td></tr></table></figure>
+<hr />
+<h3 id="vue-router基础">6.1.2 Vue Router基础</h3>
+<p><strong>安装</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install vue-router@4</span><br></pre></td></tr></table></figure></p>
+<p><strong>基础使用</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// router/index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; createRouter, createWebHistory &#125; <span class="keyword">from</span> <span class="string">&#x27;vue-router&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Home</span> <span class="keyword">from</span> <span class="string">&#x27;@/views/Home.vue&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">About</span> <span class="keyword">from</span> <span class="string">&#x27;@/views/About.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> routes = [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">&#x27;/&#x27;</span>, <span class="attr">component</span>: <span class="title class_">Home</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">&#x27;/about&#x27;</span>, <span class="attr">component</span>: <span class="title class_">About</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="title function_">createRouter</span>(&#123;</span><br><span class="line">    <span class="attr">history</span>: <span class="title function_">createWebHistory</span>(),</span><br><span class="line">    routes</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router;</span><br></pre></td></tr></table></figure></p>
+<p><strong>在组件中使用</strong>： <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">&quot;/&quot;</span>&gt;</span>首页<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">router-link</span> <span class="attr">to</span>=<span class="string">&quot;/about&quot;</span>&gt;</span>关于<span class="tag">&lt;/<span class="name">router-link</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="状态管理pinia">6.2 状态管理：Pinia</h2>
+<h3 id="什么是状态管理">6.2.1 什么是状态管理？</h3>
+<p><strong>状态</strong> =
+应用中需要共享的数据（如用户信息、购物车）</p>
+<p><strong>问题场景</strong>：</p>
+<ul>
+<li>用户信息在多个组件中都需要使用</li>
+<li>如果每个组件都单独管理，数据会不同步</li>
+</ul>
+<p><strong>解决方案</strong>：使用状态管理工具（Pinia）</p>
+<hr />
+<h3 id="pinia基础">6.2.2 Pinia基础</h3>
+<p><strong>安装</strong>： <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install pinia</span><br></pre></td></tr></table></figure></p>
+<p><strong>基础使用</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stores/user.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineStore &#125; <span class="keyword">from</span> <span class="string">&#x27;pinia&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useUserStore = <span class="title function_">defineStore</span>(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">state</span>: <span class="function">() =&gt;</span> (&#123;</span><br><span class="line">        <span class="attr">userInfo</span>: <span class="literal">null</span>,</span><br><span class="line">        <span class="attr">token</span>: <span class="string">&#x27;&#x27;</span></span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="attr">actions</span>: &#123;</span><br><span class="line">        <span class="title function_">setUserInfo</span>(<span class="params">userInfo</span>) &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">userInfo</span> = userInfo;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">setToken</span>(<span class="params">token</span>) &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">token</span> = token;</span><br><span class="line">            <span class="variable language_">localStorage</span>.<span class="title function_">setItem</span>(<span class="string">&#x27;token&#x27;</span>, token);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p><strong>在组件中使用</strong>： <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useUserStore &#125; <span class="keyword">from</span> <span class="string">&#x27;@/stores/user&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> userStore = <span class="title function_">useUserStore</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取状态</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(userStore.<span class="property">userInfo</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用方法</span></span><br><span class="line">userStore.<span class="title function_">setUserInfo</span>(&#123; <span class="attr">name</span>: <span class="string">&#x27;张三&#x27;</span> &#125;);</span><br></pre></td></tr></table></figure></p>
+<hr />
+<h2 id="什么时候需要路由和状态管理">6.3
+什么时候需要路由和状态管理？</h2>
+<table>
+<thead>
+<tr class="header">
+<th>场景</th>
+<th>是否需要</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>单页面应用</strong></td>
+<td>需要路由</td>
+</tr>
+<tr class="even">
+<td><strong>多页面应用</strong></td>
+<td>不需要路由</td>
+</tr>
+<tr class="odd">
+<td><strong>数据在多个组件共享</strong></td>
+<td>需要状态管理</td>
+</tr>
+<tr class="even">
+<td><strong>数据只在单个组件使用</strong></td>
+<td>不需要状态管理</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>建议</strong>：<br />
+小型项目可以不用路由和状态管理，但随着项目变大，这些工具会很有用。</p>
+</blockquote>
+<hr />
+<h2 id="本章总结">本章总结</h2>
+<p>通过本章的学习，你已经掌握了：</p>
+<p>✅ <strong>包管理工具</strong>：</p>
+<ul>
+<li>npm的基础使用</li>
+<li>package.json的作用</li>
+<li>依赖管理</li>
+</ul>
+<p>✅ <strong>网络请求封装</strong>：</p>
+<ul>
+<li>axios的使用</li>
+<li>请求和响应拦截器</li>
+<li>API方法封装</li>
+</ul>
+<p>✅ <strong>环境变量配置</strong>：</p>
+<ul>
+<li>环境变量的作用</li>
+<li>如何配置和使用</li>
+<li>.gitignore配置</li>
+</ul>
+<p>✅ <strong>实战技能</strong>：</p>
+<ul>
+<li>封装完整的请求模块</li>
+<li>使用AI生成代码</li>
+<li>管理项目依赖</li>
+</ul>
+<p>✅ <strong>进阶知识</strong>（选讲）：</p>
+<ul>
+<li>路由管理（Vue Router）</li>
+<li>状态管理（Pinia）</li>
+</ul>
+<blockquote>
+<p>🌟 <strong>恭喜你！</strong><br />
+你已经掌握了前端工程化的核心技能！<br />
+这些知识将帮助你：</p>
+<ul>
+<li><p>管理项目依赖</p></li>
+<li><p>封装可复用的代码</p></li>
+<li><p>提高开发效率</p></li>
+</ul>
+<p><strong>继续练习，继续探索，前端工程化的世界等着你！</strong> 🚀</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI%E9%A9%B1%E5%8A%A8Web%E5%BC%80%E5%8F%91%E6%8A%80%E6%9C%AF/" rel="tag"># AI驱动Web开发技术</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025-12-08-08-%E7%BB%84%E4%BB%B6%E5%BC%80%E5%8F%91%E4%B8%8EUI%E6%A1%86%E6%9E%B6/" rel="prev" title="08.组件开发与UI框架">
+                  <i class="fa fa-angle-left"></i> 08.组件开发与UI框架
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025-12-16-10-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="next" title="10.数据可视化">
+                  10.数据可视化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">CSGrandeur</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@next-theme/pjax@0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://fastly.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"CSGrandeur/csgrandeur.github.io","issue_term":"pathname","theme":"github-light"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+</body>
+</html>
