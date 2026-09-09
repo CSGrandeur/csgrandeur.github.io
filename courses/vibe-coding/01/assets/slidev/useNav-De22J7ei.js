@@ -1,0 +1,225 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/md-BXUD_dzl.js","assets/modules/shiki-fGx4atKb.js","assets/rolldown-runtime-hePW80VL.js","assets/modules/shiki-BrmBd2_v.css","assets/slidev/context-C4QGt8TM.js","assets/modules/vue-D6jbpgMm.js","assets/md-DQv3nMOQ.js","assets/slidev/SlideChrome-CGtVKxcn.js","assets/syncState-B-76tFHB.js","assets/index-CH8wSMA-.js","assets/index-8dE_dpr8.css","assets/useDrawings-BnEQ8SEH.js","assets/ItemList-BQUphCJP.js","assets/md-BSAroSMP.js","assets/lesson-cards-CoqtpSra.js","assets/md-D2ecVqWG.js","assets/md-DoHhVw_S.js","assets/md-Dcy7t3AO.js","assets/md-BNTLNeIx.js","assets/md-DXOx-xre.js","assets/md-B3tkmB1E.js","assets/md-yoyJYu-9.js","assets/md-CgxXczdA.js","assets/md-DLzdKj2Z.js","assets/md-F9BBpo0H.js","assets/md-CetOwma_.js"])))=>i.map(i=>d[i]);
+import{C as e,I as t,L as n,M as r,O as i,R as a,at as o,ct as s,dt as c,g as l,h as u,ht as d,mt as f,p,q as m,st as h,tt as g,ut as _,v,w as y,y as b,yt as ee}from"../modules/shiki-fGx4atKb.js";import{t as te}from"../_plugin-vue_export-helper-BDNMzG2s.js";import{A as x,B as S,E as C,I as ne,T as re,a as ie,c as ae,g as oe,h as w,k as T,l as se,m as ce,z as le}from"../modules/vue-D6jbpgMm.js";import{l as E,y as ue}from"./context-C4QGt8TM.js";function D(e,t,n){return Math.min(n,Math.max(t,e))}function de(...e){return pe(e).reduce((e,t)=>e+t,0)}function fe(e){return e??=[],Array.isArray(e)?e:[e]}function pe(e){return fe(e).flat(1)}function me(e){return Array.from(new Set(e))}function O(...e){let t,n,r;e.length===1?(t=0,r=1,[n]=e):[t,n,r=1]=e;let i=[],a=t;for(;a<n;)i.push(a),a+=r||1;return i}function he(e){return e!=null}function ge(e,t){return Object.fromEntries(Object.entries(e).map(([e,n])=>t(e,n)).filter(he))}var k={theme:`default`,title:`01.Vibe Coding定位与Harness`,titleTemplate:`%s - Slidev`,addons:[],remoteAssets:!1,monaco:!0,monacoTypesSource:`local`,monacoTypesAdditionalPackages:[],monacoTypesIgnorePackages:[],monacoRunAdditionalDeps:[],monacoRunUseStrict:!0,download:!1,export:{},info:!1,highlighter:`shiki`,twoslash:!0,lineNumbers:!1,colorSchema:`auto`,routerMode:`hash`,aspectRatio:1.7777777777777777,canvasWidth:980,exportFilename:``,selectable:!1,themeConfig:{},fonts:{sans:[`"Avenir Next"`,`"Nunito Sans"`,`ui-sans-serif`,`system-ui`,`-apple-system`,`BlinkMacSystemFont`,`"Segoe UI"`,`Roboto`,`"Helvetica Neue"`,`Arial`,`"Noto Sans"`,`sans-serif`,`"Apple Color Emoji"`,`"Segoe UI Emoji"`,`"Segoe UI Symbol"`,`"Noto Color Emoji"`],serif:[`ui-serif`,`Georgia`,`Cambria`,`"Times New Roman"`,`Times`,`serif`],mono:[`"Fira Code"`,`ui-monospace`,`SFMono-Regular`,`Menlo`,`Monaco`,`Consolas`,`"Liberation Mono"`,`"Courier New"`,`monospace`],webfonts:[`Nunito Sans`,`Fira Code`],provider:`google`,local:[`Avenir Next`],italic:!1,weights:[`200`,`400`,`600`]},favicon:`https://cdn.jsdelivr.net/gh/slidevjs/slidev/assets/favicon.png`,drawings:{enabled:!0,persist:!1,presenterOnly:!1,syncAll:!0},plantUmlServer:`https://www.plantuml.com/plantuml`,codeCopy:!0,magicMoveCopy:!0,author:``,record:`dev`,css:`unocss`,presenter:!0,browserExporter:`dev`,htmlAttrs:{},transition:null,editor:!0,mcp:!0,contextMenu:null,wakeLock:!0,pwa:!1,mdc:!1,comark:!1,seoMeta:{},notesAutoRuby:{},duration:`30min`,timer:`stopwatch`,magicMoveDuration:800,preloadImages:!0,clickAnimation:``,src:`./chapters/01.Vibe-Coding定位与Harness/slides.md`,slidesTitle:`01.Vibe Coding定位与Harness - Slidev`},_e=`build`,ve=u(()=>k.aspectRatio),ye=u(()=>k.canvasWidth),be=u(()=>Math.ceil(ye.value/ve.value)),xe=u(()=>ge(k.themeConfig||{},(e,t)=>[`--slidev-theme-${e}`,t])),Se=k.slidesTitle,Ce=`/courses/vibe-coding/01/#/`,we=`modulepreload`,Te=function(e){return`/courses/vibe-coding/01/`+e},Ee={},A=function(e,t,n){let r=Promise.resolve();if(t&&t.length>0){let e=document.getElementsByTagName(`link`),i=document.querySelector(`meta[property=csp-nonce]`),a=i?.nonce||i?.getAttribute(`nonce`);function o(e){return Promise.all(e.map(e=>Promise.resolve(e).then(e=>({status:`fulfilled`,value:e}),e=>({status:`rejected`,reason:e}))))}function s(e){return import.meta.resolve?import.meta.resolve(e):new URL(e,import.meta.url).href}r=o(t.map(t=>{if(t=Te(t,n),t=s(t),t in Ee)return;Ee[t]=!0;let r=t.endsWith(`.css`);for(let n=e.length-1;n>=0;n--){let i=e[n];if(i.href===t&&(!r||i.rel===`stylesheet`))return}let i=document.createElement(`link`);if(i.rel=r?`stylesheet`:we,r||(i.as=`script`),i.crossOrigin=``,i.href=t,a&&i.setAttribute(`nonce`,a),document.head.appendChild(i),r)return new Promise((e,n)=>{i.addEventListener(`load`,e),i.addEventListener(`error`,()=>n(Error(`Unable to preload CSS for ${t}`)))})}))}function i(e){let t=new Event(`vite:preloadError`,{cancelable:!0});if(t.payload=e,window.dispatchEvent(t),!t.defaultPrevented)throw e}return r.then(t=>{for(let e of t||[])e.status===`rejected`&&i(e.reason);return e().catch(i)})};function De(e){if(e===!1||e===`false`)return null;if(e==null||e===!0||e===`true`)return`+1`;if(typeof e==`string`&&`+-`.includes(e[0]))return e;let t=+e;return Number.isNaN(t)?(console.error(`Invalid "at" prop value: ${e}`),null):t<=0?(console.warn(`[Slidev] "at" prop value must be greater than 0, but got ${e}, has been set to 1`),1):t}function Oe(e){return Array.isArray(e)?[De(e[0]),De(e[1])]:null}function ke(e,r=0,i){let a=h(!1),o=new Map,c=new Map,l={get current(){return D(+e.value,r,l.total)},set current(t){e.value=a.value?D(t,r,l.total):t},clicksStart:r,get relativeSizeMap(){return o},get maxMap(){return c},get isMounted(){return a.value},setup(){t(()=>{a.value=!0,c=s(c),g(e)||(l.current=e.value)}),n(()=>{a.value=!1,o=new Map,c=new Map})},calculateSince(e,t=1){let n=De(e);if(n==null)return null;let r,i,a;if(typeof n==`string`){let e=l.currentOffset,o=+n;r=e+o,i=e+o+t-1,a=o+t-1}else r=n,i=n+t-1,a=0;return{start:r,end:1/0,max:i,delta:a,currentOffset:u(()=>l.current-r),isCurrent:u(()=>l.current===r),isActive:u(()=>l.current>=r)}},calculateRange(e){let t=Oe(e);if(t==null)return null;let[n,r]=t,i,a,o;return typeof n==`string`?(i=l.currentOffset+ +n,o=+n):(i=n,o=0),typeof r==`string`?(a=i+ +r,o+=+r):a=r,{start:i,end:a,max:a,delta:o,currentOffset:u(()=>l.current-i),isCurrent:u(()=>l.current===i),isActive:u(()=>i<=l.current&&l.current<a)}},calculate(e){return Array.isArray(e)?l.calculateRange(e):l.calculateSince(e)},register(e,t){if(!t)return;let{delta:n,max:r}=t;o.set(e,n),c.set(e,r)},unregister(e){o.delete(e),c.delete(e)},get currentOffset(){return de(...o.values())},get total(){return i??(a.value?Math.max(0,...c.values()):0)}};return l}function Ae(e,t=0){let n=e?.meta.slide?.frontmatter.clicksStart??0,r=h(Math.max(f(t),n));return m(()=>f(t),e=>{r.value=Math.max(e,n)}),ke(r,n,e?.meta?.clicks)}var je=/[a-z]/i;function Me(e){if(typeof e==`number`)return{seconds:e,relative:!1};let t=e.startsWith(`+`);t&&(e=e.slice(1));let n=0;if(e.includes(`:`)){let t=e.split(`:`).map(Number),r=0,i=0,a=0;if(t.length===3)r=t[0],i=t[1],a=t[2];else if(t.length===2)i=t[0],a=t[1];else if(t.length===1)a=t[0];else throw TypeError(`Invalid timestamp format`);if(Number.isNaN(r)||Number.isNaN(i)||Number.isNaN(a))throw TypeError(`Invalid timestamp format`);n=(r||0)*3600+(i||0)*60+(a||0)}else if(!je.test(e))n=Number(e);else{let t={s:1,sec:1,secs:1,m:60,min:60,mins:60,h:3600,hr:3600,hrs:3600,hour:3600,hours:3600,day:86400,days:86400,week:604800,weeks:604800,month:2629746,months:2629746,year:31556952,years:31556952},r=/([\d.]+)([a-z]+)/gi,i=e.matchAll(r);if(i)for(let e of i){let r=Number(e[1]);if(Number.isNaN(r))throw TypeError(`Invalid timestamp value: ${e[1]}`);let i=e[2].toLowerCase();if(!(i in t))throw TypeError(`Invalid timestamp unit: ${i}`);n+=r*t[i]}let a=e.replace(r,``).trim();if(a)throw TypeError(`Unknown timestamp remaining: ${a}`)}return{seconds:n,relative:t}}function Ne(e,t){if(!t||t===`all`||t===`*`)return O(1,e+1);if(t===`none`)return[];let n=[];for(let r of t.split(/[,;]/g))if(!r.includes(`-`))n.push(+r);else{let[t,i]=r.split(`-`,2);n.push(...O(+t,i?+i+1:e+1))}return me(n).filter(t=>t<=e).sort((e,t)=>e-t)}var Pe={},Fe={class:`px-4 py-10 text-center text-red-700 dark:text-red-500 font-bold font-mono`};function Ie(e,t){return a(),b(`div`,Fe,ee(`Failed to fetch this slide. Please check your network connection.`))}var j=te(Pe,[[`render`,Ie]]),Le={class:`h-full w-full flex items-center justify-center gap-2 slidev-slide-loading`},Re=y({__name:`SlideLoading`,setup(e){let n=h(!1);return t(()=>{setTimeout(()=>{n.value=!0},200)}),(e,t)=>(a(),b(`div`,Le,[n.value?(a(),b(p,{key:0},[t[0]||=l(`div`,{class:`i-svg-spinners-90-ring-with-bg text-xl`},null,-1),t[1]||=l(`div`,null,`Loading slide...`,-1)],64)):v(`v-if`,!0)]))}}),M=o({theme:`default`,title:`01.Vibe Coding定位与Harness`,info:`《AI氛围编程》课次 01。`,author:`人工智能学院`,colorSchema:`light`,aspectRatio:`16/9`,canvasWidth:1280,highlighter:`shiki`,mdc:!0,transition:`fade-out`,fonts:{provider:`none`,sans:`Microsoft YaHei, PingFang SC, Noto Sans SC, Source Han Sans SC, sans-serif`,mono:`Sarasa Mono SC, Fira Code, Consolas, ui-monospace, monospace`},htmlAttrs:{lang:`zh-CN`},layout:`lesson-cover`,week:1,weekLabel:`课次 01`,chapter:1,chapterTitle:`协作入门与工程基础`,experiment:1,experimentTitle:`项目立项与运行环境`,lead:`带着助手，做一件能演示的校园应用。人写清范围和验收，助手写草稿，人核对能否跑。课题从选题表里选，不限定某一种形态。`,course:`AI氛围编程`,unit:`人工智能学院`,defaults:{layout:`lesson-cards`,week:1,weekLabel:`课次 01`,spine:[]}}),ze=s({get layout(){return M.layout},get transition(){return M.transition},get class(){return M.class},get clicks(){return M.clicks},get name(){return M.name},get preload(){return M.preload},slide:{content:``,revision:`ulln4b`,frontmatterRaw:`theme: "default"
+title: "01.Vibe Coding定位与Harness"
+info: "《AI氛围编程》课次 01。"
+author: "人工智能学院"
+colorSchema: "light"
+aspectRatio: "16/9"
+canvasWidth: 1280
+highlighter: "shiki"
+mdc: true
+transition: "fade-out"
+fonts:
+  provider: "none"
+  sans: "Microsoft YaHei, PingFang SC, Noto Sans SC, Source Han Sans SC, sans-serif"
+  mono: "Sarasa Mono SC, Fira Code, Consolas, ui-monospace, monospace"
+htmlAttrs:
+  lang: "zh-CN"
+layout: "lesson-cover"
+week: 1
+weekLabel: "课次 01"
+chapter: 1
+chapterTitle: "协作入门与工程基础"
+experiment: 1
+experimentTitle: "项目立项与运行环境"
+lead: "带着助手，做一件能演示的校园应用。人写清范围和验收，助手写草稿，人核对能否跑。课题从选题表里选，不限定某一种形态。"
+course: "AI氛围编程"
+unit: "人工智能学院"
+defaults:
+  layout: "lesson-cards"
+  week: 1
+  weekLabel: "课次 01"
+  spine: []
+`,note:``,title:`01.Vibe Coding定位与Harness`,index:0,noteHTML:``,images:[],raw:``,frontmatter:M,filepath:``,start:0,sourceIndex:0,id:0,no:1},__clicksContext:null,__preloaded:!1}),N=o({layout:`lesson-agenda`,week:1,weekLabel:`课次 01`,heading:`本日安排`,lecture:[`课前已看编程课介绍和基本功的，本周从考核与选题开始`,`成绩：七次小报告 70%，期末大报告 30%`,`会碰到的词：程序、命令、网站与小程序、接口、Git、助手`,`选题：校园应用；形态自选；先读选题说明`],practice:[`打开在线实验环境和 CodeBuddy`,`从选题说明选定课题，打开项目要求`,`填立项：项目名、必做与不做、验收、分工`]}),Be=s({get layout(){return N.layout},get transition(){return N.transition},get class(){return N.class},get clicks(){return N.clicks},get name(){return N.name},get preload(){return N.preload},slide:{content:``,revision:`9cmoo7`,frontmatterRaw:`layout: "lesson-agenda"
+week: 1
+weekLabel: "课次 01"
+heading: "本日安排"
+lecture:
+  - "课前已看编程课介绍和基本功的，本周从考核与选题开始"
+  - "成绩：七次小报告 70%，期末大报告 30%"
+  - "会碰到的词：程序、命令、网站与小程序、接口、Git、助手"
+  - "选题：校园应用；形态自选；先读选题说明"
+practice:
+  - "打开在线实验环境和 CodeBuddy"
+  - "从选题说明选定课题，打开项目要求"
+  - "填立项：项目名、必做与不做、验收、分工"
+`,note:``,title:`本日安排`,level:1,index:1,noteHTML:``,images:[],raw:``,frontmatter:N,filepath:``,start:36,sourceIndex:1,id:1,no:2},__clicksContext:null,__preloaded:!1}),P=o({layout:`lesson-cards`,week:1,weekLabel:`课次 01`,heading:`这门课怎么过`,kicker:`1.1　考核`,cards:[{num:`01`,title:`七次小报告`,body:`过程考核合计 70%，每次 10 分。按窗口提交。`,on:!0},{num:`02`,title:`期末大报告`,body:`可演示的校园应用，占 30%。`},{num:`03`,title:`每次课的产出`,body:`离开前能指出今天改了哪一处，或立项写到哪一栏。`}]}),Ve=s({get layout(){return P.layout},get transition(){return P.transition},get class(){return P.class},get clicks(){return P.clicks},get name(){return P.name},get preload(){return P.preload},slide:{content:``,revision:`-4yvl9d`,frontmatterRaw:`layout: "lesson-cards"
+week: 1
+weekLabel: "课次 01"
+heading: "这门课怎么过"
+kicker: "1.1　考核"
+cards:
+  - num: "01"
+    title: "七次小报告"
+    body: "过程考核合计 70%，每次 10 分。按窗口提交。"
+    on: true
+  - num: "02"
+    title: "期末大报告"
+    body: "可演示的校园应用，占 30%。"
+  - num: "03"
+    title: "每次课的产出"
+    body: "离开前能指出今天改了哪一处，或立项写到哪一栏。"
+`,note:``,title:`这门课怎么过`,level:1,index:2,noteHTML:``,images:[],raw:``,frontmatter:P,filepath:``,start:54,sourceIndex:2,id:2,no:3},__clicksContext:null,__preloaded:!1}),F=o({layout:`lesson-cards`,week:1,weekLabel:`课次 01`,heading:`学期知识线索`,kicker:`1.2　不懂的词可以课后问助手`,cards:[{num:`01`,title:`指挥`,body:`任务说明、助手、约束文件。检索：Prompt、Git 提交。`},{num:`02`,title:`做出来`,body:`原型、接口、数据读写。检索：API、CRUD。`},{num:`03`,title:`盯质量`,body:`测试、审查、排错。检索：冒烟测试、日志。`},{num:`04`,title:`能交付`,body:`外部工具、门禁、发布。检索：MCP、Docker、回滚。`}]}),He=s({get layout(){return F.layout},get transition(){return F.transition},get class(){return F.class},get clicks(){return F.clicks},get name(){return F.name},get preload(){return F.preload},slide:{content:``,revision:`9b5yql`,frontmatterRaw:`layout: "lesson-cards"
+week: 1
+weekLabel: "课次 01"
+heading: "学期知识线索"
+kicker: "1.2　不懂的词可以课后问助手"
+cards:
+  - num: "01"
+    title: "指挥"
+    body: "任务说明、助手、约束文件。检索：Prompt、Git 提交。"
+  - num: "02"
+    title: "做出来"
+    body: "原型、接口、数据读写。检索：API、CRUD。"
+  - num: "03"
+    title: "盯质量"
+    body: "测试、审查、排错。检索：冒烟测试、日志。"
+  - num: "04"
+    title: "能交付"
+    body: "外部工具、门禁、发布。检索：MCP、Docker、回滚。"
+`,note:``,title:`学期知识线索`,level:1,index:3,noteHTML:``,images:[],raw:``,frontmatter:F,filepath:``,start:75,sourceIndex:3,id:3,no:4},__clicksContext:null,__preloaded:!1}),I=o({layout:`lesson-cards`,week:1,weekLabel:`课次 01`,heading:`程序、文件、命令`,kicker:`1.3　机器怎么干活`,cards:[{num:`01`,title:`程序`,body:`写给计算机执行的步骤。编程就是把步骤写成程序。`},{num:`02`,title:`文件与文件夹`,body:`代码、数据、说明都是文件；文件夹用来归类。`},{num:`03`,title:`终端与命令`,body:`用文字让计算机做事，例如启动程序。命令打错会报错，把原文留下。`}]}),Ue=s({get layout(){return I.layout},get transition(){return I.transition},get class(){return I.class},get clicks(){return I.clicks},get name(){return I.name},get preload(){return I.preload},slide:{content:``,revision:`xrqgq7`,frontmatterRaw:`layout: "lesson-cards"
+week: 1
+weekLabel: "课次 01"
+heading: "程序、文件、命令"
+kicker: "1.3　机器怎么干活"
+cards:
+  - num: "01"
+    title: "程序"
+    body: "写给计算机执行的步骤。编程就是把步骤写成程序。"
+  - num: "02"
+    title: "文件与文件夹"
+    body: "代码、数据、说明都是文件；文件夹用来归类。"
+  - num: "03"
+    title: "终端与命令"
+    body: "用文字让计算机做事，例如启动程序。命令打错会报错，把原文留下。"
+`,note:``,title:`程序、文件、命令`,level:1,index:4,noteHTML:``,images:[],raw:``,frontmatter:I,filepath:``,start:98,sourceIndex:4,id:4,no:5},__clicksContext:null,__preloaded:!1}),L=o({layout:`lesson-compare`,week:1,weekLabel:`课次 01`,heading:`做成什么样，可以选`,kicker:`1.4　交付形态`,leftTitle:`常见形态`,left:[`网站：用浏览器打开的页面`,`H5：主要给手机浏览器用的网页`,`微信小程序：在微信里打开`,`本地软件：安装或解压后在电脑上运行`],rightTitle:`本课共同要求`,right:[`有一条能演示的主路径`,`数据能保存，不能只活在聊天里`,`成功和失败都有明确结果`,`不接学校未提供的正式接口也要用示例数据跑通`]}),We=s({get layout(){return L.layout},get transition(){return L.transition},get class(){return L.class},get clicks(){return L.clicks},get name(){return L.name},get preload(){return L.preload},slide:{content:``,revision:`xyr7qs`,frontmatterRaw:`layout: "lesson-compare"
+week: 1
+weekLabel: "课次 01"
+heading: "做成什么样，可以选"
+kicker: "1.4　交付形态"
+leftTitle: "常见形态"
+left:
+  - "网站：用浏览器打开的页面"
+  - "H5：主要给手机浏览器用的网页"
+  - "微信小程序：在微信里打开"
+  - "本地软件：安装或解压后在电脑上运行"
+rightTitle: "本课共同要求"
+right:
+  - "有一条能演示的主路径"
+  - "数据能保存，不能只活在聊天里"
+  - "成功和失败都有明确结果"
+  - "不接学校未提供的正式接口也要用示例数据跑通"
+`,note:``,title:`做成什么样，可以选`,level:1,index:5,noteHTML:``,images:[],raw:``,frontmatter:L,filepath:``,start:118,sourceIndex:5,id:5,no:6},__clicksContext:null,__preloaded:!1}),R=o({layout:`lesson-split`,week:1,weekLabel:`课次 01`,heading:`一次查询在干什么`,kicker:`1.5　接口直觉`,diagram:`request-response`,items:[`你在页面上点一下，等于发出一次请求。`,`程序按约定查找，再返回结果。`,`找不到也要有说法，不能空白。后面会把约定写成接口。检索：HTTP、API。`]}),Ge=s({get layout(){return R.layout},get transition(){return R.transition},get class(){return R.class},get clicks(){return R.clicks},get name(){return R.name},get preload(){return R.preload},slide:{content:``,revision:`-seah9b`,frontmatterRaw:`layout: "lesson-split"
+week: 1
+weekLabel: "课次 01"
+heading: "一次查询在干什么"
+kicker: "1.5　接口直觉"
+diagram: "request-response"
+items:
+  - "你在页面上点一下，等于发出一次请求。"
+  - "程序按约定查找，再返回结果。"
+  - "找不到也要有说法，不能空白。后面会把约定写成接口。检索：HTTP、API。"
+`,note:``,title:`一次查询在干什么`,level:1,index:6,noteHTML:``,images:[],raw:``,frontmatter:R,filepath:``,start:140,sourceIndex:6,id:6,no:7},__clicksContext:null,__preloaded:!1}),z=o({layout:`lesson-flow`,week:1,weekLabel:`课次 01`,heading:`人与助手怎么分工`,kicker:`1.6　Vibe Coding`,nodes:[{k:`01`,t:`人写清任务`,on:!0},{k:`02`,t:`助手写代码与草稿`},{k:`03`,t:`人核对能跑、能交`,on:!0}]}),Ke=s({get layout(){return z.layout},get transition(){return z.transition},get class(){return z.class},get clicks(){return z.clicks},get name(){return z.name},get preload(){return z.preload},slide:{content:``,revision:`iglaf6`,frontmatterRaw:`layout: "lesson-flow"
+week: 1
+weekLabel: "课次 01"
+heading: "人与助手怎么分工"
+kicker: "1.6　Vibe Coding"
+nodes:
+  - k: "01"
+    t: "人写清任务"
+    on: true
+  - k: "02"
+    t: "助手写代码与草稿"
+  - k: "03"
+    t: "人核对能跑、能交"
+    on: true
+`,note:``,title:`人与助手怎么分工`,level:1,index:7,noteHTML:``,images:[],raw:``,frontmatter:z,filepath:``,start:155,sourceIndex:7,id:7,no:8},__clicksContext:null,__preloaded:!1}),B=o({layout:`lesson-cards`,week:1,weekLabel:`课次 01`,heading:`课上三个词`,kicker:`1.7　Agent 与约束`,cards:[{num:`01`,title:`助手`,body:`按你的说明改文件、跑命令、写草稿。国内外都有同类工具；本课用 CodeBuddy。检索：AI 编程助手。`},{num:`02`,title:`约束文件`,body:`写死禁止事项和必做步骤。课上称作 Harness。检索：rules、skills。`},{num:`03`,title:`实验环境`,body:`浏览器里的课程工作空间：文件、终端、提交入口在同一处。`}]}),qe=s({get layout(){return B.layout},get transition(){return B.transition},get class(){return B.class},get clicks(){return B.clicks},get name(){return B.name},get preload(){return B.preload},slide:{content:``,revision:`p8eeal`,frontmatterRaw:`layout: "lesson-cards"
+week: 1
+weekLabel: "课次 01"
+heading: "课上三个词"
+kicker: "1.7　Agent 与约束"
+cards:
+  - num: "01"
+    title: "助手"
+    body: "按你的说明改文件、跑命令、写草稿。国内外都有同类工具；本课用 CodeBuddy。检索：AI 编程助手。"
+  - num: "02"
+    title: "约束文件"
+    body: "写死禁止事项和必做步骤。课上称作 Harness。检索：rules、skills。"
+  - num: "03"
+    title: "实验环境"
+    body: "浏览器里的课程工作空间：文件、终端、提交入口在同一处。"
+`,note:``,title:`课上三个词`,level:1,index:8,noteHTML:``,images:[],raw:``,frontmatter:B,filepath:``,start:174,sourceIndex:8,id:8,no:9},__clicksContext:null,__preloaded:!1}),V=o({layout:`lesson-cards`,week:1,weekLabel:`课次 01`,heading:`选题：校园应用，形态自选`,kicker:`1.8　课题类型`,cards:[{num:`01`,title:`学生侧`,body:`课表与教室、活动、报修、图书馆、请假、竞赛组队等。同一件业务不要拆成互不共享数据的两个程序。`},{num:`02`,title:`教师侧`,body:`班务、科研登记；有的课题学生教师都要用。`},{num:`03`,title:`含助手`,body:`办事问答、通知工作台、课程答疑。答得出须指出依据，答不出须承认未知。`},{num:`04`,title:`登记`,body:`选题说明 https://docs.qq.com/aio/DREZwR2pmZ25OeFJv （内含登记表）。一行一组，名额满则改选。形态自选。`}]}),Je=s({get layout(){return V.layout},get transition(){return V.transition},get class(){return V.class},get clicks(){return V.clicks},get name(){return V.name},get preload(){return V.preload},slide:{content:``,revision:`adxo2l`,frontmatterRaw:`layout: "lesson-cards"
+week: 1
+weekLabel: "课次 01"
+heading: "选题：校园应用，形态自选"
+kicker: "1.8　课题类型"
+cards:
+  - num: "01"
+    title: "学生侧"
+    body: "课表与教室、活动、报修、图书馆、请假、竞赛组队等。同一件业务不要拆成互不共享数据的两个程序。"
+  - num: "02"
+    title: "教师侧"
+    body: "班务、科研登记；有的课题学生教师都要用。"
+  - num: "03"
+    title: "含助手"
+    body: "办事问答、通知工作台、课程答疑。答得出须指出依据，答不出须承认未知。"
+  - num: "04"
+    title: "登记"
+    body: "选题说明 https://docs.qq.com/aio/DREZwR2pmZ25OeFJv （内含登记表）。一行一组，名额满则改选。形态自选。"
+`,note:``,title:`选题：校园应用，形态自选`,level:1,index:9,noteHTML:``,images:[],raw:``,frontmatter:V,filepath:``,start:194,sourceIndex:9,id:9,no:10},__clicksContext:null,__preloaded:!1}),H=o({layout:`lesson-cards`,week:1,weekLabel:`课次 01`,heading:`立项里必须写清的四件事`,kicker:`1.9　小报告 01 开始`,cards:[{num:`01`,title:`课题`,body:`选题说明上的编号与名称，并写清主路径怎么演示。`},{num:`02`,title:`必做 / 不做`,body:`学期内能演示的最小集合，以及明确不做的部分。`},{num:`03`,title:`验收`,body:`给定什么输入、做什么操作、应看到什么结果。`},{num:`04`,title:`分工`,body:`谁对能跑起来负责，谁对演示负责，写到人。`}]}),Ye=s({get layout(){return H.layout},get transition(){return H.transition},get class(){return H.class},get clicks(){return H.clicks},get name(){return H.name},get preload(){return H.preload},slide:{content:``,revision:`-dgktzq`,frontmatterRaw:`layout: "lesson-cards"
+week: 1
+weekLabel: "课次 01"
+heading: "立项里必须写清的四件事"
+kicker: "1.9　小报告 01 开始"
+cards:
+  - num: "01"
+    title: "课题"
+    body: "选题说明上的编号与名称，并写清主路径怎么演示。"
+  - num: "02"
+    title: "必做 / 不做"
+    body: "学期内能演示的最小集合，以及明确不做的部分。"
+  - num: "03"
+    title: "验收"
+    body: "给定什么输入、做什么操作、应看到什么结果。"
+  - num: "04"
+    title: "分工"
+    body: "谁对能跑起来负责，谁对演示负责，写到人。"
+`,note:``,title:`立项里必须写清的四件事`,level:1,index:10,noteHTML:``,images:[],raw:``,frontmatter:H,filepath:``,start:217,sourceIndex:10,id:10,no:11},__clicksContext:null,__preloaded:!1}),U=o({layout:`lesson-steps`,week:1,weekLabel:`课次 01`,heading:`今天上机`,kicker:`1.10　实践`,steps:[{title:`打开工作空间`,body:`找到课程模板、终端、CodeBuddy。`},{title:`选定课题`,body:`打开选题说明 https://docs.qq.com/aio/DREZwR2pmZ25OeFJv 与该课题的项目要求。`},{title:`填立项`,body:`项目名、必做与不做、验收、成员。另一人能按验收说出怎么演示。`}]}),Xe=s({get layout(){return U.layout},get transition(){return U.transition},get class(){return U.class},get clicks(){return U.clicks},get name(){return U.name},get preload(){return U.preload},slide:{content:``,revision:`q21rxl`,frontmatterRaw:`layout: "lesson-steps"
+week: 1
+weekLabel: "课次 01"
+heading: "今天上机"
+kicker: "1.10　实践"
+steps:
+  - title: "打开工作空间"
+    body: "找到课程模板、终端、CodeBuddy。"
+  - title: "选定课题"
+    body: "打开选题说明 https://docs.qq.com/aio/DREZwR2pmZ25OeFJv 与该课题的项目要求。"
+  - title: "填立项"
+    body: "项目名、必做与不做、验收、成员。另一人能按验收说出怎么演示。"
+`,note:``,title:`今天上机`,level:1,index:11,noteHTML:``,images:[],raw:``,frontmatter:U,filepath:``,start:240,sourceIndex:11,id:11,no:12},__clicksContext:null,__preloaded:!1}),W=o({layout:`lesson-pitfalls`,week:1,weekLabel:`课次 01`,heading:`常见问题`,kicker:`1.11`,items:[{title:`里程碑写成口号`,body:`「让系统更智能」无法核对。写成：能按项目要求点通主路径。`},{title:`把密钥写进对话`,body:`账号、口令只放本地配置，不进提交物。`},{title:`只聊天不落文件`,body:`立项写在课程规定的提交文件里，不在聊天记录里。`}]}),Ze=s({get layout(){return W.layout},get transition(){return W.transition},get class(){return W.class},get clicks(){return W.clicks},get name(){return W.name},get preload(){return W.preload},slide:{content:``,revision:`-7kiy7b`,frontmatterRaw:`layout: "lesson-pitfalls"
+week: 1
+weekLabel: "课次 01"
+heading: "常见问题"
+kicker: "1.11"
+items:
+  - title: "里程碑写成口号"
+    body: "「让系统更智能」无法核对。写成：能按项目要求点通主路径。"
+  - title: "把密钥写进对话"
+    body: "账号、口令只放本地配置，不进提交物。"
+  - title: "只聊天不落文件"
+    body: "立项写在课程规定的提交文件里，不在聊天记录里。"
+`,note:``,title:`常见问题`,level:1,index:12,noteHTML:``,images:[],raw:``,frontmatter:W,filepath:``,start:257,sourceIndex:12,id:12,no:13},__clicksContext:null,__preloaded:!1}),G=o({layout:`lesson-accept`,week:1,weekLabel:`课次 01`,heading:`本次提交`,kicker:`1.12　小报告 01`,deliverable:[`立项草稿：课题编号、必做与不做、验收说法、分工`,`提交小报告 01，并附首次运行记录`],criteria:[`另一人能按验收说法说出怎么演示`,`不做事项写清`],due:`小报告 01 进行中　·　按窗口提交`,stat:`70%`,statLead:`七次小报告合计；本次是第 1 次`}),Qe=s({get layout(){return G.layout},get transition(){return G.transition},get class(){return G.class},get clicks(){return G.clicks},get name(){return G.name},get preload(){return G.preload},slide:{content:``,revision:`-uewtmr`,frontmatterRaw:`layout: "lesson-accept"
+week: 1
+weekLabel: "课次 01"
+heading: "本次提交"
+kicker: "1.12　小报告 01"
+deliverable:
+  - "立项草稿：课题编号、必做与不做、验收说法、分工"
+  - "提交小报告 01，并附首次运行记录"
+criteria:
+  - "另一人能按验收说法说出怎么演示"
+  - "不做事项写清"
+due: "小报告 01 进行中　·　按窗口提交"
+stat: "70%"
+statLead: "七次小报告合计；本次是第 1 次"
+`,note:``,title:`本次提交`,level:1,index:13,noteHTML:``,images:[],raw:``,frontmatter:G,filepath:``,start:274,sourceIndex:13,id:13,no:14},__clicksContext:null,__preloaded:!1}),K=Array(14),q=(t,n)=>e({loader:n,delay:300,loadingComponent:Re,errorComponent:j,onError:e=>console.error(`Failed to load slide `+(t+1),e)}),$e=async()=>{try{return K[0]??=await A(()=>import(`../md-BXUD_dzl.js`),__vite__mapDeps([0,1,2,3,4,5]))}catch(e){return console.error(`slide failed to load`,e),j}},et=async()=>{try{return K[1]??=await A(()=>import(`../md-DQv3nMOQ.js`),__vite__mapDeps([6,1,2,3,4,5,7,8,9,10,11,12]))}catch(e){return console.error(`slide failed to load`,e),j}},tt=async()=>{try{return K[2]??=await A(()=>import(`../md-BSAroSMP.js`),__vite__mapDeps([13,1,2,3,4,5,14,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},nt=async()=>{try{return K[3]??=await A(()=>import(`../md-D2ecVqWG.js`),__vite__mapDeps([15,1,2,3,4,5,14,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},rt=async()=>{try{return K[4]??=await A(()=>import(`../md-DoHhVw_S.js`),__vite__mapDeps([16,1,2,3,4,5,14,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},it=async()=>{try{return K[5]??=await A(()=>import(`../md-Dcy7t3AO.js`),__vite__mapDeps([17,1,2,3,4,5,7,8,9,10,11,12]))}catch(e){return console.error(`slide failed to load`,e),j}},at=async()=>{try{return K[6]??=await A(()=>import(`../md-BNTLNeIx.js`),__vite__mapDeps([18,1,2,3,4,5,7,8,9,10,11,12]))}catch(e){return console.error(`slide failed to load`,e),j}},ot=async()=>{try{return K[7]??=await A(()=>import(`../md-DXOx-xre.js`),__vite__mapDeps([19,1,2,3,4,5,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},st=async()=>{try{return K[8]??=await A(()=>import(`../md-B3tkmB1E.js`),__vite__mapDeps([20,1,2,3,4,5,14,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},ct=async()=>{try{return K[9]??=await A(()=>import(`../md-yoyJYu-9.js`),__vite__mapDeps([21,1,2,3,4,5,14,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},lt=async()=>{try{return K[10]??=await A(()=>import(`../md-CgxXczdA.js`),__vite__mapDeps([22,1,2,3,4,5,14,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},ut=async()=>{try{return K[11]??=await A(()=>import(`../md-DLzdKj2Z.js`),__vite__mapDeps([23,1,2,3,4,5,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},dt=async()=>{try{return K[12]??=await A(()=>import(`../md-F9BBpo0H.js`),__vite__mapDeps([24,1,2,3,4,5,7,8,9,10,11]))}catch(e){return console.error(`slide failed to load`,e),j}},ft=async()=>{try{return K[13]??=await A(()=>import(`../md-CetOwma_.js`),__vite__mapDeps([25,1,2,3,4,5,7,8,9,10,11,12]))}catch(e){return console.error(`slide failed to load`,e),j}},pt=[{no:1,meta:ze,load:$e,component:q(0,$e)},{no:2,meta:Be,load:et,component:q(1,et)},{no:3,meta:Ve,load:tt,component:q(2,tt)},{no:4,meta:He,load:nt,component:q(3,nt)},{no:5,meta:Ue,load:rt,component:q(4,rt)},{no:6,meta:We,load:it,component:q(5,it)},{no:7,meta:Ge,load:at,component:q(6,at)},{no:8,meta:Ke,load:ot,component:q(7,ot)},{no:9,meta:qe,load:st,component:q(8,st)},{no:10,meta:Je,load:ct,component:q(9,ct)},{no:11,meta:Ye,load:lt,component:q(10,lt)},{no:12,meta:Xe,load:ut,component:q(11,ut)},{no:13,meta:Ze,load:dt,component:q(12,dt)},{no:14,meta:Qe,load:ft,component:q(13,ft)}],J=_(pt);function mt(e,t,{mode:n=`replace`}={}){let i=S();return u({get(){let n=i.currentRoute.value.query[e];return n==null?t??null:Array.isArray(n)?n.filter(Boolean):n},set(a){r(()=>{(i.currentRoute.value.query[e]??t?.toString())!==a.toString()&&i[d(n)]({query:{...i.currentRoute.value.query,[e]:`${a}`===t?void 0:a}})})}})}function ht(e,t,n=!1){let r=e.meta.slide?.frontmatter.routeAlias??e.no;return n?`/export/${r}`:t?`/presenter/${r}`:`/${r}`}function Y(e){return J.value.find(t=>t.no===+e||t.meta.slide?.frontmatter.routeAlias===e)}function X(e,t,n=!1){return(typeof e==`number`||typeof e==`string`)&&(e=Y(e)),ht(e,t,n)}var gt={"slide-left":`slide-left | slide-right`,"slide-right":`slide-right | slide-left`,"slide-up":`slide-up | slide-down`,"slide-down":`slide-down | slide-up`};function _t(e,t=!1){if(!e||(typeof e==`string`&&(e={name:e}),!e.name))return;let n=e.name.includes(`|`)?e.name:gt[e.name]||e.name;if(n.includes(`|`)){let[e,r]=n.split(`|`).map(e=>e.trim());n=t?r:e}if(n)return{...e,name:n}}function vt(e,t,n){let r=e>0?n?.meta?.transition:t?.meta?.transition;return r||=k.transition||void 0,_t(r,e<0)}var yt=h(!1),bt=h(!1),xt=h(!1),St=h(!1),Ct=h(!1),wt=h(!1),Tt=h(!0),Et=o(new Set),Dt=u(()=>Et.size>0),Ot=se({xs:460,...ie}),kt=re(),At=oe(),jt=u(()=>kt.height.value-kt.width.value/ve.value>120),Mt=ce(x?document.body:null),Nt=ae(),Pt=u(()=>[`INPUT`,`TEXTAREA`].includes(Nt.value?.tagName||``)),Ft=u(()=>[`BUTTON`,`A`].includes(Nt.value?.tagName||``));w(`slidev-camera`,`default`,{listenToStorageChanges:!1}),w(`slidev-mic`,`default`,{listenToStorageChanges:!1});var It=w(`slidev-scale`,0),Lt=w(`slidev-wake-lock`,!0),Rt=w(`slidev-hide-cursor-idle`,!0);w(`slidev-skip-export-pdf-tip`,!1),w(`slidev-export-capture-delay`,400,{listenToStorageChanges:!1});var zt=w(`slidev-presenter-cursor`,!0,{listenToStorageChanges:!1}),Bt=w(`slidev-cursor-style`,`cursor`,{listenToStorageChanges:!1});function Vt(){zt.value=!zt.value}var Ht=w(`slidev-show-editor`,!1,{listenToStorageChanges:!1}),Ut=w(`slidev-editor-vertical`,!1,{listenToStorageChanges:!1}),Wt=w(`slidev-editor-width`,x?window.innerWidth*.4:318,{listenToStorageChanges:!1}),Gt=w(`slidev-editor-height`,x?window.innerHeight*.4:300,{listenToStorageChanges:!1}),Kt=_(null),Z=w(`slidev-presenter-font-size`,1,{listenToStorageChanges:!1}),Q=w(`slidev-presenter-layout`,1,{listenToStorageChanges:!1}),$={invert:!1,contrast:1,brightness:1,hueRotate:0,saturate:1,sepia:0},qt=w(`slidev-viewer-css-filter`,$,{listenToStorageChanges:!1,mergeDefaults:!0,deep:!0}),Jt=u(()=>Object.keys($).some(e=>qt.value[e]!==$[e]));function Yt(){Q.value+=1,Q.value>3&&(Q.value=1)}function Xt(){Z.value=Math.min(2,Z.value+.1)}function Zt(){Z.value=Math.max(.5,Z.value-.1)}var Qt=ne(St),$t=w(`slidev-sync-directions`,{viewerSend:!0,viewerReceive:!0,presenterSend:!0,presenterReceive:!0},{listenToStorageChanges:!1,mergeDefaults:!0});function en(e,t,n=1){let r=t.meta.slide.level??n;r&&r>n&&e.length>0?en(e[e.length-1].children,t,n+1):e.push({no:t.no,children:[],level:n,titleLevel:r,path:X(t.meta.slide?.frontmatter?.routeAlias??t.no,!1),hideInToc:!!t.meta?.slide?.frontmatter?.hideInToc,title:t.meta?.slide?.title})}function tn(e,t,n=!1,r,i){return e.map(e=>{let a={...e,active:e.no===i?.value,hasActiveParent:n};return a.children.length>0&&(a.children=tn(a.children,t,a.active||a.hasActiveParent,a,i)),r&&(a.active||a.activeParent)&&(r.activeParent=!0),a})}function nn(e,t=1){return e.filter(e=>!e.hideInToc).map(e=>({...e,children:nn(e.children,t+1)}))}function rn(e,t,n){let r=u(()=>e.value.filter(e=>e.meta?.slide?.title).reduce((e,t)=>(en(e,t),e),[])),i=u(()=>tn(r.value,n.value,void 0,void 0,t));return u(()=>nn(i.value))}function an(e,t,n=h(0),r,i,a){let o=u(()=>J.value.length),s=h(0),c=h(0),l=u(()=>X(e.value,r.value)),d=u(()=>e.value.no),f=u(()=>e.value.meta?.layout||(d.value===1?`cover`:`default`)),p=u(()=>e.value.meta.slide.frontmatter),g=u(()=>t.value.current),_=u(()=>t.value.clicksStart),v=u(()=>t.value.total),y=u(()=>J.value[Math.min(J.value.length,d.value+1)-1]),b=u(()=>J.value[Math.max(1,d.value-1)-1]),ee=u(()=>d.value<J.value.length||g.value<v.value),te=u(()=>d.value>1||g.value>0),x=u(()=>i.value?void 0:vt(s.value,e.value,b.value));m(e,(e,t)=>{s.value=e.no-t.no});async function S(e){return!1}let C=rn(J,d,e);async function ne(){c.value=1,v.value<=n.value?await ie():n.value+=1}async function re(){c.value=-1,n.value<=_.value?await ae(!0):--n.value}async function ie(e=!1){c.value=1,d.value<J.value.length&&await T(d.value+1,e&&!i.value?E:void 0)}async function ae(e=!1){c.value=-1,d.value>1&&await T(d.value-1,e&&!i.value?E:void 0)}function oe(){return T(1)}function w(){return T(o.value)}async function T(e,t=0,i=!1){Ct.value=!1;let o=d.value!==e,s=t!==n.value,c=Y(e)?.meta,l=c?.slide?.frontmatter.clicksStart??0;t=D(t,l,c?.__clicksContext?.total??999999),(i||o||s)&&await a?.push({path:X(e,r.value,a.currentRoute.value.name===`export`),query:{...a.currentRoute.value.query,clicks:t===0?void 0:t.toString(),embedded:location.search.includes(`embedded`)?`true`:void 0}})}function se(){a?.push({path:X(d.value,!0),query:{...a.currentRoute.value.query}})}function ce(){a?.push({path:X(d.value,!1),query:{...a.currentRoute.value.query}})}return{slides:J,total:o,currentPath:l,currentSlideNo:d,currentPage:d,currentSlideRoute:e,currentLayout:f,currentFrontmatter:p,currentTransition:x,clicksDirection:c,nextRoute:y,prevRoute:b,clicksContext:t,clicks:g,clicksStart:_,clicksTotal:v,hasNext:ee,hasPrev:te,tocTree:C,navDirection:s,openInEditor:S,next:ne,prev:re,go:T,goLast:w,goFirst:oe,nextSlide:ie,prevSlide:ae,enterPresenter:se,exitPresenter:ce}}var on=C(()=>{let e=S(),t=le(),n=u(()=>(e?.currentRoute?.value?.query,new URLSearchParams(location.search))),r=u(()=>n.value.has(`print`)||t.name===`export`),i=h(n.value.get(`print`)===`clicks`),a=u(()=>n.value.has(`embedded`)),o=u(()=>t.name===`play`),s=u(()=>t.name===`presenter`),c=u(()=>t.name===`notes`),l=u(()=>!s.value&&(!k.remote||n.value.get(`password`)===k.remote)),d=u(()=>!!t.params.no),f=u(()=>d.value?Y(t.params.no)?.no??1:1),p=u(()=>J.value[f.value-1]),m=h(Ne(J.value.length,t?.query?.range)),g=mt(`clicks`,`0`),_=u(()=>y(p.value)),v=u({get(){let e=+(g.value||0);return Number.isNaN(e)&&(e=0),e},set(e){Ct.value=!1,g.value=e.toString()}});function y(e){if(e?.meta?.__clicksContext)return e.meta.__clicksContext;let t=e.no,n=ke(u({get(){return f.value===t?Math.max(+(g.value??0),n.clicksStart):f.value>t?E:n.clicksStart},set(e){f.value===t&&(g.value=e.toString())}}),e?.meta.slide?.frontmatter.clicksStart??0,e?.meta.clicks);return e?.meta&&(e.meta.__clicksContext=n),n}return{router:e,currentRoute:u(()=>t),isPrintMode:r,isPrintWithClicks:i,isEmbedded:a,isPlaying:o,isPresenter:s,isNotesViewer:c,isPresenterAvailable:l,hasPrimarySlide:d,currentSlideNo:f,currentSlideRoute:p,clicksContext:_,queryClicksRaw:g,queryClicks:v,printRange:m,getPrimaryClicks:y}}),sn=C(()=>{let e=on(),t=S(),n=an(e.currentSlideRoute,e.clicksContext,e.queryClicks,e.isPresenter,e.isPrintMode,t);return m([n.total,e.currentRoute],async()=>{let t=e.currentRoute.value.params.no;e.hasPrimarySlide.value&&!Y(t)&&(t&&t!==`index.html`?await n.go(n.total.value,0,!0):await n.go(1,0,!0))},{flush:`pre`,immediate:!0}),{...n,...e}});function cn(){let e=sn(),t=i()?T(ue,void 0):void 0;if(!t)return e;let n=c(t).nav;return{...e,...n}}export{k as $,It as A,X as B,Dt as C,St as D,bt as E,qt as F,A as G,Me as H,$ as I,ve as J,_e as K,Lt as L,Qt as M,Vt as N,zt as O,Yt as P,xe as Q,kt as R,Tt as S,xt as T,ke as U,J as V,Ae as W,ye as X,be as Y,Se as Z,Ft as _,Bt as a,Q as b,Gt as c,Jt as d,D as et,Rt as f,Pt as g,Ut as h,Ot as i,$t as j,yt as k,Wt as l,Xt as m,Kt as n,Zt as o,Ct as p,Ce as q,Nt as r,wt as s,cn as t,O as tt,Mt as u,jt as v,Ht as w,Z as x,At as y,Y as z};
