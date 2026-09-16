@@ -333,7 +333,7 @@ kicker: "0.15"
 nav: 2
 over: "把 AI 看作一名聪明的员工。"
 line: "你愿意当内行的老板，还是外行的老板。"
-`,note:``,index:15,noteHTML:``,images:[],raw:``,frontmatter:W,filepath:``,start:394,sourceIndex:15,id:15,no:16},__clicksContext:null,__preloaded:!1}),G=o({layout:`lesson-cards`,week:0,weekLabel:`课前`,spine:[`课程`,`基本功`,`判断力`,`自检`],heading:`课外练习，自愿`,kicker:`0.16`,nav:3,lead:`用，可以靠 AI。学，得自己写。课内不要求。`,cards:[{num:`01`,title:`力扣`,body:`面试题合集，个人练习。`},{num:`02`,title:`Codeforces / AtCoder`,body:`算法排位赛。校内竞赛面向全校，想参加的可以进实验室。`},{num:`03`,title:`ACM 实验室`,body:`三人组队刷题。校内竞赛面向想参赛的同学。`},{num:`04`,title:`CCF-CSP`,body:`软件能力认证。官网 cspro.org。`}],fonts:{provider:`none`,sans:`IBM Plex Sans, Noto Sans SC, PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, system-ui, sans-serif`,mono:`IBM Plex Mono, Sarasa Mono SC, ui-monospace, Consolas, monospace`}}),it=s({get layout(){return G.layout},get transition(){return G.transition},get class(){return G.class},get clicks(){return G.clicks},get name(){return G.name},get preload(){return G.preload},slide:{content:``,revision:`-vdmsyu`,frontmatterRaw:`layout: "lesson-cards"
+`,note:``,index:15,noteHTML:``,images:[],raw:``,frontmatter:W,filepath:``,start:394,sourceIndex:15,id:15,no:16},__clicksContext:null,__preloaded:!1}),G=o({layout:`lesson-cards`,week:0,weekLabel:`课前`,spine:[`课程`,`基本功`,`判断力`,`自检`],heading:`课外练习，自愿`,kicker:`0.16`,nav:3,lead:`用，可以靠 AI。学，得自己写。课内不要求。`,cards:[{num:`01`,title:`力扣`,body:`面试题合集，个人练习。`},{num:`02`,title:`Codeforces / AtCoder`,body:`算法排位赛。`},{num:`03`,title:`ACM 爱好者协会`,body:`一起学习算法。`},{num:`04`,title:`CCF-CSP`,body:`软件能力认证。官网 cspro.org。`}],fonts:{provider:`none`,sans:`IBM Plex Sans, Noto Sans SC, PingFang SC, Microsoft YaHei, Noto Sans CJK SC, Source Han Sans SC, system-ui, sans-serif`,mono:`IBM Plex Mono, Sarasa Mono SC, ui-monospace, Consolas, monospace`}}),it=s({get layout(){return G.layout},get transition(){return G.transition},get class(){return G.class},get clicks(){return G.clicks},get name(){return G.name},get preload(){return G.preload},slide:{content:``,revision:`-x82s0v`,frontmatterRaw:`layout: "lesson-cards"
 week: 0
 weekLabel: "课前"
 spine:
@@ -351,10 +351,10 @@ cards:
     body: "面试题合集，个人练习。"
   - num: "02"
     title: "Codeforces / AtCoder"
-    body: "算法排位赛。校内竞赛面向全校，想参加的可以进实验室。"
+    body: "算法排位赛。"
   - num: "03"
-    title: "ACM 实验室"
-    body: "三人组队刷题。校内竞赛面向想参赛的同学。"
+    title: "ACM 爱好者协会"
+    body: "一起学习算法。"
   - num: "04"
     title: "CCF-CSP"
     body: "软件能力认证。官网 cspro.org。"
