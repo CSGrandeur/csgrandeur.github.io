@@ -17,7 +17,7 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      font-family: "IBM Plex Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
       color: var(--ink);
       background:
         radial-gradient(1200px 600px at 10% -10%, #dbe7ff 0%, transparent 55%),
@@ -37,20 +37,15 @@
       letter-spacing: 0.04em;
     }
     h1 {
-      margin: 0 0 0.25rem;
+      margin: 0 0 0.35rem;
       font-size: 1.85rem;
       line-height: 1.25;
     }
-    .en {
-      margin: 0 0 0.45rem;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-    .lead {
+    .note {
       margin: 0;
       color: var(--muted);
-      font-size: 0.98rem;
-      line-height: 1.55;
+      font-size: 0.92rem;
+      line-height: 1.5;
     }
     .act {
       margin: 1.45rem 0 0.5rem;
@@ -82,7 +77,7 @@
     .card.busy { opacity: 0.7; pointer-events: none; }
     .card.is-soon { opacity: 0.62; }
     .id {
-      font-family: ui-monospace, "Sarasa Mono SC", Consolas, monospace;
+      font-family: "IBM Plex Mono", "Sarasa Mono SC", ui-monospace, Consolas, monospace;
       font-weight: 700;
       font-size: 1.05rem;
       color: var(--accent);
@@ -105,32 +100,14 @@
       color: var(--muted);
       font-size: 0.88rem;
     }
-    .warn {
-      margin-top: 1.2rem;
-      color: #8a5a00;
-      font-size: 0.9rem;
-    }
-    footer {
-      margin-top: 2rem;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-    code {
-      font-family: ui-monospace, Consolas, monospace;
-      font-size: 0.85em;
-      background: #eef2f7;
-      padding: 0.1em 0.35em;
-      border-radius: 4px;
-    }
   </style>
 </head>
 <body>
   <main>
     <header>
-      <p class="kicker">人工智能学院</p>
+      <p class="kicker">人工智能学院 · Vibe Coding</p>
       <h1>AI氛围编程</h1>
-      <p class="en">Vibe Coding</p>
-      <p class="lead">课次目录，点选进入对应 PPT。</p>
+      <p class="note">课件随学期进度逐章更新。</p>
     </header>
     <p class="act">课前</p>
     <div class="grid">
@@ -143,172 +120,71 @@
         <span class="go">进入</span>
       </a>
     </div>
-    <p class="act">第1章 协作入门与工程基础</p>
-    <div class="grid">
-      <a class="card" data-id="01" href="./01/">
-        <span class="id">01</span>
-        <span class="body">
-          <span class="title">Vibe Coding定位与Harness</span>
-          <span class="sub">Vibe Coding定位；Agent与约束文件；立项</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="02" href="./02/">
-        <span class="id">02</span>
-        <span class="body">
-          <span class="title">运行链路与Git变更追踪</span>
-          <span class="sub">运行验证；提交与对照两次记录</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="03" href="./03/">
-        <span class="id">03</span>
-        <span class="body">
-          <span class="title">Skills、Rules与结构化Prompt</span>
-          <span class="sub">工作流自检；差/好任务对比</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-    </div>
-    <p class="act">第2章 原型构建与功能实现</p>
-    <div class="grid">
-      <a class="card" data-id="04" href="./04/">
-        <span class="id">04</span>
-        <span class="body">
-          <span class="title">需求到原型的迭代构建</span>
-          <span class="sub">主流程原型；范围与差距</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="05" href="./05/">
-        <span class="id">05</span>
-        <span class="body">
-          <span class="title">接口契约与联调排错</span>
-          <span class="sub">请求与返回写清；核心端点</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="06" href="./06/">
-        <span class="id">06</span>
-        <span class="body">
-          <span class="title">数据建模与持久化</span>
-          <span class="sub">读写与字段校验</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="07" href="./07/">
-        <span class="id">07</span>
-        <span class="body">
-          <span class="title">性能基准与缓存对比</span>
-          <span class="sub">测一次再决定加不加缓存</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-    </div>
-    <p class="act">第3章 调试、测试与审查</p>
-    <div class="grid">
-      <a class="card" data-id="08" href="./08/">
-        <span class="id">08</span>
-        <span class="body">
-          <span class="title">日志上下文与辅助调试</span>
-          <span class="sub">分层定位；修复记录</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="09" href="./09/">
-        <span class="id">09</span>
-        <span class="body">
-          <span class="title">冒烟测试与审查清单</span>
-          <span class="sub">用例、审查、输入校验</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-    </div>
-    <p class="act">第4章 工具扩展与过程约束</p>
-    <div class="grid">
-      <a class="card" data-id="10" href="./10/">
-        <span class="id">10</span>
-        <span class="body">
-          <span class="title">外部工具接入与权限边界</span>
-          <span class="sub">最小接入；能做什么、不能碰什么</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="11" href="./11/">
-        <span class="id">11</span>
-        <span class="body">
-          <span class="title">契约测试与项目上下文</span>
-          <span class="sub">接入测试；CONTEXT 更新</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="12" href="./12/">
-        <span class="id">12</span>
-        <span class="body">
-          <span class="title">自动化任务与过程约束</span>
-          <span class="sub">Hooks 与规则试运行</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="13" href="./13/">
-        <span class="id">13</span>
-        <span class="body">
-          <span class="title">质量门禁与计划核对闭环</span>
-          <span class="sub">门禁全流程；复盘报告</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-    </div>
-    <p class="act">第5章 交付运维与团队协作</p>
-    <div class="grid">
-      <a class="card" data-id="14" href="./14/">
-        <span class="id">14</span>
-        <span class="body">
-          <span class="title">构建、发布与回滚</span>
-          <span class="sub">流水线；发布与回滚验证</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="15" href="./15/">
-        <span class="id">15</span>
-        <span class="body">
-          <span class="title">可观测性与健康检查</span>
-          <span class="sub">日志、探针、告警演练</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="16" href="./16/">
-        <span class="id">16</span>
-        <span class="body">
-          <span class="title">分支协作与合并说明</span>
-          <span class="sub">分支开发；说明后合并</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-    </div>
-    <p class="act">第6章 验收与总结</p>
-    <div class="grid">
-      <a class="card" data-id="17" href="./17/">
-        <span class="id">17</span>
-        <span class="body">
-          <span class="title">原型到生产的差距与自测</span>
-          <span class="sub">差距清单；演示材料</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-      <a class="card" data-id="18" href="./18/">
-        <span class="id">18</span>
-        <span class="body">
-          <span class="title">期末交付与结构化复盘</span>
-          <span class="sub">综合验收；复盘报告</span>
-        </span>
-        <span class="go">进入</span>
-      </a>
-    </div>
     <p class="status" id="status"></p>
-    
-
   </main>
+  <script>
+/**
+ * 课内片字体：空闲后再向 fastly.jsdelivr 拉 woff2。
+ * 不阻塞首屏。失败或超时都继续用 tokens.css 里的系统字体。
+ */
+;(function loadVcFonts() {
+  if (typeof document === 'undefined')
+    return
+  if (window.__vcFontsStarted)
+    return
+  window.__vcFontsStarted = 1
+
+  var CDN = 'https://fastly.jsdelivr.net/npm/'
+  var LATIN = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
+  var FACES = [
+    ['Noto Sans SC', '400', '@fontsource/noto-sans-sc@5.2.8/files/noto-sans-sc-chinese-simplified-400-normal.woff2', ''],
+    ['Noto Sans SC', '600', '@fontsource/noto-sans-sc@5.2.8/files/noto-sans-sc-chinese-simplified-600-normal.woff2', ''],
+    ['Noto Sans SC', '700', '@fontsource/noto-sans-sc@5.2.8/files/noto-sans-sc-chinese-simplified-700-normal.woff2', ''],
+    ['Noto Serif SC', '600', '@fontsource/noto-serif-sc@5.2.8/files/noto-serif-sc-chinese-simplified-600-normal.woff2', ''],
+    ['IBM Plex Sans', '400', '@fontsource/ibm-plex-sans@5.2.6/files/ibm-plex-sans-latin-400-normal.woff2', LATIN],
+    ['IBM Plex Sans', '600', '@fontsource/ibm-plex-sans@5.2.6/files/ibm-plex-sans-latin-600-normal.woff2', LATIN],
+    ['IBM Plex Mono', '400', '@fontsource/ibm-plex-mono@5.2.6/files/ibm-plex-mono-latin-400-normal.woff2', LATIN],
+    ['IBM Plex Mono', '700', '@fontsource/ibm-plex-mono@5.2.6/files/ibm-plex-mono-latin-700-normal.woff2', LATIN],
+  ]
+
+  function inject() {
+    if (document.querySelector('style[data-vc-fonts]'))
+      return
+    var css = ''
+    for (var i = 0; i < FACES.length; i++) {
+      var f = FACES[i]
+      css += '@font-face{font-family:"' + f[0] + '";font-style:normal;font-weight:' + f[1]
+        + ';font-display:swap;src:url("' + CDN + f[2] + '") format("woff2");'
+        + (f[3] ? 'unicode-range:' + f[3] + ';' : '')
+        + '}'
+    }
+    var el = document.createElement('style')
+    el.setAttribute('data-vc-fonts', '')
+    el.textContent = css
+    document.head.appendChild(el)
+  }
+
+  function start() {
+    try {
+      inject()
+    }
+    catch (_) { /* 系统字体继续用 */ }
+  }
+
+  function whenIdle(fn) {
+    if (typeof requestIdleCallback === 'function')
+      requestIdleCallback(fn, { timeout: 2500 })
+    else
+      setTimeout(fn, 1)
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', function () { whenIdle(start) }, { once: true })
+  else
+    whenIdle(start)
+})()
+
+  </script>
   <script>
     const MODE = window.__HUB_MODE__ || 'static'
     const statusEl = document.getElementById('status')
