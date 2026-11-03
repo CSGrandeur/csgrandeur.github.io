@@ -1,5 +1,12 @@
 [
   {
+    "date": "20261103",
+    "slug": "acm-lab",
+    "title": "从零到金：ACM 集训队与算法与程序设计创新实验室",
+    "subtitle": "人工智能学院",
+    "dir": "20261103-acm-lab"
+  },
+  {
     "date": "20260911",
     "slug": "know-contest",
     "title": "认识算法竞赛",
