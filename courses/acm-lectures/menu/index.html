@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>讲座目录</title>
+  <style>
+
+    
+    
+    
+    :root {
+      --ink: #141414;
+      --muted: #555;
+      --rule: #141414;
+      --hair: #d9d4cc;
+      --tint: #f5f2ec;
+      --acc: #e4501a;
+      --acc-t: #c2410c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "VC Latin", "VC Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      font-weight: 500;
+      color: var(--ink);
+      background: #fff;
+    }
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+    header {
+      border-bottom: 3px solid var(--rule);
+      padding-bottom: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .kicker {
+      margin: 0 0 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    h1 {
+      margin: 0 0 0.4rem;
+      font-family: "VC Serif", "Noto Serif SC", "Songti SC", serif;
+      font-weight: 900;
+      font-size: 2.6rem;
+      line-height: 1.2;
+    }
+    .note { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .act {
+      margin: 2rem 0 0;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--rule);
+      font-family: "VC Serif", "Noto Serif SC", serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+    .grid { display: grid; }
+    .card {
+      display: grid;
+      grid-template-columns: 3.2rem 1fr auto;
+      gap: 1rem;
+      align-items: baseline;
+      padding: 0.9rem 0.25rem;
+      border-bottom: 1px solid var(--hair);
+      color: inherit;
+      text-decoration: none;
+    }
+    a.card:hover { background: var(--tint); }
+    a.card:hover .title { color: var(--acc-t); }
+    .card.busy { opacity: 0.6; pointer-events: none; }
+    .card.is-soon { opacity: 0.5; }
+    .id {
+      font-weight: 600;
+      font-size: 1.15rem;
+      color: var(--acc-t);
+      font-variant-numeric: tabular-nums;
+    }
+    .body { min-width: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .title {
+      font-family: "VC Serif", "Noto Serif SC", serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+    .sub { color: var(--muted); font-size: 0.9rem; }
+    .go { color: var(--acc-t); font-size: 0.9rem; font-weight: 600; white-space: nowrap; }
+    .card.is-soon .go { color: var(--muted); }
+    .preview { font-family: "VC Sans", sans-serif; font-size: 0.75rem; color: var(--acc-t); font-weight: 500; margin-left: 0.4rem; }
+    .status { margin-top: 1rem; min-height: 1.25rem; color: var(--muted); font-size: 0.9rem; }
+  
+
+    .toolbar {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin: 1.25rem 0 0.25rem;
+    }
+    .search {
+      flex: 1;
+      border: 1px solid var(--rule);
+      background: #fff;
+      padding: 0.65rem 0.8rem;
+      font: inherit;
+      font-size: 0.95rem;
+      color: var(--ink);
+      outline: none;
+    }
+    .search:focus { border-color: var(--acc-t); }
+    .search::placeholder { color: #999; }
+    .count { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+    .empty {
+      margin: 1.5rem 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .card .id { font-size: 0.95rem; letter-spacing: -0.02em; }
+
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="kicker">讲座课件</p>
+      <h1>讲座目录</h1>
+      <p class="note">仅直达本页可见。历次讲座按日期新到旧排列。</p>
+    </header>
+    <div class="toolbar">
+      <input class="search" id="q" type="search" placeholder="搜索主题、地点、日期或路径…" autocomplete="off" />
+      <span class="count" id="count"></span>
+    </div>
+    <div class="grid" id="list"></div>
+    <p class="empty" id="empty" hidden>没有匹配的讲座。</p>
+    <p class="status" id="status"></p>
+  </main>
+  <script>
+    const ENTER = "进入"
+    const COUNT_UNIT = " 场"
+    function fmtDate(d) {
+      if (!/^\d{8}$/.test(d)) return d
+      return d.slice(0, 4) + '-' + d.slice(4, 6) + '-' + d.slice(6, 8)
+    }
+    function sortDesc(a, b) {
+      return String(b.date).localeCompare(String(a.date)) || String(b.dir).localeCompare(String(a.dir))
+    }
+    function hay(item) {
+      return [item.date, fmtDate(item.date), item.slug, item.title, item.subtitle || '', item.dir]
+        .join(' ').toLowerCase()
+    }
+    function render(items) {
+      const list = document.getElementById('list')
+      const empty = document.getElementById('empty')
+      const count = document.getElementById('count')
+      list.innerHTML = ''
+      items.forEach((item) => {
+        const a = document.createElement('a')
+        a.className = 'card'
+        a.href = '../' + item.dir + '/'
+        a.innerHTML =
+          '<span class="id">' + fmtDate(item.date) + '</span>' +
+          '<span class="body">' +
+            '<span class="title">' + (item.title || item.dir) + '</span>' +
+            '<span class="sub">' + [item.subtitle, item.dir].filter(Boolean).join(' \u00b7 ') + '</span>' +
+          '</span>' +
+          '<span class="go">' + ENTER + '</span>'
+        list.appendChild(a)
+      })
+      empty.hidden = items.length > 0
+      count.textContent = items.length + COUNT_UNIT
+    }
+
+    async function main() {
+      const status = document.getElementById('status')
+      let data = []
+      try {
+        const res = await fetch('./lectures.json', { cache: 'no-store' })
+        if (!res.ok) throw new Error('lectures.json ' + res.status)
+        data = await res.json()
+      } catch (err) {
+        status.textContent = String(err.message || err)
+        return
+      }
+      data = (Array.isArray(data) ? data : []).slice().sort(sortDesc)
+      const q = document.getElementById('q')
+      const apply = () => {
+        const needle = (q.value || '').trim().toLowerCase()
+        render(needle ? data.filter((it) => hay(it).includes(needle)) : data)
+      }
+      q.addEventListener('input', apply)
+      apply()
+    }
+    main()
+  </script>
+</body>
+</html>
